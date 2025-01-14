@@ -1,10 +1,10 @@
-/* navbar.component.css */
+
 nav {
   background-color: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   position: absolute;
-  top: 96px; /* Height of the banner */
+  top: 96px;
   left: 0;
   right: 0;
   transform: translateY(0);
@@ -173,21 +173,30 @@ nav.scrolled {
   transform: rotate(-45deg);
 }
 
+
 @media (max-width: 768px) {
   nav {
+    position: fixed;
     top: 0;
+    height: 70px;
+  }
+
+  .hamburger {
+    display: flex;
+    position: fixed;
+    right: 20px;
+    top: 23px;
+    z-index: 1002;
   }
 
   .logo-container {
     opacity: 1;
     transform: translateX(0);
     visibility: visible;
-  }
-
-
-  .nav-content {
-    justify-content: space-between;
-    padding: 15px 20px;
+    position: fixed;
+    top: 15px;
+    left: 20px;
+    z-index: 1002;
   }
 
   .company-name {
@@ -206,53 +215,51 @@ nav.scrolled {
     width: 100%;
     background: white;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    gap: 40px;
-    transition: right 0.3s ease;
+    padding-top: 120px;
+    transition: all 0.3s ease;
+    z-index: 1001;
   }
 
   .nav-links.show-mobile {
     right: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 120px;
   }
 
-  .nav-links.scrolled-nav {
-    justify-content: center;
-    margin-right: 0;
-    gap: 40px;
-  }
-
-  .nav-links li a {
-    font-size: 1.6em;
-    padding: 10px 0;
-  }
-
-  .nav-links.show-mobile::before {
+  .nav-links::before {
     content: '';
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: 80px;
+    height: 70px;
     background: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: -1;
+  }
+
+  .nav-links li a {
+    font-size: 1.4em;
+    padding: 15px 30px;
+    display: block;
+    width: 100%;
+    text-align: center;
   }
 
   .lang-toggle {
     position: fixed;
-    top: 20px;
-    right: 70px;
-    margin-left: 0;
-    background: white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 12px 25px;
+    background: rgba(0,135,81,0.1);
+    border-radius: 25px;
+    z-index: 1001;
   }
 
-  .nav-links.show-mobile {
-    padding-top: 150px;
+  .nav-links.scrolled-nav {
+    justify-content: flex-start;
+    margin-right: 0;
+    gap: 20px;
   }
 }

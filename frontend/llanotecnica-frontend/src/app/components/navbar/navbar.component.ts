@@ -24,5 +24,6 @@ export class NavbarComponent {
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+    document.body.classList.toggle('menu-open', this.isMenuOpen);
   }
 }

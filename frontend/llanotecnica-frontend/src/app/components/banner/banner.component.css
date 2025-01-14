@@ -58,6 +58,10 @@
     text-align: center;
   }
 
+  .top-banner {
+    display: none !important;
+  }
+
   .company-highlight {
     font-size: 2em;
   }
