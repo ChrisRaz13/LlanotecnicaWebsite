@@ -1,57 +1,109 @@
-<div class="home-container">
-  <header class="hero-section">
+
+<main class="home-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
     <div class="hero-content">
-      <h1>{{companyName}}</h1>
-      <p class="hero-tagline">Transforming Technology, Inspiring Innovation</p>
-      <p class="hero-subtitle">We are committed to meeting the needs of our customers in the manufacturing of quality concrete mixers.</p>
-      <div class="hero-cta">
-        <button class="cta-button">See Products</button>
-        <div class="social-links">
-          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+      <div class="hero-text">
+        <span class="hero-word">Reliable</span>
+        <span class="hero-word">Durable</span>
+        <span class="hero-word emphasis">Quality Mixers</span>
+        <div class="hero-cta">
+          <button class="cta-button view-products">View Products</button>
         </div>
       </div>
     </div>
-  </header>
-
-  <section class="about-section">
-    <h2>Our Company</h2>
-    <div class="about-content">
-      <p>We are a company with a history of commitment, innovation and excellence. With over 21 years of experience in the industry, we have forged a legacy of leadership and quality that distinguishes us as a true pioneer in our field.</p>
-      <p>Our passion for excellence and exceptional service has been the foundation of our success throughout the decades. Since our humble beginnings, we have been at the forefront of innovation and progress in several areas.</p>
-      <button class="secondary-button">More about us</button>
-    </div>
   </section>
 
-  <section class="achievements-section">
-    <div class="achievements-grid">
-      <div class="achievement-card" *ngFor="let achievement of achievements">
-        <h3>{{achievement.number}}</h3>
-        <p>{{achievement.text}}</p>
-      </div>
-    </div>
-  </section>
+  <!-- Product Showcase -->
+  <section class="products-section">
+    <div class="section-container">
+      <h2>Our Mixer Range</h2>
+      <p class="section-subtitle">Choose the perfect mixer for your construction needs</p>
 
-  <section class="pillars-section">
-    <div class="pillars-grid">
-      <div class="pillar-card" *ngFor="let pillar of pillars">
-        <div class="pillar-icon">
-          <i class="{{pillar.icon}}"></i>
+      <div class="product-grid">
+        <div class="product-card" *ngFor="let mixer of mixers">
+          <div class="product-image">
+            <img [src]="mixer.image" [alt]="mixer.name">
+          </div>
+          <div class="product-info">
+            <h3>{{mixer.name}}</h3>
+            <p class="product-description">{{mixer.description}}</p>
+
+            <div class="specs-grid">
+              <div class="spec-item">
+                <span class="spec-label">Capacity</span>
+                <span class="spec-value">{{mixer.specs.capacity}}</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Power</span>
+                <span class="spec-value">{{mixer.specs.enginePower}}</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Build</span>
+                <span class="spec-value">{{mixer.specs.weight}}</span>
+              </div>
+            </div>
+
+            <ul class="feature-list">
+              <li *ngFor="let feature of mixer.features">
+                <i class="fas fa-check"></i>
+                {{feature}}
+              </li>
+            </ul>
+
+            <button class="product-button">Full Specifications</button>
+          </div>
         </div>
-        <h3>{{pillar.title}}</h3>
-        <p>{{pillar.description}}</p>
       </div>
     </div>
   </section>
 
+  <!-- Features Overview -->
+  <section class="features-section">
+    <div class="section-container">
+      <h2>Advanced Features</h2>
+      <p class="section-subtitle">Engineering excellence in every detail</p>
+
+      <div class="features-grid">
+        <div class="feature-item" *ngFor="let feature of features">
+          <i class="fas fa-star"></i>
+          <span>{{feature}}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="benefits-section">
+    <div class="section-container">
+      <h2>Why Choose Our Mixers</h2>
+      <p class="section-subtitle">Quality and reliability you can count on</p>
+
+      <div class="benefits-grid">
+        <div class="benefit-card" *ngFor="let benefit of benefits">
+          <i [class]="benefit.icon"></i>
+          <h3>{{benefit.title}}</h3>
+          <p>{{benefit.description}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact CTA -->
   <section class="contact-section">
-    <div class="contact-content">
-      <h2>Contact us</h2>
-      <p>Do you have any questions? We are always open to talking about your business, new projects, creative opportunities and how we can help.</p>
-      <div class="contact-form">
-        <input type="email" placeholder="Your business email">
-        <button class="submit-button">Contact now</button>
+    <div class="section-container">
+      <div class="contact-content">
+        <h2>Ready to Upgrade Your Equipment?</h2>
+        <p>Contact our team for expert guidance in choosing the right mixer</p>
+        <div class="contact-buttons">
+          <button class="cta-button primary">
+            <i class="fas fa-envelope"></i> Contact Sales
+          </button>
+          <button class="cta-button secondary">
+            <i class="fas fa-file-pdf"></i> Download Specs
+          </button>
+        </div>
       </div>
     </div>
   </section>
-</div>
+</main>
