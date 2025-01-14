@@ -1,0 +1,82 @@
+<div class="home-container">
+  <header class="hero-section">
+    <div class="hero-content">
+      <h1>{{companyName}}</h1>
+      <p class="hero-subtitle">Professional Cement Mixers for Every Project</p>
+      <div class="hero-cta">
+        <button class="cta-button">View Products</button>
+        <button class="cta-button secondary">Request Quote</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="features-section">
+    <h2>Our Professional Mixer Line</h2>
+    <div class="products-grid">
+      <div class="product-card" *ngFor="let product of products">
+        <div class="product-icon">
+          <i class="{{product.icon}}"></i>
+        </div>
+        <h3>{{product.title}}</h3>
+        <p>{{product.description}}</p>
+        <ul class="feature-list">
+          <li *ngFor="let feature of product.features">{{feature}}</li>
+        </ul>
+        <button class="learn-more-btn">Learn More</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="why-choose-us">
+    <h2>Why Choose MixMaster Pro?</h2>
+    <div class="benefits-grid">
+      <div class="benefit-item">
+        <i class="fas fa-medal"></i>
+        <h3>Quality Guaranteed</h3>
+        <p>Industry-leading 5-year warranty on all our mixers</p>
+      </div>
+      <div class="benefit-item">
+        <i class="fas fa-tools"></i>
+        <h3>Expert Support</h3>
+        <p>24/7 technical support and maintenance service</p>
+      </div>
+      <div class="benefit-item">
+        <i class="fas fa-shipping-fast"></i>
+        <h3>Fast Delivery</h3>
+        <p>Nationwide delivery and installation services</p>
+      </div>
+      <div class="benefit-item">
+        <i class="fas fa-hand-holding-usd"></i>
+        <h3>Flexible Financing</h3>
+        <p>Customized payment plans for your business needs</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials-section">
+    <h2>What Our Clients Say</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+        <div class="quote-icon">
+          <i class="fas fa-quote-right"></i>
+        </div>
+        <p class="testimonial-text">{{testimonial.text}}</p>
+        <div class="testimonial-author">
+          <p class="author-name">{{testimonial.name}}</p>
+          <p class="author-company">{{testimonial.company}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="contact-content">
+      <h2>Ready to Upgrade Your Equipment?</h2>
+      <p>Contact our sales team for expert advice and custom quotes</p>
+      <div class="contact-form">
+        <input type="email" placeholder="Enter your business email">
+        <button class="submit-button">Get in Touch</button>
+      </div>
+    </div>
+  </section>
+</div>
