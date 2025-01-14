@@ -1,24 +1,56 @@
 <nav [class.scrolled]="isScrolled">
   <div class="nav-content">
+    <!-- Logo Container -->
     <div class="logo-container" [class.show]="isScrolled">
-      <img src="assets/photos/logo.png" alt="Llanotecnica Logo" class="logo">
+      <img src="assets/photos/logo.png" alt="Llanotecnica Logo" class="logo" />
       <span class="company-name">Llanotecnica</span>
     </div>
 
+    <!-- Hamburger Menu Button -->
     <button class="hamburger" (click)="toggleMenu()" [class.active]="isMenuOpen">
       <span></span>
       <span></span>
       <span></span>
     </button>
 
-    <!-- Navigation Links -->
+    <!-- Nav Links -->
     <ul class="nav-links" [class.show-mobile]="isMenuOpen" [class.scrolled-nav]="isScrolled">
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
-      <li><a routerLink="/about" routerLinkActive="active">About Us</a></li>
-      <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
-      <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
+      <li>
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}"
+          >Home</a>
+      </li>
+      <li>
+        <a
+          routerLink="/about"
+          routerLinkActive="active"
+          >About Us</a>
+      </li>
+      <li>
+        <a
+          routerLink="/products"
+          routerLinkActive="active"
+          >Products</a>
+      </li>
+      <li>
+        <a
+          routerLink="/contact"
+          routerLinkActive="active"
+          >Contact</a>
+      </li>
+
+      <!-- Mobile-Only: Download Catalog Link -->
+      <li class="mobile-only">
+        <a href="assets/downloads/catalog.pdf" download>
+          <img src="assets/photos/pdf.png" alt="PDF Icon" class="download-icon" />
+          Download Catalog
+        </a>
+      </li>
     </ul>
 
+    <!-- Language Selector (Optional) -->
     <app-language-selector></app-language-selector>
   </div>
 </nav>

@@ -1,74 +1,219 @@
 .top-banner {
   background: linear-gradient(90deg, #008751 0%, #00a562 100%);
-  height: 96px;
-  overflow: hidden;
   position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 96px;
   z-index: 1001;
 }
 
-.banner-content {
+.banner-container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 20px;
   height: 100%;
+}
+
+.banner-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+/* Brand Section */
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-container {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  padding: 0 20px;
 }
 
-.animated-text {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+.logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.brand-text {
   color: white;
 }
 
-.company-highlight {
-  font-size: 2.5em;
+.company-name {
+  font-size: 1.5rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.1em;
+  margin: 0;
 }
 
 .slogan {
-  font-size: 1.2em;
-  font-weight: 300;
-  border-left: 2px solid rgba(255,255,255,0.5);
-  padding-left: 20px;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0.25rem 0 0;
 }
 
-.design-element {
+/* Actions Section */
+.actions-section {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.phone-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.phone-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-icon {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.social-icon:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.catalog-download {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: white;
+  color: #008751;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.catalog-download:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Icons */
+.phone-icon::before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.facebook-icon::before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.instagram-icon::before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='2' width='20' height='20' rx='5' ry='5'%3E%3C/rect%3E%3Cpath d='M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z'%3E%3C/path%3E%3Cline x1='17.5' y1='6.5' x2='17.51' y2='6.5'%3E%3C/line%3E%3C/svg%3E");
+}
+
+.download-icon::before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23008751' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'%3E%3C/path%3E%3Cpolyline points='7 10 12 15 17 10'%3E%3C/polyline%3E%3Cline x1='12' y1='15' x2='12' y2='3'%3E%3C/line%3E%3C/svg%3E");
+}
+
+
+.decorative-element {
   position: absolute;
-  right: 0;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-  transform: rotate(45deg);
+  width: 256px;
+  height: 100%;
+  opacity: 0.1;
 }
 
-@media (max-width: 768px) {
-  .animated-text {
-    flex-direction: column;
-    gap: 5px;
-    text-align: center;
+.decorative-element.right {
+  top: 0;
+  right: 0;
+}
+
+.decorative-element.right::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: white;
+  transform: rotate(12deg) translateX(128px) translateY(32px);
+}
+
+.decorative-element.left {
+  bottom: 0;
+  left: 0;
+}
+
+.decorative-element.left::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: white;
+  transform: rotate(-12deg) translateX(-128px) translateY(32px);
+}
+
+/* Desktop Only and Mobile Handling */
+.top-banner {
+  display: none;
+}
+
+/* Show only on desktop */
+@media (min-width: 769px) {
+  .top-banner {
+    display: block;
   }
 
+  /* Animation for the text */
+  .animated-text {
+    opacity: 0;
+    animation: fadeInSlide 0.8s forwards;
+  }
+
+  @keyframes fadeInSlide {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Animation for the catalog button */
+  .catalog-download {
+    opacity: 0;
+    animation: fadeIn 0.8s 0.3s forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Mobile styles (hidden) */
+@media (max-width: 768px) {
   .top-banner {
     display: none !important;
-  }
-
-  .company-highlight {
-    font-size: 2em;
-  }
-
-  .slogan {
-    font-size: 1em;
-    border-left: none;
-    padding-left: 0;
   }
 }
