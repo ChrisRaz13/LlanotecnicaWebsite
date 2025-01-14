@@ -1,6 +1,10 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent }
+  { path: '', component: HomeComponent },
+  // Add other routes as you create the components
+  { path: 'about', redirectTo: '', pathMatch: 'full' },
+  { path: 'products', redirectTo: '', pathMatch: 'full' },
+  { path: 'contact', redirectTo: '', pathMatch: 'full' }
 ];

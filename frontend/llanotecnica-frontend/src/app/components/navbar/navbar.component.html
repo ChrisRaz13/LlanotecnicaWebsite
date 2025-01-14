@@ -1,0 +1,23 @@
+<nav [class.scrolled]="isScrolled">
+  <div class="nav-content">
+    <div class="logo-container" [class.show]="isScrolled">
+      <img src="assets/photos/logo.png" alt="Llanotecnica Logo" class="logo">
+      <span class="company-name">Llanotecnica</span>
+    </div>
+
+    <!-- Hamburger Menu Button -->
+    <button class="hamburger" (click)="toggleMenu()" [class.active]="isMenuOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Navigation Links -->
+    <ul class="nav-links" [class.show-mobile]="isMenuOpen" [class.scrolled-nav]="isScrolled">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+      <li><a routerLink="/about" routerLinkActive="active">About Us</a></li>
+      <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
+      <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
+    </ul>
+  </div>
+</nav>

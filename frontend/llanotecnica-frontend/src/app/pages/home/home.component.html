@@ -1,0 +1,57 @@
+<div class="home-container">
+  <header class="hero-section">
+    <div class="hero-content">
+      <h1>{{companyName}}</h1>
+      <p class="hero-tagline">Transforming Technology, Inspiring Innovation</p>
+      <p class="hero-subtitle">We are committed to meeting the needs of our customers in the manufacturing of quality concrete mixers.</p>
+      <div class="hero-cta">
+        <button class="cta-button">See Products</button>
+        <div class="social-links">
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="about-section">
+    <h2>Our Company</h2>
+    <div class="about-content">
+      <p>We are a company with a history of commitment, innovation and excellence. With over 21 years of experience in the industry, we have forged a legacy of leadership and quality that distinguishes us as a true pioneer in our field.</p>
+      <p>Our passion for excellence and exceptional service has been the foundation of our success throughout the decades. Since our humble beginnings, we have been at the forefront of innovation and progress in several areas.</p>
+      <button class="secondary-button">More about us</button>
+    </div>
+  </section>
+
+  <section class="achievements-section">
+    <div class="achievements-grid">
+      <div class="achievement-card" *ngFor="let achievement of achievements">
+        <h3>{{achievement.number}}</h3>
+        <p>{{achievement.text}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pillars-section">
+    <div class="pillars-grid">
+      <div class="pillar-card" *ngFor="let pillar of pillars">
+        <div class="pillar-icon">
+          <i class="{{pillar.icon}}"></i>
+        </div>
+        <h3>{{pillar.title}}</h3>
+        <p>{{pillar.description}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="contact-content">
+      <h2>Contact us</h2>
+      <p>Do you have any questions? We are always open to talking about your business, new projects, creative opportunities and how we can help.</p>
+      <div class="contact-form">
+        <input type="email" placeholder="Your business email">
+        <button class="submit-button">Contact now</button>
+      </div>
+    </div>
+  </section>
+</div>
