@@ -5,7 +5,6 @@
       <span class="company-name">Llanotecnica</span>
     </div>
 
-    <!-- Hamburger Menu Button -->
     <button class="hamburger" (click)="toggleMenu()" [class.active]="isMenuOpen">
       <span></span>
       <span></span>
@@ -19,5 +18,7 @@
       <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
       <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
     </ul>
+
+    <app-language-selector></app-language-selector>
   </div>
 </nav>

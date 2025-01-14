@@ -1,0 +1,30 @@
+.lang-toggle {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  margin-left: 30px;
+}
+
+.lang-toggle:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+.flag-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .lang-toggle {
+    position: fixed;
+    top: 20px;
+    right: 70px;
+    margin-left: 0;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+}
