@@ -1,3 +1,4 @@
+/* banner.component.css */
 .top-banner {
   background: linear-gradient(90deg, #008751 0%, #00a562 100%);
   position: relative;
@@ -55,12 +56,14 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   margin: 0;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .slogan {
   font-size: 0.875rem;
   color: rgba(255, 255, 255, 0.9);
   margin: 0.25rem 0 0;
+  font-style: italic;
 }
 
 /* Actions Section */
@@ -134,6 +137,12 @@
 }
 
 
+
+
+
+
+
+/* Decorative Elements */
 .decorative-element {
   position: absolute;
   width: 256px;
@@ -217,3 +226,5 @@
     display: none !important;
   }
 }
+
+

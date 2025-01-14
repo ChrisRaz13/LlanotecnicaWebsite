@@ -1,4 +1,3 @@
-// banner.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -10,7 +9,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./banner.component.css']
 })
 export class BannerComponent {
-  phoneNumber = '+1 (234) 567-890';
+  phoneNumber = '+507 6566-4942';
+  whatsappLink = 'https://wa.me/50765664942';
   socialLinks = {
     facebook: 'https://facebook.com/llanotecnica',
     instagram: 'https://instagram.com/llanotecnica'
