@@ -1,3 +1,4 @@
+/* NAV WRAPPER */
 nav {
   background-color: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -17,16 +18,19 @@ nav.scrolled {
   transform: translateY(0);
 }
 
+/* NAV CONTENT */
 .nav-content {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 20px;
   position: relative;
   transition: all 0.5s ease;
 }
 
+/* LOGO CONTAINER */
 .logo-container {
   display: flex;
   align-items: center;
@@ -34,8 +38,6 @@ nav.scrolled {
   transform: translateX(-20px) scale(0.95);
   visibility: hidden;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  position: absolute;
-  left: 20px;
 }
 
 .logo-container.show {
@@ -56,25 +58,18 @@ nav.scrolled {
   font-family: 'Montserrat', sans-serif;
 }
 
+/* NAV LINKS */
 .nav-links {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
-  transition: all 0.5s ease;
-  width: 100%;
-  justify-content: center;
   gap: 96px;
+  position: relative;
+  z-index: 1;
 }
 
-.nav-links.scrolled-nav {
-  justify-content: flex-end;
-  gap: 96px;
-  margin-right: 96px;
-  transform: translateX(-100px);
-  transition: all 0.5s ease;
-}
-
+/* LINK STYLES */
 .nav-links li a {
   color: #333333;
   text-decoration: none;
@@ -86,6 +81,7 @@ nav.scrolled {
   white-space: nowrap;
 }
 
+/* Hover/Active States */
 .nav-links li a:after {
   content: '';
   position: absolute;
@@ -107,6 +103,7 @@ nav.scrolled {
   width: 100%;
 }
 
+/* LANGUAGE TOGGLE */
 .lang-toggle {
   margin-left: 30px;
   cursor: pointer;
@@ -140,6 +137,7 @@ nav.scrolled {
   font-weight: 300;
 }
 
+/* HAMBURGER MENU */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -177,6 +175,7 @@ nav.scrolled {
   transform: rotate(-45deg);
 }
 
+/* MOBILE ONLY */
 .mobile-only {
   display: none;
 }
@@ -187,7 +186,9 @@ nav.scrolled {
   margin-right: 5px;
 }
 
+/* MOBILE STYLES */
 @media (max-width: 768px) {
+  /* NAV WRAPPER BECOMES FIXED */
   nav {
     position: fixed;
     top: 0;
@@ -198,6 +199,7 @@ nav.scrolled {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
 
+  /* HAMBURGER VISIBLE */
   .hamburger {
     display: flex;
     position: fixed;
@@ -206,6 +208,7 @@ nav.scrolled {
     z-index: 1002;
   }
 
+  /* LOGO CONTAINER */
   .logo-container {
     opacity: 1;
     transform: translateX(0) scale(1);
@@ -226,6 +229,7 @@ nav.scrolled {
     height: 30px;
   }
 
+  /* NAV LINKS TRANSFORM INTO MOBILE MENU */
   .nav-links {
     position: fixed;
     top: 70px;
@@ -240,7 +244,7 @@ nav.scrolled {
     padding-top: 20px;
     transition: all 0.3s ease;
     z-index: 1001;
-    gap: 20px;
+    gap: 20px; /* for spacing in mobile menu */
   }
 
   .nav-links.show-mobile {
