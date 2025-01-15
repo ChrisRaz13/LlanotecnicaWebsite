@@ -1,4 +1,4 @@
-
+<!-- home.component.html -->
 <main class="home-container">
   <!-- Hero Section -->
   <section class="hero-section">
@@ -58,17 +58,40 @@
     </div>
   </section>
 
-  <!-- Features Overview -->
-  <section class="features-section">
+  <!-- Features Section -->
+  <section class="features-section" [@cardAnimation]>
     <div class="section-container">
-      <h2>Advanced Features</h2>
+      <h2 class="section-title">Advanced Features</h2>
       <p class="section-subtitle">Engineering excellence in every detail</p>
 
+      <div class="feature-filters">
+        @for (category of featureCategories; track category) {
+          <button
+            [class.active]="activeCategory === category"
+            (click)="filterFeatures(category)"
+            class="filter-btn">
+            <i [class]="category === 'all' ? 'fa-solid fa-layer-group' : 'fa-solid fa-tag'"></i>
+            {{formatCategory(category)}}
+          </button>
+        }
+      </div>
+
       <div class="features-grid">
-        <div class="feature-item" *ngFor="let feature of features">
-          <i class="fas fa-star"></i>
-          <span>{{feature}}</span>
-        </div>
+        @for (feature of filteredFeatures; track feature.title) {
+          <div class="feature-card">
+            <div class="feature-header">
+              <div class="feature-icon">
+                <i [class]="feature.icon"></i>
+              </div>
+              <h3 class="feature-title">{{feature.title}}</h3>
+            </div>
+            <p class="feature-description">{{feature.description}}</p>
+            <div class="feature-highlight">
+              <i class="fa-solid fa-check"></i>
+              <span>{{feature.highlight}}</span>
+            </div>
+          </div>
+        }
       </div>
     </div>
   </section>
