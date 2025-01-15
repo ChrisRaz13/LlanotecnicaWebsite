@@ -10,6 +10,7 @@ nav {
   transform: translateY(0);
   will-change: transform, position;
   transition: transform 0.3s ease;
+
 }
 
 nav.scrolled {
