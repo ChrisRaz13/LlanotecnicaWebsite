@@ -1,19 +1,33 @@
-
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { trigger, style, animate, transition, stagger, query } from '@angular/animations';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  animations: [
+    trigger('cardAnimation', [
+      transition(':enter', [
+        query('.product-card', [
+          style({ opacity: 0, transform: 'translateY(50px)' }),
+          stagger(200, [
+            animate('0.5s cubic-bezier(0.35, 0, 0.25, 1)',
+              style({ opacity: 1, transform: 'translateY(0)' })
+            )
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
 })
 export class HomeComponent {
   mixers = [
     {
       name: 'Concrete Mixer MT-370',
-      description: 'Compact and powerful mixer perfect for small to medium projects',
+      description: 'Compact mixer perfect for small to medium projects',
       features: [
         'Ideal for residential construction',
         'Easy to transport and maneuver',

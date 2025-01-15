@@ -16,17 +16,17 @@
 
   <!-- Product Showcase -->
   <section class="products-section">
-    <div class="section-container">
-      <h2>Our Mixer Range</h2>
+    <div class="products-container">
+      <h2 class="section-title">Our Mixer Range</h2>
       <p class="section-subtitle">Choose the perfect mixer for your construction needs</p>
 
-      <div class="product-grid">
+      <div class="product-grid" [@cardAnimation]="mixers.length">
         <div class="product-card" *ngFor="let mixer of mixers">
           <div class="product-image">
             <img [src]="mixer.image" [alt]="mixer.name">
           </div>
           <div class="product-info">
-            <h3>{{mixer.name}}</h3>
+            <h3 class="product-title">{{mixer.name}}</h3>
             <p class="product-description">{{mixer.description}}</p>
 
             <div class="specs-grid">
@@ -51,7 +51,7 @@
               </li>
             </ul>
 
-            <button class="product-button">Full Specifications</button>
+            <button class="product-button">View Specifications</button>
           </div>
         </div>
       </div>

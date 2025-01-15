@@ -6,7 +6,7 @@ import { BannerComponent } from './components/banner/banner.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, BannerComponent],
+  imports: [RouterOutlet, NavbarComponent, BannerComponent,],
   template: `
     <app-banner></app-banner>
     <app-navbar></app-navbar>
