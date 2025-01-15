@@ -1,0 +1,95 @@
+<footer class="site-footer">
+  <!-- Main Footer -->
+  <div class="footer-main">
+    <div class="footer-container">
+      <div class="footer-content">
+        <!-- Company Info -->
+        <div class="footer-section company-info">
+          <div class="footer-brand">
+            <div class="footer-logo-container">
+              <img src="assets/photos/logo.png" alt="Llanotecnica Logo" class="footer-logo">
+            </div>
+            <h2 class="footer-company-name">LLANOTECNICA</h2>
+          </div>
+          <p class="company-description">
+            Empowering construction projects with innovative concrete mixing solutions since 2002. Quality, reliability, and excellence in every machine.
+          </p>
+          <div class="contact-info">
+            <a [href]="companyInfo.whatsapp" class="footer-contact-item">
+              <i class="phone-icon"></i>
+              <span>{{ companyInfo.phone }}</span>
+            </a>
+            <a [href]="'mailto:' + companyInfo.email" class="footer-contact-item">
+              <i class="email-icon"></i>
+              <span>{{ companyInfo.email }}</span>
+            </a>
+            <div class="footer-contact-item location">
+              <i class="location-icon"></i>
+              <span>{{ companyInfo.address }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-section quick-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li *ngFor="let link of quickLinks">
+              <a [routerLink]="link.route">{{ link.text }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Products -->
+        <div class="footer-section products">
+          <h3>Our Products</h3>
+          <ul>
+            <li *ngFor="let product of products">
+              <a [routerLink]="product.route">{{ product.text }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Support -->
+        <div class="footer-section support">
+          <h3>Support</h3>
+          <ul>
+            <li *ngFor="let item of support">
+              <a [routerLink]="item.route">{{ item.text }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Social Links -->
+      <div class="footer-social">
+        <div class="social-links">
+          <a [href]="companyInfo.socialLinks.facebook" target="_blank" rel="noopener noreferrer" class="social-icon">
+            <i class="facebook-icon"></i>
+          </a>
+          <a [href]="companyInfo.socialLinks.instagram" target="_blank" rel="noopener noreferrer" class="social-icon">
+            <i class="instagram-icon"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Bottom -->
+  <div class="footer-bottom">
+    <div class="footer-container">
+      <div class="footer-bottom-content">
+        <p>&copy; {{ currentYear }} Llanotecnica. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="/privacy">Privacy Policy</a>
+          <span class="separator">|</span>
+          <a href="/terms">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative elements -->
+  <div class="decorative-element right"></div>
+  <div class="decorative-element left"></div>
+</footer>
