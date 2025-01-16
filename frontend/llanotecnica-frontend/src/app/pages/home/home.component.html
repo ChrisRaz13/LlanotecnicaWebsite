@@ -14,49 +14,73 @@
     </div>
   </section>
 
-  <!-- Product Showcase -->
-  <section class="products-section">
-    <div class="products-container">
-      <h2 class="section-title">Our Mixer Range</h2>
-      <p class="section-subtitle">Choose the perfect mixer for your construction needs</p>
+<!-- Updated Product Showcase -->
+<section class="products-section">
+  <div class="products-container">
+    <h2 class="section-title">Our Mixer Range</h2>
+    <p class="section-subtitle">Choose the perfect mixer for your construction needs</p>
 
-      <div class="product-grid" [@cardAnimation]="mixers.length">
-        <div class="product-card" *ngFor="let mixer of mixers">
-          <div class="product-image">
-            <img [src]="mixer.image" [alt]="mixer.name">
-          </div>
-          <div class="product-info">
-            <h3 class="product-title">{{mixer.name}}</h3>
-            <p class="product-description">{{mixer.description}}</p>
+    <div class="content-wrapper">
+      <!-- Left Side Content -->
+      <div class="left-content">
+        <!-- Product Overview -->
+        <div class="product-overview">
+          <h3 class="overview-title">Professional Mixing Solutions</h3>
+          <p class="overview-text">Our advanced concrete mixers combine durability with innovation, offering you:</p>
+          <ul class="overview-features">
+            <li><i class="fas fa-check"></i> Superior mixing efficiency</li>
+            <li><i class="fas fa-check"></i> Robust construction</li>
+            <li><i class="fas fa-check"></i> Easy maintenance design</li>
+          </ul>
+        </div>
 
-            <div class="specs-grid">
-              <div class="spec-item">
-                <span class="spec-label">Capacity</span>
-                <span class="spec-value">{{mixer.specs.capacity}}</span>
+        <!-- Product Cards -->
+        <div class="mixer-cards">
+          <div class="mixer-card" *ngFor="let mixer of mixers">
+            <div class="mixer-image">
+              <img [src]="mixer.image" [alt]="mixer.name">
+            </div>
+            <div class="mixer-details">
+              <div class="mixer-header">
+                <h3>{{mixer.name}}</h3>
+                <p>{{mixer.description}}</p>
               </div>
-              <div class="spec-item">
-                <span class="spec-label">Power</span>
-                <span class="spec-value">{{mixer.specs.enginePower}}</span>
-              </div>
-              <div class="spec-item">
-                <span class="spec-label">Build</span>
-                <span class="spec-value">{{mixer.specs.weight}}</span>
+              <div class="mixer-specs">
+                <div class="spec">
+                  <span class="spec-label">CAPACITY</span>
+                  <span class="spec-value">{{mixer.specs.capacity}}</span>
+                </div>
+                <div class="spec">
+                  <span class="spec-label">POWER</span>
+                  <span class="spec-value">{{mixer.specs.enginePower}}</span>
+                </div>
+                <div class="spec">
+                  <span class="spec-label">BUILD</span>
+                  <span class="spec-value">{{mixer.specs.weight}}</span>
+                </div>
               </div>
             </div>
-
-            <ul class="feature-list">
-              <li *ngFor="let feature of mixer.features">
-                <i class="fas fa-check"></i>
-                {{feature}}
-              </li>
-            </ul>
-
-            <button class="product-button">View Specifications</button>
           </div>
         </div>
       </div>
+
+      <!-- Right Side Video -->
+      <div class="video-section">
+        <div class="video-container">
+          <video
+            controls
+            class="showcase-video"
+            poster="assets/photos/MixersSpanish.jpg"
+            preload="metadata"
+            playsinline
+            controlsList="nodownload">
+            <source src="assets/videos/MixersSpanish.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Features Section -->
   <section class="features-section" [@cardAnimation]>

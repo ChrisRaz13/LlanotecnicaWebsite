@@ -1,4 +1,3 @@
-// home.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, style, animate, transition, stagger, query } from '@angular/animations';
@@ -37,6 +36,9 @@ interface Feature {
   ]
 })
 export class HomeComponent {
+  activeTab: 'video' | 'products' = 'video';
+  videoUrl = 'assets/videos/mixer-showcase.mp4';
+
   mixers = [
     {
       name: 'Concrete Mixer MT-370',
@@ -139,6 +141,10 @@ export class HomeComponent {
   ];
 
   activeCategory: CategoryType = 'all';
+
+  setActiveTab(tab: 'video' | 'products'): void {
+    this.activeTab = tab;
+  }
 
   get featureCategories(): CategoryType[] {
     const categories: CategoryType[] = ['all'];
