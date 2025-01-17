@@ -151,32 +151,34 @@ export class HomeComponent implements OnInit {
   }
 
   private startWordAnimations(): void {
-    const fillDelay = 1000; // Delay between each word fill
-    const smoothOverDelay = fillDelay * this.heroWords.length + 500; // Start smooth over after all fills
+    const fillDelay = 600;
+    const totalFillDuration = fillDelay * this.heroWords.length;
+    const smoothOverDelay = fillDelay * this.heroWords.length + 100;
 
     // Animate words from bottom to top
     this.heroWords
-      .slice()
-      .reverse()
-      .forEach((word, index) => {
-        setTimeout(() => {
-          const element = document.querySelector(`.hero-word:nth-child(${this.heroWords.length - index})`) as HTMLElement;
-          if (element) {
-            element.classList.add('animate');
-          }
-        }, index * fillDelay);
-      });
-
-    // Add smooth-over animation to all words after filling is complete
-    setTimeout(() => {
-      this.heroWords.forEach((_, index) => {
-        const element = document.querySelector(`.hero-word:nth-child(${index + 1})`) as HTMLElement;
+    .slice()
+    .reverse()
+    .forEach((_, index) => {
+      setTimeout(() => {
+        const elementIndex = this.heroWords.length - 1 - index;
+        const element = document.querySelector(`.hero-word:nth-child(${elementIndex + 1})`) as HTMLElement;
         if (element) {
-          element.classList.add('smooth-over');
+          element.classList.add('animate');
         }
-      });
-    }, smoothOverDelay);
-  }
+      }, index * fillDelay);
+    });
+
+  // After all words are filled, trigger the smooth-over effect
+  setTimeout(() => {
+    this.heroWords.forEach((_, index) => {
+      const element = document.querySelector(`.hero-word:nth-child(${index + 1})`) as HTMLElement;
+      if (element) {
+        element.classList.add('smooth-over');
+      }
+    });
+  }, totalFillDuration + smoothOverDelay);
+}
 
   setActiveTab(tab: 'video' | 'products'): void {
     this.activeTab = tab;
