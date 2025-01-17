@@ -111,17 +111,20 @@ section {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('https://c7.alamy.com/comp/T6R3YK/closeup-cement-texture-background-abstract-wall-texture-for-design-T6R3YK.jpg'); /* Rough cement texture */
+  background-image: url('https://c7.alamy.com/comp/T6R3YK/closeup-cement-texture-background-abstract-wall-texture-for-design-T6R3YK.jpg');
   background-size: cover;
   background-position: center;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); /* Hidden initially */
-  animation: pourIn 2s ease-out forwards, smoothTransition 3s ease-in 2s forwards; /* Dual animations */
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  transform-origin: bottom;
 }
 
-/* Smooth cement transition */
+.hero-word.animate::before {
+  animation: fillUp 1s ease-out forwards;
+}
+
 .hero-word::after {
   content: attr(data-text);
   position: absolute;
@@ -129,18 +132,20 @@ section {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('https://img.freepik.com/free-photo/cement-texture_1194-6209.jpg'); /* Smooth cement texture */
+  background-image: url('https://img.freepik.com/free-photo/cement-texture_1194-6209.jpg');
   background-size: cover;
   background-position: center;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  opacity: 0; /* Initially hidden */
-  animation: smoothAppearance 2s ease-in 2s forwards;
+  opacity: 0;
 }
 
-/* Corrected Pour-In Animation */
-@keyframes pourIn {
+.hero-word.smooth-over::after {
+  animation: smoothOver 1.5s ease-in forwards;
+}
+
+@keyframes fillUp {
   0% {
     clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
   }
@@ -158,9 +163,17 @@ section {
   }
 }
 
-/* Emphasis Word */
+@keyframes smoothOver {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .hero-word.emphasis {
-  font-size: 110px; /* Larger size for emphasis */
+  font-size: 110px;
   -webkit-text-stroke: 4px rgba(255, 255, 255, 0.8);
 }
 
@@ -188,7 +201,6 @@ section {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 135, 81, 0.3);
 }
-
 /* =====================================
    PRODUCTS SECTION
 ===================================== */

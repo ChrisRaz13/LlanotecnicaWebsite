@@ -1,12 +1,14 @@
 <main class="home-container">
-  <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
       <div class="hero-text">
-        <div class="hero-word" data-text="Reliable" [class.pour]="animationStates[0]">Reliable</div>
-        <div class="hero-word" data-text="Durable" [class.pour]="animationStates[1]">Durable</div>
-        <div class="hero-word emphasis" data-text="Quality Mixers" [class.pour]="animationStates[2]">Quality Mixers</div>
-
+        <div
+          *ngFor="let word of heroWords"
+          class="hero-word"
+          [class.emphasis]="word.class === 'emphasis'"
+          [attr.data-text]="word.text">
+          {{ word.text }}
+        </div>
         <div class="hero-cta">
           <button class="cta-button view-products">View Products</button>
         </div>

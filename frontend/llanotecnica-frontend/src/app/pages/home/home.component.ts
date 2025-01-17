@@ -33,8 +33,6 @@ interface Feature {
   ]
 })
 export class HomeComponent implements OnInit {
-  animationStates: boolean[] = [false, false, false, false];
-  smoothTransitionTriggered = false;
   activeTab: 'video' | 'products' = 'video';
   videoUrl = 'assets/videos/mixer-showcase.mp4';
 
@@ -153,21 +151,31 @@ export class HomeComponent implements OnInit {
   }
 
   private startWordAnimations(): void {
-    const animationDuration = 1000;
-    const totalFillDuration = animationDuration * this.heroWords.length;
+    const fillDelay = 1000; // Delay between each word fill
+    const smoothOverDelay = fillDelay * this.heroWords.length + 500; // Start smooth over after all fills
 
+    // Animate words from bottom to top
     this.heroWords
       .slice()
       .reverse()
-      .forEach((_, index) => {
+      .forEach((word, index) => {
         setTimeout(() => {
-          this.animationStates[this.heroWords.length - 1 - index] = true; // Apply animation state
-        }, index * animationDuration);
+          const element = document.querySelector(`.hero-word:nth-child(${this.heroWords.length - index})`) as HTMLElement;
+          if (element) {
+            element.classList.add('animate');
+          }
+        }, index * fillDelay);
       });
 
+    // Add smooth-over animation to all words after filling is complete
     setTimeout(() => {
-      this.smoothTransitionTriggered = true;
-    }, totalFillDuration);
+      this.heroWords.forEach((_, index) => {
+        const element = document.querySelector(`.hero-word:nth-child(${index + 1})`) as HTMLElement;
+        if (element) {
+          element.classList.add('smooth-over');
+        }
+      });
+    }, smoothOverDelay);
   }
 
   setActiveTab(tab: 'video' | 'products'): void {
