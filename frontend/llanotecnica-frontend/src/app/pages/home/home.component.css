@@ -1,6 +1,4 @@
-/* =====================================
-   GLOBAL RESETS & BASE
-===================================== */
+
 html, body {
   overflow-x: hidden;
   width: 100%;
@@ -19,7 +17,7 @@ html, body {
   flex: 1;
 }
 
-/* Ensure sections span full viewport width */
+
 section {
   width: 100%;
   max-width: 100vw;
@@ -581,7 +579,7 @@ section {
 .video-section {
   width: 100%;
   max-width: 500px;
-  margin: 0 auto 2rem; /* Centered on all devices */
+  margin: 0 auto 2rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -591,7 +589,6 @@ section {
 .video-container {
   position: relative;
   width: 100%;
-  /* 1080×1920 => 9:16 ratio => (16/9)*100% ≈ 177.78% */
   padding-bottom: 177.77%;
   border-radius: 12px;
   overflow: hidden;
@@ -613,7 +610,6 @@ section {
   left: 0;
   width: 100%;
   height: 100%;
-  /* Cover by default to fill container */
   object-fit: cover;
   background: transparent;
 }
@@ -934,15 +930,25 @@ section {
   font-weight: 700;
   color: #000000;
   margin-bottom: 20px;
-  text-align: left;
+  text-align: center;
 }
+
+.company-section .section-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 25px;
+  font-weight: 400;
+  color: #000000;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 
 .company-description {
   margin: 40px 0;
 }
 
 .company-description p {
-  color: #4a5568;
+  color: #000000;
   line-height: 1.8;
   margin-bottom: 20px;
   font-size: 18px;
