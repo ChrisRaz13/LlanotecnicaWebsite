@@ -1,12 +1,12 @@
-<!-- home.component.html -->
 <main class="home-container">
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
       <div class="hero-text">
-        <span class="hero-word">Reliable</span>
-        <span class="hero-word">Durable</span>
-        <span class="hero-word emphasis">Quality Mixers</span>
+        <div class="hero-word" data-text="Reliable" [class.pour]="animationStates[0]">Reliable</div>
+        <div class="hero-word" data-text="Durable" [class.pour]="animationStates[1]">Durable</div>
+        <div class="hero-word emphasis" data-text="Quality Mixers" [class.pour]="animationStates[2]">Quality Mixers</div>
+
         <div class="hero-cta">
           <button class="cta-button view-products">View Products</button>
         </div>
@@ -14,73 +14,75 @@
     </div>
   </section>
 
-<!-- Updated Product Showcase -->
-<section class="products-section">
-  <div class="products-container">
-    <h2 class="section-title">Our Mixer Range</h2>
-    <p class="section-subtitle">Choose the perfect mixer for your construction needs</p>
+  <!-- Updated Product Showcase -->
+  <section class="products-section">
+    <div class="products-container">
+      <h2 class="section-title">Our Mixer Range</h2>
+      <p class="section-subtitle">Choose the perfect mixer for your construction needs</p>
 
-    <div class="content-wrapper">
-      <!-- Left Side Content -->
-      <div class="left-content">
-        <!-- Product Overview -->
-        <div class="product-overview">
-          <h3 class="overview-title">Professional Mixing Solutions</h3>
-          <p class="overview-text">Our advanced concrete mixers combine durability with innovation, offering you:</p>
-          <ul class="overview-features">
-            <li><i class="fas fa-check"></i> Superior mixing efficiency</li>
-            <li><i class="fas fa-check"></i> Robust construction</li>
-            <li><i class="fas fa-check"></i> Easy maintenance design</li>
-          </ul>
-        </div>
+      <div class="content-wrapper">
+        <!-- Left Side Content -->
+        <div class="left-content">
+          <!-- Product Overview -->
+          <div class="product-overview">
+            <h3 class="overview-title">Professional Mixing Solutions</h3>
+            <p class="overview-text">
+              Our advanced concrete mixers combine durability with innovation, offering you:
+            </p>
+            <ul class="overview-features">
+              <li><i class="fas fa-check"></i> Superior mixing efficiency</li>
+              <li><i class="fas fa-check"></i> Robust construction</li>
+              <li><i class="fas fa-check"></i> Easy maintenance design</li>
+            </ul>
+          </div>
 
-        <!-- Product Cards -->
-        <div class="mixer-cards">
-          <div class="mixer-card" *ngFor="let mixer of mixers">
-            <div class="mixer-image">
-              <img [src]="mixer.image" [alt]="mixer.name">
-            </div>
-            <div class="mixer-details">
-              <div class="mixer-header">
-                <h3>{{mixer.name}}</h3>
-                <p>{{mixer.description}}</p>
+          <!-- Product Cards -->
+          <div class="mixer-cards">
+            <div class="mixer-card" *ngFor="let mixer of mixers">
+              <div class="mixer-image">
+                <img [src]="mixer.image" [alt]="mixer.name">
               </div>
-              <div class="mixer-specs">
-                <div class="spec">
-                  <span class="spec-label">CAPACITY</span>
-                  <span class="spec-value">{{mixer.specs.capacity}}</span>
+              <div class="mixer-details">
+                <div class="mixer-header">
+                  <h3>{{ mixer.name }}</h3>
+                  <p>{{ mixer.description }}</p>
                 </div>
-                <div class="spec">
-                  <span class="spec-label">POWER</span>
-                  <span class="spec-value">{{mixer.specs.enginePower}}</span>
-                </div>
-                <div class="spec">
-                  <span class="spec-label">BUILD</span>
-                  <span class="spec-value">{{mixer.specs.weight}}</span>
+                <div class="mixer-specs">
+                  <div class="spec">
+                    <span class="spec-label">CAPACITY</span>
+                    <span class="spec-value">{{ mixer.specs.capacity }}</span>
+                  </div>
+                  <div class="spec">
+                    <span class="spec-label">POWER</span>
+                    <span class="spec-value">{{ mixer.specs.enginePower }}</span>
+                  </div>
+                  <div class="spec">
+                    <span class="spec-label">BUILD</span>
+                    <span class="spec-value">{{ mixer.specs.weight }}</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Right Side Video -->
-      <div class="video-section">
-        <div class="video-container">
-          <video
-            controls
-            class="showcase-video"
-            poster="assets/photos/MixersSpanish.jpg"
-            preload="metadata"
-            playsinline
-            controlsList="nodownload">
-            <source src="assets/videos/MixersSpanish.mp4" type="video/mp4">
-          </video>
+        <!-- Right Side Video -->
+        <div class="video-section">
+          <div class="video-container">
+            <video
+              controls
+              class="showcase-video"
+              poster="assets/photos/MixersSpanish.jpg"
+              preload="metadata"
+              playsinline
+              controlsList="nodownload">
+              <source src="assets/videos/MixersSpanish.mp4" type="video/mp4">
+            </video>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- Features Section -->
   <section class="features-section" [@cardAnimation]>
@@ -89,33 +91,30 @@
       <p class="section-subtitle">Engineering excellence in every detail</p>
 
       <div class="feature-filters">
-        @for (category of featureCategories; track category) {
-          <button
-            [class.active]="activeCategory === category"
-            (click)="filterFeatures(category)"
-            class="filter-btn">
-            <i [class]="category === 'all' ? 'fa-solid fa-layer-group' : 'fa-solid fa-tag'"></i>
-            {{formatCategory(category)}}
-          </button>
-        }
+        <button
+          *ngFor="let category of featureCategories"
+          [class.active]="activeCategory === category"
+          (click)="filterFeatures(category)"
+          class="filter-btn">
+          <i [class]="category === 'all' ? 'fa-solid fa-layer-group' : 'fa-solid fa-tag'"></i>
+          {{ formatCategory(category) }}
+        </button>
       </div>
 
       <div class="features-grid">
-        @for (feature of filteredFeatures; track feature.title) {
-          <div class="feature-card">
-            <div class="feature-header">
-              <div class="feature-icon">
-                <i [class]="feature.icon"></i>
-              </div>
-              <h3 class="feature-title">{{feature.title}}</h3>
+        <div class="feature-card" *ngFor="let feature of filteredFeatures">
+          <div class="feature-header">
+            <div class="feature-icon">
+              <i [class]="feature.icon"></i>
             </div>
-            <p class="feature-description">{{feature.description}}</p>
-            <div class="feature-highlight">
-              <i class="fa-solid fa-check"></i>
-              <span>{{feature.highlight}}</span>
-            </div>
+            <h3 class="feature-title">{{ feature.title }}</h3>
           </div>
-        }
+          <p class="feature-description">{{ feature.description }}</p>
+          <div class="feature-highlight">
+            <i class="fa-solid fa-check"></i>
+            <span>{{ feature.highlight }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -129,36 +128,32 @@
       <div class="benefits-grid">
         <div class="benefit-card" *ngFor="let benefit of benefits">
           <i [class]="benefit.icon"></i>
-          <h3>{{benefit.title}}</h3>
-          <p>{{benefit.description}}</p>
+          <h3>{{ benefit.title }}</h3>
+          <p>{{ benefit.description }}</p>
         </div>
       </div>
     </div>
   </section>
 
-<!-- Company about section -->
-<section class="company-section">
-  <div class="section-container">
-    <div class="company-content">
-      <div class="company-text">
-        <h2>Our Company</h2>
-        <p class="section-subtitle">Building quality construction equipment since 2002</p>
-        <div class="company-description">
-          <p>At Llanotecnica, we're dedicated to revolutionizing the construction industry through innovative concrete mixing solutions. With over two decades of experience, we've established ourselves as industry leaders in manufacturing reliable, efficient, and sustainable construction equipment.</p>
-          <p>Our commitment to quality and customer satisfaction drives everything we do, from design to after-sales support.</p>
+  <!-- Company Section -->
+  <section class="company-section">
+    <div class="section-container">
+      <div class="company-content">
+        <div class="company-text">
+          <h2>Our Company</h2>
+          <p class="section-subtitle">Building quality construction equipment since 2002</p>
+          <div class="company-description">
+            <p>
+              At Llanotecnica, we're dedicated to revolutionizing the construction industry through
+              innovative concrete mixing solutions. With over two decades of experience, we've established
+              ourselves as industry leaders in manufacturing reliable, efficient, and sustainable construction
+              equipment.
+            </p>
+          </div>
         </div>
-        <button class="company-cta">
-          <i class="fas fa-arrow-right"></i>
-          Learn More About Our Story
-        </button>
-      </div>
-      <div class="company-image">
-        <img src="https://as2.ftcdn.net/jpg/09/74/78/89/1000_F_974788933_z0Ck4Vx0XSiFqsR3ghj0Ndwa03B38qSP.jpg" alt="Our workshop facility">
       </div>
     </div>
-  </div>
-</section>
-
+  </section>
 
   <!-- Contact CTA -->
   <section class="contact-section">
@@ -178,4 +173,3 @@
     </div>
   </section>
 </main>
-

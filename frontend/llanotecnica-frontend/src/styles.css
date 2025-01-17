@@ -1,6 +1,12 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
+@font-face {
+  font-family: 'Anton';
+  src: url('assets/fonts/Anton-Regular.ttf') format('truetype'); /* Adjust the filename as needed */
+  font-weight: normal;
+  font-style: normal;
+}
 
 
 body {
