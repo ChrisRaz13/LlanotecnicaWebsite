@@ -1,31 +1,75 @@
-<main class="home-container">
+<!-- Home Component Template -->
+<div class="home-container">
+  <!-- Hero Section -->
   <section class="hero-section">
+    <div class="hero-background">
+      <div class="overlay"></div>
+      <div class="shape-overlay">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+      </div>
+    </div>
+
     <div class="hero-content">
       <div class="hero-text">
-        <div
-          *ngFor="let word of heroWords"
-          class="hero-word"
-          [class.emphasis]="word.class === 'emphasis'"
-          [attr.data-text]="word.text">
-          {{ word.text }}
+        <div class="hero-heading">
+          <span class="heading-line">Industrial Grade</span>
+          <span class="heading-line">Construction</span>
+          <span class="heading-line accent">Mixers</span>
         </div>
+        <p class="hero-subtitle">Engineered for superior performance and reliability</p>
         <div class="hero-cta">
-          <button class="cta-button view-products">View Products</button>
+          <button class="cta-button primary">
+            <span>Explore Products</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+          <button class="cta-button secondary">
+            <span>Watch Video</span>
+            <i class="fas fa-play"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-features">
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <div class="feature-text">
+            <span>Premium Build</span>
+            <small>Industrial Grade Materials</small>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-cogs"></i>
+          </div>
+          <div class="feature-text">
+            <span>Easy Maintenance</span>
+            <small>Quick Service Access</small>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="feature-text">
+            <span>High Performance</span>
+            <small>Superior Efficiency</small>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Updated Product Showcase -->
+  <!-- Products Section -->
   <section class="products-section">
     <div class="products-container">
       <h2 class="section-title">Our Mixer Range</h2>
       <p class="section-subtitle">Choose the perfect mixer for your construction needs</p>
 
       <div class="content-wrapper">
-        <!-- Left Side Content -->
         <div class="left-content">
-          <!-- Product Overview -->
           <div class="product-overview">
             <h3 class="overview-title">Professional Mixing Solutions</h3>
             <p class="overview-text">
@@ -38,7 +82,6 @@
             </ul>
           </div>
 
-          <!-- Product Cards -->
           <div class="mixer-cards">
             <div class="mixer-card" *ngFor="let mixer of mixers">
               <div class="mixer-image">
@@ -68,7 +111,6 @@
           </div>
         </div>
 
-        <!-- Right Side Video -->
         <div class="video-section">
           <div class="video-container">
             <video
@@ -174,4 +216,4 @@
       </div>
     </div>
   </section>
-</main>
+</div>
