@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  OnInit,
+  Inject,
+  PLATFORM_ID
+} from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 
 type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
@@ -33,6 +38,9 @@ interface Feature {
   ]
 })
 export class HomeComponent implements OnInit {
+  // Indicates whether the code is running in the browser (true) or on the server (false).
+  public isBrowser = false;
+
   activeTab: 'video' | 'products' = 'video';
   videoUrl = 'assets/videos/mixer-showcase.mp4';
 
@@ -146,39 +154,48 @@ export class HomeComponent implements OnInit {
 
   activeCategory: CategoryType = 'all';
 
+  // Inject PLATFORM_ID to check if running in browser or server
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
+
   ngOnInit(): void {
+    // Only run DOM-dependent code in the browser
     this.startWordAnimations();
   }
 
   private startWordAnimations(): void {
+    // Make sure not to call 'document' on the server
+    if (!this.isBrowser) return;
+
     const fillDelay = 600;
     const totalFillDuration = fillDelay * this.heroWords.length;
     const smoothOverDelay = fillDelay * this.heroWords.length + 100;
 
     // Animate words from bottom to top
     this.heroWords
-    .slice()
-    .reverse()
-    .forEach((_, index) => {
-      setTimeout(() => {
-        const elementIndex = this.heroWords.length - 1 - index;
-        const element = document.querySelector(`.hero-word:nth-child(${elementIndex + 1})`) as HTMLElement;
-        if (element) {
-          element.classList.add('animate');
-        }
-      }, index * fillDelay);
-    });
+      .slice()
+      .reverse()
+      .forEach((_, index) => {
+        setTimeout(() => {
+          const elementIndex = this.heroWords.length - 1 - index;
+          const element = document.querySelector(`.hero-word:nth-child(${elementIndex + 1})`) as HTMLElement;
+          if (element) {
+            element.classList.add('animate');
+          }
+        }, index * fillDelay);
+      });
 
-  // After all words are filled, trigger the smooth-over effect
-  setTimeout(() => {
-    this.heroWords.forEach((_, index) => {
-      const element = document.querySelector(`.hero-word:nth-child(${index + 1})`) as HTMLElement;
-      if (element) {
-        element.classList.add('smooth-over');
-      }
-    });
-  }, totalFillDuration + smoothOverDelay);
-}
+    // After all words are "filled," trigger the smooth-over effect
+    setTimeout(() => {
+      this.heroWords.forEach((_, index) => {
+        const element = document.querySelector(`.hero-word:nth-child(${index + 1})`) as HTMLElement;
+        if (element) {
+          element.classList.add('smooth-over');
+        }
+      });
+    }, totalFillDuration + smoothOverDelay);
+  }
 
   setActiveTab(tab: 'video' | 'products'): void {
     this.activeTab = tab;

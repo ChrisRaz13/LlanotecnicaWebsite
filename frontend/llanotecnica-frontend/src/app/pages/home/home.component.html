@@ -19,11 +19,12 @@
         </div>
         <p class="hero-subtitle">Engineered for superior performance and reliability</p>
         <div class="hero-cta">
+          <!-- 1) Add an ID to the Watch Video button -->
           <button class="cta-button primary">
             <span>Explore Products</span>
             <i class="fas fa-arrow-right"></i>
           </button>
-          <button class="cta-button secondary">
+          <button class="cta-button secondary" id="watchVideoBtn">
             <span>Watch Video</span>
             <i class="fas fa-play"></i>
           </button>
@@ -113,7 +114,9 @@
 
         <div class="video-section">
           <div class="video-container">
+            <!-- 2) Add an ID to the video itself (or its container) -->
             <video
+              id="productVideo"
               controls
               class="showcase-video"
               poster="assets/photos/MixersSpanish.jpg"
@@ -127,12 +130,17 @@
       </div>
     </div>
   </section>
+<!-- Features & Benefits Combined Section -->
+<section class="features-benefits-section" [@cardAnimation]>
+  <div class="diagonal-divider"></div>
 
   <!-- Features Section -->
-  <section class="features-section" [@cardAnimation]>
+  <div class="features-container">
     <div class="section-container">
-      <h2 class="section-title">Advanced Features</h2>
-      <p class="section-subtitle">Engineering excellence in every detail</p>
+      <div class="section-header">
+        <h2 class="section-title">Advanced Features</h2>
+        <p class="section-subtitle">Engineered for superior performance and reliability</p>
+      </div>
 
       <div class="feature-filters">
         <button
@@ -140,44 +148,50 @@
           [class.active]="activeCategory === category"
           (click)="filterFeatures(category)"
           class="filter-btn">
-          <i [class]="category === 'all' ? 'fa-solid fa-layer-group' : 'fa-solid fa-tag'"></i>
+          <i [class]="category === 'all' ? 'fas fa-th-large' : 'fas fa-filter'"></i>
           {{ formatCategory(category) }}
         </button>
       </div>
 
       <div class="features-grid">
         <div class="feature-card" *ngFor="let feature of filteredFeatures">
-          <div class="feature-header">
-            <div class="feature-icon">
-              <i [class]="feature.icon"></i>
-            </div>
-            <h3 class="feature-title">{{ feature.title }}</h3>
+          <div class="feature-icon">
+            <i [class]="feature.icon"></i>
           </div>
-          <p class="feature-description">{{ feature.description }}</p>
-          <div class="feature-highlight">
-            <i class="fa-solid fa-check"></i>
-            <span>{{ feature.highlight }}</span>
+          <div class="feature-content">
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
+            <div class="feature-metric">
+              <span class="metric-value">{{ feature.highlight }}</span>
+              <i class="fas fa-chart-line"></i>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- Benefits Section -->
-  <section class="benefits-section">
+  <div class="benefits-container">
     <div class="section-container">
-      <h2>Why Choose Our Mixers</h2>
-      <p class="section-subtitle">Quality and reliability you can count on</p>
+      <div class="section-header">
+        <h2>Why Choose Our Mixers</h2>
+        <p class="section-subtitle">Industry-leading quality backed by decades of expertise</p>
+      </div>
 
       <div class="benefits-grid">
         <div class="benefit-card" *ngFor="let benefit of benefits">
-          <i [class]="benefit.icon"></i>
+          <div class="benefit-icon">
+            <i [class]="benefit.icon"></i>
+          </div>
           <h3>{{ benefit.title }}</h3>
           <p>{{ benefit.description }}</p>
+          <div class="benefit-overlay"></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Company Section -->
   <section class="company-section">
@@ -217,3 +231,24 @@
     </div>
   </section>
 </div>
+
+<!-- 3) Add a small script to handle scroll & autoplay -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const watchVideoBtn = document.getElementById('watchVideoBtn');
+    const productVideo = document.getElementById('productVideo');
+
+    // Only attach if both elements exist
+    if (watchVideoBtn && productVideo) {
+      watchVideoBtn.addEventListener('click', function () {
+        // Smoothly scroll the video into view
+        productVideo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Attempt to play the video (likely allowed due to user-initiated click)
+        productVideo.play().catch(err => {
+          console.warn('Autoplay failed:', err);
+        });
+      });
+    }
+  });
+</script>
