@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Inject,
-  PLATFORM_ID
-} from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 
@@ -18,12 +13,30 @@ interface Feature {
   category: FeatureCategory;
 }
 
+interface Product {
+  name: string;
+  description: string;
+  features: string[];
+  specs: {
+    capacity: string;
+    enginePower: string;
+    weight: string;
+  };
+  image: string;
+}
+
+interface Benefit {
+  title: string;
+  description: string;
+  icon: string;
+}
+
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  styleUrls: ['./home.component.scss'],
   animations: [
     trigger('cardAnimation', [
       transition(':enter', [
@@ -33,25 +46,39 @@ interface Feature {
             animate('0.5s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
           ])
         ], { optional: true })
+      ]),
+      transition(':leave', [
+        query('.feature-card', [
+          stagger(100, [
+            animate('0.5s ease-out', style({ opacity: 0, transform: 'translateY(20px)' }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
+    trigger('fadeSlide', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('0.6s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ])
   ]
 })
 export class HomeComponent implements OnInit {
-  // Indicates whether the code is running in the browser (true) or on the server (false).
-  public isBrowser = false;
-
+  isBrowser = false;
+  isVideoPlaying = false;
   activeTab: 'video' | 'products' = 'video';
+  activeSection = 'hero';
+  activeCategory: CategoryType = 'all';
   videoUrl = 'assets/videos/mixer-showcase.mp4';
 
-  heroWords = [
+  readonly heroWords = [
     { text: 'Reliable', class: '' },
     { text: 'Durable', class: '' },
     { text: 'Quality', class: '' },
-    { text: 'Mixers', class: 'emphasis' },
+    { text: 'Mixers', class: 'emphasis' }
   ];
 
-  mixers = [
+  readonly mixers: Product[] = [
     {
       name: 'Concrete Mixer MT-370',
       description: 'Compact mixer perfect for small to medium projects',
@@ -65,7 +92,7 @@ export class HomeComponent implements OnInit {
         enginePower: '7-9 HP',
         weight: 'Lightweight Design'
       },
-      image: 'assets/photos/MT-370.jpg'
+      image: 'assets/photos/MT-370.webp'
     },
     {
       name: 'Concrete Mixer MT-480',
@@ -80,11 +107,11 @@ export class HomeComponent implements OnInit {
         enginePower: '13+ HP',
         weight: 'Industrial Grade'
       },
-      image: 'assets/photos/MT-480.jpg'
+      image: 'assets/photos/MT-480.webp'
     }
   ];
 
-  benefits = [
+  readonly benefits: Benefit[] = [
     {
       title: 'Reliable Performance',
       description: 'Built with high-quality materials and components for consistent operation',
@@ -107,7 +134,7 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  features: Feature[] = [
+  readonly features: Feature[] = [
     {
       title: 'Reinforced Drum Design',
       description: 'Heavy-duty steel construction with double-reinforced joints and wear-resistant coating for maximum durability.',
@@ -152,49 +179,52 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  activeCategory: CategoryType = 'all';
-
-  // Inject PLATFORM_ID to check if running in browser or server
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   ngOnInit(): void {
-    // Only run DOM-dependent code in the browser
-    this.startWordAnimations();
+    if (this.isBrowser) {
+      this.initializeAnimations();
+      this.observeScroll();
+    }
   }
 
-  private startWordAnimations(): void {
-    // Make sure not to call 'document' on the server
-    if (!this.isBrowser) return;
-
+  private initializeAnimations(): void {
     const fillDelay = 600;
-    const totalFillDuration = fillDelay * this.heroWords.length;
-    const smoothOverDelay = fillDelay * this.heroWords.length + 100;
+    const totalDuration = fillDelay * this.heroWords.length;
+    const smoothDelay = totalDuration + 100;
 
-    // Animate words from bottom to top
-    this.heroWords
-      .slice()
-      .reverse()
-      .forEach((_, index) => {
-        setTimeout(() => {
-          const elementIndex = this.heroWords.length - 1 - index;
-          const element = document.querySelector(`.hero-word:nth-child(${elementIndex + 1})`) as HTMLElement;
-          if (element) {
-            element.classList.add('animate');
-          }
-        }, index * fillDelay);
-      });
+    this.heroWords.slice().reverse().forEach((_, index) => {
+      setTimeout(() => {
+        const elementIndex = this.heroWords.length - 1 - index;
+        const element = document.querySelector(`.hero-word:nth-child(${elementIndex + 1})}`);
+        element?.classList.add('animate');
+      }, index * fillDelay);
+    });
 
-    // After all words are "filled," trigger the smooth-over effect
     setTimeout(() => {
       this.heroWords.forEach((_, index) => {
-        const element = document.querySelector(`.hero-word:nth-child(${index + 1})`) as HTMLElement;
-        if (element) {
-          element.classList.add('smooth-over');
-        }
+        const element = document.querySelector(`.hero-word:nth-child(${index + 1})`);
+        element?.classList.add('smooth-over');
       });
-    }, totalFillDuration + smoothOverDelay);
+    }, smoothDelay);
+  }
+
+  private observeScroll(): void {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            this.activeSection = entry.target.id;
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    document.querySelectorAll('section[id]').forEach(section => observer.observe(section));
   }
 
   setActiveTab(tab: 'video' | 'products'): void {
@@ -202,9 +232,7 @@ export class HomeComponent implements OnInit {
   }
 
   get featureCategories(): CategoryType[] {
-    const categories: CategoryType[] = ['all'];
-    const uniqueCategories = new Set(this.features.map((feature) => feature.category));
-    return [...categories, ...uniqueCategories];
+    return ['all', ...new Set(this.features.map(f => f.category))];
   }
 
   filterFeatures(category: CategoryType): void {
@@ -214,10 +242,23 @@ export class HomeComponent implements OnInit {
   get filteredFeatures(): Feature[] {
     return this.activeCategory === 'all'
       ? this.features
-      : this.features.filter((feature) => feature.category === this.activeCategory);
+      : this.features.filter(f => f.category === this.activeCategory);
   }
 
   formatCategory(category: string): string {
     return category.charAt(0).toUpperCase() + category.slice(1);
+  }
+
+  toggleVideo(): void {
+    this.isVideoPlaying = !this.isVideoPlaying;
+    const video = document.querySelector('video');
+    if (video) {
+      this.isVideoPlaying ? video.play() : video.pause();
+    }
+  }
+
+  scrollToSection(sectionId: string): void {
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
