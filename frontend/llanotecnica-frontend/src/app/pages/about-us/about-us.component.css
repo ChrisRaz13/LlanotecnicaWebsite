@@ -34,33 +34,74 @@
 }
 
 /* Stats Section */
+/* Stats Section */
 .stats {
   margin-top: -100px;
   position: relative;
   z-index: 2;
   padding: 0 2rem;
-}
+ }
 
-.stats-grid {
+ .stats-grid {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   padding: 3rem;
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-}
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.1),
+    inset 0 0 0 1px rgba(255,255,255,0.5);
+  animation: slideUp 0.8s ease-out forwards;
+ }
 
-.stat-number {
+ .stat-number {
   font-size: 3.5rem;
-  font-weight: 700;
+  font-weight: 800;
   background: linear-gradient(45deg, #008751, #00a562);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 1rem;
-}
+ }
+
+ .stat-item {
+  text-align: center;
+  padding: 1rem;
+  position: relative;
+ }
+
+ .stat-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -1rem;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, #00875180, transparent);
+ }
+
+ @keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+ }
+
+ @media (max-width: 992px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-item:not(:last-child)::after {
+    display: none;
+  }
+ }
 
 /* Mission Section */
 .mission {
