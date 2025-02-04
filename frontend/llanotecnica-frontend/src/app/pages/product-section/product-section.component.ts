@@ -119,7 +119,7 @@ export class ProductSectionComponent {
       options: [
         {
           name: '4Power 7HP',
-          power: '7 Horsepower',
+          power: '7 HP',
           type: 'gas',
           mt370Compatible: true,
           mt480Compatible: false,
@@ -127,7 +127,7 @@ export class ProductSectionComponent {
         },
         {
           name: '4Power 9HP',
-          power: '9 Horsepower',
+          power: '9 HP',
           type: 'gas',
           mt370Compatible: true,
           mt480Compatible: false,
@@ -135,7 +135,7 @@ export class ProductSectionComponent {
         },
         {
           name: '4Power 13HP',
-          power: '13 Horsepower',
+          power: '13 HP',
           type: 'gas',
           mt370Compatible: false,
           mt480Compatible: true,
@@ -148,7 +148,7 @@ export class ProductSectionComponent {
       options: [
         {
           name: '4Power Diesel 7HP',
-          power: '7 Horsepower',
+          power: '7 HP',
           type: 'diesel',
           mt370Compatible: true,
           mt480Compatible: false,
@@ -156,7 +156,7 @@ export class ProductSectionComponent {
         },
         {
           name: '4Power Diesel 9HP',
-          power: '9 Horsepower',
+          power: '9 HP',
           type: 'diesel',
           mt370Compatible: false,
           mt480Compatible: true,

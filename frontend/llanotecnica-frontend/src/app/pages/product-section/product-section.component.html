@@ -3,8 +3,10 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="container">
-      <h1>Professional Concrete Mixers</h1>
-      <p class="subtitle">Designed for mid-sized projects, balancing agility and durability—lightweight for easy handling, yet robust for continuous mixing.</p>
+      <h1>Durable &amp; High-Performance Concrete Mixers</h1>
+      <p class="subtitle">
+        Designed for any job—from mid-sized projects to heavy-duty tasks—built for strength, efficiency, and reliable performance.
+      </p>
     </div>
   </section>
 
@@ -18,13 +20,13 @@
             <img src="assets/photos/MT-370.3.png" alt="MT-370 Concrete Mixer" loading="lazy">
           </div>
           <div class="product-content">
-            <div class="product-header">
+            <header class="product-header">
               <h2>MT-370 Series</h2>
               <span class="product-badge">Medium Duty</span>
-            </div>
-
-            <p class="product-description">Engineered for mid-scale projects where flexibility meets reliability - Light enough to maneuver, tough enough to tackle days of continuous mixing.</p>
-
+            </header>
+            <p class="product-description">
+              Engineered for mid-scale projects where flexibility meets reliability – light enough to maneuver, yet tough enough for days of continuous mixing.
+            </p>
             <div class="key-specs">
               <div class="spec-item">
                 <span class="spec-label">Capacity</span>
@@ -38,25 +40,20 @@
                 <span class="spec-label">Engine Options</span>
                 <div class="engine-tags">
                   <span class="engine-tag">
-                    <span class="tag-icon electric"></span>
-                    Electric
+                    <span class="tag-icon electric"></span> Electric
                   </span>
                   <span class="engine-tag">
-                    <span class="tag-icon gas"></span>
-                    Gasoline
+                    <span class="tag-icon gas"></span> Gasoline
                   </span>
                   <span class="engine-tag">
-                    <span class="tag-icon diesel"></span>
-                    Diesel
+                    <span class="tag-icon diesel"></span> Diesel
                   </span>
                   <span class="engine-tag">
-                    <span class="tag-icon honda"></span>
-                    Honda
+                    <span class="tag-icon honda"></span> Honda
                   </span>
                 </div>
               </div>
             </div>
-
             <div class="product-actions">
               <button class="btn-primary" (click)="requestQuote('MT-370')">Request Quote</button>
               <div class="download-buttons">
@@ -83,12 +80,13 @@
             <img src="assets/photos/MT-480.1.png" alt="MT-480 Concrete Mixer" loading="lazy">
           </div>
           <div class="product-content">
-            <div class="product-header">
+            <header class="product-header">
               <h2>MT-480 Series</h2>
               <span class="product-badge">Heavy Duty</span>
-            </div>
-            <p class="product-description">Engineered for large-scale jobs with uncompromising power—maximize efficiency with superior torque and high-capacity performance.            </p>
-
+            </header>
+            <p class="product-description">
+              Engineered for large-scale jobs with uncompromising power—maximize efficiency with superior torque and high-capacity performance.
+            </p>
             <div class="key-specs">
               <div class="spec-item">
                 <span class="spec-label">Capacity</span>
@@ -102,25 +100,20 @@
                 <span class="spec-label">Engine Options</span>
                 <div class="engine-tags">
                   <span class="engine-tag">
-                    <span class="tag-icon electric"></span>
-                    Electric
+                    <span class="tag-icon electric"></span> Electric
                   </span>
                   <span class="engine-tag">
-                    <span class="tag-icon gas"></span>
-                    Gasoline
+                    <span class="tag-icon gas"></span> Gasoline
                   </span>
                   <span class="engine-tag">
-                    <span class="tag-icon diesel"></span>
-                    Diesel
+                    <span class="tag-icon diesel"></span> Diesel
                   </span>
                   <span class="engine-tag">
-                    <span class="tag-icon honda"></span>
-                    Honda
+                    <span class="tag-icon honda"></span> Honda
                   </span>
                 </div>
               </div>
             </div>
-
             <div class="product-actions">
               <button class="btn-primary" (click)="requestQuote('MT-480')">Request Quote</button>
               <div class="download-buttons">
@@ -149,7 +142,9 @@
     <div class="container">
       <div class="comparison-header">
         <h2>Compare Models</h2>
-        <p class="comparison-subtitle">Explore the key differences between our professional mixer series</p>
+        <p class="comparison-subtitle">
+          Explore the key differences between our professional mixer series.
+        </p>
         <div class="comparison-tabs">
           <button [class.active]="activeTab === 'specs'" (click)="setActiveTab('specs')">
             <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -174,31 +169,29 @@
             <div class="header-cell model-370">MT-370</div>
             <div class="header-cell model-480">MT-480</div>
           </div>
-
           <!-- Drum Specifications -->
           <div class="spec-group">
             <div class="group-header">Drum Specifications</div>
             <div class="spec-row" *ngFor="let spec of getDrumSpecs()">
-              <div class="spec-name">{{spec.label}}</div>
+              <div class="spec-name">{{ spec.label }}</div>
               <div class="spec-value" [class.highlight]="spec.highlight === 'MT-370'">
-                {{spec.mt370Value}}
+                {{ spec.mt370Value }}
               </div>
               <div class="spec-value" [class.highlight]="spec.highlight === 'MT-480'">
-                {{spec.mt480Value}}
+                {{ spec.mt480Value }}
               </div>
             </div>
           </div>
-
           <!-- Unit Specifications -->
           <div class="spec-group">
             <div class="group-header">Unit Specifications</div>
             <div class="spec-row" *ngFor="let spec of getUnitSpecs()">
-              <div class="spec-name">{{spec.label}}</div>
+              <div class="spec-name">{{ spec.label }}</div>
               <div class="spec-value" [class.highlight]="spec.highlight === 'MT-370'">
-                {{spec.mt370Value}}
+                {{ spec.mt370Value }}
               </div>
               <div class="spec-value" [class.highlight]="spec.highlight === 'MT-480'">
-                {{spec.mt480Value}}
+                {{ spec.mt480Value }}
               </div>
             </div>
           </div>
@@ -215,24 +208,23 @@
               <div class="header-cell">MT-370</div>
               <div class="header-cell">MT-480</div>
             </div>
-
             <!-- Engine Categories -->
             <div class="engine-category" *ngFor="let category of engineCategories">
-              <div class="category-header">{{category.title}}</div>
+              <div class="category-header">{{ category.title }}</div>
               <div class="engine-row" *ngFor="let engine of category.options">
                 <div class="engine-name">
                   <span class="engine-icon" [class]="engine.type.toLowerCase()"></span>
-                  {{engine.name}}
+                  {{ engine.name }}
                 </div>
-                <div class="engine-power">{{engine.power}}</div>
+                <div class="engine-power">{{ engine.power }}</div>
                 <div class="compatibility">
                   <span class="compatibility-icon" [class.compatible]="engine.mt370Compatible">
-                    {{engine.mt370Compatible ? '✓' : '–'}}
+                    {{ engine.mt370Compatible ? '✓' : '–' }}
                   </span>
                 </div>
                 <div class="compatibility">
                   <span class="compatibility-icon" [class.compatible]="engine.mt480Compatible">
-                    {{engine.mt480Compatible ? '✓' : '–'}}
+                    {{ engine.mt480Compatible ? '✓' : '–' }}
                   </span>
                 </div>
               </div>
@@ -248,7 +240,9 @@
     <div class="container">
       <div class="cta-content">
         <h2>Need Expert Guidance?</h2>
-        <p>Our team is ready to help you choose the perfect mixer for your projects</p>
+        <p>
+          Our team is ready to help you choose the perfect mixer for your projects.
+        </p>
         <button class="btn-primary" (click)="contactSales()">
           Contact Sales Team
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
