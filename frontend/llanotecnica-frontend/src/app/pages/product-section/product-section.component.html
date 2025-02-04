@@ -1,680 +1,260 @@
-<!-- product-section.component.html -->
-<div class="products-page">
+<!-- Main Product Container -->
+<div class="products-container">
   <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-pattern"></div>
-    <div class="hero-content">
-      <h1>Concrete Mixers</h1>
-      <p class="hero-subtitle">Industrial-grade mixing solutions for every project scale</p>
-      <div class="hero-features">
-        <div class="feature">
-          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          </svg>
-          <span>Robust Construction</span>
-        </div>
-        <div class="feature">
-          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-          </svg>
-          <span>High Performance</span>
-        </div>
-        <div class="feature">
-          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 7h-9m9 7h-9m9 7H7"/>
-          </svg>
-          <span>Multiple Engines</span>
-        </div>
+  <section class="hero-section">
+    <div class="container">
+      <h1>Professional Concrete Mixers</h1>
+      <p class="subtitle">Designed for mid-sized projects, balancing agility and durability—lightweight for easy handling, yet robust for continuous mixing.</p>
+    </div>
+  </section>
+
+  <!-- Product Cards Section -->
+  <section class="products-overview">
+    <div class="container">
+      <div class="product-grid">
+        <!-- MT-370 Card -->
+        <article class="product-card">
+          <div class="product-image">
+            <img src="assets/photos/MT-370.3.png" alt="MT-370 Concrete Mixer" loading="lazy">
+          </div>
+          <div class="product-content">
+            <div class="product-header">
+              <h2>MT-370 Series</h2>
+              <span class="product-badge">Medium Duty</span>
+            </div>
+
+            <p class="product-description">Engineered for mid-scale projects where flexibility meets reliability - Light enough to maneuver, tough enough to tackle days of continuous mixing.</p>
+
+            <div class="key-specs">
+              <div class="spec-item">
+                <span class="spec-label">Capacity</span>
+                <span class="spec-value">370L (13 CU.FT)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Drum Opening</span>
+                <span class="spec-value">18 IN (450MM)</span>
+              </div>
+              <div class="engine-options">
+                <span class="spec-label">Engine Options</span>
+                <div class="engine-tags">
+                  <span class="engine-tag">
+                    <span class="tag-icon electric"></span>
+                    Electric
+                  </span>
+                  <span class="engine-tag">
+                    <span class="tag-icon gas"></span>
+                    Gasoline
+                  </span>
+                  <span class="engine-tag">
+                    <span class="tag-icon diesel"></span>
+                    Diesel
+                  </span>
+                  <span class="engine-tag">
+                    <span class="tag-icon honda"></span>
+                    Honda
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="product-actions">
+              <button class="btn-primary" (click)="requestQuote('MT-370')">Request Quote</button>
+              <div class="download-buttons">
+                <button class="btn-download" (click)="downloadManual('MT-370', 'en')">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                  </svg>
+                  EN Manual
+                </button>
+                <button class="btn-download" (click)="downloadManual('MT-370', 'es')">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                  </svg>
+                  ES Manual
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- MT-480 Card -->
+        <article class="product-card">
+          <div class="product-image">
+            <img src="assets/photos/MT-480.1.png" alt="MT-480 Concrete Mixer" loading="lazy">
+          </div>
+          <div class="product-content">
+            <div class="product-header">
+              <h2>MT-480 Series</h2>
+              <span class="product-badge">Heavy Duty</span>
+            </div>
+            <p class="product-description">Engineered for large-scale jobs with uncompromising power—maximize efficiency with superior torque and high-capacity performance.            </p>
+
+            <div class="key-specs">
+              <div class="spec-item">
+                <span class="spec-label">Capacity</span>
+                <span class="spec-value">420L (15 CU.FT)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Drum Opening</span>
+                <span class="spec-value">19 IN (460MM)</span>
+              </div>
+              <div class="engine-options">
+                <span class="spec-label">Engine Options</span>
+                <div class="engine-tags">
+                  <span class="engine-tag">
+                    <span class="tag-icon electric"></span>
+                    Electric
+                  </span>
+                  <span class="engine-tag">
+                    <span class="tag-icon gas"></span>
+                    Gasoline
+                  </span>
+                  <span class="engine-tag">
+                    <span class="tag-icon diesel"></span>
+                    Diesel
+                  </span>
+                  <span class="engine-tag">
+                    <span class="tag-icon honda"></span>
+                    Honda
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="product-actions">
+              <button class="btn-primary" (click)="requestQuote('MT-480')">Request Quote</button>
+              <div class="download-buttons">
+                <button class="btn-download" (click)="downloadManual('MT-480', 'en')">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                  </svg>
+                  EN Manual
+                </button>
+                <button class="btn-download" (click)="downloadManual('MT-480', 'es')">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                  </svg>
+                  ES Manual
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- Mixers Grid -->
-  <div class="mixers-grid">
-    <!-- MT-370 Flip Card -->
-    <div class="flip-card">
-      <div class="card-inner" [class.flipped]="isFlipped370">
-        <!-- Front Side -->
-        <div class="card-front">
-          <div class="product-image-container">
-            <img src="assets/photos/MT-370.3.png" alt="MT-370 Concrete Mixer" loading="lazy"/>
-          </div>
-          <div class="product-info">
-            <div class="product-header">
-              <h2>MT-370</h2>
-              <div class="product-badge">
-                <svg width="20" height="20" fill="none" stroke="#006B41" stroke-width="2">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                </svg>
-                <span>4 Engine Options</span>
-              </div>
-            </div>
-
-            <p class="product-description">Perfect for medium-scale projects with versatile engine options</p>
-
-            <!-- Engine Summary Tags -->
-            <div class="engine-summary">
-              <div class="engine-tag">
-                <div class="tag-icon">
-                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                  </svg>
-                </div>
-                <div class="tag-content">
-                  <span class="tag-title">4Power Series</span>
-                  <span class="tag-detail">7HP - 9HP</span>
-                </div>
-              </div>
-
-              <div class="engine-tag">
-                <div class="tag-icon">
-                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16v16H4z"/>
-                  </svg>
-                </div>
-                <div class="tag-content">
-                  <span class="tag-title">Honda GX Series</span>
-                  <span class="tag-detail">GX160 - GX270</span>
-                </div>
-              </div>
-
-              <div class="engine-tag">
-                <div class="tag-icon">
-                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                  </svg>
-                </div>
-                <div class="tag-content">
-                  <span class="tag-title">Electric</span>
-                  <span class="tag-detail">2HP - 5HP Range</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="card-actions">
-              <button class="flip-btn" (click)="flipCard('370')">
-                <span>Technical Specifications</span>
-                <svg class="flip-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M9 4l6 8-6 8"/>
-                </svg>
-              </button>
-              <button class="engine-details-btn" (click)="toggleEngineDetails('370')">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                </svg>
-                <span>Engine Details</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Back Side -->
-        <div class="card-back">
-          <div class="specs-header">
-            <h3>MT-370 Technical Specifications</h3>
-          </div>
-
-          <div class="specs-content">
-            <div class="specs-grid">
-              <!-- Unit Specifications -->
-              <div class="specs-section">
-                <h4>
-                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                  </svg>
-                  Unit Specifications
-                </h4>
-                <div class="spec-items">
-                  <div class="spec-item">
-                    <span class="spec-label">Management System</span>
-                    <span class="spec-value">V-BELT (A71)</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Dump Type</span>
-                    <span class="spec-value">MANUAL</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Discharge Height</span>
-                    <span class="spec-value">22 IN (550MM)</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Type of Drum</span>
-                    <span class="spec-value">STEEL</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Wheel Size</span>
-                    <span class="spec-value">145/70-R13</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Chassis Type</span>
-                    <span class="spec-value">TUBULAR, STABLE & REINFORCED IN T</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Paint Type</span>
-                    <span class="spec-value">QUICK DRYING</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Power Supply</span>
-                    <span class="spec-value">GASOLINE, DIESEL, ELECTRIC</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Trailer Type</span>
-                    <span class="spec-value">HITCH COUPLER, SAFETY SCREW</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Drum Specifications -->
-              <div class="specs-section">
-                <h4>
-                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
-                  </svg>
-                  Drum Specifications
-                </h4>
-                <div class="spec-items highlighted">
-                  <div class="spec-item">
-                    <span class="spec-label">Drum Capacity</span>
-                    <span class="spec-value">370L (13 CU.FT / 1 BAG)</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Opening Diameter</span>
-                    <span class="spec-value">18 IN (450MM)</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Drum Depth</span>
-                    <span class="spec-value">32 IN (800MM)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button class="flip-btn back-btn" (click)="flipCard('370')">
-            <svg class="flip-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M15 18l-6-6 6-6"/>
+  <!-- Compare Models Section -->
+  <section class="comparison-section">
+    <div class="container">
+      <div class="comparison-header">
+        <h2>Compare Models</h2>
+        <p class="comparison-subtitle">Explore the key differences between our professional mixer series</p>
+        <div class="comparison-tabs">
+          <button [class.active]="activeTab === 'specs'" (click)="setActiveTab('specs')">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16v16H4z M4 12h16 M12 4v16"/>
             </svg>
-            <span>Back to Product</span>
+            Specifications
+          </button>
+          <button [class.active]="activeTab === 'engines'" (click)="setActiveTab('engines')">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            </svg>
+            Engine Options
           </button>
         </div>
+      </div>
 
-        <!-- Engine Details Panel -->
-        <div class="engine-details-panel" *ngIf="showEngineDetails370">
-          <div class="panel-header">
-            <h3>Engine Options - MT-370</h3>
-            <button class="close-btn" (click)="toggleEngineDetails('370')">
-              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            </button>
+      <!-- Specifications Comparison -->
+      <div class="comparison-content" *ngIf="activeTab === 'specs'">
+        <div class="comparison-table">
+          <div class="table-header">
+            <div class="header-cell spec-name">Specification</div>
+            <div class="header-cell model-370">MT-370</div>
+            <div class="header-cell model-480">MT-480</div>
           </div>
-          <div class="panel-content">
-            <div class="engine-type" *ngFor="let engine of getEngineDetails('370')">
-              <h4>
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                </svg>
-                {{ engine.type }}
-              </h4>
-              <div class="engine-info">
-                <div class="power-options">
-                  <span class="label">Power Range:</span>
-                  <span class="value">{{engine.power.join(', ')}}</span>
-                </div>
-                <div class="features">
-                  <span class="label">Key Features:</span>
-                  <ul>
-                    <li *ngFor="let feature of engine.features">{{ feature }}</li>
-                  </ul>
-                </div>
+
+          <!-- Drum Specifications -->
+          <div class="spec-group">
+            <div class="group-header">Drum Specifications</div>
+            <div class="spec-row" *ngFor="let spec of getDrumSpecs()">
+              <div class="spec-name">{{spec.label}}</div>
+              <div class="spec-value" [class.highlight]="spec.highlight === 'MT-370'">
+                {{spec.mt370Value}}
+              </div>
+              <div class="spec-value" [class.highlight]="spec.highlight === 'MT-480'">
+                {{spec.mt480Value}}
+              </div>
+            </div>
+          </div>
+
+          <!-- Unit Specifications -->
+          <div class="spec-group">
+            <div class="group-header">Unit Specifications</div>
+            <div class="spec-row" *ngFor="let spec of getUnitSpecs()">
+              <div class="spec-name">{{spec.label}}</div>
+              <div class="spec-value" [class.highlight]="spec.highlight === 'MT-370'">
+                {{spec.mt370Value}}
+              </div>
+              <div class="spec-value" [class.highlight]="spec.highlight === 'MT-480'">
+                {{spec.mt480Value}}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- MT-480 Flip Card (Similar structure as MT-370) -->
-    <div class="flip-card">
-      <div class="card-inner" [class.flipped]="isFlipped480">
-        <!-- Front Side -->
-        <div class="card-front">
-          <div class="product-image-container">
-            <img src="assets/photos/MT-480.1.png" alt="MT-480 Concrete Mixer" loading="lazy"/>
-          </div>
-          <div class="product-info">
-            <div class="product-header">
-              <h2>MT-480</h2>
-              <div class="product-badge">
-                <svg width="20" height="20" fill="none" stroke="#006B41" stroke-width="2">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                </svg>
-                <span>4 Engine Options</span>
-              </div>
+      <!-- Engine Compatibility Table -->
+      <div class="comparison-content" *ngIf="activeTab === 'engines'">
+        <div class="engine-compatibility">
+          <div class="engine-table">
+            <div class="table-header">
+              <div class="header-cell">Engine Type</div>
+              <div class="header-cell">Power Rating</div>
+              <div class="header-cell">MT-370</div>
+              <div class="header-cell">MT-480</div>
             </div>
 
-            <p class="product-description">Industrial-grade mixer for large-scale operations</p>
-
-            <!-- Engine Summary Tags -->
-            <div class="engine-summary">
-              <div class="engine-tag">
-                <div class="tag-icon">
-                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                  </svg>
+            <!-- Engine Categories -->
+            <div class="engine-category" *ngFor="let category of engineCategories">
+              <div class="category-header">{{category.title}}</div>
+              <div class="engine-row" *ngFor="let engine of category.options">
+                <div class="engine-name">
+                  <span class="engine-icon" [class]="engine.type.toLowerCase()"></span>
+                  {{engine.name}}
                 </div>
-                <div class="tag-content">
-                  <span class="tag-title">4Power Series</span>
-                  <span class="tag-detail">13HP</span>
+                <div class="engine-power">{{engine.power}}</div>
+                <div class="compatibility">
+                  <span class="compatibility-icon" [class.compatible]="engine.mt370Compatible">
+                    {{engine.mt370Compatible ? '✓' : '–'}}
+                  </span>
                 </div>
-              </div>
-
-              <div class="engine-tag">
-                <div class="tag-icon">
-                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16v16H4z"/>
-                  </svg>
-                </div>
-                <div class="tag-content">
-                  <span class="tag-title">Honda GX Series</span>
-                  <span class="tag-detail">GX390</span>
-                </div>
-              </div>
-
-              <div class="engine-tag">
-                <div class="tag-icon">
-                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                  </svg>
-                </div>
-                <div class="tag-content">
-                  <span class="tag-title">Electric</span>
-                  <span class="tag-detail">3HP - 5HP Range</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="card-actions">
-              <button class="flip-btn" (click)="flipCard('480')">
-                <span>Technical Specifications</span>
-                <svg class="flip-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M9 4l6 8-6 8"/>
-                </svg>
-              </button>
-              <button class="engine-details-btn" (click)="toggleEngineDetails('480')">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                </svg>
-                <span>Engine Details</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Back Side -->
-        <div class="card-back">
-          <div class="specs-header">
-            <h3>MT-480 Technical Specifications</h3>
-          </div>
-
-          <div class="specs-content">
-            <div class="specs-grid">
-              <!-- Unit Specifications -->
-              <div class="specs-section">
-                <h4>
-                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                  </svg>
-                  Unit Specifications
-                </h4>
-                <div class="spec-items">
-                  <div class="spec-item">
-                    <span class="spec-label">Management System</span>
-                    <span class="spec-value">V-BELT (A69)</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Dump Type</span>
-                    <span class="spec-value">MANUAL</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Discharge Height</span>
-                    <span class="spec-value">23 IN (580MM)</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Type of Drum</span>
-                    <span class="spec-value">STEEL</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Wheel Size</span>
-                    <span class="spec-value">145/70-R13</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Chassis Type</span>
-                    <span class="spec-value">TUBULAR, STABLE & REINFORCED IN T</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Paint Type</span>
-                    <span class="spec-value">QUICK DRYING</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Power Supply</span>
-                    <span class="spec-value">GASOLINE, DIESEL, ELECTRIC</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Trailer Type</span>
-                    <span class="spec-value">HITCH COUPLER, SAFETY SCREW</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Drum Specifications -->
-              <div class="specs-section">
-                <h4>
-                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
-                  </svg>
-                  Drum Specifications
-                </h4>
-                <div class="spec-items highlighted">
-                  <div class="spec-item">
-                    <span class="spec-label">Drum Capacity</span>
-                    <span class="spec-value">420L (15 CU.FT / 2 BAGS)</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Opening Diameter</span>
-                    <span class="spec-value">19 IN (460MM)</span>
-                  </div>
-                  <div class="spec-item">
-                    <span class="spec-label">Drum Depth</span>
-                    <span class="spec-value">41 IN (1020MM)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button class="flip-btn back-btn" (click)="flipCard('480')">
-            <svg class="flip-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M15 18l-6-6 6-6"/>
-            </svg>
-            <span>Back to Product</span>
-          </button>
-        </div>
-
-        <!-- Engine Details Panel -->
-        <div class="engine-details-panel" *ngIf="showEngineDetails480">
-          <div class="panel-header">
-            <h3>Engine Options - MT-480</h3>
-            <button class="close-btn" (click)="toggleEngineDetails('480')">
-              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            </button>
-          </div>
-          <div class="panel-content">
-            <div class="engine-type" *ngFor="let engine of getEngineDetails('480')">
-              <h4>
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                </svg>
-                {{ engine.type }}
-              </h4>
-              <div class="engine-info">
-                <div class="power-options">
-                  <span class="label">Power Range:</span>
-                  <span class="value">{{engine.power.join(', ')}}</span>
-                </div>
-                <div class="features">
-                  <span class="label">Key Features:</span>
-                  <ul>
-                    <li *ngFor="let feature of engine.features">{{ feature }}</li>
-                  </ul>
+                <div class="compatibility">
+                  <span class="compatibility-icon" [class.compatible]="engine.mt480Compatible">
+                    {{engine.mt480Compatible ? '✓' : '–'}}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Engine Compatibility Section -->
-  <section class="compatibility">
-    <h2>Engine Compatibility Chart</h2>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Engine Type</th>
-            <th>MT-370</th>
-            <th>MT-480</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="category">
-            <td colspan="3">4Power Gasoline</td>
-          </tr>
-          <tr>
-            <td>7HP</td>
-            <td>✓</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>9HP</td>
-            <td>✓</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>13HP</td>
-            <td>-</td>
-            <td>✓</td>
-          </tr>
-
-          <tr class="category">
-            <td colspan="3">4Power Diesel</td>
-          </tr>
-          <tr>
-            <td>7HP</td>
-            <td>✓</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>9HP</td>
-            <td>-</td>
-            <td>✓</td>
-          </tr>
-
-          <tr class="category">
-            <td colspan="3">Honda Engines</td>
-          </tr>
-          <tr>
-            <td>GX160 (5.5HP)</td>
-            <td>✓</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>GX200 (6.5HP)</td>
-            <td>✓</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>GX270 (9HP)</td>
-            <td>✓</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>GX390 (13HP)</td>
-            <td>-</td>
-            <td>✓</td>
-          </tr>
-
-          <tr class="category">
-            <td colspan="3">Electric Motors</td>
-          </tr>
-          <tr>
-            <td>2HP-5HP (1725 RPM)</td>
-            <td>✓</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>3HP-5HP (1725 RPM)</td>
-            <td>-</td>
-            <td>✓</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Engine Benefits Section -->
-  <section class="engine-benefits">
-    <h2>Engine Type Benefits</h2>
-    <div class="benefits-grid">
-      <!-- 4Power Card -->
-      <div class="benefit-card">
-        <div class="icon-wrapper">
-          <svg width="24" height="24" fill="none" stroke="#008751" stroke-width="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-        </div>
-        <h3>4Power Series</h3>
-        <ul>
-          <li><span class="bullet">✓</span> Cost-effective solution</li>
-          <li><span class="bullet">✓</span> Easy maintenance</li>
-          <li><span class="bullet">✓</span> Reliable performance</li>
-        </ul>
-      </div>
-
-      <!-- Honda Engines Card -->
-      <div class="benefit-card">
-        <div class="icon-wrapper honda-icon">
-          <svg width="24" height="24" fill="none" stroke="#008751">
-            <path d="M4 4h16v16H4z"/>
-            <path d="M8 4v16"/>
-            <path d="M16 4v16"/>
-            <path d="M4 12h16"/>
-          </svg>
-        </div>
-        <h3>Honda Engines</h3>
-        <ul>
-          <li><span class="bullet">✓</span> Premium quality</li>
-          <li><span class="bullet">✓</span> Fuel efficient</li>
-          <li><span class="bullet">✓</span> Low emissions</li>
-        </ul>
-      </div>
-
-      <!-- Electric Engines Card -->
-      <div class="benefit-card">
-        <div class="icon-wrapper">
-          <svg width="24" height="24" fill="none" stroke="#008751" stroke-width="2">
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-          </svg>
-        </div>
-        <h3>Electric Options</h3>
-        <ul>
-          <li><span class="bullet">✓</span> Zero emissions</li>
-          <li><span class="bullet">✓</span> Ultra-quiet operation</li>
-          <li><span class="bullet">✓</span> Minimal maintenance</li>
-        </ul>
       </div>
     </div>
   </section>
 
-  <!-- CTA Section -->
+  <!-- Request Quote Section -->
   <section class="cta-section">
-    <div class="cta-pattern"></div>
-    <div class="cta-content">
-      <h2>Power Your Projects with Confidence</h2>
-      <p>Get expert guidance on selecting the perfect mixer configuration</p>
-      <div class="cta-cards">
-        <div class="cta-card">
-          <div class="card-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
-            </svg>
-          </div>
-          <h3>Professional Support</h3>
-          <p>Technical expertise at your service</p>
-          <button class="btn-primary" (click)="requestQuote()">
-            Request Quote
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </button>
-        </div>
-        <div class="cta-card">
-          <div class="card-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
-            </svg>
-          </div>
-          <h3>Direct Consultation</h3>
-          <p>Personalized solutions for your needs</p>
-          <button class="btn-secondary" (click)="contactSales()">
-            Contact Sales
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Technical Resources Section -->
-  <section class="resources-section">
-    <h2>Technical Resources</h2>
-    <div class="resources-grid">
-      <!-- Manual Resource Card -->
-      <div class="resource-card">
-        <div class="resource-icon">
-          <svg width="24" height="24" fill="none" stroke="#006B41" stroke-width="2">
-            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-            <path d="M14 2v6h6M12 18v-6M9 15h6"/>
+    <div class="container">
+      <div class="cta-content">
+        <h2>Need Expert Guidance?</h2>
+        <p>Our team is ready to help you choose the perfect mixer for your projects</p>
+        <button class="btn-primary" (click)="contactSales()">
+          Contact Sales Team
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
-        </div>
-        <h3>Product Manual</h3>
-        <p>Detailed operational guides and maintenance instructions</p>
-        <div class="resource-buttons">
-          <button class="download-btn" (click)="downloadManual('MT-370')">
-            MT-370 Manual
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-            </svg>
-          </button>
-          <button class="download-btn" (click)="downloadManual('MT-480')">
-            MT-480 Manual
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Specifications Resource Card -->
-      <div class="resource-card">
-        <div class="resource-icon">
-          <svg width="24" height="24" fill="none" stroke="#006B41" stroke-width="2">
-            <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/>
-            <path d="M13 2v7h7M12 18v-6M8 15h8"/>
-          </svg>
-        </div>
-        <h3>Specifications Sheet</h3>
-        <p>Complete technical specifications and requirements</p>
-        <div class="resource-buttons">
-          <button class="download-btn" (click)="downloadSpecs('MT-370')">
-            MT-370 Specs
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-            </svg>
-          </button>
-          <button class="download-btn" (click)="downloadSpecs('MT-480')">
-            MT-480 Specs
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-            </svg>
-          </button>
-        </div>
+        </button>
       </div>
     </div>
   </section>

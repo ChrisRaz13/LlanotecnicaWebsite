@@ -36,6 +36,31 @@ interface EngineDetails {
   features: string[];
 }
 
+/** Comparison Spec interface */
+interface ComparisonSpec {
+  label: string;
+  key: string;
+  mt370Value: string;
+  mt480Value: string;
+  highlight?: 'MT-370' | 'MT-480' | null;
+}
+
+/** Engine Category interface */
+interface EngineCategory {
+  title: string;
+  options: EngineOption[];
+}
+
+/** Engine Option interface */
+interface EngineOption {
+  name: string;
+  power: string;
+  type: string;
+  mt370Compatible: boolean;
+  mt480Compatible: boolean;
+  features: string[];
+}
+
 @Component({
   selector: 'app-product-section',
   standalone: true,
@@ -44,16 +69,10 @@ interface EngineDetails {
   styleUrls: ['./product-section.component.css']
 })
 export class ProductSectionComponent {
+  // Active tab for comparison section
+  activeTab: 'specs' | 'engines' = 'specs';
 
-  /** Flip card states for each product */
-  isFlipped370: boolean = false;
-  isFlipped480: boolean = false;
-
-  /** Engine details panel states for each product */
-  showEngineDetails370: boolean = false;
-  showEngineDetails480: boolean = false;
-
-  /** Product specs data for each mixer */
+  /** Product specs data */
   productSpecs: { [key: string]: ProductSpecs } = {
     'MT-370': {
       unitSpecs: {
@@ -93,132 +112,194 @@ export class ProductSectionComponent {
     }
   };
 
-  /** Engine compatibility data for the chart */
-  engineCompatibility: EngineCompatibility[] = [
+  /** Engine categories data */
+  engineCategories: EngineCategory[] = [
     {
-      model: 'MT-370',
-      powerEngines: [true, true, false],        // 7HP, 9HP, (13HP = false)
-      hondaEngines: [true, true, true, false],  // GX160, GX200, GX270, GX390
-      electricEngines: [true, false]            // 2-5HP (true), 3-5HP (false)
+      title: '4Power Gasoline Engines',
+      options: [
+        {
+          name: '4Power 7HP',
+          power: '7 Horsepower',
+          type: 'gas',
+          mt370Compatible: true,
+          mt480Compatible: false,
+          features: ['Cost-effective', 'Easy maintenance', 'Optimal efficiency']
+        },
+        {
+          name: '4Power 9HP',
+          power: '9 Horsepower',
+          type: 'gas',
+          mt370Compatible: true,
+          mt480Compatible: false,
+          features: ['Enhanced power', 'Reliable performance', 'Versatile usage']
+        },
+        {
+          name: '4Power 13HP',
+          power: '13 Horsepower',
+          type: 'gas',
+          mt370Compatible: false,
+          mt480Compatible: true,
+          features: ['High power', 'Heavy-duty performance', 'Maximum output']
+        }
+      ]
     },
     {
-      model: 'MT-480',
-      powerEngines: [false, false, true],       // (7HP= false, 9HP= false), 13HP= true
-      hondaEngines: [false, false, false, true],// GX160, GX200, GX270, GX390
-      electricEngines: [false, true]            // 2-5HP (false), 3-5HP (true)
+      title: '4Power Diesel Engines',
+      options: [
+        {
+          name: '4Power Diesel 7HP',
+          power: '7 Horsepower',
+          type: 'diesel',
+          mt370Compatible: true,
+          mt480Compatible: false,
+          features: ['Fuel efficient', 'High torque', 'Durable design']
+        },
+        {
+          name: '4Power Diesel 9HP',
+          power: '9 Horsepower',
+          type: 'diesel',
+          mt370Compatible: false,
+          mt480Compatible: true,
+          features: ['Enhanced efficiency', 'Maximum torque', 'Long-lasting']
+        }
+      ]
+    },
+    {
+      title: 'Honda Engines',
+      options: [
+        {
+          name: 'Honda GX160',
+          power: '5.5HP',
+          type: 'honda',
+          mt370Compatible: true,
+          mt480Compatible: false,
+          features: ['Premium quality', 'Reliable', 'Low maintenance']
+        },
+        {
+          name: 'Honda GX200',
+          power: '6.5HP',
+          type: 'honda',
+          mt370Compatible: true,
+          mt480Compatible: false,
+          features: ['Premium quality', 'Enhanced power', 'Efficient operation']
+        },
+        {
+          name: 'Honda GX270',
+          power: '9HP',
+          type: 'honda',
+          mt370Compatible: true,
+          mt480Compatible: false,
+          features: ['Premium quality', 'High performance', 'Professional grade']
+        },
+        {
+          name: 'Honda GX390',
+          power: '13HP',
+          type: 'honda',
+          mt370Compatible: false,
+          mt480Compatible: true,
+          features: ['Premium quality', 'Maximum power', 'Industrial strength']
+        }
+      ]
+    },
+    {
+      title: 'Electric Motors',
+      options: [
+        {
+          name: 'EcoDrive Electric',
+          power: '2HP-5HP (1725 RPM)',
+          type: 'electric',
+          mt370Compatible: true,
+          mt480Compatible: false,
+          features: ['Zero emissions', 'Low maintenance', 'Quiet operation']
+        },
+        {
+          name: 'EcoDrive Plus',
+          power: '3HP-5HP (1725 RPM)',
+          type: 'electric',
+          mt370Compatible: false,
+          mt480Compatible: true,
+          features: ['Clean energy', 'Enhanced power', 'Silent performance']
+        }
+      ]
     }
   ];
 
-  /** Engine details data for each product */
-  engineDetails: { [key: string]: EngineDetails[] } = {
-    'MT-370': [
+  /** Get drum specifications for comparison */
+  getDrumSpecs(): ComparisonSpec[] {
+    return [
       {
-        type: '4Power Gasoline',
-        power: ['7HP', '9HP'],
-        features: ['Cost-effective', 'Easy maintenance']
+        label: 'Drum Capacity',
+        key: 'capacity',
+        mt370Value: this.productSpecs['MT-370'].drumSpecs.capacity,
+        mt480Value: this.productSpecs['MT-480'].drumSpecs.capacity,
+        highlight: 'MT-480'
       },
       {
-        type: '4Power Diesel',
-        power: ['7HP'],
-        features: ['Fuel efficient', 'High torque']
+        label: 'Opening Diameter',
+        key: 'openingDiameter',
+        mt370Value: this.productSpecs['MT-370'].drumSpecs.openingDiameter,
+        mt480Value: this.productSpecs['MT-480'].drumSpecs.openingDiameter,
+        highlight: 'MT-480'
       },
       {
-        type: 'Honda',
-        power: ['GX160', 'GX200', 'GX270'],
-        features: ['Premium quality', 'Reliable']
-      },
-      {
-        type: 'Electric',
-        power: ['2HP - 5HP Range'],
-        features: ['Zero emissions', 'Low maintenance']
+        label: 'Drum Depth',
+        key: 'depth',
+        mt370Value: this.productSpecs['MT-370'].drumSpecs.depth,
+        mt480Value: this.productSpecs['MT-480'].drumSpecs.depth,
+        highlight: 'MT-480'
       }
-    ],
-    'MT-480': [
-      {
-        type: '4Power Gasoline',
-        power: ['13HP'],
-        features: ['High power', 'Durable']
-      },
-      {
-        type: '4Power Diesel',
-        power: ['9HP'],
-        features: ['Efficient', 'Long-lasting']
-      },
-      {
-        type: 'Honda',
-        power: ['GX390'],
-        features: ['Premium quality', 'High performance']
-      },
-      {
-        type: 'Electric',
-        power: ['3HP - 5HP Range'],
-        features: ['Clean energy', 'Low noise']
-      }
-    ]
-  };
-
-  /**
-   * Toggles the card (front/back) for either MT-370 or MT-480.
-   * Hides the engine details panel if flipping to the back.
-   */
-  flipCard(model: '370' | '480'): void {
-    if (model === '370') {
-      this.isFlipped370 = !this.isFlipped370;
-      // If flipping to specs, close engine details
-      if (this.isFlipped370) {
-        this.showEngineDetails370 = false;
-      }
-    } else {
-      this.isFlipped480 = !this.isFlipped480;
-      // If flipping to specs, close engine details
-      if (this.isFlipped480) {
-        this.showEngineDetails480 = false;
-      }
-    }
+    ];
   }
 
-  /**
-   * Toggles the engine details side panel for a given product
-   * Also ensures the card's specs side isn't shown while the panel is open
-   */
-  toggleEngineDetails(model: '370' | '480'): void {
-    if (model === '370') {
-      this.showEngineDetails370 = !this.showEngineDetails370;
-      if (this.showEngineDetails370) {
-        // close the specs by flipping to front
-        this.isFlipped370 = false;
+  /** Get unit specifications for comparison */
+  getUnitSpecs(): ComparisonSpec[] {
+    return [
+      {
+        label: 'Management System',
+        key: 'managementSystem',
+        mt370Value: this.productSpecs['MT-370'].unitSpecs.managementSystem,
+        mt480Value: this.productSpecs['MT-480'].unitSpecs.managementSystem
+      },
+      {
+        label: 'Discharge Height',
+        key: 'dischargeHeight',
+        mt370Value: this.productSpecs['MT-370'].unitSpecs.dischargeHeight,
+        mt480Value: this.productSpecs['MT-480'].unitSpecs.dischargeHeight,
+        highlight: 'MT-480'
+      },
+      {
+        label: 'Wheel Size',
+        key: 'wheelSize',
+        mt370Value: this.productSpecs['MT-370'].unitSpecs.wheelSize,
+        mt480Value: this.productSpecs['MT-480'].unitSpecs.wheelSize
       }
-    } else {
-      this.showEngineDetails480 = !this.showEngineDetails480;
-      if (this.showEngineDetails480) {
-        this.isFlipped480 = false;
-      }
-    }
+    ];
   }
 
-  /**
-   * Returns the engine details array for the requested model.
-   * e.g. getEngineDetails('370') => engineDetails['MT-370']
-   */
-  getEngineDetails(model: '370' | '480'): EngineDetails[] {
-    return this.engineDetails[`MT-${model}`];
+  /** Set active comparison tab */
+  setActiveTab(tab: 'specs' | 'engines'): void {
+    this.activeTab = tab;
   }
 
-  /**
-   * Download Handlers for manuals / specs (PDF)
-   */
-  downloadManual(model: string): void {
-    console.log(`Downloading manual for ${model}...`);
-    const fileName = `${model.toLowerCase()}_manual.pdf`;
+  /** Request quote for specific model */
+  requestQuote(model: string): void {
+    console.log(`Requesting quote for ${model}`);
+    // Implement quote request logic
+  }
+
+  /** Contact sales team */
+  contactSales(): void {
+    console.log('Contacting sales team');
+    // Implement sales contact logic
+  }
+
+  /** Download product manual */
+  downloadManual(model: string, language: 'en' | 'es'): void {
+    const fileName = `${model.toLowerCase()}_manual_${language}.pdf`;
     this.triggerDownload(fileName);
   }
 
-  downloadSpecs(model: string): void {
-    console.log(`Downloading specifications for ${model}...`);
-    const fileName = `${model.toLowerCase()}_specifications.pdf`;
-    this.triggerDownload(fileName);
-  }
-
+  /** Trigger file download */
   private triggerDownload(fileName: string): void {
     const link = document.createElement('a');
     link.setAttribute('target', '_blank');
@@ -227,14 +308,5 @@ export class ProductSectionComponent {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
-
-  /** Contact & Quote Handlers */
-  requestQuote(): void {
-    console.log('Processing quote request...');
-  }
-
-  contactSales(): void {
-    console.log('Initiating sales contact...');
   }
 }
