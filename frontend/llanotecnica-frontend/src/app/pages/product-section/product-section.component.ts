@@ -118,7 +118,7 @@ export class ProductSectionComponent {
       title: '4Power Gasoline Engines',
       options: [
         {
-          name: '4Power 7HP',
+          name: '4Power Gasoline',
           power: '7 HP',
           type: 'gas',
           mt370Compatible: true,
@@ -126,7 +126,7 @@ export class ProductSectionComponent {
           features: ['Cost-effective', 'Easy maintenance', 'Optimal efficiency']
         },
         {
-          name: '4Power 9HP',
+          name: '4Power Gasoline',
           power: '9 HP',
           type: 'gas',
           mt370Compatible: true,
@@ -134,7 +134,7 @@ export class ProductSectionComponent {
           features: ['Enhanced power', 'Reliable performance', 'Versatile usage']
         },
         {
-          name: '4Power 13HP',
+          name: '4Power Gasoline',
           power: '13 HP',
           type: 'gas',
           mt370Compatible: false,
@@ -147,7 +147,7 @@ export class ProductSectionComponent {
       title: '4Power Diesel Engines',
       options: [
         {
-          name: '4Power Diesel 7HP',
+          name: '4Power Diesel',
           power: '7 HP',
           type: 'diesel',
           mt370Compatible: true,
@@ -155,7 +155,7 @@ export class ProductSectionComponent {
           features: ['Fuel efficient', 'High torque', 'Durable design']
         },
         {
-          name: '4Power Diesel 9HP',
+          name: '4Power Diesel',
           power: '9 HP',
           type: 'diesel',
           mt370Compatible: false,
@@ -165,7 +165,7 @@ export class ProductSectionComponent {
       ]
     },
     {
-      title: 'Honda Engines',
+      title: 'Honda Engines (Gasoline)',
       options: [
         {
           name: 'Honda GX160',
@@ -202,10 +202,10 @@ export class ProductSectionComponent {
       ]
     },
     {
-      title: 'Electric Motors',
+      title: '4Power Electric Motors',
       options: [
         {
-          name: 'EcoDrive Electric',
+          name: '4Power Electric',
           power: '2HP-5HP (1725 RPM)',
           type: 'electric',
           mt370Compatible: true,
@@ -213,7 +213,7 @@ export class ProductSectionComponent {
           features: ['Zero emissions', 'Low maintenance', 'Quiet operation']
         },
         {
-          name: 'EcoDrive Plus',
+          name: '4Power Electric Plus',
           power: '3HP-5HP (1725 RPM)',
           type: 'electric',
           mt370Compatible: false,
