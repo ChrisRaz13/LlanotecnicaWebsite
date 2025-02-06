@@ -13,8 +13,7 @@
 /* ----------------------- */
 .hero {
   height: 100vh;
-  background: url('/assets/photos/aboutus-herosection.jpg')
-    center/cover no-repeat fixed;
+  background: url('/assets/photos/aboutus-herosection.jpg') center/cover no-repeat fixed;
   position: relative;
   display: flex;
   align-items: center;
@@ -242,13 +241,66 @@
 /* ----------------------- */
 /*       RESPONSIVE ADJUSTMENTS       */
 /* ----------------------- */
+
+/* For tablets and small desktops */
 @media (max-width: 1024px) {
   .image-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, auto);
   }
 }
+
+/* For mobile devices */
 @media (max-width: 768px) {
+  /* Hero adjustments */
+  .hero {
+    height: 70vh;
+    background-attachment: scroll; /* Fix background issues on mobile */
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  .hero p {
+    font-size: 1.2rem;
+  }
+
+  /* Stats adjustments */
+  .stats {
+    margin-top: 0;
+    padding: 1rem;
+  }
+  .stats-grid {
+    flex-direction: column;
+    padding: 2rem;
+  }
+  .stat-item {
+    margin-bottom: 1rem;
+  }
+
+  /* Mission adjustments */
+  .mission-wrapper {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .mission-content h2 {
+    font-size: 2.5rem;
+  }
+  .mission-content p {
+    font-size: 1rem;
+  }
+  .mission-image img {
+    max-width: 100%;
+  }
+
+  /* Values adjustments */
+  .values {
+    padding: 4rem 1rem;
+  }
+  .values h2 {
+    font-size: 2.5rem;
+  }
+
+  /* About Gallery adjustments */
   .image-grid {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(6, auto);
