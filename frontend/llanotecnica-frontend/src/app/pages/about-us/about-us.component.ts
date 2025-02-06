@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, QueryList, ViewChildren, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import * as AOS from 'aos';
 
 interface Value {
   icon: string;
@@ -9,10 +8,11 @@ interface Value {
   description: string;
 }
 
-interface TeamMember {
+interface ProductionStage {
   image: string;
   title: string;
   description: string;
+  visible: boolean;
 }
 
 @Component({
@@ -22,7 +22,13 @@ interface TeamMember {
   templateUrl: './about-us.component.html',
   styleUrls: ['./about-us.component.css']
 })
-export class AboutUsComponent implements OnInit {
+export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChildren('stageElement') stageElements!: QueryList<ElementRef>;
+  @ViewChild('finalCtaElement') finalCtaElement!: ElementRef;
+  @ViewChild('videoElement') videoElement!: ElementRef;  // Reference for the video element
+
+  finalCtaVisible: boolean = false;
+
   values: Value[] = [
     { icon: 'fas fa-lightbulb', title: 'Innovation', description: 'Pushing boundaries in mixing technology with cutting-edge solutions' },
     { icon: 'fas fa-shield-alt', title: 'Quality', description: 'Unwavering commitment to excellence in every machine we produce' },
@@ -30,48 +36,138 @@ export class AboutUsComponent implements OnInit {
     { icon: 'fas fa-handshake', title: 'Partnership', description: 'Building lasting relationships through trust and mutual success' }
   ];
 
-  teamGallery: TeamMember[] = [
-    { image: 'assets/photos/worker1.jpg', title: 'Precision Welding', description: 'Ensuring durability & strength in every frame.' },
-    { image: 'assets/photos/worker2.jpg', title: 'Expert Assembly', description: 'Every part meticulously placed for peak performance.' },
-    { image: 'assets/photos/worker3.jpg', title: 'Quality Assurance', description: 'Rigorous testing to meet industry standards.' },
-    { image: 'assets/photos/worker4.jpg', title: 'Final Inspections', description: 'Ensuring perfection before shipping out.' },
-    { image: 'assets/photos/worker5.jpg', title: 'Premium Finishing', description: 'High-quality coatings for a lasting impact.' },
-    { image: 'assets/photos/worker6.jpg', title: 'Efficient Delivery', description: 'On-time and safe transportation to customers.' }
+  productionStages: ProductionStage[] = [
+    {
+      image: 'assets/photos/worker1.jpg',
+      title: 'Precision Welding',
+      description: 'Ensuring durability & strength in every frame.',
+      visible: false
+    },
+    {
+      image: 'assets/photos/worker2.jpg',
+      title: 'Expert Assembly',
+      description: 'Every part meticulously placed for peak performance.',
+      visible: false
+    },
+    {
+      image: 'assets/photos/worker3.jpg',
+      title: 'Quality Assurance',
+      description: 'Rigorous testing to meet industry standards.',
+      visible: false
+    },
+    {
+      image: 'assets/photos/worker4.jpg',
+      title: 'Final Inspections',
+      description: 'Ensuring perfection before shipping out.',
+      visible: false
+    },
+    {
+      image: 'assets/photos/worker5.jpg',
+      title: 'Premium Finishing',
+      description: 'High-quality coatings for a lasting impact.',
+      visible: false
+    },
+    {
+      image: 'assets/photos/worker6.jpg',
+      title: 'Final Quality Check',
+      description: 'A comprehensive final inspection ensuring every machine meets our rigorous standards.',
+      visible: false
+    }
   ];
 
-  modalActive: boolean = false;
-  selectedMember: TeamMember | null = null;
+  private observers: IntersectionObserver[] = [];
+  private finalCtaObserver: IntersectionObserver | null = null;
+
+  constructor() {}
 
   ngOnInit(): void {
-    AOS.init({
-      duration: 1000,
-      once: true,
-      easing: 'ease-out-cubic',
-      offset: 100
+    // Any initialization logic if needed
+  }
+
+  ngAfterViewInit(): void {
+    // Mute the video element after the view has initialized
+    if (this.videoElement) {
+      this.videoElement.nativeElement.muted = true;
+    }
+
+    // Use requestAnimationFrame if available; otherwise, fall back to setTimeout.
+    if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(() => {
+        this.setupIntersectionObservers();
+        this.setupFinalCtaObserver();
+      });
+    } else {
+      setTimeout(() => {
+        this.setupIntersectionObservers();
+        this.setupFinalCtaObserver();
+      }, 0);
+    }
+  }
+
+  private setupIntersectionObservers(): void {
+    // Fallback if IntersectionObserver is not defined
+    if (typeof IntersectionObserver === 'undefined') {
+      // Make all production stages visible if the API is not available
+      this.productionStages.forEach((stage, index) => {
+        stage.visible = true;
+      });
+      return;
+    }
+
+    // Clean up existing observers
+    this.observers.forEach(observer => observer.disconnect());
+    this.observers = [];
+
+    // Set up observers for production stages
+    this.stageElements.forEach((element, index) => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.productionStages[index].visible = true;
+              observer.disconnect();
+            }
+          });
+        },
+        {
+          threshold: 0.2,
+          rootMargin: '0px 0px -100px 0px'
+        }
+      );
+      observer.observe(element.nativeElement);
+      this.observers.push(observer);
     });
   }
 
-  openModal(index: number): void {
-    this.selectedMember = this.teamGallery[index];
-    this.modalActive = true;
+  private setupFinalCtaObserver(): void {
+    // Fallback if IntersectionObserver is not defined
+    if (typeof IntersectionObserver === 'undefined') {
+      this.finalCtaVisible = true;
+      return;
+    }
 
-    setTimeout(() => {
-      const modalElement = document.querySelector('.modal-container');
-      if (modalElement) {
-        modalElement.classList.add('active');
-      }
-    }, 50);
+    if (this.finalCtaElement) {
+      this.finalCtaObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.finalCtaVisible = true;
+              this.finalCtaObserver?.disconnect();
+            }
+          });
+        },
+        {
+          threshold: 0.3,
+          rootMargin: '0px 0px -100px 0px'
+        }
+      );
+      this.finalCtaObserver.observe(this.finalCtaElement.nativeElement);
+    }
   }
 
-  closeModal(): void {
-    const modalElement = document.querySelector('.modal-container');
-    if (modalElement) {
-      modalElement.classList.remove('active');
-
-      setTimeout(() => {
-        this.modalActive = false;
-        this.selectedMember = null;
-      }, 300);
-    }
+  ngOnDestroy(): void {
+    // Clean up all observers
+    this.observers.forEach(observer => observer.disconnect());
+    this.finalCtaObserver?.disconnect();
   }
 }

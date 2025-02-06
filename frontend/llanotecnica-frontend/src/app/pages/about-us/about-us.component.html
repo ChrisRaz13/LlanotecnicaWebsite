@@ -39,7 +39,7 @@
           <span class="highlighted-text">efficiency, reliability, and sustainability</span>.
         </p>
         <p>
-          We’re committed to
+          We're committed to
           <span class="highlighted-text">transforming the construction landscape</span>
           through cutting-edge technology, robust design, and environmentally conscious engineering.
         </p>
@@ -54,78 +54,73 @@
   <section class="values">
     <h2>Our Values</h2>
     <div class="values-grid">
-      <div class="value-card">
-        <i class="fas fa-lightbulb"></i>
-        <h3>Innovation</h3>
-        <p>Pushing boundaries in mixing technology with cutting-edge solutions.</p>
-      </div>
-      <div class="value-card">
-        <i class="fas fa-shield-alt"></i>
-        <h3>Quality</h3>
-        <p>Unwavering commitment to excellence in every machine we produce.</p>
-      </div>
-      <div class="value-card">
-        <i class="fas fa-leaf"></i>
-        <h3>Sustainability</h3>
-        <p>Environmental responsibility through efficient, eco-friendly designs.</p>
-      </div>
-      <div class="value-card">
-        <i class="fas fa-handshake"></i>
-        <h3>Partnership</h3>
-        <p>Building lasting relationships through trust and mutual success.</p>
+      <div class="value-card" *ngFor="let value of values">
+        <i [class]="value.icon"></i>
+        <h3>{{value.title}}</h3>
+        <p>{{value.description}}</p>
       </div>
     </div>
   </section>
 
-  <!-- Team in Action Section -->
-  <section class="about-gallery">
-    <h2 class="gallery-title">Our Team in Action</h2>
-    <p class="gallery-subtitle">
+  <!-- Production Story Section -->
+  <section class="production-story">
+    <h2 class="story-title">Our Team in Action</h2>
+    <div class="story-subtitle">
       A look inside our factory where expert craftsmanship meets innovation.
-    </p>
-    <div class="image-grid">
-      <div class="image-item">
-        <img src="assets/photos/worker1.jpg" alt="Precision Welding" />
-        <div class="overlay">
-          <h3>Precision Welding</h3>
-          <p>Ensuring durability &amp; strength in every frame.</p>
-        </div>
-      </div>
-      <div class="image-item">
-        <img src="assets/photos/worker2.jpg" alt="Expert Assembly" />
-        <div class="overlay">
-          <h3>Expert Assembly</h3>
-          <p>Every part meticulously placed for peak performance.</p>
-        </div>
-      </div>
-      <div class="image-item">
-        <img src="assets/photos/worker3.jpg" alt="Quality Assurance" />
-        <div class="overlay">
-          <h3>Quality Assurance</h3>
-          <p>Rigorous testing to meet industry standards.</p>
-        </div>
-      </div>
-      <div class="image-item">
-        <img src="assets/photos/worker4.jpg" alt="Final Inspections" />
-        <div class="overlay">
-          <h3>Final Inspections</h3>
-          <p>Ensuring perfection before shipping out.</p>
-        </div>
-      </div>
-      <div class="image-item">
-        <img src="assets/photos/worker5.jpg" alt="Premium Finishing" />
-        <div class="overlay">
-          <h3>Premium Finishing</h3>
-          <p>Precision-crafted components for lasting durability.</p>
-        </div>
-      </div>
-      <div class="image-item">
-        <img src="assets/photos/worker6.jpg" alt="Efficient Delivery" />
-        <div class="overlay">
-          <h3>Efficient Delivery</h3>
-          <p>On-time and safe transportation to customers.</p>
+    </div>
+
+    <div class="story-timeline">
+      <div class="timeline-item"
+           *ngFor="let stage of productionStages; let i = index"
+           #stageElement
+           [class.visible]="stage.visible">
+        <div class="timeline-connector" *ngIf="i < productionStages.length - 1"></div>
+
+        <div class="timeline-content">
+          <div class="parallax-container">
+            <img [src]="stage.image"
+                 [alt]="stage.title"
+                 class="parallax-image"
+                 [class.visible]="stage.visible">
+          </div>
+
+          <div class="timeline-text" [class.visible]="stage.visible">
+            <div class="stage-number">Stage {{i + 1}}</div>
+            <h3>{{stage.title}}</h3>
+            <p>{{stage.description}}</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
-</main>
+
+<!-- Final CTA Section -->
+<section class="final-cta-section">
+  <div class="final-cta-container" #finalCtaElement [class.visible]="finalCtaVisible">
+    <div class="final-cta-content">
+      <h2 class="final-cta-title">Excellence in Every Detail</h2>
+      <p class="final-cta-text">
+        The culmination of our craftsmanship and expertise - creating reliable, efficient concrete
+        mixing solutions that help build a stronger tomorrow.
+      </p>
+      <div class="final-cta-buttons">
+        <a routerLink="/contact" class="cta-button primary-cta">Contact Us</a>
+        <a routerLink="/quote" class="cta-button secondary-cta">Request Quote</a>
+      </div>
+    </div>
+    <div class="final-video-container">
+      <video
+  #videoElement
+  autoplay
+  loop
+  playsinline
+  class="final-video"
+  aria-hidden="true"
+  [attr.aria-label]="'Background video showing concrete mixer'"
+>
+  <source src="assets/videos/finishedproduct.mp4" type="video/mp4">
+</video>
+
+    </div>
+  </div>
+</section>
