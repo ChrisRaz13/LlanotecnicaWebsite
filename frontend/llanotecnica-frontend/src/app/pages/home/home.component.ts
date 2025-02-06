@@ -1,34 +1,45 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { animate, trigger, style, transition, query, stagger, state } from '@angular/animations';
 
-type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
-type CategoryType = FeatureCategory | 'all';
+interface CompanyStats {
+  value: string;
+  label: string;
+  icon: string;
+}
 
-interface Feature {
+interface ProductFeature {
+  icon: string;
   title: string;
   description: string;
+  metric?: string;
+}
+
+interface ProductSpec {
+  label: string;
+  value: string;
   icon: string;
-  highlight: string;
-  category: FeatureCategory;
 }
 
 interface Product {
+  id: string;
   name: string;
+  model: string;
   description: string;
-  features: string[];
-  specs: {
-    capacity: string;
-    enginePower: string;
-    weight: string;
-  };
-  image: string;
+  features: ProductFeature[];
+  specs: ProductSpec[];
+  gallery: string[];
+  mainImage: string;
+  highlights: string[];
 }
 
-interface Benefit {
+interface VideoContent {
+  id: string;
   title: string;
   description: string;
-  icon: string;
+  thumbnail: string;
+  url: string;
+  duration: string;
 }
 
 @Component({
@@ -36,229 +47,249 @@ interface Benefit {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  styleUrls: ['./home.component.css'],
   animations: [
-    trigger('cardAnimation', [
+    trigger('fadeIn', [
       transition(':enter', [
-        query('.feature-card', [
-          style({ opacity: 0, transform: 'translateY(20px)' }),
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('0.6s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ]),
+    trigger('slideInLeft', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateX(-100px)' }),
+        animate('0.6s ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
+      ])
+    ]),
+    trigger('staggerFade', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(30px)' }),
           stagger(100, [
             animate('0.5s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
           ])
         ], { optional: true })
-      ]),
-      transition(':leave', [
-        query('.feature-card', [
-          stagger(100, [
-            animate('0.5s ease-out', style({ opacity: 0, transform: 'translateY(20px)' }))
-          ])
-        ], { optional: true })
-      ])
-    ]),
-    trigger('fadeSlide', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('0.6s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ])
   ]
 })
 export class HomeComponent implements OnInit {
-  isBrowser = false;
-  isVideoPlaying = false;
-  activeTab: 'video' | 'products' = 'video';
-  activeSection = 'hero';
-  activeCategory: CategoryType = 'all';
-  videoUrl = 'assets/videos/mixer-showcase.mp4';
+  headerFixed: boolean = false;
+  activeSection: string = 'hero';
+  selectedProduct: string = 'mt-370';
+  videoModalActive: boolean = false;
+  currentVideo: VideoContent | null = null;
 
-  readonly heroWords = [
-    { text: 'Reliable', class: '' },
-    { text: 'Durable', class: '' },
-    { text: 'Quality', class: '' },
-    { text: 'Mixers', class: 'emphasis' }
+  readonly companyStats: CompanyStats[] = [
+    {
+      value: '20+',
+      label: 'Years Experience',
+      icon: 'fa-clock'
+    },
+    {
+      value: '5000+',
+      label: 'Units Delivered',
+      icon: 'fa-truck'
+    },
+    {
+      value: '98%',
+      label: 'Customer Satisfaction',
+      icon: 'fa-star'
+    }
   ];
 
-  readonly mixers: Product[] = [
+  readonly products: Product[] = [
     {
+      id: 'mt-370',
       name: 'Concrete Mixer MT-370',
-      description: 'Compact mixer perfect for small to medium projects',
+      model: 'MT-370',
+      description: 'Compact yet powerful mixer perfect for small to medium construction projects.',
       features: [
-        'Ideal for residential construction',
-        'Easy to transport and maneuver',
-        'Durable steel construction'
+        {
+          icon: 'fa-gauge',
+          title: 'Enhanced Efficiency',
+          description: 'Optimized paddle design ensures thorough mixing',
+          metric: '30% faster'
+        },
+        {
+          icon: 'fa-shield',
+          title: 'Durable Build',
+          description: 'Industrial-grade materials and construction',
+          metric: '10+ years'
+        }
       ],
-      specs: {
-        capacity: '370 Liters',
-        enginePower: '7-9 HP',
-        weight: 'Lightweight Design'
-      },
-      image: 'assets/photos/MT-370.webp'
+      specs: [
+        {
+          label: 'Capacity',
+          value: '370L',
+          icon: 'fa-flask'
+        },
+        {
+          label: 'Power',
+          value: '7-9 HP',
+          icon: 'fa-bolt'
+        }
+      ],
+      gallery: [
+        'assets/photos/MT-370.jpg',
+        'assets/photos/PHOTO-2025-01-31-15-45-46.jpg',
+        'assets/photos/PHOTO-2025-01-31-15-45-47.jpg',
+        'assets/photos/PHOTO-2025-01-31-15-45-48.jpg'
+      ],
+      mainImage: 'assets/photos/MT-370.jpg',
+      highlights: [
+        'Perfect for residential projects',
+        'Easy transport and setup',
+        'Low maintenance design'
+      ]
     },
     {
+      id: 'mt-480',
       name: 'Concrete Mixer MT-480',
-      description: 'Heavy-duty mixer engineered for large commercial projects',
+      model: 'MT-480',
+      description: 'Heavy-duty industrial mixer designed for large commercial projects.',
       features: [
-        'Perfect for commercial construction',
-        'Maximum mixing efficiency',
-        'Heavy-duty construction'
+        {
+          icon: 'fa-industry',
+          title: 'Industrial Power',
+          description: 'Maximum mixing capacity for heavy workloads',
+          metric: '40% more'
+        },
+        {
+          icon: 'fa-gears',
+          title: 'Advanced Systems',
+          description: 'Premium components and controls',
+          metric: '15+ years'
+        }
       ],
-      specs: {
-        capacity: '480 Liters',
-        enginePower: '13+ HP',
-        weight: 'Industrial Grade'
-      },
-      image: 'assets/photos/MT-480.webp'
+      specs: [
+        {
+          label: 'Capacity',
+          value: '480L',
+          icon: 'fa-flask'
+        },
+        {
+          label: 'Power',
+          value: '13+ HP',
+          icon: 'fa-bolt'
+        }
+      ],
+      gallery: [
+        'assets/photos/MT-480.jpg',
+        'assets/photos/PHOTO-2025-01-31-15-50-19.jpg',
+        'assets/photos/PHOTO-2025-01-31-15-50-20.jpg',
+        'assets/photos/PHOTO-2025-01-31-15-50-21_2.jpg'
+      ],
+      mainImage: 'assets/photos/MT-480.jpg',
+      highlights: [
+        'Ideal for commercial construction',
+        'Heavy-duty performance',
+        'Advanced safety features'
+      ]
     }
   ];
 
-  readonly benefits: Benefit[] = [
+  readonly videos: VideoContent[] = [
     {
-      title: 'Reliable Performance',
-      description: 'Built with high-quality materials and components for consistent operation',
-      icon: 'fas fa-cog'
+      id: 'mixer-overview',
+      title: 'Product Overview',
+      description: 'Comprehensive guide to our mixer range',
+      thumbnail: 'assets/photos/PHOTO-2025-01-31-15-45-46.jpg',
+      url: 'assets/videos/MixersEnglishDub.mp4',
+      duration: '3:45'
     },
     {
-      title: 'Easy Maintenance',
-      description: 'Simple design allows for quick cleaning and routine maintenance',
-      icon: 'fas fa-tools'
-    },
-    {
-      title: 'Cost Effective',
-      description: 'Maximize your investment with durable equipment built to last',
-      icon: 'fas fa-dollar-sign'
-    },
-    {
-      title: 'Technical Support',
-      description: 'Expert assistance and spare parts readily available',
-      icon: 'fas fa-headset'
+      id: 'demo-video',
+      title: 'Live Demonstration',
+      description: 'See our mixers in action',
+      thumbnail: 'assets/photos/PHOTO-2025-01-31-15-50-19.jpg',
+      url: 'assets/videos/VIDEO-2025-01-31-15-51-32.mp4',
+      duration: '2:30'
     }
   ];
 
-  readonly features: Feature[] = [
-    {
-      title: 'Reinforced Drum Design',
-      description: 'Heavy-duty steel construction with double-reinforced joints and wear-resistant coating for maximum durability.',
-      icon: 'fa-solid fa-shield',
-      highlight: '50% increased lifespan',
-      category: 'design'
-    },
-    {
-      title: 'Protected Gear Mechanism',
-      description: 'Sealed gearbox system with automatic lubrication and debris protection for minimal maintenance.',
-      icon: 'fa-solid fa-gears',
-      highlight: '10,000+ operation hours',
-      category: 'performance'
-    },
-    {
-      title: 'Enhanced Safety Features',
-      description: 'Multiple emergency stops, protective guards, and safety interlocks ensure operator protection.',
-      icon: 'fa-solid fa-shield-halved',
-      highlight: 'Triple safety system',
-      category: 'safety'
-    },
-    {
-      title: 'Efficient Mixing Paddles',
-      description: 'Optimized paddle design with anti-stick coating ensures thorough mixing and easy cleaning.',
-      icon: 'fa-solid fa-rotate',
-      highlight: '30% faster mixing',
-      category: 'performance'
-    },
-    {
-      title: 'Multiple Engine Options',
-      description: 'Choose from diesel, gasoline, or electric power options to match your site requirements.',
-      icon: 'fa-solid fa-gauge-high',
-      highlight: '3 power options',
-      category: 'operation'
-    },
-    {
-      title: 'Quick-Release System',
-      description: 'Patented quick-lock mechanism enables tool-free drum removal and maintenance access.',
-      icon: 'fa-solid fa-unlock',
-      highlight: '5-minute setup time',
-      category: 'operation'
-    }
+  readonly galleryImages: string[] = [
+    'assets/photos/20160914_171413.jpg',
+    'assets/photos/PHOTO-2025-01-31-15-44-41.jpg',
+    'assets/photos/PHOTO-2025-01-31-15-45-48.jpg',
+    'assets/photos/PHOTO-2025-01-31-15-50-19.jpg',
+    'assets/photos/20160914_171514.jpg',
+    'assets/photos/PHOTO-2025-01-31-15-50-20.jpg'
   ];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    this.headerFixed = window.scrollY > 50;
+    this.checkActiveSection();
   }
 
-  ngOnInit(): void {
-    if (this.isBrowser) {
-      this.initializeAnimations();
-      this.observeScroll();
-    }
+  ngOnInit() {
+    this.initializeScrollObserver();
   }
 
-  private initializeAnimations(): void {
-    const fillDelay = 600;
-    const totalDuration = fillDelay * this.heroWords.length;
-    const smoothDelay = totalDuration + 100;
-
-    this.heroWords.slice().reverse().forEach((_, index) => {
-      setTimeout(() => {
-        const elementIndex = this.heroWords.length - 1 - index;
-        const element = document.querySelector(`.hero-word:nth-child(${elementIndex + 1})}`);
-        element?.classList.add('animate');
-      }, index * fillDelay);
-    });
-
-    setTimeout(() => {
-      this.heroWords.forEach((_, index) => {
-        const element = document.querySelector(`.hero-word:nth-child(${index + 1})`);
-        element?.classList.add('smooth-over');
-      });
-    }, smoothDelay);
-  }
-
-  private observeScroll(): void {
+  private initializeScrollObserver() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            this.activeSection = entry.target.id;
+            const id = entry.target.getAttribute('id');
+            if (id) this.activeSection = id;
           }
         });
       },
       { threshold: 0.3 }
     );
 
-    document.querySelectorAll('section[id]').forEach(section => observer.observe(section));
+    document.querySelectorAll('section[id]').forEach(section => {
+      observer.observe(section);
+    });
   }
 
-  setActiveTab(tab: 'video' | 'products'): void {
-    this.activeTab = tab;
+  private checkActiveSection() {
+    const sections = document.querySelectorAll('section[id]');
+    const scrollPosition = window.scrollY + window.innerHeight / 3;
+
+    sections.forEach(section => {
+      const sectionTop = (section as HTMLElement).offsetTop;
+      const sectionHeight = section.clientHeight;
+      const sectionId = section.getAttribute('id');
+
+      if (scrollPosition >= sectionTop && scrollPosition <= sectionTop + sectionHeight) {
+        this.activeSection = sectionId || 'hero';
+      }
+    });
   }
 
-  get featureCategories(): CategoryType[] {
-    return ['all', ...new Set(this.features.map(f => f.category))];
+  selectProduct(productId: string) {
+    this.selectedProduct = productId;
   }
 
-  filterFeatures(category: CategoryType): void {
-    this.activeCategory = category;
+  getSelectedProduct(): Product {
+    return this.products.find(p => p.id === this.selectedProduct) || this.products[0];
   }
 
-  get filteredFeatures(): Feature[] {
-    return this.activeCategory === 'all'
-      ? this.features
-      : this.features.filter(f => f.category === this.activeCategory);
+  playVideo(video: VideoContent) {
+    this.currentVideo = video;
+    this.videoModalActive = true;
+
+    setTimeout(() => {
+      const videoElement = document.querySelector('.video-modal video') as HTMLVideoElement;
+      if (videoElement) {
+        videoElement.play().catch(err => console.warn('Autoplay prevented:', err));
+      }
+    }, 100);
   }
 
-  formatCategory(category: string): string {
-    return category.charAt(0).toUpperCase() + category.slice(1);
+  closeVideoModal() {
+    this.videoModalActive = false;
+    this.currentVideo = null;
   }
 
-  toggleVideo(): void {
-    this.isVideoPlaying = !this.isVideoPlaying;
-    const video = document.querySelector('video');
-    if (video) {
-      this.isVideoPlaying ? video.play() : video.pause();
-    }
-  }
-
-  scrollToSection(sectionId: string): void {
+  scrollToSection(sectionId: string) {
     const element = document.getElementById(sectionId);
-    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 }

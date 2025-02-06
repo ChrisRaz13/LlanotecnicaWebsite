@@ -1,38 +1,36 @@
 <main class="about-container">
+  <!-- Hero Section -->
   <section class="hero">
-    <div class="overlay"></div>
-    <div class="hero-content" data-aos="fade">
-      <h1>Building Tomorrow's Infrastructure</h1>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>A Team Committed to Engineering Excellence</h1>
       <p>Pioneering concrete mixing technology since 2002</p>
     </div>
   </section>
 
+  <!-- Stats Section -->
   <section class="stats">
     <div class="stats-grid">
-      <div class="stat-item" data-aos="fade-up">
+      <div class="stat-item">
         <div class="stat-number">20+</div>
         <span>Years Experience</span>
       </div>
-      <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+      <div class="stat-item">
         <div class="stat-number">500+</div>
         <span>Projects Completed</span>
       </div>
-      <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+      <div class="stat-item">
         <div class="stat-number">30+</div>
         <span>Countries Served</span>
       </div>
     </div>
   </section>
 
+  <!-- Mission Section -->
   <section class="mission">
     <div class="mission-wrapper">
-      <!-- LEFT SIDE: Logo + Mission Text -->
-      <div class="mission-content" data-aos="fade-right">
-        <img
-          src="assets/photos/logo.png"
-          alt="Logo"
-          class="mission-logo"
-        />
+      <div class="mission-content">
+        <img src="assets/photos/logo.png" alt="Company Logo" class="mission-logo" />
         <h2>Our Mission</h2>
         <p>
           At Llanotecnica, we believe the future of construction hinges on
@@ -43,27 +41,91 @@
         <p>
           We’re committed to
           <span class="highlighted-text">transforming the construction landscape</span>
-          through cutting-edge technology, robust design, and environmentally
-          conscious engineering.
+          through cutting-edge technology, robust design, and environmentally conscious engineering.
         </p>
       </div>
-
-      <!-- RIGHT SIDE: Mixer Image -->
-      <div class="mission-image" data-aos="fade-left">
-        <img src="assets/photos/MT-480.3.png" alt="Concrete Mixer" />
+      <div class="mission-image">
+        <img src="assets/photos/teamphoto.jpg" alt="Team in Factory" />
       </div>
     </div>
   </section>
 
-
+  <!-- Values Section -->
   <section class="values">
-    <h2 data-aos="fade-up">Our Values</h2>
+    <h2>Our Values</h2>
     <div class="values-grid">
-      <div class="value-card" *ngFor="let value of values" data-aos="fade-up">
-        <i [class]="value.icon"></i>
-        <h3>{{ value.title }}</h3>
-        <p>{{ value.description }}</p>
+      <div class="value-card">
+        <i class="fas fa-lightbulb"></i>
+        <h3>Innovation</h3>
+        <p>Pushing boundaries in mixing technology with cutting-edge solutions.</p>
+      </div>
+      <div class="value-card">
+        <i class="fas fa-shield-alt"></i>
+        <h3>Quality</h3>
+        <p>Unwavering commitment to excellence in every machine we produce.</p>
+      </div>
+      <div class="value-card">
+        <i class="fas fa-leaf"></i>
+        <h3>Sustainability</h3>
+        <p>Environmental responsibility through efficient, eco-friendly designs.</p>
+      </div>
+      <div class="value-card">
+        <i class="fas fa-handshake"></i>
+        <h3>Partnership</h3>
+        <p>Building lasting relationships through trust and mutual success.</p>
       </div>
     </div>
   </section>
- </main>
+
+  <!-- Team in Action Section -->
+  <section class="about-gallery">
+    <h2 class="gallery-title">Our Team in Action</h2>
+    <p class="gallery-subtitle">
+      A look inside our factory where expert craftsmanship meets innovation.
+    </p>
+    <div class="image-grid">
+      <div class="image-item">
+        <img src="assets/photos/worker1.jpg" alt="Precision Welding" />
+        <div class="overlay">
+          <h3>Precision Welding</h3>
+          <p>Ensuring durability &amp; strength in every frame.</p>
+        </div>
+      </div>
+      <div class="image-item">
+        <img src="assets/photos/worker2.jpg" alt="Expert Assembly" />
+        <div class="overlay">
+          <h3>Expert Assembly</h3>
+          <p>Every part meticulously placed for peak performance.</p>
+        </div>
+      </div>
+      <div class="image-item">
+        <img src="assets/photos/worker3.jpg" alt="Quality Assurance" />
+        <div class="overlay">
+          <h3>Quality Assurance</h3>
+          <p>Rigorous testing to meet industry standards.</p>
+        </div>
+      </div>
+      <div class="image-item">
+        <img src="assets/photos/worker4.jpg" alt="Final Inspections" />
+        <div class="overlay">
+          <h3>Final Inspections</h3>
+          <p>Ensuring perfection before shipping out.</p>
+        </div>
+      </div>
+      <div class="image-item">
+        <img src="assets/photos/worker5.jpg" alt="Premium Finishing" />
+        <div class="overlay">
+          <h3>Premium Finishing</h3>
+          <p>Precision-crafted components for lasting durability.</p>
+        </div>
+      </div>
+      <div class="image-item">
+        <img src="assets/photos/worker6.jpg" alt="Efficient Delivery" />
+        <div class="overlay">
+          <h3>Efficient Delivery</h3>
+          <p>On-time and safe transportation to customers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
