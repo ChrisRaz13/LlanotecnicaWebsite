@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 
@@ -25,10 +25,11 @@ interface Product {
   image: string;
 }
 
-interface Benefit {
-  title: string;
-  description: string;
-  icon: string;
+interface FAQ {
+  question: string;
+  answer: string;
+  videoUrl?: string;
+  posterImage?: string;
 }
 
 @Component({
@@ -38,7 +39,13 @@ interface Benefit {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   animations: [
-    trigger('cardAnimation', [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('0.6s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ]),
+    trigger('staggerFade', [
       transition(':enter', [
         query('.feature-card', [
           style({ opacity: 0, transform: 'translateY(20px)' }),
@@ -46,37 +53,15 @@ interface Benefit {
             animate('0.5s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
           ])
         ], { optional: true })
-      ]),
-      transition(':leave', [
-        query('.feature-card', [
-          stagger(100, [
-            animate('0.5s ease-out', style({ opacity: 0, transform: 'translateY(20px)' }))
-          ])
-        ], { optional: true })
-      ])
-    ]),
-    trigger('fadeSlide', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('0.6s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ])
   ]
 })
 export class HomeComponent implements OnInit {
-  isBrowser = false;
-  isVideoPlaying = false;
-  activeTab: 'video' | 'products' = 'video';
+  @ViewChild('demoVideo') demoVideo?: ElementRef<HTMLVideoElement>;
   activeSection = 'hero';
-  activeCategory: CategoryType = 'all';
-  videoUrl = 'assets/videos/mixer-showcase.mp4';
-
-  readonly heroWords = [
-    { text: 'Reliable', class: '' },
-    { text: 'Durable', class: '' },
-    { text: 'Quality', class: '' },
-    { text: 'Mixers', class: 'emphasis' }
-  ];
+  activeFaq: number | null = null;
+  isVideoPlaying = false;
 
   readonly mixers: Product[] = [
     {
@@ -90,9 +75,9 @@ export class HomeComponent implements OnInit {
       specs: {
         capacity: '370 Liters',
         enginePower: '7-9 HP',
-        weight: 'Lightweight Design'
+        weight: '750 kg'
       },
-      image: 'assets/photos/MT-370.jpg'
+      image: '/assets/photos/MT-370.1.jpg'
     },
     {
       name: 'Concrete Mixer MT-480',
@@ -105,118 +90,80 @@ export class HomeComponent implements OnInit {
       specs: {
         capacity: '480 Liters',
         enginePower: '13+ HP',
-        weight: 'Industrial Grade'
+        weight: '950 kg'
       },
-      image: 'assets/photos/MT-480.jpg'
-    }
-  ];
-
-  readonly benefits: Benefit[] = [
-    {
-      title: 'Reliable Performance',
-      description: 'Built with high-quality materials and components for consistent operation',
-      icon: 'fas fa-cog'
-    },
-    {
-      title: 'Easy Maintenance',
-      description: 'Simple design allows for quick cleaning and routine maintenance',
-      icon: 'fas fa-tools'
-    },
-    {
-      title: 'Cost Effective',
-      description: 'Maximize your investment with durable equipment built to last',
-      icon: 'fas fa-dollar-sign'
-    },
-    {
-      title: 'Technical Support',
-      description: 'Expert assistance and spare parts readily available',
-      icon: 'fas fa-headset'
+      image: '/assets/photos/MT-480.jpg'
     }
   ];
 
   readonly features: Feature[] = [
     {
       title: 'Reinforced Drum Design',
-      description: 'Heavy-duty steel construction with double-reinforced joints and wear-resistant coating for maximum durability.',
+      description: 'Heavy-duty steel construction with double-reinforced joints and wear-resistant coating.',
       icon: 'fa-solid fa-shield',
       highlight: '50% increased lifespan',
       category: 'design'
     },
     {
       title: 'Protected Gear Mechanism',
-      description: 'Sealed gearbox system with automatic lubrication and debris protection for minimal maintenance.',
+      description: 'Sealed gearbox system with automatic lubrication and debris protection.',
       icon: 'fa-solid fa-gears',
       highlight: '10,000+ operation hours',
       category: 'performance'
     },
     {
       title: 'Enhanced Safety Features',
-      description: 'Multiple emergency stops, protective guards, and safety interlocks ensure operator protection.',
+      description: 'Multiple emergency stops, protective guards, and safety interlocks for operator protection.',
       icon: 'fa-solid fa-shield-halved',
       highlight: 'Triple safety system',
       category: 'safety'
-    },
-    {
-      title: 'Efficient Mixing Paddles',
-      description: 'Optimized paddle design with anti-stick coating ensures thorough mixing and easy cleaning.',
-      icon: 'fa-solid fa-rotate',
-      highlight: '30% faster mixing',
-      category: 'performance'
-    },
-    {
-      title: 'Multiple Engine Options',
-      description: 'Choose from diesel, gasoline, or electric power options to match your site requirements.',
-      icon: 'fa-solid fa-gauge-high',
-      highlight: '3 power options',
-      category: 'operation'
-    },
-    {
-      title: 'Quick-Release System',
-      description: 'Patented quick-lock mechanism enables tool-free drum removal and maintenance access.',
-      icon: 'fa-solid fa-unlock',
-      highlight: '5-minute setup time',
-      category: 'operation'
     }
   ];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
-  }
+  readonly faqs: FAQ[] = [
+    {
+      question: 'How do I operate the MT-370 mixer?',
+      answer: 'Watch our detailed demonstration video below:',
+      videoUrl: '/assets/videos/instruction.mp4',
+      posterImage: '/assets/photos/mixer-demo-poster.jpg'
+    },
+    {
+      question: 'What maintenance is required?',
+      answer: 'Regular maintenance includes daily cleaning, weekly lubrication checks, and monthly mechanical inspections.'
+    },
+    {
+      question: 'Which mixer is right for my project?',
+      answer: 'The MT-370 is ideal for residential and small commercial projects, while the MT-480 is designed for larger commercial applications.'
+    },
+    {
+      question: 'What warranty do you offer?',
+      answer: 'We provide a comprehensive 2-year warranty on all components, with extended warranty options available.'
+    },
+    {
+      question: 'Are spare parts readily available?',
+      answer: 'Yes, we maintain a complete inventory of spare parts with next-day delivery available for most components.'
+    }
+  ];
+
+  readonly companyStats = {
+    yearsExperience: '20+',
+    mixersDelivered: '5000+',
+    clientSatisfaction: '98%'
+  };
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(): void {
-    if (this.isBrowser) {
-      this.initializeAnimations();
-      this.observeScroll();
+    if (isPlatformBrowser(this.platformId)) {
+      this.initializeScrollObserver();
     }
   }
 
-  private initializeAnimations(): void {
-    const fillDelay = 600;
-    const totalDuration = fillDelay * this.heroWords.length;
-    const smoothDelay = totalDuration + 100;
-
-    this.heroWords.slice().reverse().forEach((_, index) => {
-      setTimeout(() => {
-        const elementIndex = this.heroWords.length - 1 - index;
-        const element = document.querySelector(`.hero-word:nth-child(${elementIndex + 1})}`);
-        element?.classList.add('animate');
-      }, index * fillDelay);
-    });
-
-    setTimeout(() => {
-      this.heroWords.forEach((_, index) => {
-        const element = document.querySelector(`.hero-word:nth-child(${index + 1})`);
-        element?.classList.add('smooth-over');
-      });
-    }, smoothDelay);
-  }
-
-  private observeScroll(): void {
+  private initializeScrollObserver(): void {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
             this.activeSection = entry.target.id;
           }
         });
@@ -224,41 +171,37 @@ export class HomeComponent implements OnInit {
       { threshold: 0.3 }
     );
 
-    document.querySelectorAll('section[id]').forEach(section => observer.observe(section));
-  }
-
-  setActiveTab(tab: 'video' | 'products'): void {
-    this.activeTab = tab;
-  }
-
-  get featureCategories(): CategoryType[] {
-    return ['all', ...new Set(this.features.map(f => f.category))];
-  }
-
-  filterFeatures(category: CategoryType): void {
-    this.activeCategory = category;
-  }
-
-  get filteredFeatures(): Feature[] {
-    return this.activeCategory === 'all'
-      ? this.features
-      : this.features.filter(f => f.category === this.activeCategory);
-  }
-
-  formatCategory(category: string): string {
-    return category.charAt(0).toUpperCase() + category.slice(1);
-  }
-
-  toggleVideo(): void {
-    this.isVideoPlaying = !this.isVideoPlaying;
-    const video = document.querySelector('video');
-    if (video) {
-      this.isVideoPlaying ? video.play() : video.pause();
-    }
+    document.querySelectorAll('section[id]').forEach(section => {
+      observer.observe(section);
+    });
   }
 
   scrollToSection(sectionId: string): void {
     const element = document.getElementById(sectionId);
-    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  toggleFaq(index: number): void {
+    // If we're closing the FAQ that contains the video (index 0)
+    if (index === 0 && this.activeFaq === 0) {
+      // Using ViewChild reference to control video
+      if (this.demoVideo?.nativeElement) {
+        this.demoVideo.nativeElement.pause();
+        this.demoVideo.nativeElement.currentTime = 0; // Reset to start
+      }
+    }
+    this.activeFaq = this.activeFaq === index ? null : index;
+  }
+
+  playDemoVideo(): void {
+    this.scrollToSection('video');
+    setTimeout(() => {
+      const video = document.querySelector('video');
+      if (video) {
+        video.play();
+      }
+    }, 1000);
   }
 }

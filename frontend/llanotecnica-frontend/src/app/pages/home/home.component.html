@@ -1,300 +1,229 @@
-<!-- Home Component Template -->
-<div class="home-container">
+<main class="home-container">
   <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-background">
-      <div class="overlay"></div>
-      <div class="shape-overlay">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-      </div>
-    </div>
-
+  <section id="hero" class="hero-section">
+    <img src="/assets/photos/hero-homepage.jpg" alt="Industrial cement mixer in action" class="hero-bg">
     <div class="hero-content">
-      <div class="hero-text">
-        <div class="hero-heading">
-          <span class="heading-line">Industrial Grade</span>
-          <span class="heading-line">Construction</span>
-          <span class="heading-line accent">Mixers</span>
-        </div>
-        <p class="hero-subtitle">Engineered for superior performance and reliability</p>
+      <div class="hero-text" @fadeIn>
+        <h1>Engineered for Strength,<br>Built to Last</h1>
+        <p>Professional-grade concrete mixers delivering reliability and performance for over two decades</p>
         <div class="hero-cta">
-          <!-- 1) Add an ID to the Watch Video button -->
-          <button class="cta-button primary">
-            <span>Explore Products</span>
+          <button class="btn-primary" (click)="scrollToSection('products')">
+            Explore Products
             <i class="fas fa-arrow-right"></i>
           </button>
-          <button class="cta-button secondary" id="watchVideoBtn">
-            <span>Watch Video</span>
+          <button class="btn-secondary" (click)="playDemoVideo()">
+            Watch Video
             <i class="fas fa-play"></i>
           </button>
-        </div>
-      </div>
-
-      <div class="hero-features">
-        <div class="feature">
-          <div class="feature-icon">
-            <i class="fas fa-shield-alt"></i>
-          </div>
-          <div class="feature-text">
-            <span>Premium Build</span>
-            <small>Industrial Grade Materials</small>
-          </div>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">
-            <i class="fas fa-cogs"></i>
-          </div>
-          <div class="feature-text">
-            <span>Easy Maintenance</span>
-            <small>Quick Service Access</small>
-          </div>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">
-            <i class="fas fa-chart-line"></i>
-          </div>
-          <div class="feature-text">
-            <span>High Performance</span>
-            <small>Superior Efficiency</small>
-          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Products Section -->
-  <section class="products-section">
-    <div class="products-container">
-      <h2 class="section-title">Our Mixer Range</h2>
-      <p class="section-subtitle">Choose the perfect mixer for your construction needs</p>
-
-      <div class="content-wrapper">
-        <div class="left-content">
-          <div class="product-overview">
-            <h3 class="overview-title">Professional Mixing Solutions</h3>
-            <p class="overview-text">
-              Our advanced concrete mixers combine durability with innovation, offering you:
-            </p>
-            <ul class="overview-features">
-              <li><i class="fas fa-check"></i> Superior mixing efficiency</li>
-              <li><i class="fas fa-check"></i> Robust construction</li>
-              <li><i class="fas fa-check"></i> Easy maintenance design</li>
-            </ul>
+  <section id="products" class="products-section">
+    <div class="section-container">
+      <header class="section-header" @fadeIn>
+        <h2>Our Mixer Range</h2>
+        <p>Choose the perfect mixer for your construction needs</p>
+      </header>
+      <div class="products-grid">
+        <div class="product-card" *ngFor="let mixer of mixers" @fadeIn>
+          <div class="product-image">
+            <img [src]="mixer.image" [alt]="mixer.name">
           </div>
-
-          <div class="mixer-cards">
-            <div class="mixer-card" *ngFor="let mixer of mixers">
-              <div class="mixer-image">
-                <img [src]="mixer.image" [alt]="mixer.name">
+          <div class="product-content">
+            <h3>{{mixer.name}}</h3>
+            <p>{{mixer.description}}</p>
+            <div class="specs-grid">
+              <div class="spec">
+                <span class="label">Capacity</span>
+                <span class="value">{{mixer.specs.capacity}}</span>
               </div>
-              <div class="mixer-details">
-                <div class="mixer-header">
-                  <h3>{{ mixer.name }}</h3>
-                  <p>{{ mixer.description }}</p>
-                </div>
-                <div class="mixer-specs">
-                  <div class="spec">
-                    <span class="spec-label">CAPACITY</span>
-                    <span class="spec-value">{{ mixer.specs.capacity }}</span>
-                  </div>
-                  <div class="spec">
-                    <span class="spec-label">POWER</span>
-                    <span class="spec-value">{{ mixer.specs.enginePower }}</span>
-                  </div>
-                  <div class="spec">
-                    <span class="spec-label">BUILD</span>
-                    <span class="spec-value">{{ mixer.specs.weight }}</span>
-                  </div>
-                </div>
+              <div class="spec">
+                <span class="label">Power</span>
+                <span class="value">{{mixer.specs.enginePower}}</span>
+              </div>
+              <div class="spec">
+                <span class="label">Weight</span>
+                <span class="value">{{mixer.specs.weight}}</span>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div class="video-section">
-          <div class="video-container">
-            <!-- 2) Add an ID to the video itself (or its container) -->
-            <video
-              id="productVideo"
-              controls
-              class="showcase-video"
-              poster="assets/photos/MixersSpanish.jpg"
-              preload="metadata"
-              playsinline
-              controlsList="nodownload">
-              <source src="assets/videos/MixersSpanish.mp4" type="video/mp4">
-            </video>
+            <ul class="feature-list">
+              <li *ngFor="let feature of mixer.features">
+                <i class="fas fa-check"></i>
+                {{feature}}
+              </li>
+            </ul>
+            <button class="btn-primary" (click)="scrollToSection('contact')">
+              Request Quote
+              <i class="fas fa-arrow-right"></i>
+            </button>
           </div>
         </div>
       </div>
     </div>
   </section>
-<!-- Features & Benefits Combined Section -->
-<section class="features-benefits-section" [@cardAnimation]>
-  <div class="diagonal-divider"></div>
+
+  <!-- Video Section -->
+  <section id="video" class="video-section">
+    <div class="section-container">
+      <div class="video-wrapper">
+        <video
+          controls
+          poster="/assets/photos/mixer-video-poster.jpg"
+          preload="metadata"
+          class="product-video">
+          <source src="/assets/videos/mixer-showcase.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </section>
 
   <!-- Features Section -->
-  <div class="features-container">
+  <section id="features" class="features-section">
     <div class="section-container">
-      <div class="section-header">
-        <h2 class="section-title">Advanced Features</h2>
-        <p class="section-subtitle">Engineered for superior performance and reliability</p>
-      </div>
-
-      <div class="feature-filters">
-        <button
-          *ngFor="let category of featureCategories"
-          [class.active]="activeCategory === category"
-          (click)="filterFeatures(category)"
-          class="filter-btn">
-          <i [class]="category === 'all' ? 'fas fa-th-large' : 'fas fa-filter'"></i>
-          {{ formatCategory(category) }}
-        </button>
-      </div>
-
-      <div class="features-grid">
-        <div class="feature-card" *ngFor="let feature of filteredFeatures">
+      <header class="section-header" @fadeIn>
+        <h2>Advanced Features</h2>
+        <p>Engineering excellence in every detail</p>
+      </header>
+      <div class="features-grid" @staggerFade>
+        <div class="feature-card" *ngFor="let feature of features">
           <div class="feature-icon">
             <i [class]="feature.icon"></i>
           </div>
           <div class="feature-content">
-            <h3>{{ feature.title }}</h3>
-            <p>{{ feature.description }}</p>
-            <div class="feature-metric">
-              <span class="metric-value">{{ feature.highlight }}</span>
-              <i class="fas fa-chart-line"></i>
+            <h3>{{feature.title}}</h3>
+            <p>{{feature.description}}</p>
+            <div class="feature-highlight">
+              <span>{{feature.highlight}}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Benefits Section -->
-  <div class="benefits-container">
+  <!-- Company Section -->
+  <section id="company" class="company-section">
     <div class="section-container">
-      <div class="section-header">
-        <h2>Why Choose Our Mixers</h2>
-        <p class="section-subtitle">Industry-leading quality backed by decades of expertise</p>
-      </div>
-
-      <div class="benefits-grid">
-        <div class="benefit-card" *ngFor="let benefit of benefits">
-          <div class="benefit-icon">
-            <i [class]="benefit.icon"></i>
-          </div>
-          <h3>{{ benefit.title }}</h3>
-          <p>{{ benefit.description }}</p>
-          <div class="benefit-overlay"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Company Section -->
-<section class="company-section">
-  <div class="section-container">
-    <div class="company-content">
-      <div class="company-text">
-        <div class="section-header">
-          <h2>Our Company</h2>
-          <div class="header-accent"></div>
-          <p class="section-subtitle">Building quality construction equipment since 2002</p>
-        </div>
-        <div class="company-description">
-          <p>
-            At Llanotecnica, we're dedicated to revolutionizing the construction industry through
-            innovative concrete mixing solutions. With over two decades of experience, we've established
-            ourselves as industry leaders in manufacturing reliable, efficient, and sustainable construction
-            equipment.
-          </p>
+      <div class="company-content" @fadeIn>
+        <div class="company-text">
+          <h2>Two Decades of Excellence</h2>
+          <p>Building quality construction equipment since 2002</p>
           <div class="company-stats">
-            <div class="stat-item">
-              <span class="stat-number">20+</span>
-              <span class="stat-label">Years Experience</span>
+            <div class="stat">
+              <span class="number">{{companyStats.yearsExperience}}</span>
+              <span class="label">Years Experience</span>
             </div>
-            <div class="stat-item">
-              <span class="stat-number">5000+</span>
-              <span class="stat-label">Mixers Delivered</span>
+            <div class="stat">
+              <span class="number">{{companyStats.mixersDelivered}}</span>
+              <span class="label">Mixers Delivered</span>
             </div>
-            <div class="stat-item">
-              <span class="stat-number">98%</span>
-              <span class="stat-label">Client Satisfaction</span>
+            <div class="stat">
+              <span class="number">{{companyStats.clientSatisfaction}}</span>
+              <span class="label">Client Satisfaction</span>
             </div>
           </div>
-          <button class="company-cta">
+          <a href="/about" class="btn-secondary">
             Learn More About Us
             <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="faq-section">
+    <div class="section-container">
+      <header class="section-header" @fadeIn>
+        <h2>Frequently Asked Questions</h2>
+        <p>Get answers to common questions about our mixers</p>
+      </header>
+      <div class="faq-list">
+        <div class="faq-item" *ngFor="let faq of faqs; let i = index" @fadeIn>
+          <button class="faq-question" (click)="toggleFaq(i)"
+            [class.active]="activeFaq === i">
+            {{faq.question}}
+            <i class="fas" [class.fa-chevron-down]="activeFaq !== i"
+              [class.fa-chevron-up]="activeFaq === i"></i>
           </button>
-        </div>
-      </div>
-      <div class="company-media">
-        <div class="media-grid">
-          <div class="grid-item main-image">
-            <img src="assets/photos/company-main.jpg" alt="Factory floor">
-            <div class="image-overlay"></div>
-          </div>
-          <div class="grid-item">
-            <img src="assets/photos/company-2.jpg" alt="Quality testing">
-            <div class="image-overlay"></div>
-          </div>
-          <div class="grid-item">
-            <img src="assets/photos/company-3.jpg" alt="Team working">
-            <div class="image-overlay"></div>
+          <div class="faq-answer" [class.active]="activeFaq === i">
+            <p>{{faq.answer}}</p>
+            <div class="faq-video" *ngIf="faq.videoUrl">
+              <div class="faq-video-container">
+                <video #demoVideo controls poster="{{faq.posterImage}}">
+                  <source [src]="faq.videoUrl" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+              <div class="faq-video-info">
+                <div class="guide-title">
+                  <div class="guide-icon">
+                    <i class="fas fa-list-check"></i>
+                  </div>
+                  <h4>Operating Your Mixer: Step-by-Step Guide</h4>
+                </div>
+                <div class="operation-steps">
+                  <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                      <div class="step-header">
+                        <div class="step-icon">
+                          <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="step-title">Pre-Operation Check</div>
+                      </div>
+                      <div class="step-desc">Check engine oil level and mechanical parts</div>
+                    </div>
+                  </div>
+
+                  <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                      <div class="step-header">
+                        <div class="step-icon">
+                          <i class="fas fa-power-off"></i>
+                        </div>
+                        <div class="step-title">Start Engine</div>
+                      </div>
+                      <div class="step-desc">Pull starter yo-yo until engine runs smoothly</div>
+                    </div>
+                  </div>
+
+                  <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                      <div class="step-header">
+                        <div class="step-icon">
+                          <i class="fas fa-rotate"></i>
+                        </div>
+                        <div class="step-title">Control Position</div>
+                      </div>
+                      <div class="step-desc">Use foot pedal to adjust drum angle</div>
+                    </div>
+                  </div>
+
+                  <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                      <div class="step-header">
+                        <div class="step-icon">
+                          <i class="fas fa-fill-drip"></i>
+                        </div>
+                        <div class="step-title">Load Materials</div>
+                      </div>
+                      <div class="step-desc">Fill to max capacity (MT-370: 370L, MT-480: 480L)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- Contact Section -->
-<section class="contact-section">
-  <div class="geometric-overlay"></div>
-  <div class="section-container">
-    <div class="contact-content">
-      <div class="contact-header">
-        <div class="header-icon">
-          <i class="fas fa-handshake"></i>
-        </div>
-        <h2>Ready to Upgrade Your Equipment?</h2>
-        <p>Contact our team for expert guidance in choosing the right mixer</p>
-      </div>
-      <div class="contact-actions">
-        <button class="cta-button primary">
-          <i class="fas fa-envelope"></i>
-          Contact Sales
-          <div class="button-overlay"></div>
-        </button>
-        <button class="cta-button secondary">
-          <i class="fas fa-file-pdf"></i>
-          Download Specs
-          <div class="button-overlay"></div>
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 3) Add a small script to handle scroll & autoplay -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const watchVideoBtn = document.getElementById('watchVideoBtn');
-    const productVideo = document.getElementById('productVideo');
-
-    // Only attach if both elements exist
-    if (watchVideoBtn && productVideo) {
-      watchVideoBtn.addEventListener('click', function () {
-        // Smoothly scroll the video into view
-        productVideo.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        // Attempt to play the video (likely allowed due to user-initiated click)
-        productVideo.play().catch(err => {
-          console.warn('Autoplay failed:', err);
-        });
-      });
-    }
-  });
-</script>
+  </section>
+</main>
