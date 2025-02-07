@@ -159,7 +159,7 @@
   font-weight: 900;
   padding: 0 4px;
   border-radius: 4px;
-  background: rgba(0, 135, 81, 0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .mission-image {
@@ -559,11 +559,6 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(0, 135, 81, 0.3),
-    rgba(0, 165, 98, 0.3)
-  );
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 1;

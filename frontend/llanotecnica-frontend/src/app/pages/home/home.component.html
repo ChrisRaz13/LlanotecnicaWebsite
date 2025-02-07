@@ -1,71 +1,62 @@
+<!-- Home Component Template -->
 <div class="home-container">
-  <!-- Header -->
-  <header [class.fixed]="headerFixed">
-    <nav class="nav-wrapper">
-      <div class="nav-brand">
-        <img src="assets/photos/logo.png" alt="Company Logo" class="nav-logo">
-      </div>
-      <div class="nav-links">
-        <a (click)="scrollToSection('products')">Products</a>
-        <a (click)="scrollToSection('features')">Features</a>
-        <a (click)="scrollToSection('gallery')">Gallery</a>
-        <a (click)="scrollToSection('videos')">Videos</a>
-        <button class="contact-btn" (click)="scrollToSection('contact')">Contact Us</button>
-      </div>
-    </nav>
-  </header>
-
   <!-- Hero Section -->
-  <section id="hero" class="hero-section">
+  <section class="hero-section">
     <div class="hero-background">
-      <img src="assets/photos/20160914_171413.jpg" alt="Factory Background" class="hero-bg-image">
       <div class="overlay"></div>
-      <div class="pattern-overlay"></div>
+      <div class="shape-overlay">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+      </div>
     </div>
 
     <div class="hero-content">
       <div class="hero-text">
-        <div class="hero-headings" [@fadeIn]>
-          <span class="heading-accent">Industrial-Grade</span>
-          <h1>Concrete Mixers</h1>
-          <span class="heading-sub">Engineering Excellence</span>
+        <div class="hero-heading">
+          <span class="heading-line">Industrial Grade</span>
+          <span class="heading-line">Construction</span>
+          <span class="heading-line accent">Mixers</span>
         </div>
-
-        <p class="hero-description">
-          Precision engineered mixing solutions delivering unmatched performance and reliability for professional construction projects
-        </p>
-
-        <div class="hero-stats" [@staggerFade]="companyStats.length">
-          <div class="stat-card" *ngFor="let stat of companyStats">
-            <div class="stat-icon">
-              <i [class]="'fas ' + stat.icon"></i>
-            </div>
-            <div class="stat-content">
-              <span class="stat-value">{{ stat.value }}</span>
-              <span class="stat-label">{{ stat.label }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-actions">
-          <button class="primary-btn" (click)="scrollToSection('products')">
-            Explore Our Mixers
+        <p class="hero-subtitle">Engineered for superior performance and reliability</p>
+        <div class="hero-cta">
+          <!-- 1) Add an ID to the Watch Video button -->
+          <button class="cta-button primary">
+            <span>Explore Products</span>
             <i class="fas fa-arrow-right"></i>
           </button>
-          <button class="video-btn" (click)="scrollToSection('videos')">
-            Watch Demo
+          <button class="cta-button secondary" id="watchVideoBtn">
+            <span>Watch Video</span>
             <i class="fas fa-play"></i>
           </button>
         </div>
       </div>
 
-      <div class="hero-showcase">
-        <div class="product-preview">
-          <img [src]="products[0].mainImage" alt="Featured Mixer" class="feature-image">
+      <div class="hero-features">
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <div class="feature-text">
+            <span>Premium Build</span>
+            <small>Industrial Grade Materials</small>
+          </div>
         </div>
-        <div class="preview-gallery">
-          <div class="preview-item" *ngFor="let image of products[0].gallery.slice(0, 3)">
-            <img [src]="image" [alt]="products[0].name">
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-cogs"></i>
+          </div>
+          <div class="feature-text">
+            <span>Easy Maintenance</span>
+            <small>Quick Service Access</small>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="feature-text">
+            <span>High Performance</span>
+            <small>Superior Efficiency</small>
           </div>
         </div>
       </div>
@@ -73,194 +64,237 @@
   </section>
 
   <!-- Products Section -->
-  <section id="products" class="products-section">
-    <div class="section-container">
-      <div class="section-header">
-        <h2>Our Professional Range</h2>
-        <p>Choose the perfect mixer for your construction needs</p>
-      </div>
+  <section class="products-section">
+    <div class="products-container">
+      <h2 class="section-title">Our Mixer Range</h2>
+      <p class="section-subtitle">Choose the perfect mixer for your construction needs</p>
 
-      <div class="product-navigation">
-        <div class="nav-container">
-          <button *ngFor="let product of products"
-                  [class.active]="selectedProduct === product.id"
-                  (click)="selectProduct(product.id)"
-                  class="product-nav-btn">
-            {{ product.model }}
-          </button>
-        </div>
-      </div>
-
-      <div class="product-showcase" *ngFor="let product of [getSelectedProduct()]" [@fadeIn]>
-        <div class="showcase-main">
-          <div class="product-gallery">
-            <div class="main-image">
-              <img [src]="product.mainImage" [alt]="product.name">
-            </div>
-            <div class="gallery-grid">
-              <div class="gallery-item" *ngFor="let img of product.gallery">
-                <img [src]="img" [alt]="product.name">
-              </div>
-            </div>
-          </div>
-
-          <div class="product-info">
-            <h3>{{ product.name }}</h3>
-            <p class="product-description">{{ product.description }}</p>
-
-            <div class="specs-grid">
-              <div class="spec-item" *ngFor="let spec of product.specs">
-                <div class="spec-icon">
-                  <i [class]="'fas ' + spec.icon"></i>
-                </div>
-                <div class="spec-content">
-                  <span class="spec-value">{{ spec.value }}</span>
-                  <span class="spec-label">{{ spec.label }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="feature-highlights">
-              <div class="feature-card" *ngFor="let feature of product.features">
-                <div class="feature-icon">
-                  <i [class]="'fas ' + feature.icon"></i>
-                </div>
-                <div class="feature-content">
-                  <h4>{{ feature.title }}</h4>
-                  <p>{{ feature.description }}</p>
-                  <span class="feature-metric">{{ feature.metric }}</span>
-                </div>
-              </div>
-            </div>
-
-            <ul class="highlight-list">
-              <li *ngFor="let highlight of product.highlights">
-                <i class="fas fa-check"></i>
-                <span>{{ highlight }}</span>
-              </li>
+      <div class="content-wrapper">
+        <div class="left-content">
+          <div class="product-overview">
+            <h3 class="overview-title">Professional Mixing Solutions</h3>
+            <p class="overview-text">
+              Our advanced concrete mixers combine durability with innovation, offering you:
+            </p>
+            <ul class="overview-features">
+              <li><i class="fas fa-check"></i> Superior mixing efficiency</li>
+              <li><i class="fas fa-check"></i> Robust construction</li>
+              <li><i class="fas fa-check"></i> Easy maintenance design</li>
             </ul>
+          </div>
 
-            <div class="product-actions">
-              <button class="primary-btn">
-                Request Quote
-                <i class="fas fa-arrow-right"></i>
-              </button>
-              <button class="secondary-btn">
-                Download Specs
-                <i class="fas fa-download"></i>
-              </button>
+          <div class="mixer-cards">
+            <div class="mixer-card" *ngFor="let mixer of mixers">
+              <div class="mixer-image">
+                <img [src]="mixer.image" [alt]="mixer.name">
+              </div>
+              <div class="mixer-details">
+                <div class="mixer-header">
+                  <h3>{{ mixer.name }}</h3>
+                  <p>{{ mixer.description }}</p>
+                </div>
+                <div class="mixer-specs">
+                  <div class="spec">
+                    <span class="spec-label">CAPACITY</span>
+                    <span class="spec-value">{{ mixer.specs.capacity }}</span>
+                  </div>
+                  <div class="spec">
+                    <span class="spec-label">POWER</span>
+                    <span class="spec-value">{{ mixer.specs.enginePower }}</span>
+                  </div>
+                  <div class="spec">
+                    <span class="spec-label">BUILD</span>
+                    <span class="spec-value">{{ mixer.specs.weight }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Gallery Section -->
-  <section id="gallery" class="gallery-section">
-    <div class="section-container">
-      <div class="section-header">
-        <h2>Project Gallery</h2>
-        <p>Our mixers in action across various construction projects</p>
-      </div>
-
-      <div class="gallery-grid" [@staggerFade]="galleryImages.length">
-        <div class="gallery-item" *ngFor="let image of galleryImages">
-          <img [src]="image" alt="Project Image">
-          <div class="item-overlay">
-            <i class="fas fa-search-plus"></i>
+        <div class="video-section">
+          <div class="video-container">
+            <!-- 2) Add an ID to the video itself (or its container) -->
+            <video
+              id="productVideo"
+              controls
+              class="showcase-video"
+              poster="assets/photos/MixersSpanish.jpg"
+              preload="metadata"
+              playsinline
+              controlsList="nodownload">
+              <source src="assets/videos/MixersSpanish.mp4" type="video/mp4">
+            </video>
           </div>
         </div>
       </div>
     </div>
   </section>
+<!-- Features & Benefits Combined Section -->
+<section class="features-benefits-section" [@cardAnimation]>
+  <div class="diagonal-divider"></div>
 
-  <!-- Videos Section -->
-  <section id="videos" class="videos-section">
+  <!-- Features Section -->
+  <div class="features-container">
     <div class="section-container">
       <div class="section-header">
-        <h2>Watch Our Mixers in Action</h2>
-        <p>Detailed demonstrations and product overviews</p>
+        <h2 class="section-title">Advanced Features</h2>
+        <p class="section-subtitle">Engineered for superior performance and reliability</p>
       </div>
 
-      <div class="video-grid" [@staggerFade]="videos.length">
-        <div class="video-card" *ngFor="let video of videos" (click)="playVideo(video)">
-          <div class="video-thumbnail">
-            <img [src]="video.thumbnail" [alt]="video.title">
-            <div class="play-overlay">
-              <i class="fas fa-play"></i>
-              <span class="duration">{{ video.duration }}</span>
+      <div class="feature-filters">
+        <button
+          *ngFor="let category of featureCategories"
+          [class.active]="activeCategory === category"
+          (click)="filterFeatures(category)"
+          class="filter-btn">
+          <i [class]="category === 'all' ? 'fas fa-th-large' : 'fas fa-filter'"></i>
+          {{ formatCategory(category) }}
+        </button>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card" *ngFor="let feature of filteredFeatures">
+          <div class="feature-icon">
+            <i [class]="feature.icon"></i>
+          </div>
+          <div class="feature-content">
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
+            <div class="feature-metric">
+              <span class="metric-value">{{ feature.highlight }}</span>
+              <i class="fas fa-chart-line"></i>
             </div>
           </div>
-          <div class="video-info">
-            <h3>{{ video.title }}</h3>
-            <p>{{ video.description }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact" class="contact-section">
-    <div class="section-container">
-      <div class="section-header">
-        <h2>Ready to Transform Your Projects?</h2>
-        <p>Get in touch with our team for expert guidance and support</p>
-      </div>
-
-      <div class="contact-cards">
-        <div class="contact-card sales">
-          <div class="card-icon">
-            <i class="fas fa-handshake"></i>
-          </div>
-          <h3>Sales Inquiry</h3>
-          <p>Get a customized quote for your project needs</p>
-          <button class="primary-btn">
-            Contact Sales
-            <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
-
-        <div class="contact-card support">
-          <div class="card-icon">
-            <i class="fas fa-headset"></i>
-          </div>
-          <h3>Technical Support</h3>
-          <p>Expert assistance when you need it</p>
-          <button class="secondary-btn">
-            Get Support
-            <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="accent-shapes">
-      <div class="accent left"></div>
-      <div class="accent right"></div>
-    </div>
-  </section>
-
-  <!-- Video Modal -->
-  <div class="video-modal" [class.active]="videoModalActive" (click)="closeVideoModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <button class="close-btn" (click)="closeVideoModal()">
-        <i class="fas fa-times"></i>
-      </button>
-
-      <div class="video-container" *ngIf="currentVideo">
-        <div class="video-header">
-          <h3>{{ currentVideo.title }}</h3>
-          <p>{{ currentVideo.description }}</p>
-        </div>
-        <div class="video-player">
-          <video controls>
-            <source [src]="currentVideo.url" type="video/mp4">
-            Your browser does not support HTML5 video.
-          </video>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+  <!-- Benefits Section -->
+  <div class="benefits-container">
+    <div class="section-container">
+      <div class="section-header">
+        <h2>Why Choose Our Mixers</h2>
+        <p class="section-subtitle">Industry-leading quality backed by decades of expertise</p>
+      </div>
+
+      <div class="benefits-grid">
+        <div class="benefit-card" *ngFor="let benefit of benefits">
+          <div class="benefit-icon">
+            <i [class]="benefit.icon"></i>
+          </div>
+          <h3>{{ benefit.title }}</h3>
+          <p>{{ benefit.description }}</p>
+          <div class="benefit-overlay"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Company Section -->
+<section class="company-section">
+  <div class="section-container">
+    <div class="company-content">
+      <div class="company-text">
+        <div class="section-header">
+          <h2>Our Company</h2>
+          <div class="header-accent"></div>
+          <p class="section-subtitle">Building quality construction equipment since 2002</p>
+        </div>
+        <div class="company-description">
+          <p>
+            At Llanotecnica, we're dedicated to revolutionizing the construction industry through
+            innovative concrete mixing solutions. With over two decades of experience, we've established
+            ourselves as industry leaders in manufacturing reliable, efficient, and sustainable construction
+            equipment.
+          </p>
+          <div class="company-stats">
+            <div class="stat-item">
+              <span class="stat-number">20+</span>
+              <span class="stat-label">Years Experience</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">5000+</span>
+              <span class="stat-label">Mixers Delivered</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">98%</span>
+              <span class="stat-label">Client Satisfaction</span>
+            </div>
+          </div>
+          <button class="company-cta">
+            Learn More About Us
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+      <div class="company-media">
+        <div class="media-grid">
+          <div class="grid-item main-image">
+            <img src="assets/photos/company-main.jpg" alt="Factory floor">
+            <div class="image-overlay"></div>
+          </div>
+          <div class="grid-item">
+            <img src="assets/photos/company-2.jpg" alt="Quality testing">
+            <div class="image-overlay"></div>
+          </div>
+          <div class="grid-item">
+            <img src="assets/photos/company-3.jpg" alt="Team working">
+            <div class="image-overlay"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section">
+  <div class="geometric-overlay"></div>
+  <div class="section-container">
+    <div class="contact-content">
+      <div class="contact-header">
+        <div class="header-icon">
+          <i class="fas fa-handshake"></i>
+        </div>
+        <h2>Ready to Upgrade Your Equipment?</h2>
+        <p>Contact our team for expert guidance in choosing the right mixer</p>
+      </div>
+      <div class="contact-actions">
+        <button class="cta-button primary">
+          <i class="fas fa-envelope"></i>
+          Contact Sales
+          <div class="button-overlay"></div>
+        </button>
+        <button class="cta-button secondary">
+          <i class="fas fa-file-pdf"></i>
+          Download Specs
+          <div class="button-overlay"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3) Add a small script to handle scroll & autoplay -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const watchVideoBtn = document.getElementById('watchVideoBtn');
+    const productVideo = document.getElementById('productVideo');
+
+    // Only attach if both elements exist
+    if (watchVideoBtn && productVideo) {
+      watchVideoBtn.addEventListener('click', function () {
+        // Smoothly scroll the video into view
+        productVideo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Attempt to play the video (likely allowed due to user-initiated click)
+        productVideo.play().catch(err => {
+          console.warn('Autoplay failed:', err);
+        });
+      });
+    }
+  });
+</script>
