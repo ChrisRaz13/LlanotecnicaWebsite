@@ -122,10 +122,10 @@ export class HomeComponent implements OnInit {
 
   readonly faqs: FAQ[] = [
     {
-      question: 'How do I operate the MT-370 mixer?',
+      question: 'How do I operate the MT-370 and MT-480 mixers?',
       answer: 'Watch our detailed demonstration video below:',
       videoUrl: '/assets/videos/instruction.mp4',
-      posterImage: '/assets/photos/mixer-demo-poster.jpg'
+      posterImage: '/assets/photos/instruction-poster.png'
     },
     {
       question: 'What maintenance is required?',
