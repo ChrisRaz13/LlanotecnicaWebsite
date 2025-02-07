@@ -175,7 +175,7 @@ export class HomeComponent implements OnInit {
     },
     {
       type: 'video',
-      src: '/assets/videos/homepage1.mp4',
+      src: '/assets/videos/homepage3.mp4',
       poster: '/assets/photos/hero-video-poster.jpg'
     }
   ];
