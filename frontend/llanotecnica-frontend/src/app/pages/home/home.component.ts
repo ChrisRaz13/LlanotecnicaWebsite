@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, PLATFORM_ID, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
+import { animate, query, stagger, style, transition, trigger, state } from '@angular/animations';
+import { Meta, Title } from '@angular/platform-browser';
 
 type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
 type CategoryType = FeatureCategory | 'all';
@@ -45,6 +46,12 @@ interface FAQ {
         animate('0.6s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ]),
+    trigger('slideIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateX(-30px)' }),
+        animate('0.8s ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
+      ])
+    ]),
     trigger('staggerFade', [
       transition(':enter', [
         query('.feature-card', [
@@ -54,14 +61,23 @@ interface FAQ {
           ])
         ], { optional: true })
       ])
+    ]),
+    trigger('scrollIndicator', [
+      state('visible', style({ opacity: 1, transform: 'translateY(0)' })),
+      state('hidden', style({ opacity: 0, transform: 'translateY(20px)' })),
+      transition('visible <=> hidden', animate('0.3s ease-in-out'))
     ])
   ]
 })
 export class HomeComponent implements OnInit {
   @ViewChild('demoVideo') demoVideo?: ElementRef<HTMLVideoElement>;
+  @ViewChild('heroVideo') heroVideo?: ElementRef<HTMLVideoElement>;
+
   activeSection = 'hero';
   activeFaq: number | null = null;
   isVideoPlaying = false;
+  showScrollIndicator = true;
+  currentHeroBackground = 0;
 
   readonly mixers: Product[] = [
     {
@@ -151,11 +167,62 @@ export class HomeComponent implements OnInit {
     clientSatisfaction: '98%'
   };
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  readonly heroBackgrounds = [
+    {
+      type: 'image',
+      src: '/assets/photos/twomixers1.jpg',
+      alt: 'Industrial cement mixer in action'
+    },
+    {
+      type: 'video',
+      src: '/assets/videos/homepage1.mp4',
+      poster: '/assets/photos/hero-video-poster.jpg'
+    }
+  ];
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private meta: Meta,
+    private title: Title
+  ) {}
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.initializeScrollObserver();
+      this.setupScrollIndicator();
+      this.setupSEO();
+    }
+  }
+
+  private setupSEO(): void {
+    this.title.setTitle('Professional Concrete Mixers | Industrial Mixing Solutions');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Professional-grade concrete mixers delivering reliability and performance for over two decades. Explore our range of industrial mixing solutions.'
+    });
+
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: 'Industrial Concrete Mixers',
+      description: 'Professional-grade concrete mixers for construction projects',
+      manufacturer: {
+        '@type': 'Organization',
+        name: 'Your Company Name'
+      }
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(structuredData);
+    document.head.appendChild(script);
+  }
+
+  private setupScrollIndicator(): void {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', () => {
+        this.showScrollIndicator = window.scrollY < 100;
+      });
     }
   }
 
@@ -184,12 +251,10 @@ export class HomeComponent implements OnInit {
   }
 
   toggleFaq(index: number): void {
-    // If we're closing the FAQ that contains the video (index 0)
     if (index === 0 && this.activeFaq === 0) {
-      // Using ViewChild reference to control video
       if (this.demoVideo?.nativeElement) {
         this.demoVideo.nativeElement.pause();
-        this.demoVideo.nativeElement.currentTime = 0; // Reset to start
+        this.demoVideo.nativeElement.currentTime = 0;
       }
     }
     this.activeFaq = this.activeFaq === index ? null : index;
@@ -203,5 +268,10 @@ export class HomeComponent implements OnInit {
         video.play();
       }
     }, 1000);
+  }
+
+  toggleHeroBackground(): void {
+    this.currentHeroBackground =
+      (this.currentHeroBackground + 1) % this.heroBackgrounds.length;
   }
 }
