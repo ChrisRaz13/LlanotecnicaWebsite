@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 declare var grecaptcha: any;
@@ -74,8 +75,8 @@ export class ContactComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private sanitizer: DomSanitizer,
-    private firestore: Firestore,
     private ngZone: NgZone,
+    private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.initializeForm();
@@ -217,28 +218,26 @@ export class ContactComponent implements OnInit, OnDestroy {
           });
         });
 
-        // Update form with token
-        this.contactForm.patchValue({ recaptchaToken: token });
-
-        // Submit to Firestore
-        const contactRef = collection(this.firestore, 'contactMessages');
+        // Prepare form data
         const formData = {
           ...this.contactForm.value,
-          timestamp: new Date().toISOString(),
-          userAgent: navigator.userAgent,
-          recaptchaScore: token // Store token for verification
+          recaptchaToken: token
         };
 
-        await addDoc(contactRef, formData);
+        // Submit to Cloud Function
+        const response = await firstValueFrom(this.http.post(
+          'https://southamerica-east1-llanotecnica-59a31.cloudfunctions.net/submitContactForm',
+          formData
+        ));
 
         this.ngZone.run(() => {
-          console.log('✅ Form successfully saved to Firestore');
+          console.log('✅ Form successfully submitted');
           this.submitSuccess = true;
           this.contactForm.reset();
         });
       } catch (error) {
         this.ngZone.run(() => {
-          console.error('🔥 Form submission error:', error);
+          console.error('Form submission error:', error);
           this.submitError = true;
         });
       } finally {
