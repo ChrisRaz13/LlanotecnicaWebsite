@@ -1,10 +1,11 @@
-import { Component, OnInit, HostListener, NgZone, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, Inject, PLATFORM_ID, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 import { environment } from '../../../environments/environment';
 
 declare var grecaptcha: any;
@@ -77,6 +78,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private ngZone: NgZone,
     private http: HttpClient,
+    private firestore: Firestore,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.initializeForm();
@@ -134,33 +136,18 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   private initializeMap() {
-    try {
-      if (!environment.googleMapsApiKey) {
-        console.error('Google Maps API key is missing');
-        return;
-      }
-
-      const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=Panama+City+Panama&zoom=15`;
-      this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(mapUrl);
-    } catch (error) {
-      console.error('Error initializing map:', error);
+    if (!environment.googleMapsApiKey) {
+      console.error('🚨 Google Maps API key is missing');
+      return;
     }
+
+    const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=Panama+City+Panama&zoom=15`;
+    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(mapUrl);
   }
 
   private loadRecaptcha() {
-    if (!environment.recaptchaSiteKey) {
-      console.error('reCAPTCHA site key is missing');
+    if (!environment.recaptchaSiteKey || !isPlatformBrowser(this.platformId)) {
       return;
-    }
-
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    // Remove any existing reCAPTCHA scripts
-    const existingScript = document.querySelector('script[src*="recaptcha"]');
-    if (existingScript) {
-      existingScript.remove();
     }
 
     this.recaptchaScript = document.createElement('script');
@@ -199,12 +186,10 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.submitError = false;
 
       try {
-        // Verify reCAPTCHA is available
         if (typeof grecaptcha === 'undefined') {
           throw new Error('reCAPTCHA is not loaded');
         }
 
-        // Get reCAPTCHA token
         const token = await new Promise<string>((resolve, reject) => {
           grecaptcha.ready(async () => {
             try {
@@ -218,17 +203,17 @@ export class ContactComponent implements OnInit, OnDestroy {
           });
         });
 
-        // Prepare form data
+        this.contactForm.patchValue({ recaptchaToken: token });
+
         const formData = {
           ...this.contactForm.value,
-          recaptchaToken: token
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent
         };
 
-        // Submit to Cloud Function
-        const response = await firstValueFrom(this.http.post(
-          'https://southamerica-east1-llanotecnica-59a31.cloudfunctions.net/submitContactForm',
-          formData
-        ));
+        console.log('🚀 Submitting form data:', formData);
+
+        await addDoc(collection(this.firestore, 'contactMessages'), formData);
 
         this.ngZone.run(() => {
           console.log('✅ Form successfully submitted');
@@ -237,7 +222,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
       } catch (error) {
         this.ngZone.run(() => {
-          console.error('Form submission error:', error);
+          console.error('🔥 Form submission error:', error);
           this.submitError = true;
         });
       } finally {
@@ -271,16 +256,13 @@ export class ContactComponent implements OnInit, OnDestroy {
       pattern: this.getPatternErrorMessage(controlName)
     };
 
-    const errorKey = Object.keys(control.errors)[0];
-    return errors[errorKey as keyof typeof errors] || 'Invalid input';
+    return errors[Object.keys(control.errors)[0] as keyof typeof errors] || 'Invalid input';
   }
 
   private getPatternErrorMessage(controlName: string): string {
-    switch (controlName) {
-      case 'name': return 'Please enter a valid name (letters only)';
-      case 'email': return 'Please enter a valid email address';
-      case 'phone': return 'Please enter a valid phone number';
-      default: return 'Invalid format';
-    }
+    return controlName === 'name' ? 'Please enter a valid name (letters only)'
+         : controlName === 'email' ? 'Please enter a valid email address'
+         : controlName === 'phone' ? 'Please enter a valid phone number'
+         : 'Invalid format';
   }
 }
