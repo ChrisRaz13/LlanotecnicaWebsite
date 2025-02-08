@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { environment } from '../../../environments/environment';
+
+declare var grecaptcha: any;
 
 interface ContactForm {
   name: string;
@@ -37,8 +40,9 @@ export class ContactComponent implements OnInit {
   isSubmitting = false;
   submitSuccess = false;
   submitError = false;
-  isDarkMode = false;
   isFormTouched = false;
+  recaptchaLoaded = false;
+  mapUrl: SafeResourceUrl | undefined;
 
   inquiryTypes = [
     'Product Information',
@@ -67,16 +71,13 @@ export class ContactComponent implements OnInit {
     instagram: 'https://instagram.com/llanotecnica'
   };
 
-  mapUrl: SafeResourceUrl | undefined;
-
   constructor(
     private fb: FormBuilder,
     private sanitizer: DomSanitizer,
-    private firestore: Firestore // Inject Firestore for database access
+    private firestore: Firestore
   ) {
     this.initializeForm();
     this.initializeMap();
-    this.checkDarkMode();
   }
 
   ngOnInit() {
@@ -120,15 +121,29 @@ export class ContactComponent implements OnInit {
   }
 
   private initializeMap() {
-    const mapUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=Panama+City+Panama`;
+    const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=Panama+City+Panama`;
     this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(mapUrl);
   }
 
   private loadRecaptcha() {
-    const script = document.createElement('script');
-    script.src = 'https://www.google.com/recaptcha/api.js';
-    document.body.appendChild(script);
-    (window as any).onRecaptchaResolved = this.onRecaptchaResolved.bind(this);
+    if (!this.recaptchaLoaded) {
+      const script = document.createElement('script');
+      script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => this.setupRecaptcha();
+      document.body.appendChild(script);
+      this.recaptchaLoaded = true;
+    }
+  }
+
+  private setupRecaptcha() {
+    grecaptcha.ready(() => {
+      grecaptcha.render('recaptcha-container', {
+        sitekey: environment.recaptchaSiteKey,
+        callback: (token: string) => this.onRecaptchaResolved(token)
+      });
+    });
   }
 
   onRecaptchaResolved(token: string) {
@@ -142,21 +157,21 @@ export class ContactComponent implements OnInit {
       this.submitError = false;
 
       try {
-        const contactRef = collection(this.firestore, 'contactMessages'); // Reference to Firestore collection
+        const contactRef = collection(this.firestore, 'contactMessages');
         await addDoc(contactRef, {
           ...this.contactForm.value,
           timestamp: new Date().toISOString()
         });
 
-        console.log('Form successfully saved to Firestore');
+        console.log('✅ Form successfully saved to Firestore');
 
         this.submitSuccess = true;
         this.contactForm.reset();
-        (window as any).grecaptcha.reset();
+        grecaptcha.reset();
 
       } catch (error) {
         this.submitError = true;
-        console.error('Firestore submission error:', error);
+        console.error('🔥 Firestore submission error:', error);
       } finally {
         this.isSubmitting = false;
       }
@@ -196,20 +211,6 @@ export class ContactComponent implements OnInit {
       case 'email': return 'Please enter a valid email address';
       case 'phone': return 'Please enter a valid phone number';
       default: return 'Invalid format';
-    }
-  }
-
-  toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-    document.body.classList.toggle('dark-mode');
-    localStorage.setItem('darkMode', String(this.isDarkMode));
-  }
-
-  private checkDarkMode() {
-    const savedMode = localStorage.getItem('darkMode');
-    this.isDarkMode = savedMode === 'true';
-    if (this.isDarkMode) {
-      document.body.classList.add('dark-mode');
     }
   }
 }

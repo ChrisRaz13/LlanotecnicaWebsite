@@ -1,6 +1,7 @@
 {
   "projects": {
-    "staging": "llanotecnica-59a31"
+    "staging": "llanotecnica-59a31",
+    "default": "llanotecnica-59a31"
   },
   "targets": {},
   "etags": {}
