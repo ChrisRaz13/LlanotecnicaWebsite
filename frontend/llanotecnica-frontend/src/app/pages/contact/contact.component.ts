@@ -1,6 +1,6 @@
-import { Component, OnInit, HostListener, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, HostListener, NgZone, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Firestore, collection, addDoc } from '@angular/fire/firestore';
@@ -75,18 +75,23 @@ export class ContactComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private sanitizer: DomSanitizer,
     private firestore: Firestore,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.initializeForm();
-    this.initializeMap();
+    if (isPlatformBrowser(this.platformId)) {
+      this.initializeMap();
+    }
   }
 
   ngOnInit() {
-    this.loadRecaptcha();
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadRecaptcha();
+    }
   }
 
   ngOnDestroy() {
-    if (this.recaptchaScript) {
+    if (isPlatformBrowser(this.platformId) && this.recaptchaScript) {
       this.recaptchaScript.remove();
     }
   }
@@ -99,7 +104,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   private initializeForm() {
-    this.contactForm = this.fb.group<ContactForm>({
+    this.contactForm = this.fb.group({
       name: ['', [
         Validators.required,
         Validators.minLength(2),
@@ -120,7 +125,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         Validators.maxLength(1000)
       ]],
       recaptchaToken: ['']
-    } as any);
+    });
 
     this.contactForm.valueChanges.subscribe(() => {
       this.isFormTouched = true;
@@ -147,6 +152,10 @@ export class ContactComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     // Remove any existing reCAPTCHA scripts
     const existingScript = document.querySelector('script[src*="recaptcha"]');
     if (existingScript) {
@@ -159,20 +168,30 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.recaptchaScript.defer = true;
 
     this.recaptchaScript.onload = () => {
-      console.log('✅ reCAPTCHA script loaded successfully');
-      grecaptcha.ready(() => {
-        console.log('✅ reCAPTCHA is ready');
+      this.ngZone.run(() => {
+        console.log('✅ reCAPTCHA script loaded successfully');
+        if (typeof grecaptcha !== 'undefined') {
+          grecaptcha.ready(() => {
+            console.log('✅ reCAPTCHA is ready');
+          });
+        }
       });
     };
 
     this.recaptchaScript.onerror = (error) => {
-      console.error('🔥 Error loading reCAPTCHA script:', error);
+      this.ngZone.run(() => {
+        console.error('🔥 Error loading reCAPTCHA script:', error);
+      });
     };
 
     document.head.appendChild(this.recaptchaScript);
   }
 
   async onSubmit() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     if (this.contactForm.valid) {
       this.isSubmitting = true;
       this.submitSuccess = false;
@@ -191,9 +210,9 @@ export class ContactComponent implements OnInit, OnDestroy {
               const token = await grecaptcha.execute(environment.recaptchaSiteKey, {
                 action: 'contact_form_submit'
               });
-              resolve(token);
+              this.ngZone.run(() => resolve(token));
             } catch (error) {
-              reject(error);
+              this.ngZone.run(() => reject(error));
             }
           });
         });
@@ -211,15 +230,21 @@ export class ContactComponent implements OnInit, OnDestroy {
         };
 
         await addDoc(contactRef, formData);
-        console.log('✅ Form successfully saved to Firestore');
 
-        this.submitSuccess = true;
-        this.contactForm.reset();
+        this.ngZone.run(() => {
+          console.log('✅ Form successfully saved to Firestore');
+          this.submitSuccess = true;
+          this.contactForm.reset();
+        });
       } catch (error) {
-        console.error('🔥 Form submission error:', error);
-        this.submitError = true;
+        this.ngZone.run(() => {
+          console.error('🔥 Form submission error:', error);
+          this.submitError = true;
+        });
       } finally {
-        this.isSubmitting = false;
+        this.ngZone.run(() => {
+          this.isSubmitting = false;
+        });
       }
     } else {
       this.markFormGroupTouched(this.contactForm);
