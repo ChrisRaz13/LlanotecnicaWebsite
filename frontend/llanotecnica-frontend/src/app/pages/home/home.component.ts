@@ -262,7 +262,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   readonly companyStats = {
     yearsExperience: '20+',
     mixersDelivered: '5000+',
-    clientSatisfaction: '98%'
+    countriesServed: '30+'
   };
 
   readonly heroBackgrounds = [

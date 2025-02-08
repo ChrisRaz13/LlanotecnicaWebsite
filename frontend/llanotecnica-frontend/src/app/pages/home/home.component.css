@@ -18,18 +18,27 @@ section {
 .section-header {
   text-align: center;
   margin-bottom: 48px;
+  position: relative; /* Ensures it's not affected by parents */
+  z-index: 10; /* Brings it to the front */
 }
 
 .section-header h2 {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 16px;
-  color: #1a1a1a;
+  color: #008751 !important; /* Force green */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Improves readability */
 }
 
 .section-header p {
   font-size: 1.25rem;
-  color: #666666;
+  color: #006c41 !important; /* Darker green */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* More visibility */
+}
+
+/* Fix any transparency issue */
+.products-section .gradient-overlay {
+  background: none !important; /* Removes overlay */
 }
 
 /* Button Styles */
@@ -59,15 +68,18 @@ section {
 }
 
 .btn-secondary {
-  background: transparent;
-  color: #ffffff;
-  border: 2px solid #ffffff;
+  background: #008751 !important;
+  color: #ffffff !important;
+  border: 2px solid #006c41 !important;
+  transition: all 0.3s ease-in-out;
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: #006c41 !important;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 135, 81, 0.3);
 }
+
 
 .btn-accent {
   background: #f2ff00;
