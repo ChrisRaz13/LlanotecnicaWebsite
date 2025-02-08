@@ -2,7 +2,6 @@
   <!-- Hero Section -->
   <section id="hero" class="hero-section" aria-label="Welcome to our concrete mixer solutions">
     <div class="hero-background">
-      <!-- Dynamic background based on currentHeroBackground -->
       <ng-container *ngIf="heroBackgrounds[currentHeroBackground].type === 'image'">
         <img
           [src]="heroBackgrounds[currentHeroBackground].src"
@@ -66,9 +65,8 @@
       </div>
 
       <div class="hero-highlights">
-
-        </div>
       </div>
+    </div>
 
     <button
       class="hero-background-toggle"
@@ -80,6 +78,25 @@
          aria-hidden="true"></i>
     </button>
   </section>
+
+<!-- Flag Carousel Section -->
+<section class="flag-carousel-section">
+  <div class="delivery-note">
+    Delivered to 20+ countries and counting • We ship worldwide
+  </div>
+  <div class="flag-carousel-container">
+    <div class="flag-carousel-track">
+      <div class="flag-item" *ngFor="let flag of duplicatedFlags">
+        <div class="flag-wrapper">
+          <img [src]="'https://flagcdn.com/' + flag.code.toLowerCase() + '.svg'"
+               [alt]="flag.country + ' flag'"
+               loading="lazy">
+        </div>
+        <span class="country-name">{{flag.country}}</span>
+      </div>
+    </div>
+  </div>
+</section>
 
   <!-- Products Section -->
   <section id="products" class="products-section">

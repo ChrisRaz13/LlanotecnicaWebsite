@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { animate, query, stagger, style, transition, trigger, state } from '@angular/animations';
 import { Meta, Title } from '@angular/platform-browser';
@@ -31,6 +31,12 @@ interface FAQ {
   answer: string;
   videoUrl?: string;
   posterImage?: string;
+}
+
+interface Flag {
+  country: string;
+  code: string;
+  region: 'northAmerica' | 'caribbean' | 'centralAmerica' | 'southAmerica';
 }
 
 @Component({
@@ -69,7 +75,9 @@ interface FAQ {
     ])
   ]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+  // Expose Math to template
+  readonly Math = Math;
   @ViewChild('demoVideo') demoVideo?: ElementRef<HTMLVideoElement>;
   @ViewChild('heroVideo') heroVideo?: ElementRef<HTMLVideoElement>;
 
@@ -78,6 +86,31 @@ export class HomeComponent implements OnInit {
   isVideoPlaying = false;
   showScrollIndicator = true;
   currentHeroBackground = 0;
+  private scrollInterval: any;
+
+  readonly flags: Flag[] = [
+    { country: 'United States', code: 'us', region: 'northAmerica' },
+    { country: 'Canada', code: 'ca', region: 'northAmerica' },
+    { country: 'Mexico', code: 'mx', region: 'northAmerica' },
+    { country: 'Brazil', code: 'br', region: 'southAmerica' },
+    { country: 'Argentina', code: 'ar', region: 'southAmerica' },
+    { country: 'Chile', code: 'cl', region: 'southAmerica' },
+    { country: 'Colombia', code: 'co', region: 'southAmerica' },
+    { country: 'Peru', code: 'pe', region: 'southAmerica' },
+    { country: 'Venezuela', code: 've', region: 'southAmerica' },
+    { country: 'Jamaica', code: 'jm', region: 'caribbean' },
+    { country: 'Dominican Republic', code: 'do', region: 'caribbean' },
+    { country: 'Panama', code: 'pa', region: 'centralAmerica' },
+    { country: 'Costa Rica', code: 'cr', region: 'centralAmerica' },
+    { country: 'Guatemala', code: 'gt', region: 'centralAmerica' },
+    { country: 'Honduras', code: 'hn', region: 'centralAmerica' },
+    { country: 'El Salvador', code: 'sv', region: 'centralAmerica' },
+    { country: 'Nicaragua', code: 'ni', region: 'centralAmerica' },
+    { country: 'Belize', code: 'bz', region: 'centralAmerica' }
+  ];
+
+  // Create duplicated array for seamless scrolling
+  duplicatedFlags = [...this.flags, ...this.flags];
 
   readonly mixers: Product[] = [
     {
@@ -191,7 +224,31 @@ export class HomeComponent implements OnInit {
       this.initializeScrollObserver();
       this.setupScrollIndicator();
       this.setupSEO();
+      this.initializeFlagCarousel();
     }
+  }
+
+  ngOnDestroy(): void {
+    if (this.scrollInterval) {
+      clearInterval(this.scrollInterval);
+    }
+  }
+
+  private initializeFlagCarousel(): void {
+    // Duplicate flags for seamless scrolling
+    this.duplicatedFlags = [...this.flags, ...this.flags];
+    this.startAutoScroll();
+  }
+
+  private startAutoScroll(): void {
+    const flagContainer = document.querySelector('.flag-carousel-inner');
+    if (flagContainer) {
+      flagContainer.classList.add('scrolling');
+    }
+  }
+
+  getFlagUrl(code: string): string {
+    return `/assets/flags/${code.toLowerCase()}.svg`;
   }
 
   private setupSEO(): void {
