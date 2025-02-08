@@ -64,8 +64,7 @@
         </div>
       </div>
 
-      <div class="hero-highlights">
-      </div>
+      <div class="hero-highlights"></div>
     </div>
 
     <button
@@ -79,82 +78,154 @@
     </button>
   </section>
 
-<!-- Flag Carousel Section -->
-<section class="flag-carousel-section">
-  <div class="delivery-note">
-    Delivered to 20+ countries and counting • We ship worldwide
-  </div>
-  <div class="flag-carousel-container">
-    <div class="flag-carousel-track">
-      <div class="flag-item" *ngFor="let flag of duplicatedFlags">
-        <div class="flag-wrapper">
-          <img [src]="'https://flagcdn.com/' + flag.code.toLowerCase() + '.svg'"
-               [alt]="flag.country + ' flag'"
-               loading="lazy">
-        </div>
-        <span class="country-name">{{flag.country}}</span>
-      </div>
+  <!-- Flag Carousel Section -->
+  <section class="flag-carousel-section">
+    <div class="delivery-note">
+      Delivered to 20+ countries and counting • We ship worldwide!
     </div>
-  </div>
-</section>
-
-  <!-- Products Section -->
-  <section id="products" class="products-section">
-    <div class="section-container">
-      <header class="section-header" @fadeIn>
-        <h2>Our Mixer Range</h2>
-        <p>Choose the perfect mixer for your construction needs</p>
-      </header>
-      <div class="products-grid">
-        <div class="product-card" *ngFor="let mixer of mixers" @fadeIn>
-          <div class="product-image">
-            <img [src]="mixer.image" [alt]="mixer.name">
+    <div class="flag-carousel-container">
+      <div class="flag-carousel-track">
+        <div class="flag-item" *ngFor="let flag of duplicatedFlags">
+          <div class="flag-wrapper">
+            <img [src]="'https://flagcdn.com/' + flag.code.toLowerCase() + '.svg'"
+                 [alt]="flag.country + ' flag'"
+                 loading="lazy">
           </div>
-          <div class="product-content">
-            <h3>{{mixer.name}}</h3>
-            <p>{{mixer.description}}</p>
-            <div class="specs-grid">
-              <div class="spec">
-                <span class="label">Capacity</span>
-                <span class="value">{{mixer.specs.capacity}}</span>
-              </div>
-              <div class="spec">
-                <span class="label">Power</span>
-                <span class="value">{{mixer.specs.enginePower}}</span>
-              </div>
-              <div class="spec">
-                <span class="label">Weight</span>
-                <span class="value">{{mixer.specs.weight}}</span>
-              </div>
-            </div>
-            <ul class="feature-list">
-              <li *ngFor="let feature of mixer.features">
-                <i class="fas fa-check"></i>
-                {{feature}}
-              </li>
-            </ul>
-            <button class="btn-primary" (click)="scrollToSection('contact')">
-              Request Quote
-              <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
+          <span class="country-name">{{flag.country}}</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Video Section -->
-  <section id="video" class="video-section">
+    <!-- Video Section -->
+    <section id="video" class="video-section">
+      <div class="section-container">
+        <div class="video-wrapper">
+          <video
+            controls
+            poster="/assets/photos/mixer-video-poster.jpg"
+            preload="metadata"
+            class="product-video">
+            <source src="/assets/videos/mixer-showcase.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </section>
+
+  <!-- Products Section -->
+  <section id="products" class="products-section">
+    <div class="products-background">
+      <div class="geometric-pattern"></div>
+      <div class="gradient-overlay"></div>
+    </div>
+
     <div class="section-container">
-      <div class="video-wrapper">
-        <video
-          controls
-          poster="/assets/photos/mixer-video-poster.jpg"
-          preload="metadata"
-          class="product-video">
-          <source src="/assets/videos/mixer-showcase.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
+      <header class="section-header" @fadeIn>
+        <h2>Our Mixer Range</h2>
+        <p>Choose the perfect mixer for your construction needs</p>
+      </header>
+
+      <div class="products-layout" @productFadeIn>
+        <div class="products-grid">
+          <!-- First Product Card -->
+          <div class="product-card" [@productCardHover]="'idle'">
+            <div class="product-image-wrapper">
+              <img [src]="mixers[0].image" [alt]="mixers[0].name" class="product-image">
+              <div class="image-overlay"></div>
+            </div>
+            <div class="product-content">
+              <h3>{{mixers[0].name}}</h3>
+              <p class="product-description">{{mixers[0].description}}</p>
+              <div class="specs-grid">
+                <div class="spec">
+                  <span class="label">Capacity</span>
+                  <span class="value">{{mixers[0].specs.capacity}}</span>
+                </div>
+                <div class="spec">
+                  <span class="label">Power</span>
+                  <span class="value">{{mixers[0].specs.enginePower}}</span>
+                </div>
+                <div class="spec">
+                  <span class="label">Weight</span>
+                  <span class="value">{{mixers[0].specs.weight}}</span>
+                </div>
+              </div>
+              <ul class="feature-list">
+                <li *ngFor="let feature of mixers[0].features">
+                  <i class="fas fa-check"></i>
+                  {{feature}}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Centered CTA Section -->
+          <div class="products-cta" @ctaFadeIn>
+            <div class="cta-content">
+              <h3>Find Your Perfect Mixer</h3>
+              <p>Take the next step in choosing your ideal concrete mixer</p>
+
+              <div class="cta-buttons">
+                <button
+                  class="cta-button btn-primary"
+                  (click)="requestQuote()"
+                  aria-label="Request a quote">
+                  <i class="fas fa-paper-plane"></i>
+                  Request a Quote
+                </button>
+
+                <button
+                  class="cta-button btn-secondary"
+                  (click)="downloadCatalog()"
+                  aria-label="Download product catalog">
+                  <i class="fas fa-file-pdf"></i>
+                  Download Catalog
+                </button>
+
+                <button
+                  class="cta-button btn-accent"
+                  (click)="navigateToComparison()"
+                  aria-label="Compare mixer models">
+                  <i class="fas fa-scale-balanced"></i>
+                  Compare Models
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Second Product Card -->
+          <div class="product-card" [@productCardHover]="'idle'">
+            <div class="product-image-wrapper">
+              <img [src]="mixers[1].image" [alt]="mixers[1].name" class="product-image">
+              <div class="image-overlay"></div>
+            </div>
+            <div class="product-content">
+              <h3>{{mixers[1].name}}</h3>
+              <p class="product-description">{{mixers[1].description}}</p>
+              <div class="specs-grid">
+                <div class="spec">
+                  <span class="label">Capacity</span>
+                  <span class="value">{{mixers[1].specs.capacity}}</span>
+                </div>
+                <div class="spec">
+                  <span class="label">Power</span>
+                  <span class="value">{{mixers[1].specs.enginePower}}</span>
+                </div>
+                <div class="spec">
+                  <span class="label">Weight</span>
+                  <span class="value">{{mixers[1].specs.weight}}</span>
+                </div>
+              </div>
+              <ul class="feature-list">
+                <li *ngFor="let feature of mixers[1].features">
+                  <i class="fas fa-check"></i>
+                  {{feature}}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -302,6 +373,3 @@
           </div>
         </div>
       </div>
-    </div>
-  </section>
-</main>
