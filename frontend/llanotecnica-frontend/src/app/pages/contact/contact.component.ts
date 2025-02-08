@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, NgZone, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -35,13 +35,13 @@ interface ContactForm {
     ])
   ]
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, OnDestroy {
   contactForm!: FormGroup;
   isSubmitting = false;
   submitSuccess = false;
   submitError = false;
   isFormTouched = false;
-  recaptchaLoaded = false;
+  private recaptchaScript?: HTMLScriptElement;
   mapUrl: SafeResourceUrl | undefined;
 
   inquiryTypes = [
@@ -74,7 +74,8 @@ export class ContactComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private sanitizer: DomSanitizer,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private ngZone: NgZone
   ) {
     this.initializeForm();
     this.initializeMap();
@@ -82,6 +83,12 @@ export class ContactComponent implements OnInit {
 
   ngOnInit() {
     this.loadRecaptcha();
+  }
+
+  ngOnDestroy() {
+    if (this.recaptchaScript) {
+      this.recaptchaScript.remove();
+    }
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -112,7 +119,7 @@ export class ContactComponent implements OnInit {
         Validators.minLength(10),
         Validators.maxLength(1000)
       ]],
-      recaptchaToken: ['', Validators.required]
+      recaptchaToken: ['']
     } as any);
 
     this.contactForm.valueChanges.subscribe(() => {
@@ -121,33 +128,48 @@ export class ContactComponent implements OnInit {
   }
 
   private initializeMap() {
-    const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=Panama+City+Panama`;
-    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(mapUrl);
-  }
+    try {
+      if (!environment.googleMapsApiKey) {
+        console.error('Google Maps API key is missing');
+        return;
+      }
 
-  private loadRecaptcha() {
-    if (!this.recaptchaLoaded) {
-      const script = document.createElement('script');
-      script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => this.setupRecaptcha();
-      document.body.appendChild(script);
-      this.recaptchaLoaded = true;
+      const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=Panama+City+Panama&zoom=15`;
+      this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(mapUrl);
+    } catch (error) {
+      console.error('Error initializing map:', error);
     }
   }
 
-  private setupRecaptcha() {
-    grecaptcha.ready(() => {
-      grecaptcha.render('recaptcha-container', {
-        sitekey: environment.recaptchaSiteKey,
-        callback: (token: string) => this.onRecaptchaResolved(token)
-      });
-    });
-  }
+  private loadRecaptcha() {
+    if (!environment.recaptchaSiteKey) {
+      console.error('reCAPTCHA site key is missing');
+      return;
+    }
 
-  onRecaptchaResolved(token: string) {
-    this.contactForm.patchValue({ recaptchaToken: token });
+    // Remove any existing reCAPTCHA scripts
+    const existingScript = document.querySelector('script[src*="recaptcha"]');
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    this.recaptchaScript = document.createElement('script');
+    this.recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${environment.recaptchaSiteKey}`;
+    this.recaptchaScript.async = true;
+    this.recaptchaScript.defer = true;
+
+    this.recaptchaScript.onload = () => {
+      console.log('✅ reCAPTCHA script loaded successfully');
+      grecaptcha.ready(() => {
+        console.log('✅ reCAPTCHA is ready');
+      });
+    };
+
+    this.recaptchaScript.onerror = (error) => {
+      console.error('🔥 Error loading reCAPTCHA script:', error);
+    };
+
+    document.head.appendChild(this.recaptchaScript);
   }
 
   async onSubmit() {
@@ -157,21 +179,45 @@ export class ContactComponent implements OnInit {
       this.submitError = false;
 
       try {
-        const contactRef = collection(this.firestore, 'contactMessages');
-        await addDoc(contactRef, {
-          ...this.contactForm.value,
-          timestamp: new Date().toISOString()
+        // Verify reCAPTCHA is available
+        if (typeof grecaptcha === 'undefined') {
+          throw new Error('reCAPTCHA is not loaded');
+        }
+
+        // Get reCAPTCHA token
+        const token = await new Promise<string>((resolve, reject) => {
+          grecaptcha.ready(async () => {
+            try {
+              const token = await grecaptcha.execute(environment.recaptchaSiteKey, {
+                action: 'contact_form_submit'
+              });
+              resolve(token);
+            } catch (error) {
+              reject(error);
+            }
+          });
         });
 
+        // Update form with token
+        this.contactForm.patchValue({ recaptchaToken: token });
+
+        // Submit to Firestore
+        const contactRef = collection(this.firestore, 'contactMessages');
+        const formData = {
+          ...this.contactForm.value,
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent,
+          recaptchaScore: token // Store token for verification
+        };
+
+        await addDoc(contactRef, formData);
         console.log('✅ Form successfully saved to Firestore');
 
         this.submitSuccess = true;
         this.contactForm.reset();
-        grecaptcha.reset();
-
       } catch (error) {
+        console.error('🔥 Form submission error:', error);
         this.submitError = true;
-        console.error('🔥 Firestore submission error:', error);
       } finally {
         this.isSubmitting = false;
       }
