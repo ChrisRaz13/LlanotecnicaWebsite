@@ -3,11 +3,12 @@ import { Component, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LanguageSelectorComponent } from '../../services/language-selector/language-selector.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, LanguageSelectorComponent],
+  imports: [CommonModule, RouterModule, LanguageSelectorComponent, TranslateModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })

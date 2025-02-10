@@ -1,0 +1,102 @@
+{
+  "NAV": {
+    "LOGO_ALT": "Llanotecnica Logo",
+    "COMPANY_NAME": "Llanotecnica",
+    "HOME": "Home",
+    "ABOUT_US": "About Us",
+    "PRODUCTS": "Products",
+    "CONTACT": "Contact",
+    "DOWNLOAD_CATALOG": "Download Catalog"
+  },
+  "FOOTER": {
+    "COMPANY_INFO": {
+      "PHONE": "+507 6566-4942",
+      "WHATSAPP_URL": "https://wa.me/50765664942",
+      "EMAIL": "info@llanotecnica.com",
+      "ADDRESS": "Panama City, Panama",
+      "SOCIAL_LINKS": {
+        "FACEBOOK_URL": "https://facebook.com/llanotecnica",
+        "INSTAGRAM_URL": "https://instagram.com/llanotecnica"
+      }
+    },
+    "QUICK_LINKS_TITLE": "Quick Links",
+    "QUICK_LINKS": [
+      { "TEXT": "About Us", "ROUTE": "/about" },
+      { "TEXT": "Products", "ROUTE": "/products" },
+      { "TEXT": "Services", "ROUTE": "/services" },
+      { "TEXT": "Contact", "ROUTE": "/contact" }
+    ],
+    "PRODUCTS_TITLE": "Products",
+    "PRODUCTS": [
+      { "TEXT": "MT-370 Mixer", "ROUTE": "/products/mt-370" },
+      { "TEXT": "MT-480 Mixer", "ROUTE": "/products/mt-480" },
+      { "TEXT": "Engines", "ROUTE": "/products/accessories" }
+    ],
+    "SUPPORT_TITLE": "Support",
+    "SUPPORT": [
+      { "TEXT": "Technical Support", "ROUTE": "/support" },
+      { "TEXT": "Maintenance Guide", "ROUTE": "/maintenance" },
+      { "TEXT": "FAQ", "ROUTE": "/faq" },
+      { "TEXT": "Download Catalog", "ROUTE": "/catalog" }
+    ],
+    "COPYRIGHT": "© {{currentYear}} Llanotecnica",
+    "ALL_RIGHTS_RESERVED": "All rights reserved"
+  },
+  "HOME_PAGE": {
+    "HERO": {
+      "TITLE": "Engineered for Strength, Built to Last",
+      "DESCRIPTION": "Professional-grade concrete mixers delivering unmatched reliability and performance for over two decades. Experience the power of precision engineering in every pour.",
+      "CTA_EXPLORE": "Explore Products",
+      "CTA_VIDEO": "Watch Video",
+      "CTA_QUOTE": "Request Quote",
+      "SCROLL_INDICATOR": "Scroll to explore"
+    },
+    "FLAG_CAROUSEL": {
+      "DELIVERY_NOTE": "Delivered to 30+ countries and counting • We ship worldwide!"
+    },
+    "VIDEO_SECTION": {
+      "HEADING": "Instructional Video",
+      "VIDEO_POSTER_ALT": "Mixer Video Poster"
+    },
+    "PRODUCTS_SECTION": {
+      "SECTION_TITLE": "Our Mixer Range",
+      "SECTION_SUBTITLE": "Choose the perfect mixer for your construction needs",
+      "PRODUCTS_CTA_TITLE": "Find Your Perfect Mixer",
+      "PRODUCTS_CTA_SUBTITLE": "Take the next step in choosing your ideal concrete mixer",
+      "CTA_REQUEST_QUOTE": "Request a Quote",
+      "CTA_DOWNLOAD": "Download Catalog",
+      "CTA_COMPARE": "Compare Models"
+    },
+    "FEATURES_SECTION": {
+      "SECTION_TITLE": "Advanced Features",
+      "SECTION_SUBTITLE": "Engineering excellence in every detail"
+    },
+    "COMPANY_SECTION": {
+      "HEADING": "Two Decades of Excellence",
+      "SUBHEADING": "Building quality construction equipment since 2002",
+      "STATS_YEARS_EXPERIENCE": "Years Experience",
+      "STATS_MIXERS_DELIVERED": "Mixers Delivered",
+      "STATS_COUNTRIES_SERVED": "Countries Served",
+      "LEARN_MORE_BUTTON": "Learn More About Us"
+    },
+    "FAQ_SECTION": {
+      "SECTION_TITLE": "Frequently Asked Questions",
+      "SECTION_SUBTITLE": "Get answers to common questions about our mixers",
+      "FAQ_1_QUESTION": "How do I operate the MT-370 and MT-480 mixers?",
+      "FAQ_1_ANSWER": "Watch our detailed demonstration video below:",
+      "FAQ_2_QUESTION": "What maintenance is required?",
+      "FAQ_2_ANSWER": "Regular maintenance includes daily cleaning, weekly lubrication checks, and monthly mechanical inspections.",
+      "FAQ_3_QUESTION": "Which mixer is right for my project?",
+      "FAQ_3_ANSWER": "The MT-370 is ideal for residential and small commercial projects, while the MT-480 is designed for larger commercial applications.",
+      "FAQ_4_QUESTION": "What warranty do you offer?",
+      "FAQ_4_ANSWER": "We provide a comprehensive 2-year warranty on all components, with extended warranty options available.",
+      "FAQ_5_QUESTION": "Are spare parts readily available?",
+      "FAQ_5_ANSWER": "Yes, we maintain a complete inventory of spare parts with next-day delivery for most components.",
+      "VIDEO_STEPS_TITLE": "Operating Your Mixer: Step-by-Step Guide",
+      "STEP_PREOP": "Pre-Operation Check",
+      "STEP_START_ENGINE": "Start Engine",
+      "STEP_CONTROL_POSITION": "Control Position",
+      "STEP_LOAD_MATERIALS": "Load Materials"
+    }
+  }
+}

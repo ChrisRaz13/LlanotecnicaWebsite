@@ -1,0 +1,102 @@
+{
+  "NAV": {
+    "LOGO_ALT": "Logotipo de Llanotecnica",
+    "COMPANY_NAME": "Llanotecnica",
+    "HOME": "Inicio",
+    "ABOUT_US": "Sobre Nosotros",
+    "PRODUCTS": "Productos",
+    "CONTACT": "Contacto",
+    "DOWNLOAD_CATALOG": "Descargar Catálogo"
+  },
+  "FOOTER": {
+    "COMPANY_INFO": {
+      "PHONE": "+507 6566-4942",
+      "WHATSAPP_URL": "https://wa.me/50765664942",
+      "EMAIL": "info@llanotecnica.com",
+      "ADDRESS": "Ciudad de Panamá, Panamá",
+      "SOCIAL_LINKS": {
+        "FACEBOOK_URL": "https://facebook.com/llanotecnica",
+        "INSTAGRAM_URL": "https://instagram.com/llanotecnica"
+      }
+    },
+    "QUICK_LINKS_TITLE": "Enlaces Rápidos",
+    "QUICK_LINKS": [
+      { "TEXT": "Sobre Nosotros", "ROUTE": "/about" },
+      { "TEXT": "Productos", "ROUTE": "/products" },
+      { "TEXT": "Servicios", "ROUTE": "/services" },
+      { "TEXT": "Contacto", "ROUTE": "/contact" }
+    ],
+    "PRODUCTS_TITLE": "Productos",
+    "PRODUCTS": [
+      { "TEXT": "Mezcladora MT-370", "ROUTE": "/products/mt-370" },
+      { "TEXT": "Mezcladora MT-480", "ROUTE": "/products/mt-480" },
+      { "TEXT": "Motores", "ROUTE": "/products/accessories" }
+    ],
+    "SUPPORT_TITLE": "Soporte",
+    "SUPPORT": [
+      { "TEXT": "Soporte Técnico", "ROUTE": "/support" },
+      { "TEXT": "Guía de Mantenimiento", "ROUTE": "/maintenance" },
+      { "TEXT": "Preguntas Frecuentes", "ROUTE": "/faq" },
+      { "TEXT": "Descargar Catálogo", "ROUTE": "/catalog" }
+    ],
+    "COPYRIGHT": "© {{currentYear}} Llanotecnica",
+    "ALL_RIGHTS_RESERVED": "Todos los derechos reservados"
+  },
+  "HOME_PAGE": {
+    "HERO": {
+      "TITLE": "Diseñadas para Fuerza, Construidas para Durar",
+      "DESCRIPTION": "Mezcladoras de concreto de grado profesional que brindan confiabilidad y rendimiento incomparables durante más de dos décadas. Descubre la potencia de la ingeniería de precisión en cada vertida.",
+      "CTA_EXPLORE": "Ver Productos",
+      "CTA_VIDEO": "Ver Video",
+      "CTA_QUOTE": "Solicitar Cotización",
+      "SCROLL_INDICATOR": "Desplázate para explorar"
+    },
+    "FLAG_CAROUSEL": {
+      "DELIVERY_NOTE": "Entregamos a más de 30 países • ¡Enviamos a nivel mundial!"
+    },
+    "VIDEO_SECTION": {
+      "HEADING": "Video Instructivo",
+      "VIDEO_POSTER_ALT": "Póster del Video de Mezcladora"
+    },
+    "PRODUCTS_SECTION": {
+      "SECTION_TITLE": "Nuestra Gama de Mezcladoras",
+      "SECTION_SUBTITLE": "Elige la mezcladora perfecta para tus necesidades de construcción",
+      "PRODUCTS_CTA_TITLE": "Encuentra tu Mezcladora Ideal",
+      "PRODUCTS_CTA_SUBTITLE": "Da el siguiente paso para elegir tu mezcladora de concreto ideal",
+      "CTA_REQUEST_QUOTE": "Solicitar Cotización",
+      "CTA_DOWNLOAD": "Descargar Catálogo",
+      "CTA_COMPARE": "Comparar Modelos"
+    },
+    "FEATURES_SECTION": {
+      "SECTION_TITLE": "Funciones Avanzadas",
+      "SECTION_SUBTITLE": "Excelencia de ingeniería en cada detalle"
+    },
+    "COMPANY_SECTION": {
+      "HEADING": "Dos Décadas de Excelencia",
+      "SUBHEADING": "Fabricando equipos de construcción de calidad desde 2002",
+      "STATS_YEARS_EXPERIENCE": "Años de Experiencia",
+      "STATS_MIXERS_DELIVERED": "Mezcladoras Entregadas",
+      "STATS_COUNTRIES_SERVED": "Países Atendidos",
+      "LEARN_MORE_BUTTON": "Conoce Más Sobre Nosotros"
+    },
+    "FAQ_SECTION": {
+      "SECTION_TITLE": "Preguntas Frecuentes",
+      "SECTION_SUBTITLE": "Respuestas a las preguntas comunes sobre nuestras mezcladoras",
+      "FAQ_1_QUESTION": "¿Cómo opero las mezcladoras MT-370 y MT-480?",
+      "FAQ_1_ANSWER": "Mira nuestro video de demostración detallado a continuación:",
+      "FAQ_2_QUESTION": "¿Qué mantenimiento se requiere?",
+      "FAQ_2_ANSWER": "El mantenimiento regular incluye limpieza diaria, revisiones semanales de lubricación e inspecciones mecánicas mensuales.",
+      "FAQ_3_QUESTION": "¿Cuál mezcladora es la adecuada para mi proyecto?",
+      "FAQ_3_ANSWER": "La MT-370 es ideal para proyectos residenciales y comerciales pequeños, mientras que la MT-480 está diseñada para aplicaciones comerciales de gran tamaño.",
+      "FAQ_4_QUESTION": "¿Qué garantía ofrecen?",
+      "FAQ_4_ANSWER": "Ofrecemos una garantía completa de 2 años en todos los componentes, con opciones de garantía extendida disponibles.",
+      "FAQ_5_QUESTION": "¿Hay repuestos disponibles?",
+      "FAQ_5_ANSWER": "Sí, mantenemos un inventario completo de repuestos con entrega al día siguiente para la mayoría de componentes.",
+      "VIDEO_STEPS_TITLE": "Operando Tu Mezcladora: Guía Paso a Paso",
+      "STEP_PREOP": "Chequeo Pre-Operativo",
+      "STEP_START_ENGINE": "Encender el Motor",
+      "STEP_CONTROL_POSITION": "Control de Posición",
+      "STEP_LOAD_MATERIALS": "Cargar Materiales"
+    }
+  }
+}

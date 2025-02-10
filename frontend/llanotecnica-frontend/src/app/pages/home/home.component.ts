@@ -1,6 +1,24 @@
-import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, ViewChild, ViewChildren, ElementRef, QueryList } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  PLATFORM_ID,
+  ViewChild,
+  ViewChildren,
+  ElementRef,
+  QueryList
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { animate, query, stagger, style, transition, trigger, state } from '@angular/animations';
+import {
+  animate,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger,
+  state
+} from '@angular/animations';
 import { Meta, Title } from '@angular/platform-browser';
 
 type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
@@ -77,7 +95,10 @@ interface Flag {
     trigger('productFadeIn', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(30px)' }),
-        animate('0.8s cubic-bezier(0.21, 1.02, 0.73, 1)', style({ opacity: 1, transform: 'translateY(0)' }))
+        animate(
+          '0.8s cubic-bezier(0.21, 1.02, 0.73, 1)',
+          style({ opacity: 1, transform: 'translateY(0)' })
+        )
       ])
     ]),
     trigger('ctaFadeIn', [
@@ -85,7 +106,10 @@ interface Flag {
         query('.cta-button', [
           style({ opacity: 0, transform: 'translateY(20px)' }),
           stagger(150, [
-            animate('0.5s cubic-bezier(0.21, 1.02, 0.73, 1)', style({ opacity: 1, transform: 'translateY(0)' }))
+            animate(
+              '0.5s cubic-bezier(0.21, 1.02, 0.73, 1)',
+              style({ opacity: 1, transform: 'translateY(0)' })
+            )
           ])
         ], { optional: true })
       ])
@@ -132,6 +156,15 @@ interface Flag {
   ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
+requestQuote() {
+throw new Error('Method not implemented.');
+}
+downloadCatalog() {
+throw new Error('Method not implemented.');
+}
+navigateToComparison() {
+throw new Error('Method not implemented.');
+}
   // Expose Math to template
   readonly Math = Math;
   @ViewChild('demoVideo') demoVideo?: ElementRef<HTMLVideoElement>;
@@ -290,114 +323,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.setupScrollIndicator();
       this.setupSEO();
       this.initializeFlagCarousel();
-      this.initializeProductAnimations();
     }
   }
 
   ngOnDestroy(): void {
     if (this.scrollInterval) {
       clearInterval(this.scrollInterval);
-    }
-  }
-
-  // Product Section Methods
-  private initializeProductAnimations(): void {
-    // Initialize states
-    setTimeout(() => {
-      this.buttonStates = this.buttonStates.map(() => 'visible');
-      this.activeFeatures = new Array(this.features.length).fill(false);
-    }, 500);
-  }
-
-  onProductCardHover(index: number, isEnter: boolean): void {
-    this.productCardStates[index] = isEnter ? 'hovered' : 'default';
-    this.hoveredProduct = isEnter ? index : null;
-  }
-
-  // Updated ripple effect function with safe type-checking
-  createRippleEffect(event: MouseEvent, button: EventTarget | null): void {
-    const btn = button as HTMLElement | null;
-    if (!btn) {
-      return;
-    }
-    const rect = btn.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    const x = event.clientX - rect.left - size / 2;
-    const y = event.clientY - rect.top - size / 2;
-
-    const ripple = document.createElement('span');
-    ripple.style.cssText = `
-      position: absolute;
-      width: ${size}px;
-      height: ${size}px;
-      top: ${y}px;
-      left: ${x}px;
-      background-color: rgba(255, 255, 255, 0.7);
-      border-radius: 50%;
-      transform: scale(0);
-      animation: ripple 0.6s linear;
-      pointer-events: none;
-    `;
-
-    btn.style.position = 'relative';
-    btn.style.overflow = 'hidden';
-    btn.appendChild(ripple);
-
-    setTimeout(() => ripple.remove(), 600);
-  }
-
-  toggleComparisonMode(): void {
-    this.isComparisonMode = !this.isComparisonMode;
-    if (this.isComparisonMode) {
-      this.productCards.forEach(card => {
-        const element = card.nativeElement;
-        element.classList.add('comparison-mode');
-      });
-    } else {
-      this.productCards.forEach(card => {
-        const element = card.nativeElement;
-        element.classList.remove('comparison-mode');
-      });
-    }
-  }
-
-  highlightFeature(index: number, isEnter: boolean): void {
-    this.activeFeatures[index] = isEnter;
-  }
-
-  selectProduct(product: Product): void {
-    this.selectedProduct = product;
-    // Trigger any additional UI updates needed
-  }
-
-  // Product Action Methods
-  downloadCatalog(): void {
-    // Add analytics tracking
-    this.trackEvent('catalog_download');
-    window.open('/assets/docs/mixer-catalog.pdf', '_blank');
-  }
-
-  navigateToComparison(): void {
-    this.trackEvent('comparison_view');
-    window.location.href = '/products/compare';
-  }
-
-  requestQuote(productName?: string): void {
-    this.trackEvent('quote_request', { product: productName });
-    this.scrollToSection('contact');
-    // Additional logic for pre-filling form
-    if (productName) {
-      // Add logic to pre-fill form with product details
-    }
-  }
-
-  // Utility Methods
-  private trackEvent(action: string, data?: any): void {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', action, {
-        ...data,
-        source: 'products_section'
-      });
     }
   }
 
@@ -413,10 +344,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  getFlagUrl(code: string): string {
-    return `/assets/flags/${code.toLowerCase()}.svg`;
+  // Example: track event
+  private trackEvent(action: string, data?: any): void {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', action, {
+        ...data,
+        source: 'products_section'
+      });
+    }
   }
 
+  // SEO
   private setupSEO(): void {
     this.title.setTitle('Professional Concrete Mixers | Industrial Mixing Solutions');
     this.meta.updateTag({
@@ -441,6 +379,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     document.head.appendChild(script);
   }
 
+  // Scroll logic
   private setupScrollIndicator(): void {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', () => {
@@ -455,9 +394,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             this.activeSection = entry.target.id;
-            if (this.activeSection === 'products') {
-              this.initializeProductAnimations();
-            }
           }
         });
       },
@@ -476,6 +412,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Additional methods
   toggleFaq(index: number): void {
     if (index === 0 && this.activeFaq === 0) {
       if (this.demoVideo?.nativeElement) {
@@ -499,18 +436,5 @@ export class HomeComponent implements OnInit, OnDestroy {
   toggleHeroBackground(): void {
     this.currentHeroBackground =
       (this.currentHeroBackground + 1) % this.heroBackgrounds.length;
-  }
-
-  // Animation Helper Methods
-  getFeatureState(index: number): string {
-    return this.activeFeatures[index] ? 'active' : 'inactive';
-  }
-
-  getButtonState(index: number): string {
-    return this.buttonStates[index];
-  }
-
-  getProductCardState(index: number): string {
-    return this.productCardStates[index];
   }
 }

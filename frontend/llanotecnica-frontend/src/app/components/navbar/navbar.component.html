@@ -19,33 +19,37 @@
         <a
           routerLink="/"
           routerLinkActive="active"
-          [routerLinkActiveOptions]="{exact: true}"
-          >Home</a>
+          [routerLinkActiveOptions]="{exact: true}">
+          {{ 'NAV.HOME' | translate }}
+        </a>
       </li>
       <li>
         <a
           routerLink="/about-us"
-          routerLinkActive="active"
-          >About Us</a>
+          routerLinkActive="active">
+          {{ 'NAV.ABOUT_US' | translate }}
+        </a>
       </li>
       <li>
         <a
           routerLink="/products"
-          routerLinkActive="active"
-          >Products</a>
+          routerLinkActive="active">
+          {{ 'NAV.PRODUCTS' | translate }}
+        </a>
       </li>
       <li>
         <a
           routerLink="/contact"
-          routerLinkActive="active"
-          >Contact</a>
+          routerLinkActive="active">
+          {{ 'NAV.CONTACT' | translate }}
+        </a>
       </li>
 
       <!-- Mobile-Only: Download Catalog Link -->
       <li class="mobile-only">
         <a href="assets/downloads/catalog.pdf" download>
           <img src="assets/photos/pdf.png" alt="PDF Icon" class="download-icon" />
-          Download Catalog
+          {{ 'NAV.DOWNLOAD_CATALOG' | translate }}
         </a>
       </li>
     </ul>

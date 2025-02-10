@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css']
 })
@@ -32,8 +33,7 @@ export class FooterComponent {
   products = [
     { text: 'MT-370 Mixer', route: '/products/mt-370' },
     { text: 'MT-480 Mixer', route: '/products/mt-480' },
-    { text: 'Spare Parts', route: '/products/parts' },
-    { text: 'Accessories', route: '/products/accessories' }
+    { text: 'Engines', route: '/products/accessories' }
   ];
 
   support = [
