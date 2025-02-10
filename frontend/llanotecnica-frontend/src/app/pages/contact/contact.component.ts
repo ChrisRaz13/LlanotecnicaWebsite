@@ -3,9 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 declare var grecaptcha: any;
@@ -17,6 +15,12 @@ interface ContactForm {
   inquiryType: string;
   message: string;
   recaptchaToken: string;
+}
+
+interface SubmitResponse {
+  message: string;
+  recaptchaScore?: number;
+  error?: string;
 }
 
 @Component({
@@ -42,11 +46,12 @@ export class ContactComponent implements OnInit, OnDestroy {
   isSubmitting = false;
   submitSuccess = false;
   submitError = false;
+  errorMessage = '';
   isFormTouched = false;
   private recaptchaScript?: HTMLScriptElement;
   mapUrl: SafeResourceUrl | undefined;
 
-  inquiryTypes = [
+  inquiryTypes: string[] = [
     'Product Information',
     'Price Quote',
     'Spare Parts',
@@ -78,7 +83,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private ngZone: NgZone,
     private http: HttpClient,
-    private firestore: Firestore,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.initializeForm();
@@ -111,7 +115,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       name: ['', [
         Validators.required,
         Validators.minLength(2),
-        Validators.pattern(/^[a-zA-Z\s]*$/)
+        Validators.pattern(/^[a-zA-ZÀ-ÿ\s]*$/)
       ]],
       email: ['', [
         Validators.required,
@@ -129,10 +133,6 @@ export class ContactComponent implements OnInit, OnDestroy {
       ]],
       recaptchaToken: ['']
     });
-
-    this.contactForm.valueChanges.subscribe(() => {
-      this.isFormTouched = true;
-    });
   }
 
   private initializeMap() {
@@ -140,9 +140,9 @@ export class ContactComponent implements OnInit, OnDestroy {
       console.error('🚨 Google Maps API key is missing');
       return;
     }
-
-    const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=Panama+City+Panama&zoom=15`;
-    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(mapUrl);
+    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=Panama+City+Panama&zoom=15`
+    );
   }
 
   private loadRecaptcha() {
@@ -157,18 +157,11 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     this.recaptchaScript.onload = () => {
       this.ngZone.run(() => {
-        console.log('✅ reCAPTCHA script loaded successfully');
         if (typeof grecaptcha !== 'undefined') {
           grecaptcha.ready(() => {
             console.log('✅ reCAPTCHA is ready');
           });
         }
-      });
-    };
-
-    this.recaptchaScript.onerror = (error) => {
-      this.ngZone.run(() => {
-        console.error('🔥 Error loading reCAPTCHA script:', error);
       });
     };
 
@@ -180,50 +173,60 @@ export class ContactComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.contactForm.valid) {
+    if (this.contactForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
       this.submitSuccess = false;
       this.submitError = false;
+      this.errorMessage = '';
 
       try {
         if (typeof grecaptcha === 'undefined') {
-          throw new Error('reCAPTCHA is not loaded');
+          throw new Error('reCAPTCHA is not loaded.');
         }
 
-        const token = await new Promise<string>((resolve, reject) => {
-          grecaptcha.ready(async () => {
-            try {
-              const token = await grecaptcha.execute(environment.recaptchaSiteKey, {
-                action: 'contact_form_submit'
-              });
-              this.ngZone.run(() => resolve(token));
-            } catch (error) {
-              this.ngZone.run(() => reject(error));
-            }
-          });
+        const token = await grecaptcha.execute(environment.recaptchaSiteKey, {
+          action: 'contact_form_submit'
         });
 
-        this.contactForm.patchValue({ recaptchaToken: token });
-
-        const formData = {
+        const formData: ContactForm = {
           ...this.contactForm.value,
-          timestamp: new Date().toISOString(),
-          userAgent: navigator.userAgent
+          recaptchaToken: token
         };
 
-        console.log('🚀 Submitting form data:', formData);
-
-        await addDoc(collection(this.firestore, 'contactMessages'), formData);
+        const response = await this.http.post<SubmitResponse>(
+          environment.contactFormEndpoint,
+          formData
+        ).toPromise();
 
         this.ngZone.run(() => {
-          console.log('✅ Form successfully submitted');
           this.submitSuccess = true;
           this.contactForm.reset();
+          if (response?.recaptchaScore) {
+            console.log('📊 reCAPTCHA Score:', response.recaptchaScore);
+          }
         });
+
       } catch (error) {
         this.ngZone.run(() => {
-          console.error('🔥 Form submission error:', error);
           this.submitError = true;
+          if (error instanceof HttpErrorResponse) {
+            switch (error.status) {
+              case 400:
+                this.errorMessage = 'Please check your form inputs and try again.';
+                break;
+              case 403:
+                this.errorMessage = 'Security verification failed. Please try again.';
+                break;
+              case 429:
+                this.errorMessage = 'Too many attempts. Please try again later.';
+                break;
+              default:
+                this.errorMessage = 'An error occurred. Please try again later.';
+            }
+          } else {
+            this.errorMessage = 'An unexpected error occurred. Please try again.';
+          }
+          console.error('🔥 Form submission error:', error);
         });
       } finally {
         this.ngZone.run(() => {
@@ -256,13 +259,20 @@ export class ContactComponent implements OnInit, OnDestroy {
       pattern: this.getPatternErrorMessage(controlName)
     };
 
-    return errors[Object.keys(control.errors)[0] as keyof typeof errors] || 'Invalid input';
+    const firstError = Object.keys(control.errors)[0] as keyof typeof errors;
+    return errors[firstError] || 'Invalid input';
   }
 
   private getPatternErrorMessage(controlName: string): string {
-    return controlName === 'name' ? 'Please enter a valid name (letters only)'
-         : controlName === 'email' ? 'Please enter a valid email address'
-         : controlName === 'phone' ? 'Please enter a valid phone number'
-         : 'Invalid format';
+    switch (controlName) {
+      case 'name':
+        return 'Please enter a valid name (letters only)';
+      case 'email':
+        return 'Please enter a valid email address';
+      case 'phone':
+        return 'Please enter a valid phone number';
+      default:
+        return 'Invalid format';
+    }
   }
 }
