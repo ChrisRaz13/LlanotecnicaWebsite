@@ -20,27 +20,26 @@ section {
 .section-header {
   text-align: center;
   margin-bottom: 48px;
-  position: relative; /* Ensures it's not affected by parents */
-  z-index: 10; /* Brings it to the front */
+  position: relative;
+  z-index: 10;
 }
 
 .section-header h2 {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 16px;
-  color: #008751 !important; /* Force green */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Improves readability */
+  color: #008751 !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .section-header p {
   font-size: 1.25rem;
-  color: #006c41 !important; /* Darker green */
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* More visibility */
+  color: #006c41 !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Fix any transparency issue */
 .products-section .gradient-overlay {
-  background: none !important; /* Removes overlay */
+  background: none !important;
 }
 
 /* Button Styles */
@@ -443,13 +442,13 @@ section {
 .product-image-wrapper {
   position: relative;
   width: 100%;
-  height: 280px; /* Will override on mobile if user wants no cropping */
+  height: 280px;
   overflow: hidden;
 }
 .product-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Overridden on mobile if user wants entire photo */
+  object-fit: cover;
   transition: transform 0.4s ease;
 }
 
@@ -677,9 +676,8 @@ section {
 
 .product-video {
   width: 100%;
-  aspect-ratio: 16/9; /* Maintains ratio on modern browsers */
+  aspect-ratio: 16/9;
   background: #000000;
-  /* fallback for older browsers: */
   height: auto;
   display: block;
 }
@@ -728,39 +726,176 @@ section {
 
 /* Company Section */
 .company-section {
-  background: #f8f9fa;
+  position: relative;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  overflow: hidden;
+  padding: 120px 0;
 }
-.company-content {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
+
+.company-cta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+  padding-bottom: 2rem;
+  position: relative;
+  z-index: 10;
 }
-.company-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  margin: 48px 0;
+
+.company-cta a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: #008751 !important;
+  color: white !important;
+  border: 2px solid #006c41;
 }
-.stat .number {
-  display: block;
-  font-size: 2.5rem;
+
+.company-cta a:hover {
+  background: #006c41 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 135, 81, 0.3);
+}
+
+
+.company-background {
+  position: absolute;
+  inset: 0;
+
+  .geometric-pattern {
+    background-image: linear-gradient(rgba(0, 135, 81, 0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0, 135, 81, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+  }
+
+  .gradient-overlay {
+    background: radial-gradient(circle at top right, rgba(0, 135, 81, 0.1), transparent 70%);
+    position: absolute;
+    inset: 0;
+  }
+}
+
+.company-title {
+  font-size: 3rem;
   font-weight: 800;
   color: #008751;
-  margin-bottom: 8px;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
-.stat .label {
-  font-size: 1rem;
-  color: #666666;
+
+.company-subtitle {
+  font-size: 1.25rem;
+  color: #666;
+}
+
+.company-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin: 4rem 0;
+}
+
+.stat-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  .stat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #008751;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 1.125rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-detail {
+    font-size: 0.875rem;
+    color: #888;
+  }
+}
+
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin: 4rem 0;
+}
+
+.achievement-card {
+  background: rgba(0, 135, 81, 0.05);
+  border-radius: 1rem;
+  padding: 2rem;
+
+  h3 {
+    color: #008751;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #666;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 768px) {
+  .company-stats-grid,
+  .achievement-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .company-section {
+    padding: 80px 0;
+  }
+
+  .company-title {
+    font-size: 2.25rem;
+  }
 }
 
 /* FAQ Section */
 .faq-section {
+  position: relative;
   background: #ffffff;
+  padding: 80px 0;
+  z-index: 5;
 }
 .faq-list {
   max-width: 800px;
   margin: 0 auto;
+  z-index: 5;
 }
+
+
+
 .faq-item {
   margin-bottom: 16px;
 }
@@ -779,7 +914,9 @@ section {
   justify-content: space-between;
   align-items: center;
   transition: all 0.3s ease;
+  z-index: 5;
 }
+
 .faq-question:hover {
   background: #f0f0f0;
 }
@@ -795,6 +932,7 @@ section {
   border: 1px solid #e0e0e0;
   border-radius: 0 0 8px 8px;
   margin-top: -1px;
+  z-index: 5;
 }
 .faq-answer.active {
   display: block;

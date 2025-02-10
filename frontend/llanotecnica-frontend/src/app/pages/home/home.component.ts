@@ -8,9 +8,9 @@ import {
   ViewChildren,
   ElementRef,
   QueryList
-} from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import {
+ } from '@angular/core';
+ import { CommonModule, isPlatformBrowser } from '@angular/common';
+ import {
   animate,
   query,
   stagger,
@@ -18,21 +18,22 @@ import {
   transition,
   trigger,
   state
-} from '@angular/animations';
-import { Meta, Title } from '@angular/platform-browser';
+ } from '@angular/animations';
+ import { Meta, Title } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 
-type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
-type CategoryType = FeatureCategory | 'all';
+ type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
+ type CategoryType = FeatureCategory | 'all';
 
-interface Feature {
+ interface Feature {
   title: string;
   description: string;
   icon: string;
   highlight: string;
   category: FeatureCategory;
-}
+ }
 
-interface Product {
+ interface Product {
   name: string;
   description: string;
   features: string[];
@@ -42,25 +43,32 @@ interface Product {
     weight: string;
   };
   image: string;
-}
+ }
 
-interface FAQ {
+ interface FAQ {
   question: string;
   answer: string;
   videoUrl?: string;
   posterImage?: string;
-}
+ }
 
-interface Flag {
+ interface Flag {
   country: string;
   code: string;
   region: 'northAmerica' | 'caribbean' | 'centralAmerica' | 'southAmerica';
-}
+ }
 
-@Component({
+ interface CompanyStat {
+  icon: string;
+  value: string;
+  label: string;
+  detail: string;
+ }
+
+ @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   animations: [
@@ -91,7 +99,6 @@ interface Flag {
       state('hidden', style({ opacity: 0, transform: 'translateY(20px)' })),
       transition('visible <=> hidden', animate('0.3s ease-in-out'))
     ]),
-    // Enhanced product section animations
     trigger('productFadeIn', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(30px)' }),
@@ -152,26 +159,25 @@ interface Flag {
       transition('inactive <=> active', [
         animate('0.2s ease-out')
       ])
+    ]),
+    trigger('statFadeIn', [
+      transition(':enter', [
+        query('.stat-card', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger(100, [
+            animate('0.5s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
     ])
   ]
-})
-export class HomeComponent implements OnInit, OnDestroy {
-requestQuote() {
-throw new Error('Method not implemented.');
-}
-downloadCatalog() {
-throw new Error('Method not implemented.');
-}
-navigateToComparison() {
-throw new Error('Method not implemented.');
-}
-  // Expose Math to template
+ })
+ export class HomeComponent implements OnInit, OnDestroy {
   readonly Math = Math;
   @ViewChild('demoVideo') demoVideo?: ElementRef<HTMLVideoElement>;
   @ViewChild('heroVideo') heroVideo?: ElementRef<HTMLVideoElement>;
   @ViewChildren('productCard') productCards!: QueryList<ElementRef>;
 
-  // UI State Variables
   activeSection = 'hero';
   activeFaq: number | null = null;
   isVideoPlaying = false;
@@ -179,7 +185,6 @@ throw new Error('Method not implemented.');
   currentHeroBackground = 0;
   private scrollInterval: any;
 
-  // Product Section State
   productCardStates: string[] = ['default', 'default'];
   buttonStates: string[] = ['void', 'void', 'void'];
   isComparisonMode = false;
@@ -292,11 +297,26 @@ throw new Error('Method not implemented.');
     }
   ];
 
-  readonly companyStats = {
-    yearsExperience: '20+',
-    mixersDelivered: '5000+',
-    countriesServed: '30+'
-  };
+  readonly companyStats: CompanyStat[] = [
+    {
+      icon: '🏭',
+      value: '20+',
+      label: 'Years Experience',
+      detail: 'Industry leadership since 2002'
+    },
+    {
+      icon: '🚛',
+      value: '5000+',
+      label: 'Mixers Delivered',
+      detail: 'Serving global construction needs'
+    },
+    {
+      icon: '🌍',
+      value: '30+',
+      label: 'Countries Served',
+      detail: 'Global presence and support'
+    }
+  ];
 
   readonly heroBackgrounds = [
     {
@@ -344,7 +364,6 @@ throw new Error('Method not implemented.');
     }
   }
 
-  // Example: track event
   private trackEvent(action: string, data?: any): void {
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', action, {
@@ -354,7 +373,6 @@ throw new Error('Method not implemented.');
     }
   }
 
-  // SEO
   private setupSEO(): void {
     this.title.setTitle('Professional Concrete Mixers | Industrial Mixing Solutions');
     this.meta.updateTag({
@@ -379,7 +397,7 @@ throw new Error('Method not implemented.');
     document.head.appendChild(script);
   }
 
-  // Scroll logic
+
   private setupScrollIndicator(): void {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', () => {
@@ -412,7 +430,6 @@ throw new Error('Method not implemented.');
     }
   }
 
-  // Additional methods
   toggleFaq(index: number): void {
     if (index === 0 && this.activeFaq === 0) {
       if (this.demoVideo?.nativeElement) {
@@ -437,4 +454,23 @@ throw new Error('Method not implemented.');
     this.currentHeroBackground =
       (this.currentHeroBackground + 1) % this.heroBackgrounds.length;
   }
-}
+
+  requestQuote() {
+    // Implement quote request logic
+    throw new Error('Method not implemented.');
+  }
+
+  downloadCatalog() {
+    // Implement catalog download
+    throw new Error('Method not implemented.');
+  }
+
+  navigateToComparison() {
+    // Implement comparison navigation
+    throw new Error('Method not implemented.');
+  }
+
+  trackStatBy(index: number, stat: CompanyStat): string {
+    return stat.label;
+  }
+ }

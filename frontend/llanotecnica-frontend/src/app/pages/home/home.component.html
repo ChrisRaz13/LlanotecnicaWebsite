@@ -256,33 +256,36 @@
 
   <!-- Company Section -->
   <section id="company" class="company-section">
+    <div class="company-background">
+      <div class="geometric-pattern"></div>
+      <div class="gradient-overlay"></div>
+    </div>
+
     <div class="section-container">
       <div class="company-content" @fadeIn>
-        <div class="company-text">
-          <h2>Two Decades of Excellence</h2>
-          <p>Building quality construction equipment since 2002</p>
-          <div class="company-stats">
-            <div class="stat">
-              <span class="number">{{companyStats.yearsExperience}}</span>
-              <span class="label">Years Experience</span>
-            </div>
-            <div class="stat">
-              <span class="number">{{companyStats.mixersDelivered}}</span>
-              <span class="label">Mixers Delivered</span>
-            </div>
-            <div class="stat">
-              <span class="number">{{companyStats.countriesServed}}</span>
-              <span class="label">Countries Served</span>
-            </div>
-          </div>
-          <a href="/about" class="btn-secondary">
-            Learn More About Us
-            <i class="fas fa-arrow-right"></i>
-          </a>
+        <div class="text-center mb-12">
+          <h2 class="company-title">Pioneering Construction Innovation</h2>
+          <p class="company-subtitle">Building the future of concrete mixing since 2002</p>
         </div>
-      </div>
-    </div>
-  </section>
+
+        <div class="company-stats-grid">
+          <div class="stat-card" *ngFor="let stat of companyStats; let i = index" @statFadeIn>
+            <div class="stat-icon">{{stat.icon}}</div>
+            <div class="stat-number">{{stat.value}}</div>
+            <div class="stat-label">{{stat.label}}</div>
+            <div class="stat-detail">{{stat.detail}}</div>
+          </div>
+        </div>
+
+
+        <div class="company-content" @fadeIn>
+          <div class="company-cta">
+            <a [routerLink]="['/about-us']" class="btn-secondary">
+              Learn More About Us
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
 
   <!-- FAQ Section -->
   <section id="faq" class="faq-section">
@@ -375,4 +378,3 @@
       </div>
     </div>
   </section>
-</main>
