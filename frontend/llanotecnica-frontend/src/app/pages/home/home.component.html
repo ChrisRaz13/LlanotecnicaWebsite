@@ -46,8 +46,8 @@
           </button>
 
           <button
-            class="btn-accent"
-            (click)="scrollToSection('contact')"
+            class="btn-accent flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200"
+            (click)="requestQuote()"
             aria-label="Request a product quote">
             Request Quote
             <i class="fas fa-paper-plane" aria-hidden="true"></i>
@@ -277,15 +277,15 @@
           </div>
         </div>
 
-
-        <div class="company-content" @fadeIn>
-          <div class="company-cta">
-            <a [routerLink]="['/about-us']" class="btn-secondary">
-              Learn More About Us
-              <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
+        <div class="company-cta">
+          <a [routerLink]="['/about-us']" class="btn-secondary">
+            Learn More About Us
+            <i class="fas fa-arrow-right"></i>
+          </a>
         </div>
+      </div>
+    </div>
+  </section>
 
   <!-- FAQ Section -->
   <section id="faq" class="faq-section">
@@ -372,9 +372,3 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>

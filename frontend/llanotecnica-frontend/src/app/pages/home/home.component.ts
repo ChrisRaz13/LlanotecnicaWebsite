@@ -20,7 +20,7 @@ import {
   state
  } from '@angular/animations';
  import { Meta, Title } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
  type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
  type CategoryType = FeatureCategory | 'all';
@@ -334,7 +334,8 @@ import { RouterModule } from '@angular/router';
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private meta: Meta,
-    private title: Title
+    private title: Title,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -397,7 +398,6 @@ import { RouterModule } from '@angular/router';
     document.head.appendChild(script);
   }
 
-
   private setupScrollIndicator(): void {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', () => {
@@ -455,22 +455,37 @@ import { RouterModule } from '@angular/router';
       (this.currentHeroBackground + 1) % this.heroBackgrounds.length;
   }
 
-  requestQuote() {
-    // Implement quote request logic
-    throw new Error('Method not implemented.');
+  requestQuote(): void {
+    this.router.navigate(['/contact'], {
+      queryParams: {
+        type: 'quote',
+        source: 'home_page'
+      }
+    });
+
+    this.trackEvent('quote_request_clicked', {
+      location: 'home_page',
+      button_type: 'primary'
+    });
   }
 
-  downloadCatalog() {
-    // Implement catalog download
-    throw new Error('Method not implemented.');
+  navigateToContact(): void {
+    this.requestQuote();
   }
 
-  navigateToComparison() {
-    // Implement comparison navigation
-    throw new Error('Method not implemented.');
+  private notImplementedAlert(): void {
+    console.warn('Feature not yet implemented');
+  }
+
+  downloadCatalog(): void {
+    this.notImplementedAlert();
+  }
+
+  navigateToComparison(): void {
+    this.notImplementedAlert();
   }
 
   trackStatBy(index: number, stat: CompanyStat): string {
     return stat.label;
   }
- }
+}
