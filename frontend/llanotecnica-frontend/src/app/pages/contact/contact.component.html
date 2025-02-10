@@ -19,7 +19,7 @@
         </div>
         <div *ngIf="submitError" class="alert alert-danger" role="alert" [@fadeSlideInOut]>
           <i class="fas fa-exclamation-circle me-2"></i>
-          There was an error sending your message. Please try again.
+          {{ errorMessage || 'There was an error sending your message. Please try again.' }}
         </div>
 
         <!-- Contact Form -->
@@ -84,6 +84,57 @@
             </div>
           </div>
 
+          <!-- Country Field -->
+          <div class="form-group">
+            <label for="country" class="form-label">
+              <i class="fas fa-globe me-2"></i>
+              Country *
+            </label>
+            <div class="country-selector" (clickOutside)="onClickOutside($event)">
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="country"
+                  #countryInput
+                  formControlName="country"
+                  class="form-control"
+                  [class.is-invalid]="contactForm.get('country')?.touched && contactForm.get('country')?.invalid"
+                  placeholder="Type to search countries"
+                  (focus)="onCountryInputFocus()"
+                  autocomplete="off"
+                >
+                <span class="input-group-text" *ngIf="isLoadingCountries">
+                  <div class="spinner-border spinner-border-sm text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </span>
+                <span class="input-group-text" *ngIf="!isLoadingCountries && getSelectedCountryFlag()">
+                  <img [src]="getSelectedCountryFlag()" alt="Selected country flag" class="country-flag">
+                </span>
+              </div>
+
+              <div class="country-dropdown shadow-sm" *ngIf="showCountryDropdown && !isLoadingCountries">
+                <div
+                  *ngFor="let country of filteredCountries; let i = index"
+                  class="country-option"
+                  [class.selected]="i === selectedCountryIndex"
+                  (click)="selectCountry(country)"
+                  (mouseenter)="selectedCountryIndex = i"
+                >
+                  <img [src]="country.flags.svg" [alt]="country.name.common + ' flag'" class="country-flag">
+                  <span>{{ country.name.common }}</span>
+                </div>
+                <div class="p-3 text-center text-muted" *ngIf="filteredCountries.length === 0">
+                  No countries found
+                </div>
+              </div>
+
+              <div class="invalid-feedback" [@fadeSlideInOut]>
+                {{ getErrorMessage('country') }}
+              </div>
+            </div>
+          </div>
+
           <!-- Inquiry Type Dropdown -->
           <div class="form-group">
             <label for="inquiryType" class="form-label">
@@ -136,7 +187,7 @@
             [class.loading]="isSubmitting"
           >
             <div class="button-content">
-              <span *ngIf="isSubmitting" class="spinner-border" role="status">
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status">
                 <span class="visually-hidden">Loading...</span>
               </span>
               <i class="fas" [class.fa-paper-plane]="!isSubmitting" [class.fa-spinner]="isSubmitting"></i>

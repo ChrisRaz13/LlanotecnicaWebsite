@@ -22,9 +22,33 @@ interface ContactFormData {
   name: string;
   email: string;
   phone?: string;
+  country: string;
+  countryCode: string;
   inquiryType: string;
   message: string;
   recaptchaToken: string;
+}
+
+interface MessageData {
+  name: string;
+  email: string;
+  phone: string | null;
+  country: string;
+  countryCode: string;
+  inquiryType: string;
+  message: string;
+  timestamp: admin.firestore.FieldValue;
+  recaptchaData: {
+    score: number;
+    timestamp?: string;
+    action?: string;
+  };
+  metadata: {
+    userAgent: string;
+    ipAddress: string;
+    submittedAt: string;
+    source: string;
+  };
 }
 
 export const submitContactForm = onRequest({
@@ -48,14 +72,29 @@ export const submitContactForm = onRequest({
       name,
       email,
       phone,
+      country,
+      countryCode,
       inquiryType,
       message,
       recaptchaToken,
     } = req.body as ContactFormData;
 
     // Validate required fields
-    if (!name?.trim() || !email?.trim() || !inquiryType?.trim() || !message?.trim() || !recaptchaToken) {
+    if (!name?.trim() ||
+        !email?.trim() ||
+        !country?.trim() ||
+        !countryCode?.trim() ||
+        !inquiryType?.trim() ||
+        !message?.trim() ||
+        !recaptchaToken) {
       res.status(400).json({error: "Missing or invalid required fields"});
+      return;
+    }
+
+    // Validate country code format (ISO 3166-1 alpha-2)
+    const countryCodeRegex = /^[A-Z]{2}$/;
+    if (!countryCodeRegex.test(countryCode)) {
+      res.status(400).json({error: "Invalid country code format"});
       return;
     }
 
@@ -64,6 +103,15 @@ export const submitContactForm = onRequest({
     if (!emailRegex.test(email)) {
       res.status(400).json({error: "Invalid email format"});
       return;
+    }
+
+    // Validate phone format if provided
+    if (phone) {
+      const phoneRegex = /^\+?[\d\s-]{10,}$/;
+      if (!phoneRegex.test(phone)) {
+        res.status(400).json({error: "Invalid phone number format"});
+        return;
+      }
     }
 
     // Check for reCAPTCHA secret
@@ -103,10 +151,12 @@ export const submitContactForm = onRequest({
     }
 
     // Prepare message data
-    const messageData = {
+    const messageData: MessageData = {
       name: name.trim(),
       email: email.toLowerCase().trim(),
       phone: phone ? phone.trim() : null,
+      country: country.trim(),
+      countryCode: countryCode.trim(),
       inquiryType: inquiryType.trim(),
       message: message.trim(),
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
@@ -123,11 +173,16 @@ export const submitContactForm = onRequest({
       },
     };
 
-    // Save to Firestore
-    await admin.firestore()
-      .collection("contactMessages")
-      .add(messageData);
-
+    // Save to Firestore with error handling
+    try {
+      await admin.firestore()
+        .collection("contactMessages")
+        .add(messageData);
+    } catch (firestoreError) {
+      console.error("❌ Firestore save failed:", firestoreError);
+      res.status(500).json({error: "Failed to save message"});
+      return;
+    }
     // Send success response
     res.status(200).json({
       message: "Form submitted successfully!",

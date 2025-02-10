@@ -1,17 +1,54 @@
-import { Component, OnInit, OnDestroy, HostListener, Inject, PLATFORM_ID, NgZone } from '@angular/core';
+// Type declaration for Google reCAPTCHA
+declare global {
+  interface Window {
+    grecaptcha: {
+      ready: (callback: () => void) => void;
+      execute: (siteKey: string, options: { action: string }) => Promise<string>;
+    };
+  }
+}
+
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  Inject,
+  PLATFORM_ID,
+  NgZone,
+  ElementRef,
+  ViewChild,
+  ChangeDetectorRef
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
 
-declare var grecaptcha: any;
+interface Country {
+  name: {
+    common: string;
+    official: string;
+  };
+  cca2: string;
+  flags: {
+    svg: string;
+    png: string;
+  };
+  region?: string;
+}
 
 interface ContactForm {
   name: string;
   email: string;
   phone?: string;
+  country: string;
+  countryCode: string;
   inquiryType: string;
   message: string;
   recaptchaToken: string;
@@ -26,7 +63,7 @@ interface SubmitResponse {
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.css'],
+  styleUrls: ['./contact.component.scss'],
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   animations: [
@@ -42,12 +79,20 @@ interface SubmitResponse {
   ]
 })
 export class ContactComponent implements OnInit, OnDestroy {
+  @ViewChild('countryInput') countryInput!: ElementRef;
+
   contactForm!: FormGroup;
+  countries: Country[] = [];
+  filteredCountries: Country[] = [];
+  showCountryDropdown = false;
+  isLoadingCountries = false;
+  selectedCountryIndex = -1;
   isSubmitting = false;
   submitSuccess = false;
   submitError = false;
   errorMessage = '';
   isFormTouched = false;
+  private destroy$ = new Subject<void>();
   private recaptchaScript?: HTMLScriptElement;
   mapUrl: SafeResourceUrl | undefined;
 
@@ -83,6 +128,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private ngZone: NgZone,
     private http: HttpClient,
+    private cd: ChangeDetectorRef, // <-- Added ChangeDetectorRef
+    private router: Router,        // <-- Added Router
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.initializeForm();
@@ -94,19 +141,26 @@ export class ContactComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.loadRecaptcha();
+
+      // Load countries first, then set up search
+      this.loadCountries().then(() => {
+        this.setupCountrySearch();
+      });
+
+      // Reload countries on navigation end to fix any missing field issues
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          this.loadCountries();
+        }
+      });
     }
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     if (isPlatformBrowser(this.platformId) && this.recaptchaScript) {
       this.recaptchaScript.remove();
-    }
-  }
-
-  @HostListener('window:keydown', ['$event'])
-  handleKeyboardNavigation(event: KeyboardEvent) {
-    if (event.key === 'Tab') {
-      this.isFormTouched = true;
     }
   }
 
@@ -125,6 +179,8 @@ export class ContactComponent implements OnInit, OnDestroy {
       phone: ['', [
         Validators.pattern(/^\+?[\d\s-]{10,}$/)
       ]],
+      country: ['', [Validators.required]],
+      countryCode: ['', [Validators.required]],
       inquiryType: ['', Validators.required],
       message: ['', [
         Validators.required,
@@ -133,6 +189,133 @@ export class ContactComponent implements OnInit, OnDestroy {
       ]],
       recaptchaToken: ['']
     });
+  }
+
+  private setupCountrySearch() {
+    this.contactForm.get('country')?.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(value => {
+        if (typeof value === 'string') {
+          this.filterCountries(value);
+        }
+      });
+  }
+
+  private async loadCountries() {
+    try {
+      this.isLoadingCountries = true;
+      const response = await this.http
+        .get<Country[]>('https://restcountries.com/v3.1/all?fields=name,cca2,flags,region')
+        .pipe(map(countries => countries.sort((a, b) => a.name.common.localeCompare(b.name.common))))
+        .toPromise();
+
+      if (response) {
+        this.countries = response;
+        this.filteredCountries = [...this.countries];
+
+        // Force Angular to detect changes so UI updates immediately
+        this.cd.detectChanges();
+      }
+    } catch (error) {
+      console.error('Error loading countries:', error);
+    } finally {
+      this.isLoadingCountries = false;
+    }
+  }
+
+  filterCountries(value: string) {
+    const searchTerm = value.toLowerCase();
+    this.filteredCountries = this.countries.filter(country =>
+      country.name.common.toLowerCase().includes(searchTerm) ||
+      country.name.official.toLowerCase().includes(searchTerm)
+    );
+    this.showCountryDropdown = true;
+    this.selectedCountryIndex = -1;
+  }
+
+  selectCountry(country: Country) {
+    this.contactForm.patchValue({
+      country: country.name.common,
+      countryCode: country.cca2
+    });
+    this.showCountryDropdown = false;
+    this.selectedCountryIndex = -1;
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (!this.showCountryDropdown) return;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        this.selectedCountryIndex = Math.min(
+          this.selectedCountryIndex + 1,
+          this.filteredCountries.length - 1
+        );
+        this.scrollToSelectedCountry();
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        this.selectedCountryIndex = Math.max(this.selectedCountryIndex - 1, -1);
+        this.scrollToSelectedCountry();
+        break;
+      case 'Enter':
+        event.preventDefault();
+        if (this.selectedCountryIndex >= 0) {
+          this.selectCountry(this.filteredCountries[this.selectedCountryIndex]);
+        }
+        break;
+      case 'Escape':
+        this.showCountryDropdown = false;
+        this.selectedCountryIndex = -1;
+        break;
+    }
+  }
+
+  private scrollToSelectedCountry() {
+    if (this.selectedCountryIndex >= 0) {
+      const dropdown = document.querySelector('.country-dropdown');
+      const selectedOption = document.querySelector(
+        `.country-option:nth-child(${this.selectedCountryIndex + 1})`
+      );
+
+      if (dropdown && selectedOption) {
+        const dropdownRect = dropdown.getBoundingClientRect();
+        const selectedRect = selectedOption.getBoundingClientRect();
+
+        if (selectedRect.bottom > dropdownRect.bottom) {
+          dropdown.scrollTop += selectedRect.bottom - dropdownRect.bottom;
+        } else if (selectedRect.top < dropdownRect.top) {
+          dropdown.scrollTop -= dropdownRect.top - selectedRect.top;
+        }
+      }
+    }
+  }
+
+  onCountryInputFocus() {
+    // Keep the dropdown open if there are results
+    if (this.filteredCountries.length > 0) {
+      this.showCountryDropdown = true;
+    }
+  }
+
+  onClickOutside(event: Event) {
+    if (!(event.target as HTMLElement).closest('.country-selector')) {
+      this.showCountryDropdown = false;
+      this.selectedCountryIndex = -1;
+    }
+  }
+
+  getSelectedCountryFlag(): string | null {
+    const selectedCountry = this.countries.find(
+      country => country.name.common === this.contactForm.get('country')?.value
+    );
+    return selectedCountry?.flags.svg || null;
   }
 
   private initializeMap() {
@@ -157,8 +340,8 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     this.recaptchaScript.onload = () => {
       this.ngZone.run(() => {
-        if (typeof grecaptcha !== 'undefined') {
-          grecaptcha.ready(() => {
+        if (typeof window.grecaptcha !== 'undefined') {
+          window.grecaptcha.ready(() => {
             console.log('✅ reCAPTCHA is ready');
           });
         }
@@ -169,9 +352,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   async onSubmit() {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
+    if (!isPlatformBrowser(this.platformId)) return;
 
     if (this.contactForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
@@ -180,11 +361,11 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.errorMessage = '';
 
       try {
-        if (typeof grecaptcha === 'undefined') {
+        if (typeof window.grecaptcha === 'undefined') {
           throw new Error('reCAPTCHA is not loaded.');
         }
 
-        const token = await grecaptcha.execute(environment.recaptchaSiteKey, {
+        const token = await window.grecaptcha.execute(environment.recaptchaSiteKey, {
           action: 'contact_form_submit'
         });
 
@@ -193,10 +374,12 @@ export class ContactComponent implements OnInit, OnDestroy {
           recaptchaToken: token
         };
 
-        const response = await this.http.post<SubmitResponse>(
-          environment.contactFormEndpoint,
-          formData
-        ).toPromise();
+        // 🟢 Debug: verify country/countryCode before sending
+        console.log('DEBUG (Angular): Sending formData:', formData);
+
+        const response = await this.http
+          .post<SubmitResponse>(environment.contactFormEndpoint, formData)
+          .toPromise();
 
         this.ngZone.run(() => {
           this.submitSuccess = true;
@@ -205,7 +388,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             console.log('📊 reCAPTCHA Score:', response.recaptchaScore);
           }
         });
-
       } catch (error) {
         this.ngZone.run(() => {
           this.submitError = true;
