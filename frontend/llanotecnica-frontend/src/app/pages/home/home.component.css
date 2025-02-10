@@ -263,7 +263,7 @@ section {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Overridden on mobile below if needed */
+  object-fit: cover;
 }
 
 .hero-overlay {
@@ -1111,15 +1111,11 @@ section {
     justify-content: center;
   }
 
-  /* MOBILE HERO REFACTOR: Let's shorten the hero so it fits better. */
   .hero-section {
-    min-height: 80vh !important; /* Slightly smaller for mobile */
+    min-height: 80vh !important;
   }
 
-  /* If you truly want to see entire background, you can switch to contain. */
-  /* .hero-bg-image, .hero-bg-video {
-    object-fit: cover;
-  } */
+
 
   /* PRODUCTS MOBILE FIX */
   .product-image-wrapper {
