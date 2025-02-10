@@ -19,42 +19,46 @@
         <a
           routerLink="/"
           routerLinkActive="active"
-          [routerLinkActiveOptions]="{exact: true}">
+          [routerLinkActiveOptions]="{exact: true}"
+          (click)="closeMenu()">
           {{ 'NAV.HOME' | translate }}
         </a>
       </li>
       <li>
         <a
           routerLink="/about-us"
-          routerLinkActive="active">
+          routerLinkActive="active"
+          (click)="closeMenu()">
           {{ 'NAV.ABOUT_US' | translate }}
         </a>
       </li>
       <li>
         <a
           routerLink="/products"
-          routerLinkActive="active">
+          routerLinkActive="active"
+          (click)="closeMenu()">
           {{ 'NAV.PRODUCTS' | translate }}
         </a>
       </li>
       <li>
         <a
           routerLink="/contact"
-          routerLinkActive="active">
+          routerLinkActive="active"
+          (click)="closeMenu()">
           {{ 'NAV.CONTACT' | translate }}
         </a>
       </li>
 
       <!-- Mobile-Only: Download Catalog Link -->
       <li class="mobile-only">
-        <a href="assets/downloads/catalog.pdf" download>
+        <a href="assets/downloads/catalog.pdf" download (click)="closeMenu()">
           <img src="assets/photos/pdf.png" alt="PDF Icon" class="download-icon" />
           {{ 'NAV.DOWNLOAD_CATALOG' | translate }}
         </a>
       </li>
     </ul>
 
-    <!-- Language Selector (Optional) -->
+    <!-- Language Selector -->
     <app-language-selector></app-language-selector>
   </div>
 </nav>

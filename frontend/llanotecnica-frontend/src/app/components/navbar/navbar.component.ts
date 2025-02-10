@@ -1,4 +1,3 @@
-
 import { Component, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -19,12 +18,19 @@ export class NavbarComponent {
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const bannerHeight = 96;
-    const scrollPosition = window.scrollY;
-    this.isScrolled = scrollPosition >= bannerHeight;
+    this.isScrolled = window.scrollY >= bannerHeight;
   }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
     document.body.classList.toggle('menu-open', this.isMenuOpen);
+  }
+
+  closeMenu() {
+    if (this.isMenuOpen) {
+      this.isMenuOpen = false;
+      document.body.classList.remove('menu-open');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
   }
 }
