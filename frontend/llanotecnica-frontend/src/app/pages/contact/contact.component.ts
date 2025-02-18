@@ -214,7 +214,6 @@ export class ContactComponent implements OnInit, OnDestroy {
       if (response) {
         this.countries = response;
         this.filteredCountries = [...this.countries];
-
         this.cd.detectChanges();
       }
     } catch (error) {
@@ -246,7 +245,6 @@ export class ContactComponent implements OnInit, OnDestroy {
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (!this.showCountryDropdown) return;
-
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
@@ -280,11 +278,9 @@ export class ContactComponent implements OnInit, OnDestroy {
       const selectedOption = document.querySelector(
         `.country-option:nth-child(${this.selectedCountryIndex + 1})`
       );
-
       if (dropdown && selectedOption) {
         const dropdownRect = dropdown.getBoundingClientRect();
         const selectedRect = selectedOption.getBoundingClientRect();
-
         if (selectedRect.bottom > dropdownRect.bottom) {
           dropdown.scrollTop += selectedRect.bottom - dropdownRect.bottom;
         } else if (selectedRect.top < dropdownRect.top) {
@@ -319,17 +315,12 @@ export class ContactComponent implements OnInit, OnDestroy {
       console.error('🚨 Google Maps API key is missing');
       return;
     }
-
-    // Encode the address for use in the URL
     const address = encodeURIComponent(
       'Llanotecnica SA, Rio Chico, Calle Principal, Corregimiento de, Pacora, Provincia de Panamá, Panamá'
     );
-
     this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
       `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=${address}&zoom=16`
     );
-
-    // Update company details to match new address
     this.companyDetails = {
       ...this.companyDetails,
       address: 'Rio Chico, Calle Principal, Corregimiento de Pacora, Provincia de Panamá, Panamá'
@@ -337,15 +328,13 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   private loadRecaptcha() {
-    if (!environment.recaptchaSiteKey || !isPlatformBrowser(this.platformId)) {
+    if (!environment.recaptcha || !environment.recaptcha.siteKey || !isPlatformBrowser(this.platformId)) {
       return;
     }
-
     this.recaptchaScript = document.createElement('script');
-    this.recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${environment.recaptchaSiteKey}`;
+    this.recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${environment.recaptcha.siteKey}`;
     this.recaptchaScript.async = true;
     this.recaptchaScript.defer = true;
-
     this.recaptchaScript.onload = () => {
       this.ngZone.run(() => {
         if (typeof window.grecaptcha !== 'undefined') {
@@ -355,39 +344,31 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
       });
     };
-
     document.head.appendChild(this.recaptchaScript);
   }
 
   async onSubmit() {
     if (!isPlatformBrowser(this.platformId)) return;
-
     if (this.contactForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
       this.submitSuccess = false;
       this.submitError = false;
       this.errorMessage = '';
-
       try {
         if (typeof window.grecaptcha === 'undefined') {
           throw new Error('reCAPTCHA is not loaded.');
         }
-
-        const token = await window.grecaptcha.execute(environment.recaptchaSiteKey, {
+        const token = await window.grecaptcha.execute(environment.recaptcha.siteKey, {
           action: 'contact_form_submit'
         });
-
         const formData: ContactForm = {
           ...this.contactForm.value,
           recaptchaToken: token
         };
-
         console.log('DEBUG (Angular): Sending formData:', formData);
-
         const response = await this.http
           .post<SubmitResponse>(environment.contactFormEndpoint, formData)
           .toPromise();
-
         this.ngZone.run(() => {
           this.submitSuccess = true;
           this.contactForm.reset();
@@ -439,7 +420,6 @@ export class ContactComponent implements OnInit, OnDestroy {
   getErrorMessage(controlName: string): string {
     const control = this.contactForm.get(controlName);
     if (!control || !control.errors || !control.touched) return '';
-
     const errors = {
       required: 'This field is required',
       email: 'Please enter a valid email address',
@@ -447,7 +427,6 @@ export class ContactComponent implements OnInit, OnDestroy {
       maxlength: `Maximum length is ${control.errors?.['maxlength']?.requiredLength} characters`,
       pattern: this.getPatternErrorMessage(controlName)
     };
-
     const firstError = Object.keys(control.errors)[0] as keyof typeof errors;
     return errors[firstError] || 'Invalid input';
   }

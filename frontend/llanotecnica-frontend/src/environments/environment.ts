@@ -10,23 +10,19 @@ export const environment = {
     measurementId: "G-VQPNJ37TSN"
   },
   googleMapsApiKey: "AIzaSyDCRGZ-Ra5ge911FIwBoUCXpoUcJG1VYGU",
-  recaptchaSiteKey: "6LdIxNAqAAAAABJ1qk8u28KgSy86pJcl-mvlkAzo",
+  recaptcha: {
+    siteKey: "6LfTlNcqAAAAAPyLOGeMEbyvZTYwwDD23VvoRFiK"
+  },
   contactFormEndpoint: "https://us-central1-llanotecnica-59a31.cloudfunctions.net/submitContactForm",
-
-  // Development-specific configuration
-  logLevel: 'debug', // More verbose logging for development
-  reCaptchaThreshold: 0.3, // Lower threshold for testing
-  maxRetries: 5, // More retries for testing
-
-  // API endpoints
+  logLevel: 'debug',
+  reCaptchaThreshold: 0.3,
+  maxRetries: 5,
   api: {
     contact: {
       submitForm: "https://us-central1-llanotecnica-59a31.cloudfunctions.net/submitContactForm",
-      timeout: 60000 // Longer timeout for development
+      timeout: 60000
     }
   },
-
-  // Feature flags
   features: {
     enableGoogleMaps: true,
     enableRecaptcha: true,
