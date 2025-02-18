@@ -10,6 +10,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 interface Value {
   icon: string;
@@ -27,7 +29,13 @@ interface ProductionStage {
 @Component({
   selector: 'app-about-us',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    TranslateModule,
+    RecaptchaModule
+  ],
   templateUrl: './about-us.component.html',
   styleUrls: ['./about-us.component.css'],
   animations: [
@@ -43,13 +51,13 @@ interface ProductionStage {
   ]
 })
 export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
-  [x: string]: any;
   @ViewChildren('stageElement') stageElements!: QueryList<ElementRef>;
   @ViewChild('finalCtaElement') finalCtaElement!: ElementRef;
   @ViewChild('videoElement') videoElement!: ElementRef;
   @ViewChild('heroContent') heroContent!: ElementRef;
   @ViewChildren('statNumber') statNumbers!: QueryList<ElementRef>;
 
+  contactForm: FormGroup;
   finalCtaVisible = false;
   heroContentVisible = false;
 
@@ -114,25 +122,76 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      this['initializeMap']();
+      this.initializeMap();
     }
+
+    // Initialize the contact form
+    this.contactForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', Validators.required],
+      company: [''],
+      country: ['', Validators.required],
+      inquiryType: ['', Validators.required],
+      message: ['', Validators.required],
+      recaptcha: ['', Validators.required]
+    });
   }
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this['loadRecaptcha']();
-      this['loadCountries']().then(() => {
-        this['setupCountrySearch']();
+      this.loadRecaptcha();
+      this.loadCountries().then(() => {
+        this.setupCountrySearch();
       });
-      this.router.events.subscribe(event => {
+      this.router.events.pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(event => {
         if (event instanceof NavigationEnd) {
-          this['loadCountries']();
+          this.loadCountries();
         }
       });
     }
     setTimeout(() => {
       this.heroContentVisible = true;
     }, 100);
+  }
+
+  private initializeMap(): void {
+    const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}
+      &q=${this.companyDetails.mapLocation.lat},${this.companyDetails.mapLocation.lng}`;
+    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(mapUrl);
+}
+
+  private loadRecaptcha(): void {
+    // Load recaptcha script if not already loaded
+    if (!document.getElementById('recaptcha-script')) {
+      const script = document.createElement('script');
+      script.id = 'recaptcha-script';
+      script.src = `https://www.google.com/recaptcha/api.js?render=${environment.recaptcha.siteKey}`;
+      document.body.appendChild(script);
+    }
+  }
+
+  private async loadCountries(): Promise<void> {
+    try {
+      const response = await this.http.get<any[]>('assets/data/countries.json').toPromise();
+      // Process countries data
+      return Promise.resolve();
+    } catch (error) {
+      console.error('Error loading countries:', error);
+      return Promise.reject(error);
+    }
+  }
+
+  private setupCountrySearch(): void {
+    this.contactForm.get('country')?.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
+    ).subscribe(value => {
+      // Implement country search logic
+    });
   }
 
   ngAfterViewInit(): void {
@@ -265,6 +324,13 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
         { threshold: 0.2, rootMargin: '0px' }
       );
       this.heroObserver.observe(this.heroContent.nativeElement);
+    }
+  }
+
+  onSubmit(): void {
+    if (this.contactForm.valid) {
+      // Handle form submission
+      console.log(this.contactForm.value);
     }
   }
 

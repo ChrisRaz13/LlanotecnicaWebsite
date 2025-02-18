@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes, ExtraOptions } from '@angular/router';
+import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ProductSectionComponent } from './pages/product-section/product-section.component';
 import { ContactComponent } from './pages/contact/contact.component';
+import { provideRouter, withViewTransitions, withInMemoryScrolling } from '@angular/router';
+import { ApplicationConfig } from '@angular/core';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -12,13 +13,15 @@ export const routes: Routes = [
   { path: 'contact', component: ContactComponent },
 ];
 
-const routerOptions: ExtraOptions = {
-  anchorScrolling: 'enabled',
-  scrollPositionRestoration: 'enabled',
+export const appRouting: ApplicationConfig = {
+  providers: [
+    provideRouter(
+      routes,
+      withViewTransitions(),
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'enabled',
+        anchorScrolling: 'enabled'
+      })
+    )
+  ]
 };
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes, routerOptions)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule {}
