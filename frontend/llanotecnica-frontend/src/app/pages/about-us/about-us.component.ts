@@ -125,7 +125,6 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.initializeMap();
     }
 
-    // Initialize the contact form
     this.contactForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -161,11 +160,10 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}
       &q=${this.companyDetails.mapLocation.lat},${this.companyDetails.mapLocation.lng}`;
     this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(mapUrl);
-}
+  }
 
   private loadRecaptcha(): void {
-    // Load recaptcha script if not already loaded
-    if (!document.getElementById('recaptcha-script')) {
+    if (!document.getElementById('recaptcha-script') && environment.recaptcha?.siteKey) {
       const script = document.createElement('script');
       script.id = 'recaptcha-script';
       script.src = `https://www.google.com/recaptcha/api.js?render=${environment.recaptcha.siteKey}`;
@@ -176,7 +174,6 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
   private async loadCountries(): Promise<void> {
     try {
       const response = await this.http.get<any[]>('assets/data/countries.json').toPromise();
-      // Process countries data
       return Promise.resolve();
     } catch (error) {
       console.error('Error loading countries:', error);
@@ -196,15 +193,15 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      if (this.videoElement) {
+      if (this.videoElement?.nativeElement) {
         this.videoElement.nativeElement.muted = true;
       }
-      window.requestAnimationFrame(() => {
+      setTimeout(() => {
         this.setupIntersectionObservers();
         this.setupFinalCtaObserver();
         this.setupHeroObserver();
         this.setupStatsAnimation();
-      });
+      }, 0);
     }
   }
 
@@ -220,7 +217,10 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
         (entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              this.productionStages[index].visible = true;
+              this.ngZone.run(() => {
+                this.productionStages[index].visible = true;
+                this.cd.detectChanges();
+              });
               observer.disconnect();
             }
           });
@@ -234,55 +234,70 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private setupStatsAnimation(): void {
     if (!isPlatformBrowser(this.platformId)) {
-      this.animateAllStats();
       return;
     }
-    const options = { threshold: 0.3, rootMargin: '0px 0px -100px 0px' };
-    this.statsObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const card = entry.target as HTMLElement;
-          this.animateStatCard(card);
-          this.statsObserver?.unobserve(card);
-        }
-      });
-    }, options);
-    if (isPlatformBrowser(this.platformId)) {
+
+    setTimeout(() => {
+      const options = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -10% 0px'
+      };
+
+      this.statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const card = entry.target as HTMLElement;
+            this.ngZone.run(() => {
+              this.animateStatCard(card);
+            });
+            this.statsObserver?.unobserve(card);
+          }
+        });
+      }, options);
+
       const statCards = document.querySelectorAll('.stat-card');
-      statCards.forEach(card => this.statsObserver?.observe(card));
-    }
+      if (statCards.length > 0) {
+        statCards.forEach(card => {
+          this.statsObserver?.observe(card);
+        });
+      }
+    }, 100);
   }
 
   private animateStatCard(card: HTMLElement): void {
     const number = card.querySelector('.stat-number');
     const label = card.querySelector('.stat-label');
+
     if (number && label) {
+      this.cd.detectChanges();
+
       number.classList.add('animate');
       label.classList.add('animate');
+
       const targetValue = parseInt(number.getAttribute('data-value') || '0');
       this.animateNumber(number as HTMLElement, targetValue);
     }
   }
 
   private animateNumber(element: HTMLElement, target: number): void {
+    const duration = 2000;
     const steps = 60;
-    const stepValue = target / steps;
-    let current = 0;
-    const updateNumber = () => {
-      current += stepValue;
-      if (current > target) current = target;
-      element.textContent = Math.round(current).toString() + (target > 100 ? '+' : '');
-      if (current < target) {
+    let start: number | null = null;
+
+    const updateNumber = (timestamp: number) => {
+      if (!start) start = timestamp;
+      const progress = timestamp - start;
+      const percentage = Math.min(progress / duration, 1);
+
+      const current = Math.min(Math.round(target * percentage), target);
+      element.textContent = current.toString() + (target > 100 ? '+' : '');
+
+      if (progress < duration) {
         requestAnimationFrame(updateNumber);
       }
     };
-    requestAnimationFrame(updateNumber);
-  }
 
-  private animateAllStats(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    const statCards = document.querySelectorAll('.stat-card');
-    statCards.forEach(card => this.animateStatCard(card as HTMLElement));
+    requestAnimationFrame(updateNumber);
   }
 
   private setupFinalCtaObserver(): void {
@@ -295,7 +310,10 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
         (entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              this.finalCtaVisible = true;
+              this.ngZone.run(() => {
+                this.finalCtaVisible = true;
+                this.cd.detectChanges();
+              });
               this.finalCtaObserver?.disconnect();
             }
           });
@@ -316,7 +334,10 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
         (entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              this.heroContentVisible = true;
+              this.ngZone.run(() => {
+                this.heroContentVisible = true;
+                this.cd.detectChanges();
+              });
               this.heroObserver?.disconnect();
             }
           });
@@ -329,7 +350,6 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSubmit(): void {
     if (this.contactForm.valid) {
-      // Handle form submission
       console.log(this.contactForm.value);
     }
   }
