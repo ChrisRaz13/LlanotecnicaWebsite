@@ -2,15 +2,12 @@ import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import {
   provideRouter,
   withViewTransitions,
-  withInMemoryScrolling,
-  withHashLocation
+  withInMemoryScrolling
 } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
-// Make sure your app.routes.ts file has `export const routes: Routes = [ ... ]`
 import { routes } from './app.routes';
 
 export function createTranslateLoader(http: HttpClient) {
@@ -25,13 +22,10 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
         anchorScrolling: 'enabled'
-      }),
-      withHashLocation()
+      })
     ),
-
     provideAnimations(),
     provideHttpClient(),
-
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {
