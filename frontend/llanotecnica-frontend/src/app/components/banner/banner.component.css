@@ -1,4 +1,6 @@
 /* banner.component.css */
+
+/* Top banner container styling */
 .top-banner {
   background: linear-gradient(90deg, #008751 0%, #00a562 100%);
   position: relative;
@@ -133,14 +135,51 @@
 }
 
 .download-icon::before {
-  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23008751' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'%3E%3C/path%3E%3Cpolyline points='7 10 12 15 17 10'%3E%3C/polyline%3E%3Cline x1='12' y1='15' x2='12' y2='3'%3E%3C/line%3E%3C/svg%3E");
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23008751' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'%3E%3C/path%3E%3Cpolyline points='7 10 12 15 17 10'%3E%3C/polyline%3E%3Cline x1='12' y1='15' x2='12' y2='3'%3E%3C/line%3E");
 }
 
+/* Modal Overlay + Content (matching the footer's style) */
+.manual-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.modal-content {
+  background: #fff;
+  color: #000;
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 280px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+}
 
+.modal-content button {
+  margin: 0.5rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background-color: #008751;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
 
-
-
+.modal-content button:hover {
+  background-color: #00a562;
+}
 
 /* Decorative Elements */
 .decorative-element {
@@ -220,11 +259,9 @@
   }
 }
 
-/* Mobile styles (hidden) */
+/* Hide on Mobile */
 @media (max-width: 768px) {
   .top-banner {
     display: none !important;
   }
 }
-
-

@@ -15,5 +15,26 @@ export class BannerComponent {
     facebook: 'https://www.facebook.com/llanotecnica2007/',
     instagram: 'https://instagram.com/llanotecnica'
   };
-  catalogPath = 'assets/downloads/catalog.pdf';
+
+  // Tracks whether the Catalog Modal is open
+  showCatalogModal = false;
+
+  // Toggle the catalog modal
+  toggleCatalogModal() {
+    this.showCatalogModal = !this.showCatalogModal;
+  }
+
+  // Download Catalog in English or Spanish
+  downloadCatalog(language: 'en' | 'es'): void {
+    const fileName = language === 'en' ? 'Catalog-Eng.pdf' : 'Catalog-Esp.pdf';
+    const link = document.createElement('a');
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', `assets/photos/${fileName}`);
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    this.showCatalogModal = false;
+  }
 }

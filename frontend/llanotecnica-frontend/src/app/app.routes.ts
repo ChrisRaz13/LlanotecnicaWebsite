@@ -5,7 +5,7 @@ import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ProductSectionComponent } from './pages/product-section/product-section.component';
 import { ContactComponent } from './pages/contact/contact.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'about-us', component: AboutUsComponent },
   { path: 'products', component: ProductSectionComponent },

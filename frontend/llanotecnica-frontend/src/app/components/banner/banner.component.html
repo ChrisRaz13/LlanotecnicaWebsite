@@ -27,8 +27,8 @@
           </a>
         </div>
 
-        <!-- Catalog download button -->
-        <a [href]="catalogPath" download class="catalog-download">
+        <!-- Catalog download button triggers the modal -->
+        <a (click)="toggleCatalogModal()" class="catalog-download">
           <i class="download-icon"></i>
           <span>Download Catalog</span>
         </a>
@@ -39,4 +39,14 @@
   <!-- Decorative elements -->
   <div class="decorative-element right"></div>
   <div class="decorative-element left"></div>
+</div>
+
+<!-- Catalog Modal -->
+<div class="manual-modal" *ngIf="showCatalogModal">
+  <div class="modal-content">
+    <h2>Select Catalog</h2>
+    <button (click)="downloadCatalog('en')">English</button>
+    <button (click)="downloadCatalog('es')">Español</button>
+    <button (click)="toggleCatalogModal()">Cancel</button>
+  </div>
 </div>

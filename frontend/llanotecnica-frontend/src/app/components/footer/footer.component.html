@@ -2,6 +2,7 @@
   <div class="footer-main">
     <div class="footer-container">
       <div class="footer-content">
+        <!-- Company Info -->
         <div class="footer-section company-info">
           <div class="footer-brand">
             <div class="footer-logo-container">
@@ -28,6 +29,7 @@
           </div>
         </div>
 
+        <!-- Quick Links -->
         <div class="footer-section quick-links">
           <h3>Quick Links</h3>
           <ul>
@@ -37,6 +39,7 @@
           </ul>
         </div>
 
+        <!-- Products -->
         <div class="footer-section products">
           <h3>Our Products</h3>
           <ul>
@@ -46,34 +49,39 @@
           </ul>
         </div>
 
+        <!-- Support (Switch Case Approach) -->
         <div class="footer-section support">
           <h3>Support</h3>
           <ul>
             <li *ngFor="let item of support">
-              <ng-container *ngIf="item.text === 'Mixer Manual'; else checkFaqOrCatalog">
-                <a (click)="toggleManualModal()">{{ item.text }}</a>
+              <ng-container [ngSwitch]="item.text">
+
+                <!-- Mixer Manual -->
+                <a *ngSwitchCase="'Mixer Manual'" (click)="toggleManualModal()">
+                  {{ item.text }}
+                </a>
+
+                <!-- FAQ -->
+                <a *ngSwitchCase="'FAQ'" (click)="goToFaq()">
+                  {{ item.text }}
+                </a>
+
+                <!-- Download Catalog -->
+                <a *ngSwitchCase="'Download Catalog'" (click)="toggleCatalogModal()">
+                  {{ item.text }}
+                </a>
+
+                <!-- Default: normal router link -->
+                <a *ngSwitchDefault [routerLink]="item.route">
+                  {{ item.text }}
+                </a>
               </ng-container>
-
-              <ng-template #checkFaqOrCatalog>
-                <ng-container *ngIf="item.text === 'FAQ'; else checkCatalog">
-                  <a (click)="goToFaq()">{{ item.text }}</a>
-                </ng-container>
-
-                <ng-template #checkCatalog>
-                  <ng-container *ngIf="item.text === 'Download Catalog'; else normalRoute">
-                    <a (click)="toggleCatalogModal()">{{ item.text }}</a>
-                  </ng-container>
-
-                  <ng-template #normalRoute>
-                    <a [routerLink]="item.route">{{ item.text }}</a>
-                  </ng-template>
-                </ng-template>
-              </ng-template>
             </li>
           </ul>
         </div>
       </div>
 
+      <!-- Social Links -->
       <div class="footer-social">
         <div class="social-links">
           <a [href]="companyInfo.socialLinks.facebook" target="_blank" rel="noopener noreferrer" class="social-icon">
@@ -87,6 +95,7 @@
     </div>
   </div>
 
+  <!-- Footer Bottom -->
   <div class="footer-bottom">
     <div class="footer-container">
       <div class="footer-bottom-content">
