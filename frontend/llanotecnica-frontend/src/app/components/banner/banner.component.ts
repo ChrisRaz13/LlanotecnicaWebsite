@@ -12,7 +12,7 @@ export class BannerComponent {
   phoneNumber = '+507 6566-4942';
   whatsappLink = 'https://wa.me/50765664942';
   socialLinks = {
-    facebook: 'https://facebook.com/llanotecnica',
+    facebook: 'https://www.facebook.com/llanotecnica2007/',
     instagram: 'https://instagram.com/llanotecnica'
   };
   catalogPath = 'assets/downloads/catalog.pdf';

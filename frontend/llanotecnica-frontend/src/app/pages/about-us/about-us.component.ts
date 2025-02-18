@@ -25,9 +25,13 @@ interface ProductionStage {
 export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('stageElement') stageElements!: QueryList<ElementRef>;
   @ViewChild('finalCtaElement') finalCtaElement!: ElementRef;
-  @ViewChild('videoElement') videoElement!: ElementRef;  // Reference for the video element
+  @ViewChild('videoElement') videoElement!: ElementRef;
+  @ViewChild('heroContent') heroContent!: ElementRef;
+  @ViewChildren('statNumber') statNumbers!: QueryList<ElementRef>;
 
+  // Visibility states
   finalCtaVisible: boolean = false;
+  heroContentVisible: boolean = false;
 
   values: Value[] = [
     { icon: 'fas fa-lightbulb', title: 'Innovation', description: 'Pushing boundaries in mixing technology with cutting-edge solutions' },
@@ -77,48 +81,50 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private observers: IntersectionObserver[] = [];
   private finalCtaObserver: IntersectionObserver | null = null;
+  private heroObserver: IntersectionObserver | null = null;
+  private statsObserver: IntersectionObserver | null = null;
 
   constructor() {}
 
   ngOnInit(): void {
-    // Any initialization logic if needed
+    setTimeout(() => {
+      this.heroContentVisible = true;
+    }, 100);
   }
 
   ngAfterViewInit(): void {
-    // Mute the video element after the view has initialized
     if (this.videoElement) {
       this.videoElement.nativeElement.muted = true;
     }
 
-    // Use requestAnimationFrame if available; otherwise, fall back to setTimeout.
     if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
       window.requestAnimationFrame(() => {
         this.setupIntersectionObservers();
         this.setupFinalCtaObserver();
+        this.setupHeroObserver();
+        this.setupStatsAnimation();
       });
     } else {
       setTimeout(() => {
         this.setupIntersectionObservers();
         this.setupFinalCtaObserver();
+        this.setupHeroObserver();
+        this.setupStatsAnimation();
       }, 0);
     }
   }
 
   private setupIntersectionObservers(): void {
-    // Fallback if IntersectionObserver is not defined
     if (typeof IntersectionObserver === 'undefined') {
-      // Make all production stages visible if the API is not available
-      this.productionStages.forEach((stage, index) => {
+      this.productionStages.forEach((stage) => {
         stage.visible = true;
       });
       return;
     }
 
-    // Clean up existing observers
     this.observers.forEach(observer => observer.disconnect());
     this.observers = [];
 
-    // Set up observers for production stages
     this.stageElements.forEach((element, index) => {
       const observer = new IntersectionObserver(
         (entries) => {
@@ -139,8 +145,70 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  private setupStatsAnimation(): void {
+    if (typeof IntersectionObserver === 'undefined') {
+      this.animateAllStats();
+      return;
+    }
+
+    const options = {
+      threshold: 0.3,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    this.statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const card = entry.target as HTMLElement;
+          this.animateStatCard(card);
+          this.statsObserver?.unobserve(card);
+        }
+      });
+    }, options);
+
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards.forEach(card => this.statsObserver?.observe(card));
+  }
+
+  private animateStatCard(card: HTMLElement): void {
+    const number = card.querySelector('.stat-number');
+    const label = card.querySelector('.stat-label');
+
+    if (number && label) {
+      number.classList.add('animate');
+      label.classList.add('animate');
+
+      const targetValue = parseInt(number.getAttribute('data-value') || '0');
+      this.animateNumber(number as HTMLElement, targetValue);
+    }
+  }
+
+  private animateNumber(element: HTMLElement, target: number): void {
+    const duration = 2000;
+    const steps = 60;
+    const stepValue = target / steps;
+    let current = 0;
+
+    const updateNumber = () => {
+      current += stepValue;
+      if (current > target) current = target;
+
+      element.textContent = Math.round(current).toString() + (target > 100 ? '+' : '');
+
+      if (current < target) {
+        requestAnimationFrame(updateNumber);
+      }
+    };
+
+    requestAnimationFrame(updateNumber);
+  }
+
+  private animateAllStats(): void {
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards.forEach(card => this.animateStatCard(card as HTMLElement));
+  }
+
   private setupFinalCtaObserver(): void {
-    // Fallback if IntersectionObserver is not defined
     if (typeof IntersectionObserver === 'undefined') {
       this.finalCtaVisible = true;
       return;
@@ -165,9 +233,35 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  private setupHeroObserver(): void {
+    if (typeof IntersectionObserver === 'undefined') {
+      this.heroContentVisible = true;
+      return;
+    }
+
+    if (this.heroContent) {
+      this.heroObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.heroContentVisible = true;
+              this.heroObserver?.disconnect();
+            }
+          });
+        },
+        {
+          threshold: 0.2,
+          rootMargin: '0px'
+        }
+      );
+      this.heroObserver.observe(this.heroContent.nativeElement);
+    }
+  }
+
   ngOnDestroy(): void {
-    // Clean up all observers
     this.observers.forEach(observer => observer.disconnect());
     this.finalCtaObserver?.disconnect();
+    this.heroObserver?.disconnect();
+    this.statsObserver?.disconnect();
   }
 }

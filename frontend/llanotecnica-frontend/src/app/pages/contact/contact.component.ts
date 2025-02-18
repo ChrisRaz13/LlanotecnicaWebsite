@@ -110,7 +110,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   companyDetails = {
     phone: '+507 6566-4942',
     whatsapp: 'https://wa.me/50765664942',
-    email: 'info@llanotecnica.com',
+    email: 'ventas@llanotecnica.com',
     address: 'Panama City, Panama',
     mapLocation: {
       lat: 8.9824,
@@ -119,7 +119,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   };
 
   socialLinks = {
-    facebook: 'https://facebook.com/llanotecnica',
+    facebook: 'https://www.facebook.com/llanotecnica2007/',
     instagram: 'https://instagram.com/llanotecnica'
   };
 
@@ -128,8 +128,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private ngZone: NgZone,
     private http: HttpClient,
-    private cd: ChangeDetectorRef, // <-- Added ChangeDetectorRef
-    private router: Router,        // <-- Added Router
+    private cd: ChangeDetectorRef,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.initializeForm();
@@ -142,12 +142,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.loadRecaptcha();
 
-      // Load countries first, then set up search
       this.loadCountries().then(() => {
         this.setupCountrySearch();
       });
 
-      // Reload countries on navigation end to fix any missing field issues
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           this.loadCountries();
@@ -217,7 +215,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.countries = response;
         this.filteredCountries = [...this.countries];
 
-        // Force Angular to detect changes so UI updates immediately
         this.cd.detectChanges();
       }
     } catch (error) {
@@ -298,7 +295,6 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   onCountryInputFocus() {
-    // Keep the dropdown open if there are results
     if (this.filteredCountries.length > 0) {
       this.showCountryDropdown = true;
     }
@@ -323,9 +319,21 @@ export class ContactComponent implements OnInit, OnDestroy {
       console.error('🚨 Google Maps API key is missing');
       return;
     }
-    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=Panama+City+Panama&zoom=15`
+
+    // Encode the address for use in the URL
+    const address = encodeURIComponent(
+      'Llanotecnica SA, Rio Chico, Calle Principal, Corregimiento de, Pacora, Provincia de Panamá, Panamá'
     );
+
+    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=${address}&zoom=16`
+    );
+
+    // Update company details to match new address
+    this.companyDetails = {
+      ...this.companyDetails,
+      address: 'Rio Chico, Calle Principal, Corregimiento de Pacora, Provincia de Panamá, Panamá'
+    };
   }
 
   private loadRecaptcha() {
@@ -374,7 +382,6 @@ export class ContactComponent implements OnInit, OnDestroy {
           recaptchaToken: token
         };
 
-        // 🟢 Debug: verify country/countryCode before sending
         console.log('DEBUG (Angular): Sending formData:', formData);
 
         const response = await this.http

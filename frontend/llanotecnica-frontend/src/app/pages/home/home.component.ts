@@ -289,11 +289,11 @@ import { Router, RouterModule } from '@angular/router';
     },
     {
       question: 'What warranty do you offer?',
-      answer: 'We provide a comprehensive 2-year warranty on all components, with extended warranty options available.'
+      answer: 'Our concrete mixers are covered by a 6-month warranty against any manufacturing defects. For more information, please contact technical support.'
     },
     {
       question: 'Are spare parts readily available?',
-      answer: 'Yes, we maintain a complete inventory of spare parts with next-day delivery available for most components.'
+      answer: 'Yes, we maintain a complete inventory of spare parts with delivery on request.'
     }
   ];
 

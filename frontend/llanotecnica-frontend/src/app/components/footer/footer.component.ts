@@ -15,8 +15,8 @@ export class FooterComponent {
   companyInfo = {
     phone: '+507 6566-4942',
     whatsapp: 'https://wa.me/50765664942',
-    email: 'info@llanotecnica.com',
-    address: 'Panama City, Panama',
+    email: 'ventas@llanotecnica.com',
+    address: 'Llanotecnica SA, Rio Chico, Calle Principal, Corregimiento de, Pacora, Provincia de Panamá, Panamá',
     socialLinks: {
       facebook: 'https://facebook.com/llanotecnica',
       instagram: 'https://instagram.com/llanotecnica'
@@ -24,22 +24,40 @@ export class FooterComponent {
   };
 
   quickLinks = [
-    { text: 'About Us', route: '/about' },
+    { text: 'Home', route: '/' },
+    { text: 'About Us', route: '/about-us' },
     { text: 'Products', route: '/products' },
-    { text: 'Services', route: '/services' },
     { text: 'Contact', route: '/contact' }
   ];
 
   products = [
-    { text: 'MT-370 Mixer', route: '/products/mt-370' },
-    { text: 'MT-480 Mixer', route: '/products/mt-480' },
-    { text: 'Engines', route: '/products/accessories' }
+    { text: 'MT-370 Mixer', route: '/products' },
+    { text: 'MT-480 Mixer', route: '/products' },
+    { text: 'Engines', route: '/products' }
   ];
 
   support = [
-    { text: 'Technical Support', route: '/support' },
-    { text: 'Maintenance Guide', route: '/maintenance' },
+    { text: 'Mixer Manual', route: null },
     { text: 'FAQ', route: '/faq' },
     { text: 'Download Catalog', route: '/catalog' }
   ];
+
+  showManualModal = false;
+
+  toggleManualModal() {
+    this.showManualModal = !this.showManualModal;
+  }
+
+  downloadManual(language: 'en' | 'es') {
+    const fileName = language === 'en' ? 'Manual-Eng.pdf' : 'Manual-Esp.pdf';
+    const link = document.createElement('a');
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', `assets/photos/${fileName}`);
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    this.showManualModal = false;
+  }
 }

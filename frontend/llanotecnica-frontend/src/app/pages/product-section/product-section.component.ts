@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
-/** Engine Compatibility interface */
 interface EngineCompatibility {
   model: string;
-  powerEngines: boolean[];     // e.g. [7HP, 9HP, 13HP]
-  hondaEngines: boolean[];     // e.g. [GX160, GX200, GX270, GX390]
-  electricEngines: boolean[];  // e.g. [2-5HP, 3-5HP]
+  powerEngines: boolean[];
+  hondaEngines: boolean[];
+  electricEngines: boolean[];
 }
 
-/** Product Specifications interface */
 interface ProductSpecs {
   unitSpecs: {
     managementSystem: string;
@@ -29,14 +28,12 @@ interface ProductSpecs {
   };
 }
 
-/** Engine Details interface */
 interface EngineDetails {
   type: string;
   power: string[];
   features: string[];
 }
 
-/** Comparison Spec interface */
 interface ComparisonSpec {
   label: string;
   key: string;
@@ -45,13 +42,11 @@ interface ComparisonSpec {
   highlight?: 'MT-370' | 'MT-480' | null;
 }
 
-/** Engine Category interface */
 interface EngineCategory {
   title: string;
   options: EngineOption[];
 }
 
-/** Engine Option interface */
 interface EngineOption {
   name: string;
   power: string;
@@ -64,15 +59,13 @@ interface EngineOption {
 @Component({
   selector: 'app-product-section',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './product-section.component.html',
   styleUrls: ['./product-section.component.css']
 })
 export class ProductSectionComponent {
-  // Active tab for comparison section
   activeTab: 'specs' | 'engines' = 'specs';
 
-  /** Product specs data */
   productSpecs: { [key: string]: ProductSpecs } = {
     'MT-370': {
       unitSpecs: {
@@ -112,7 +105,6 @@ export class ProductSectionComponent {
     }
   };
 
-  /** Engine categories data */
   engineCategories: EngineCategory[] = [
     {
       title: '4Power Gasoline Engines',
@@ -224,7 +216,8 @@ export class ProductSectionComponent {
     }
   ];
 
-  /** Get drum specifications for comparison */
+  constructor(private router: Router) {}
+
   getDrumSpecs(): ComparisonSpec[] {
     return [
       {
@@ -251,7 +244,6 @@ export class ProductSectionComponent {
     ];
   }
 
-  /** Get unit specifications for comparison */
   getUnitSpecs(): ComparisonSpec[] {
     return [
       {
@@ -276,34 +268,25 @@ export class ProductSectionComponent {
     ];
   }
 
-  /** Set active comparison tab */
   setActiveTab(tab: 'specs' | 'engines'): void {
     this.activeTab = tab;
   }
 
-  /** Request quote for specific model */
   requestQuote(model: string): void {
-    console.log(`Requesting quote for ${model}`);
-    // Implement quote request logic
+    this.router.navigate(['/contact']);
   }
 
-  /** Contact sales team */
-  contactSales(): void {
-    console.log('Contacting sales team');
-    // Implement sales contact logic
-  }
+  contactSales(): void {}
 
-  /** Download product manual */
   downloadManual(model: string, language: 'en' | 'es'): void {
-    const fileName = `${model.toLowerCase()}_manual_${language}.pdf`;
+    const fileName = language === 'en' ? 'Manual-Eng.pdf' : 'Manual-Esp.pdf';
     this.triggerDownload(fileName);
   }
 
-  /** Trigger file download */
   private triggerDownload(fileName: string): void {
     const link = document.createElement('a');
     link.setAttribute('target', '_blank');
-    link.setAttribute('href', `/assets/documents/${fileName}`);
+    link.setAttribute('href', `assets/photos/${fileName}`);
     link.setAttribute('download', fileName);
     document.body.appendChild(link);
     link.click();

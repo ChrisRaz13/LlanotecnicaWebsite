@@ -1,29 +1,44 @@
 <main class="about-container">
   <!-- Hero Section -->
   <section class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <h1>A Team Committed to Engineering Excellence</h1>
-      <p>Pioneering concrete mixing technology since 2002</p>
-    </div>
-  </section>
+    <!-- Background Elements -->
+    <div class="hero-bg"></div>
 
-  <!-- Stats Section -->
-  <section class="stats">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-number">20+</div>
-        <span>Years Experience</span>
+    <!-- Main Container -->
+    <div class="hero-container">
+      <!-- Left Content Area -->
+      <div class="hero-content-left">
+        <span class="hero-eyebrow">Engineering Excellence</span>
+        <h1 class="hero-title">Redefining Concrete Technology</h1>
+        <p class="hero-subtitle">
+          Pioneering advanced mixing solutions since 2002, combining precision engineering
+          with sustainable practices to transform the construction industry.
+        </p>
       </div>
-      <div class="stat-item">
-        <div class="stat-number">500+</div>
-        <span>Projects Completed</span>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">30+</div>
-        <span>Countries Served</span>
+
+      <!-- Right Stats Area -->
+      <div class="hero-content-right">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" data-value="20">0</div>
+            <div class="stat-label">Years of Innovation</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-value="500">0</div>
+            <div class="stat-label">Projects Delivered</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-value="30">0</div>
+            <div class="stat-label">Countries Served</div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- Decorative Accents -->
+    <div class="hero-accent accent-dots"></div>
+    <div class="hero-accent accent-line"></div>
+    <div class="hero-accent accent-circle"></div>
   </section>
 
   <!-- Mission Section -->
@@ -94,32 +109,32 @@
     </div>
   </section>
 
-<!-- Final CTA Section -->
-<section class="final-cta-section">
-  <div class="final-cta-container" #finalCtaElement [class.visible]="finalCtaVisible">
-    <div class="final-cta-content">
-      <h2 class="final-cta-title">Excellence in Every Detail</h2>
-      <p class="final-cta-text">
-        The culmination of our craftsmanship and expertise - creating reliable, efficient concrete
-        mixing solutions that help build a stronger tomorrow.
-      </p>
-      <div class="final-cta-buttons">
-        <a routerLink="/contact" class="cta-button primary-cta">Contact Us</a>
+  <!-- Final CTA Section -->
+  <section class="final-cta-section">
+    <div class="final-cta-container" #finalCtaElement [class.visible]="finalCtaVisible">
+      <div class="final-cta-content">
+        <h2 class="final-cta-title">Excellence in Every Detail</h2>
+        <p class="final-cta-text">
+          The culmination of our craftsmanship and expertise - creating reliable, efficient concrete
+          mixing solutions that help build a stronger tomorrow.
+        </p>
+        <div class="final-cta-buttons">
+          <a routerLink="/contact" class="cta-button primary-cta">Contact Us</a>
+        </div>
+      </div>
+      <div class="final-video-container">
+        <video
+          #videoElement
+          autoplay
+          loop
+          playsinline
+          class="final-video"
+          aria-hidden="true"
+          [attr.aria-label]="'Background video showing concrete mixer'"
+        >
+          <source src="assets/videos/finishedproduct.mp4" type="video/mp4">
+        </video>
       </div>
     </div>
-    <div class="final-video-container">
-      <video
-  #videoElement
-  autoplay
-  loop
-  playsinline
-  class="final-video"
-  aria-hidden="true"
-  [attr.aria-label]="'Background video showing concrete mixer'"
->
-  <source src="assets/videos/finishedproduct.mp4" type="video/mp4">
-</video>
-
-    </div>
-  </div>
-</section>
+  </section>
+</main>

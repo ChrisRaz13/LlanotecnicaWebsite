@@ -1,9 +1,7 @@
 <footer class="site-footer">
-  <!-- Main Footer -->
   <div class="footer-main">
     <div class="footer-container">
       <div class="footer-content">
-        <!-- Company Info -->
         <div class="footer-section company-info">
           <div class="footer-brand">
             <div class="footer-logo-container">
@@ -30,7 +28,6 @@
           </div>
         </div>
 
-        <!-- Quick Links -->
         <div class="footer-section quick-links">
           <h3>Quick Links</h3>
           <ul>
@@ -40,7 +37,6 @@
           </ul>
         </div>
 
-        <!-- Products -->
         <div class="footer-section products">
           <h3>Our Products</h3>
           <ul>
@@ -50,18 +46,22 @@
           </ul>
         </div>
 
-        <!-- Support -->
         <div class="footer-section support">
           <h3>Support</h3>
           <ul>
             <li *ngFor="let item of support">
-              <a [routerLink]="item.route">{{ item.text }}</a>
+              <ng-container *ngIf="item.route; else manualLink">
+                <a [routerLink]="item.route">{{ item.text }}</a>
+              </ng-container>
+              <ng-template #manualLink>
+                <!-- Remove href, just use click -->
+                <a (click)="toggleManualModal()">{{ item.text }}</a>
+              </ng-template>
             </li>
           </ul>
         </div>
       </div>
 
-      <!-- Social Links -->
       <div class="footer-social">
         <div class="social-links">
           <a [href]="companyInfo.socialLinks.facebook" target="_blank" rel="noopener noreferrer" class="social-icon">
@@ -75,7 +75,6 @@
     </div>
   </div>
 
-  <!-- Footer Bottom -->
   <div class="footer-bottom">
     <div class="footer-container">
       <div class="footer-bottom-content">
@@ -89,7 +88,16 @@
     </div>
   </div>
 
-  <!-- Decorative elements -->
   <div class="decorative-element right"></div>
   <div class="decorative-element left"></div>
+
+  <!-- Modal Overlay -->
+  <div class="manual-modal" *ngIf="showManualModal">
+    <div class="modal-content">
+      <h2>Select Manual Language</h2>
+      <button (click)="downloadManual('en')">English</button>
+      <button (click)="downloadManual('es')">Español</button>
+      <button (click)="toggleManualModal()">Cancel</button>
+    </div>
+  </div>
 </footer>
