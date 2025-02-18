@@ -113,7 +113,6 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // Removed this.initializeForm(); because it's not defined
     if (isPlatformBrowser(this.platformId)) {
       this['initializeMap']();
     }
