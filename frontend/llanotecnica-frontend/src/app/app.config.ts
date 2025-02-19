@@ -9,6 +9,7 @@ import { provideHttpClient, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { RECAPTCHA_SETTINGS, RecaptchaSettings, RecaptchaModule } from "ng-recaptcha";
+import { IMAGE_CONFIG } from '@angular/common';
 
 import { routes } from './app.routes';
 import { environment } from '../environments/environment.prod';
@@ -29,6 +30,14 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimations(),
     provideHttpClient(),
+    {
+      provide: IMAGE_CONFIG,
+      useValue: {
+        disableImageSizeWarning: true,
+        disableImageLazyLoadWarning: true,
+        breakpoints: [768, 1024, 1440]
+      }
+    },
     importProvidersFrom(
       RecaptchaModule,
       TranslateModule.forRoot({
