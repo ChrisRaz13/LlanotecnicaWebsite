@@ -29,6 +29,12 @@ interface ProductSpecs {
     openingDiameter: string;
     depth: string;
   };
+  dimensions: {
+    length: string;
+    width: string;
+    height: string;
+    weight: string;
+  };
 }
 
 interface ProductImage {
@@ -83,6 +89,12 @@ interface EngineSpecification {
   };
 }
 
+interface ManualDialogData {
+  productModel: string;
+}
+
+type EngineFilterType = 'all' | 'gas' | 'diesel' | 'electric';
+
 @Component({
   selector: 'app-product-section',
   standalone: true,
@@ -95,6 +107,7 @@ export class ProductSectionComponent implements AfterViewInit {
   activeTab = signal<'specs' | 'engines'>('specs');
   selectedEngine = signal<EngineSpecification | null>(null);
   showEngineDialog = signal<boolean>(false);
+  activeEngineFilter = signal<EngineFilterType>('all');
 
   readonly productSpecs = signal<{ [key: string]: ProductSpecs }>({
     'MT-370': {
@@ -113,6 +126,12 @@ export class ProductSectionComponent implements AfterViewInit {
         capacity: '370L (13 CU.FT / 1 BAG)',
         openingDiameter: '18 IN (450MM)',
         depth: '32 IN (800MM)'
+      },
+      dimensions: {
+        length: '83 IN (2100MM)',
+        width: '47 IN (1190MM)',
+        height: '58 IN (1460MM)',
+        weight: '276 KG (608 LB)'
       }
     },
     'MT-480': {
@@ -131,6 +150,12 @@ export class ProductSectionComponent implements AfterViewInit {
         capacity: '420L (15 CU.FT / 2 BAGS)',
         openingDiameter: '19 IN (460MM)',
         depth: '41 IN (1020MM)'
+      },
+      dimensions: {
+        length: '83 IN (2100MM)',
+        width: '47 IN (1190MM)',
+        height: '65 IN (1640MM)',
+        weight: '290 KG (639 LB)'
       }
     }
   });
@@ -159,6 +184,7 @@ export class ProductSectionComponent implements AfterViewInit {
         ]
       }
     },
+
     'GX270H2': {
       type: 'honda',
       specs: {
@@ -315,6 +341,48 @@ export class ProductSectionComponent implements AfterViewInit {
           'Heavy-duty industrial performance'
         ]
       }
+    },
+    'electric-2hp': {
+      type: 'electric',
+      specs: {
+        bore_stroke: 'N/A',
+        displacement: 'N/A',
+        compression_ratio: 'N/A',
+        max_power: '2.0 HP @ 1725 rpm',
+        max_torque: '8.3 Nm continuous',
+        start_model: 'Electric switch',
+        ignition_system: 'Electric motor',
+        oil_capacity: 'N/A',
+        dimensions: '320 x 210 x 210 mm',
+        dry_weight: '15 kg',
+        additional_features: [
+          'Single phase operation',
+          'Thermal protection',
+          'IP54 protection rating',
+          'Maintenance-free design'
+        ]
+      }
+    },
+    'electric-5hp': {
+      type: 'electric',
+      specs: {
+        bore_stroke: 'N/A',
+        displacement: 'N/A',
+        compression_ratio: 'N/A',
+        max_power: '5.0 HP @ 1725 rpm',
+        max_torque: '20.5 Nm continuous',
+        start_model: 'Electric switch with soft start',
+        ignition_system: 'Electric motor',
+        oil_capacity: 'N/A',
+        dimensions: '380 x 240 x 240 mm',
+        dry_weight: '28 kg',
+        additional_features: [
+          'Three phase operation',
+          'Enhanced thermal protection',
+          'IP55 protection rating',
+          'Industrial grade efficiency'
+        ]
+      }
     }
   });
 
@@ -431,9 +499,11 @@ export class ProductSectionComponent implements AfterViewInit {
 
   @ViewChild('imageContainer') imageContainer!: ElementRef;
   @ViewChild('engineDialog') engineDialog!: TemplateRef<any>;
+  @ViewChild('manualDialog') manualDialog!: TemplateRef<any>;
 
   readonly drumSpecs = computed(() => this.getDrumSpecs());
   readonly unitSpecs = computed(() => this.getUnitSpecs());
+  readonly filteredEngineCount = computed(() => this.getFilteredEngineCount());
 
   readonly productImages = signal<ProductImage[]>([
     {
@@ -446,9 +516,32 @@ export class ProductSectionComponent implements AfterViewInit {
     }
   ]);
 
+  readonly productFeatures = signal<{ [key: string]: string[] }>({
+    'MT-370': [
+      'Drum with 360° rotation for flexible loading and unloading',
+      'Optimized drum blade vanes for best mixing performance',
+      'Tubular T-reinforced chassis for maximum strength',
+      'V-belt transmission to minimize vibration',
+      'Cast iron-toothed parts for long service life',
+      'Pedal control for easy position changes by a single operator',
+      'All cast parts are easily replaceable'
+    ],
+    'MT-480': [
+      'Drum with 360° rotation for flexible loading and unloading',
+      'Optimized drum blade vanes for best mixing performance',
+      'Tubular T-reinforced chassis for maximum strength',
+      'V-belt transmission to minimize vibration',
+      'Cast iron-toothed parts for long service life',
+      'Pedal control for easy position changes by a single operator',
+      'All cast parts are easily replaceable',
+      'Larger capacity ideal for high-volume projects'
+    ]
+  });
+
   trackByFn: TrackByFunction<ProductImage> = (index, product) => product.model;
   trackByEngine: TrackByFunction<EngineOption> = (index, engine) => engine.name;
   trackByCategory: TrackByFunction<EngineCategory> = (index, category) => category.title;
+  trackByFeature: TrackByFunction<string> = (index, feature) => index;
 
   constructor(
     private router: Router,
@@ -459,6 +552,7 @@ export class ProductSectionComponent implements AfterViewInit {
     // Check if window is defined (to avoid errors during SSR)
     if (typeof window !== 'undefined') {
       this.setupLazyLoading();
+      this.setupSpecsTabs();
     }
   }
 
@@ -483,6 +577,27 @@ export class ProductSectionComponent implements AfterViewInit {
       const images = this.imageContainer?.nativeElement.querySelectorAll('img[data-src]');
       images?.forEach((img: Element) => observer.observe(img));
     }
+  }
+
+  private setupSpecsTabs(): void {
+    const tabButtons = document.querySelectorAll('.specs-tab');
+    tabButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const tabId = target.getAttribute('data-tab');
+
+        // Deactivate all tabs
+        document.querySelectorAll('.specs-tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.specs-content').forEach(content => content.classList.remove('active'));
+
+        // Activate clicked tab
+        target.classList.add('active');
+        if (tabId) {
+          const content = document.getElementById(tabId);
+          if (content) content.classList.add('active');
+        }
+      });
+    });
   }
 
   getDrumSpecs(): ComparisonSpec[] {
@@ -537,8 +652,105 @@ export class ProductSectionComponent implements AfterViewInit {
     ];
   }
 
+  getDimensionSpecs(): ComparisonSpec[] {
+    const specs = this.productSpecs();
+    return [
+      {
+        label: 'Length',
+        key: 'length',
+        mt370Value: specs['MT-370'].dimensions.length,
+        mt480Value: specs['MT-480'].dimensions.length
+      },
+      {
+        label: 'Width',
+        key: 'width',
+        mt370Value: specs['MT-370'].dimensions.width,
+        mt480Value: specs['MT-480'].dimensions.width
+      },
+      {
+        label: 'Height',
+        key: 'height',
+        mt370Value: specs['MT-370'].dimensions.height,
+        mt480Value: specs['MT-480'].dimensions.height,
+        highlight: 'MT-480'
+      },
+      {
+        label: 'Weight',
+        key: 'weight',
+        mt370Value: specs['MT-370'].dimensions.weight,
+        mt480Value: specs['MT-480'].dimensions.weight,
+        highlight: 'MT-480'
+      }
+    ];
+  }
+
   setActiveTab(tab: 'specs' | 'engines'): void {
     this.activeTab.set(tab);
+  }
+
+  // New method for filter functionality
+  setEngineFilter(filter: EngineFilterType): void {
+    this.activeEngineFilter.set(filter);
+  }
+
+  // Count engines displayed based on filter
+  getFilteredEngineCount(): number {
+    const currentFilter = this.activeEngineFilter();
+    if (currentFilter === 'all') {
+      return Object.keys(this.engineSpecs()).length;
+    }
+
+    return Object.values(this.engineSpecs())
+      .filter(engine => {
+        if (currentFilter === 'gas') {
+          return engine.type === 'gas' || engine.type === 'honda';
+        }
+        return engine.type === currentFilter;
+      }).length;
+  }
+
+  // Helper for the dialog to show engine model
+  getEngineModel(engine: EngineSpecification): string {
+    if (engine.type === 'honda') {
+      // Extract the model number from the key
+      const power = engine.specs.max_power.split(' ')[0];
+      return `GX ${power} HP Engine`;
+    } else if (engine.type === 'gas') {
+      return `${engine.specs.max_power.split(' ')[0]} HP Gasoline Engine`;
+    } else if (engine.type === 'diesel') {
+      return `${engine.specs.max_power.split(' ')[0]} HP Diesel Engine`;
+    } else {
+      return `${engine.specs.max_power.split(' ')[0]} HP Electric Motor`;
+    }
+  }
+
+  // Check engine compatibility with models
+  isCompatibleWithMT370(engine: EngineSpecification): boolean {
+    const power = parseFloat(engine.specs.max_power.split(' ')[0]);
+
+    if (engine.type === 'honda' || engine.type === 'gas') {
+      return power <= 9.0;
+    } else if (engine.type === 'diesel') {
+      return power === 7.0;
+    } else if (engine.type === 'electric') {
+      return power <= 3.0;
+    }
+
+    return false;
+  }
+
+  isCompatibleWithMT480(engine: EngineSpecification): boolean {
+    const power = parseFloat(engine.specs.max_power.split(' ')[0]);
+
+    if (engine.type === 'honda' || engine.type === 'gas') {
+      return power >= 13.0;
+    } else if (engine.type === 'diesel') {
+      return power >= 9.0;
+    } else if (engine.type === 'electric') {
+      return power >= 5.0;
+    }
+
+    return false;
   }
 
   openEngineSpecs(engineInput: EngineOption | string): void {
@@ -575,14 +787,25 @@ export class ProductSectionComponent implements AfterViewInit {
     });
   }
 
+  openManualDialog(model: string): void {
+    this.dialog.open(this.manualDialog, {
+      data: { productModel: model },
+      width: '350px',
+      panelClass: 'manual-dialog-panel'
+    });
+  }
+
   downloadManual(model: string, language: 'en' | 'es'): void {
     const fileName = language === 'en' ? 'Manual-Eng.pdf' : 'Manual-Esp.pdf';
     const link = document.createElement('a');
-    link.href = `assets/manuals/${model.toLowerCase()}/${fileName}`;
+    link.href = `assets/photos/${fileName}`;
     link.download = `${model}-${fileName}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    // Close the dialog
+    this.dialog.closeAll();
   }
 
   getEngineTypeIcon(type: string): string {
@@ -629,13 +852,22 @@ export class ProductSectionComponent implements AfterViewInit {
         break;
       case 'electric':
         // Electric engines follow power rating
-        const hp = parseInt(engine.power);
+        const powerRange = engine.power.split('-')[0];
+        const hp = parseInt(powerRange);
         return `electric-${hp}hp`;
     }
     return '';
   }
 
-  // Optional: Add helper method to get quick specs for showcase
+  getRecommendedEngine(model: string): string {
+    if (model === 'MT-370') {
+      return 'Honda GX270 (9HP) or 4Power Gasoline (7HP)';
+    } else {
+      return 'Honda GX390 (13HP) or 4Power Diesel (9HP)';
+    }
+  }
+
+  // Helper method to get quick specs for showcase
   getQuickSpecs(engineId: string): { displacement?: string; torque?: string; weight: string } {
     const specs = this.engineSpecs();
     const engine = specs[engineId];
@@ -646,18 +878,6 @@ export class ProductSectionComponent implements AfterViewInit {
       torque: engine.specs.max_torque,
       weight: engine.specs.dry_weight
     };
-  }
-
-  getCompatibleEngines(model: string): EngineOption[] {
-    return this.engineCategories()
-      .flatMap(category => category.options)
-      .filter(engine =>
-        model === 'MT-370' ? engine.mt370Compatible : engine.mt480Compatible
-      );
-  }
-
-  formatPowerOutput(power: string): string {
-    return power.includes('HP') ? power : `${power} HP`;
   }
 
   handleKeyboardEvent(event: KeyboardEvent): void {

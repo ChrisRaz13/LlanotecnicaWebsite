@@ -115,41 +115,40 @@
     </div>
   </section>
 
-<!-- Compare Models Section -->
-<section class="comparison-section" aria-labelledby="comparison-heading">
-  <div class="container">
-    <div class="comparison-header">
-      <h2 id="comparison-heading">Compare Models</h2>
-      <p class="comparison-subtitle">
-        Explore the key differences between our professional mixer series.
-      </p>
-      <!-- Tabs -->
-      <div class="comparison-tabs" role="tablist">
-        <button type="button"
-                role="tab"
-                [attr.aria-selected]="activeTab() === 'specs'"
-                [class.active]="activeTab() === 'specs'"
-                (click)="setActiveTab('specs')"
-                [attr.aria-controls]="'specs-panel'">
-          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M4 4h16v16H4z M4 12h16 M12 4v16"/>
-          </svg>
-          Specifications
-        </button>
-        <button type="button"
-                role="tab"
-                [attr.aria-selected]="activeTab() === 'engines'"
-                [class.active]="activeTab() === 'engines'"
-                (click)="setActiveTab('engines')"
-                [attr.aria-controls]="'engines-panel'">
-          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          </svg>
-          Engine Options
-        </button>
+  <!-- Compare Models Section -->
+  <section class="comparison-section" aria-labelledby="comparison-heading">
+    <div class="container">
+      <div class="comparison-header">
+        <h2 id="comparison-heading">Compare Models</h2>
+        <p class="comparison-subtitle">
+          Explore the key differences between our professional mixer series.
+        </p>
+        <!-- Tabs -->
+        <div class="comparison-tabs" role="tablist">
+          <button type="button"
+                  role="tab"
+                  [attr.aria-selected]="activeTab() === 'specs'"
+                  [class.active]="activeTab() === 'specs'"
+                  (click)="setActiveTab('specs')"
+                  [attr.aria-controls]="'specs-panel'">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M4 4h16v16H4z M4 12h16 M12 4v16"/>
+            </svg>
+            Specifications
+          </button>
+          <button type="button"
+                  role="tab"
+                  [attr.aria-selected]="activeTab() === 'engines'"
+                  [class.active]="activeTab() === 'engines'"
+                  (click)="setActiveTab('engines')"
+                  [attr.aria-controls]="'engines-panel'">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            </svg>
+            Engine Options
+          </button>
+        </div>
       </div>
-    </div>
-
 
       <!-- Specs Tab -->
       <div *ngIf="activeTab() === 'specs'"
@@ -250,268 +249,671 @@
     </div>
   </section>
 
-  <!-- Engine Details Showcase -->
-  <section class="engine-options-showcase">
+  <!-- Engine Details Showcase - Redesigned with Filtering -->
+  <section class="engine-showcase" aria-labelledby="engine-showcase-title">
     <div class="container">
-      <h2 class="showcase-title">Available Engine Options</h2>
-      <p class="showcase-description">Browse our range of high-performance engines designed for optimal concrete mixing performance.</p>
+      <header class="engine-showcase-header">
+        <h2 id="engine-showcase-title" class="engine-showcase-title">Available Engine Options</h2>
+        <p class="engine-showcase-description">Our concrete mixers are powered by reliable, high-performance engines tailored for demanding construction environments.</p>
 
-      <div class="engine-categories">
-        <!-- Honda Gasoline Engines -->
-        <div class="engine-category">
-          <h3>Honda Gasoline Engines</h3>
-          <div class="engine-grid">
-            <button class="engine-card" (click)="openEngineSpecs('GX160H2')">
-              <div class="engine-icon honda"></div>
-              <div class="engine-info">
-                <h4>Honda GX160H2</h4>
-                <span class="power-rating">5.5 HP  3600 rpm</span>
-                <ul class="quick-specs">
-                  <li>{{ getQuickSpecs('GX160H2').displacement }}</li>
-                  <li>{{ getQuickSpecs('GX160H2').torque }}</li>
-                  <li>{{ getQuickSpecs('GX160H2').weight }}</li>
-                </ul>
-              </div>
-              <span class="view-specs">View Full Specifications</span>
-            </button>
+        <!-- Engine Type Filters -->
+        <div class="engine-filter-tabs" role="tablist">
+          <button
+            type="button"
+            role="tab"
+            class="engine-filter-tab"
+            [class.active]="activeEngineFilter() === 'all'"
+            (click)="setEngineFilter('all')"
+            [attr.aria-selected]="activeEngineFilter() === 'all'"
+            aria-controls="engine-panel-all">
+            <span class="filter-icon all"></span>
+            All Engines
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="engine-filter-tab"
+            [class.active]="activeEngineFilter() === 'gas'"
+            (click)="setEngineFilter('gas')"
+            [attr.aria-selected]="activeEngineFilter() === 'gas'"
+            aria-controls="engine-panel-gas">
+            <span class="filter-icon gas"></span>
+            Gasoline
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="engine-filter-tab"
+            [class.active]="activeEngineFilter() === 'diesel'"
+            (click)="setEngineFilter('diesel')"
+            [attr.aria-selected]="activeEngineFilter() === 'diesel'"
+            aria-controls="engine-panel-diesel">
+            <span class="filter-icon diesel"></span>
+            Diesel
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="engine-filter-tab"
+            [class.active]="activeEngineFilter() === 'electric'"
+            (click)="setEngineFilter('electric')"
+            [attr.aria-selected]="activeEngineFilter() === 'electric'"
+            aria-controls="engine-panel-electric">
+            <span class="filter-icon electric"></span>
+            Electric
+          </button>
+        </div>
+      </header>
 
-            <button class="engine-card" (click)="openEngineSpecs('GX270H2')">
-              <div class="engine-icon honda"></div>
-              <div class="engine-info">
-                <h4>Honda GX270H2</h4>
-                <span class="power-rating">9.0 HP - 3600 rpm</span>
-                <ul class="quick-specs">
-                  <li>{{ getQuickSpecs('GX270H2').displacement }}</li>
-                  <li>{{ getQuickSpecs('GX270H2').torque }}</li>
-                  <li>{{ getQuickSpecs('GX270H2').weight }}</li>
-                </ul>
-              </div>
-              <span class="view-specs">View Full Specifications</span>
-            </button>
-
-            <button class="engine-card" (click)="openEngineSpecs('GX390H2')">
-              <div class="engine-icon honda"></div>
-              <div class="engine-info">
-                <h4>Honda GX390H2</h4>
-                <span class="power-rating">13.0 HP - 3600 rpm</span>
-                <ul class="quick-specs">
-                  <li>{{ getQuickSpecs('GX390H2').displacement }}</li>
-                  <li>{{ getQuickSpecs('GX390H2').torque }}</li>
-                  <li>{{ getQuickSpecs('GX390H2').weight }}</li>
-                </ul>
-              </div>
-              <span class="view-specs">View Full Specifications</span>
-            </button>
-          </div>
+      <!-- Gasoline Engines (Honda + 4Power combined) -->
+      <div
+        *ngIf="activeEngineFilter() === 'all' || activeEngineFilter() === 'gas'"
+        id="engine-panel-gas"
+        role="tabpanel"
+        class="engine-showcase-category"
+        [attr.aria-labelledby]="'engine-filter-gas'">
+        <div class="category-header">
+          <div class="category-icon gas"></div>
+          <h3>Gasoline Engines</h3>
+          <span class="category-badge">Premium Performance</span>
         </div>
 
-        <!-- 4Power Gasoline Engines -->
-        <div class="engine-category">
-          <h3>4Power Gasoline Engines</h3>
-          <div class="engine-grid">
-            <button class="engine-card" (click)="openEngineSpecs('170F')">
-              <div class="engine-icon gas"></div>
-              <div class="engine-info">
-                <h4>4Power 170F</h4>
-                <span class="power-rating">7.0 HP - 3600 rpm</span>
-                <ul class="quick-specs">
-                  <li>{{ getQuickSpecs('170F').displacement }}</li>
-                  <li>{{ getQuickSpecs('170F').torque }}</li>
-                  <li>{{ getQuickSpecs('170F').weight }}</li>
-                </ul>
-              </div>
-              <span class="view-specs">View Full Specifications</span>
-            </button>
+        <div class="engine-showcase-grid">
+          <!-- Honda GX160H2 -->
+          <div class="engine-showcase-card" (click)="openEngineSpecs('GX160H2')">
 
-            <button class="engine-card" (click)="openEngineSpecs('177F')">
-              <div class="engine-icon gas"></div>
-              <div class="engine-info">
-                <h4>4Power 177F</h4>
-                <span class="power-rating">9.0 HP - 3600 rpm</span>
-                <ul class="quick-specs">
-                  <li>{{ getQuickSpecs('177F').displacement }}</li>
-                  <li>{{ getQuickSpecs('177F').torque }}</li>
-                  <li>{{ getQuickSpecs('177F').weight }}</li>
-                </ul>
-              </div>
-              <span class="view-specs">View Full Specifications</span>
-            </button>
 
-            <button class="engine-card" (click)="openEngineSpecs('188F')">
-              <div class="engine-icon gas"></div>
-              <div class="engine-info">
-                <h4>4Power 188F</h4>
-                <span class="power-rating">13.0 HP - 3600 rpm</span>
-                <ul class="quick-specs">
-                  <li>{{ getQuickSpecs('188F').displacement }}</li>
-                  <li>{{ getQuickSpecs('188F').torque }}</li>
-                  <li>{{ getQuickSpecs('188F').weight }}</li>
-                </ul>
+            <div class="engine-card-header">
+              <div class="engine-brand-model">
+                <div class="engine-icon gas"></div>
+                <div class="engine-model-info">
+                  <h4>Honda GX160H2</h4>
+                  <span class="engine-model-number">Gasoline Engine</span>
+                </div>
               </div>
-              <span class="view-specs">View Full Specifications</span>
-            </button>
+              <span class="power-badge">5.5 HP</span>
+            </div>
+
+            <div class="engine-card-content">
+              <div class="specs-grid">
+                <div class="spec-group">
+                  <span class="spec-label">Displacement</span>
+                  <span class="spec-value">{{ getQuickSpecs('GX160H2').displacement }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Torque</span>
+                  <span class="spec-value">{{ getQuickSpecs('GX160H2').torque }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Weight</span>
+                  <span class="spec-value">{{ getQuickSpecs('GX160H2').weight }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-value">MT-370</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="engine-card-footer">
+              <a class="view-specs-btn">View Full Specifications</a>
+            </div>
+          </div>
+
+          <!-- Honda GX270H2 -->
+          <div class="engine-showcase-card" (click)="openEngineSpecs('GX270H2')">
+
+            <div class="engine-card-header">
+              <div class="engine-brand-model">
+                <div class="engine-icon gas"></div>
+                <div class="engine-model-info">
+                  <h4>Honda GX270H2</h4>
+                  <span class="engine-model-number">Gasoline Engine</span>
+                </div>
+              </div>
+              <span class="power-badge">9.0 HP</span>
+            </div>
+
+            <div class="engine-card-content">
+              <div class="specs-grid">
+                <div class="spec-group">
+                  <span class="spec-label">Displacement</span>
+                  <span class="spec-value">{{ getQuickSpecs('GX270H2').displacement }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Torque</span>
+                  <span class="spec-value">{{ getQuickSpecs('GX270H2').torque }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Weight</span>
+                  <span class="spec-value">{{ getQuickSpecs('GX270H2').weight }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-value">MT-370</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="engine-card-footer">
+              <a class="view-specs-btn">View Full Specifications</a>
+            </div>
+          </div>
+
+          <!-- Honda GX390H2 -->
+          <div class="engine-showcase-card" (click)="openEngineSpecs('GX390H2')">
+
+            <div class="engine-card-header">
+              <div class="engine-brand-model">
+                <div class="engine-icon gas"></div>
+                <div class="engine-model-info">
+                  <h4>Honda GX390H2</h4>
+                  <span class="engine-model-number">Gasoline Engine</span>
+                </div>
+              </div>
+              <span class="power-badge">13.0 HP</span>
+            </div>
+
+            <div class="engine-card-content">
+              <div class="specs-grid">
+                <div class="spec-group">
+                  <span class="spec-label">Displacement</span>
+                  <span class="spec-value">{{ getQuickSpecs('GX390H2').displacement }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Torque</span>
+                  <span class="spec-value">{{ getQuickSpecs('GX390H2').torque }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Weight</span>
+                  <span class="spec-value">{{ getQuickSpecs('GX390H2').weight }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-value">MT-480</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="engine-card-footer">
+              <a class="view-specs-btn">View Full Specifications</a>
+            </div>
+          </div>
+
+          <!-- 4Power 170F -->
+          <div class="engine-showcase-card" (click)="openEngineSpecs('170F')">
+
+            <div class="engine-card-header">
+              <div class="engine-brand-model">
+                <div class="engine-icon gas"></div>
+                <div class="engine-model-info">
+                  <h4>4Power 170F</h4>
+                  <span class="engine-model-number">Gasoline Engine</span>
+                </div>
+              </div>
+              <span class="power-badge">7.0 HP</span>
+            </div>
+
+            <div class="engine-card-content">
+              <div class="specs-grid">
+                <div class="spec-group">
+                  <span class="spec-label">Displacement</span>
+                  <span class="spec-value">{{ getQuickSpecs('170F').displacement }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Torque</span>
+                  <span class="spec-value">{{ getQuickSpecs('170F').torque }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Weight</span>
+                  <span class="spec-value">{{ getQuickSpecs('170F').weight }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-value">MT-370</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="engine-card-footer">
+              <a class="view-specs-btn">View Full Specifications</a>
+            </div>
+          </div>
+
+          <!-- 4Power 177F -->
+          <div class="engine-showcase-card" (click)="openEngineSpecs('177F')">
+
+            <div class="engine-card-header">
+              <div class="engine-brand-model">
+                <div class="engine-icon gas"></div>
+                <div class="engine-model-info">
+                  <h4>4Power 177F</h4>
+                  <span class="engine-model-number">Gasoline Engine</span>
+                </div>
+              </div>
+              <span class="power-badge">9.0 HP</span>
+            </div>
+
+            <div class="engine-card-content">
+              <div class="specs-grid">
+                <div class="spec-group">
+                  <span class="spec-label">Displacement</span>
+                  <span class="spec-value">{{ getQuickSpecs('177F').displacement }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Torque</span>
+                  <span class="spec-value">{{ getQuickSpecs('177F').torque }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Weight</span>
+                  <span class="spec-value">{{ getQuickSpecs('177F').weight }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-value">MT-370</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="engine-card-footer">
+              <a class="view-specs-btn">View Full Specifications</a>
+            </div>
+          </div>
+
+          <!-- 4Power 188F -->
+          <div class="engine-showcase-card" (click)="openEngineSpecs('188F')">
+
+            <div class="engine-card-header">
+              <div class="engine-brand-model">
+                <div class="engine-icon gas"></div>
+                <div class="engine-model-info">
+                  <h4>4Power 188F</h4>
+                  <span class="engine-model-number">Gasoline Engine</span>
+                </div>
+              </div>
+              <span class="power-badge">13.0 HP</span>
+            </div>
+
+            <div class="engine-card-content">
+              <div class="specs-grid">
+                <div class="spec-group">
+                  <span class="spec-label">Displacement</span>
+                  <span class="spec-value">{{ getQuickSpecs('188F').displacement }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Torque</span>
+                  <span class="spec-value">{{ getQuickSpecs('188F').torque }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Weight</span>
+                  <span class="spec-value">{{ getQuickSpecs('188F').weight }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-value">MT-480</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="engine-card-footer">
+              <a class="view-specs-btn">View Full Specifications</a>
+            </div>
           </div>
         </div>
+      </div>
 
-        <!-- Diesel Engines -->
-        <div class="engine-category">
-          <h3>4Power Diesel Engines</h3>
-          <div class="engine-grid">
-            <button class="engine-card" (click)="openEngineSpecs('4Power-D7')">
-              <div class="engine-icon diesel"></div>
-              <div class="engine-info">
-                <h4>4Power C178F</h4>
-                <span class="power-rating">7.0 HP - 3600 rpm</span>
-                <ul class="quick-specs">
-                  <li>{{ getQuickSpecs('4Power-D7').displacement }}</li>
-                  <li>{{ getQuickSpecs('4Power-D7').torque }}</li>
-                  <li>{{ getQuickSpecs('4Power-D7').weight }}</li>
-                </ul>
-              </div>
-              <span class="view-specs">View Full Specifications</span>
-            </button>
-
-            <button class="engine-card" (click)="openEngineSpecs('4Power-D9')">
-              <div class="engine-icon diesel"></div>
-              <div class="engine-info">
-                <h4>4Power C186F</h4>
-                <span class="power-rating">9.0 HP - 3600 rpm</span>
-                <ul class="quick-specs">
-                  <li>{{ getQuickSpecs('4Power-D9').displacement }}</li>
-                  <li>{{ getQuickSpecs('4Power-D9').torque }}</li>
-                  <li>{{ getQuickSpecs('4Power-D9').weight }}</li>
-                </ul>
-              </div>
-              <span class="view-specs">View Full Specifications</span>
-            </button>
-          </div>
+      <!-- Diesel Engines -->
+      <div
+        *ngIf="activeEngineFilter() === 'all' || activeEngineFilter() === 'diesel'"
+        id="engine-panel-diesel"
+        role="tabpanel"
+        class="engine-showcase-category"
+        [attr.aria-labelledby]="'engine-filter-diesel'">
+        <div class="category-header">
+          <div class="category-icon diesel"></div>
+          <h3>Diesel Engines</h3>
+          <span class="category-badge">Fuel Efficient</span>
         </div>
 
-        <!-- Electric Motors -->
-        <div class="engine-category">
-          <h3>4Power Electric Motors</h3>
-          <div class="engine-grid">
-            <button class="engine-card" (click)="openEngineSpecs('electric-2hp')">
-              <div class="engine-icon electric"></div>
-              <div class="engine-info">
-                <h4>4Power Electric</h4>
-                <span class="power-rating">2 HP - 1725 rpm</span>
-                <ul class="quick-specs">
-                  <li>1725 RPM Speed</li>
-                  <li>Single Phase</li>
-                  <li>Low Maintenance</li>
-                </ul>
-              </div>
-              <span class="view-specs">View Full Specifications</span>
-            </button>
+        <div class="engine-showcase-grid">
+          <!-- 4Power C178F -->
+          <div class="engine-showcase-card" (click)="openEngineSpecs('4Power-D7')">
 
-            <button class="engine-card" (click)="openEngineSpecs('electric-5hp')">
-              <div class="engine-icon electric"></div>
-              <div class="engine-info">
-                <h4>4Power Electric Plus</h4>
-                <span class="power-rating">5 HP - 1725 rpm</span>
-                <ul class="quick-specs">
-                  <li>1725 RPM Speed</li>
-                  <li>Three Phase</li>
-                  <li>Industrial Grade</li>
-                </ul>
+            <div class="engine-card-header">
+              <div class="engine-brand-model">
+                <div class="engine-icon diesel"></div>
+                <div class="engine-model-info">
+                  <h4>4Power C178F</h4>
+                  <span class="engine-model-number">Diesel Engine</span>
+                </div>
               </div>
-              <span class="view-specs">View Full Specifications</span>
-            </button>
+              <span class="power-badge">7.0 HP</span>
+            </div>
+
+            <div class="engine-card-content">
+              <div class="specs-grid">
+                <div class="spec-group">
+                  <span class="spec-label">Displacement</span>
+                  <span class="spec-value">{{ getQuickSpecs('4Power-D7').displacement }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Torque</span>
+                  <span class="spec-value">{{ getQuickSpecs('4Power-D7').torque }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Weight</span>
+                  <span class="spec-value">{{ getQuickSpecs('4Power-D7').weight }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-value">MT-370</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="engine-card-footer">
+              <a class="view-specs-btn">View Full Specifications</a>
+            </div>
+          </div>
+
+          <!-- 4Power C186F -->
+          <div class="engine-showcase-card" (click)="openEngineSpecs('4Power-D9')">
+
+            <div class="engine-card-header">
+              <div class="engine-brand-model">
+                <div class="engine-icon diesel"></div>
+                <div class="engine-model-info">
+                  <h4>4Power C186F</h4>
+                  <span class="engine-model-number">Diesel Engine</span>
+                </div>
+              </div>
+              <span class="power-badge">9.0 HP</span>
+            </div>
+
+            <div class="engine-card-content">
+              <div class="specs-grid">
+                <div class="spec-group">
+                  <span class="spec-label">Displacement</span>
+                  <span class="spec-value">{{ getQuickSpecs('4Power-D9').displacement }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Torque</span>
+                  <span class="spec-value">{{ getQuickSpecs('4Power-D9').torque }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Weight</span>
+                  <span class="spec-value">{{ getQuickSpecs('4Power-D9').weight }}</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-value">MT-480</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="engine-card-footer">
+              <a class="view-specs-btn">View Full Specifications</a>
+            </div>
           </div>
         </div>
+      </div>
+
+      <!-- Electric Motors -->
+      <div
+        *ngIf="activeEngineFilter() === 'all' || activeEngineFilter() === 'electric'"
+        id="engine-panel-electric"
+        role="tabpanel"
+        class="engine-showcase-category"
+        [attr.aria-labelledby]="'engine-filter-electric'">
+        <div class="category-header">
+          <div class="category-icon electric"></div>
+          <h3>Electric Motors</h3>
+          <span class="category-badge">Zero Emissions</span>
+        </div>
+
+        <div class="engine-showcase-grid">
+          <!-- 4Power Electric 2HP -->
+          <div class="engine-showcase-card" (click)="openEngineSpecs('electric-2hp')">
+
+            <div class="engine-card-header">
+              <div class="engine-brand-model">
+                <div class="engine-icon electric"></div>
+                <div class="engine-model-info">
+                  <h4>4Power Electric</h4>
+                  <span class="engine-model-number">Electric Motor</span>
+                </div>
+              </div>
+              <span class="power-badge">2 HP</span>
+            </div>
+
+            <div class="engine-card-content">
+              <div class="specs-grid">
+                <div class="spec-group">
+                  <span class="spec-label">Speed</span>
+                  <span class="spec-value">1725 RPM</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Power Type</span>
+                  <span class="spec-value">Single Phase</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Maintenance</span>
+                  <span class="spec-value">Low</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-value">MT-370</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="engine-card-footer">
+              <a class="view-specs-btn">View Full Specifications</a>
+            </div>
+          </div>
+
+          <!-- 4Power Electric 5HP -->
+          <div class="engine-showcase-card" (click)="openEngineSpecs('electric-5hp')">
+
+            <div class="engine-card-header">
+              <div class="engine-brand-model">
+                <div class="engine-icon electric"></div>
+                <div class="engine-model-info">
+                  <h4>4Power Electric Plus</h4>
+                  <span class="engine-model-number">Electric Motor</span>
+                </div>
+              </div>
+              <span class="power-badge">5 HP</span>
+            </div>
+
+            <div class="engine-card-content">
+              <div class="specs-grid">
+                <div class="spec-group">
+                  <span class="spec-label">Speed</span>
+                  <span class="spec-value">1725 RPM</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Power Type</span>
+                  <span class="spec-value">Three Phase</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Grade</span>
+                  <span class="spec-value">Industrial</span>
+                </div>
+
+                <div class="spec-group">
+                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-value">MT-480</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="engine-card-footer">
+              <a class="view-specs-btn">View Full Specifications</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Results Message (shown when filtering reveals no results) -->
+      <div *ngIf="filteredEngineCount() === 0" class="engine-no-results">
+        <div class="no-results-icon"></div>
+        <h3>No engines match your selection</h3>
+        <p>Please try selecting a different filter option.</p>
+        <button
+          type="button"
+          class="reset-filter-btn"
+          (click)="setEngineFilter('all')">
+          Show All Engines
+        </button>
       </div>
     </div>
   </section>
-</div>
 
-<!-- Engine Details Dialog -->
-<div class="dialog-overlay"
-     *ngIf="showEngineDialog() && selectedEngine() as engine"
-     role="dialog"
-     [attr.aria-label]="engine.type.toUpperCase() + ' Engine Details'"
-     (click)="closeEngineSpecs()"
-     (keydown)="handleKeyboardEvent($event)">
-  <div class="dialog-container" (click)="$event.stopPropagation()">
-    <header class="dialog-header">
-      <h2>{{ engine.type.toUpperCase() }} Engine Details</h2>
-      <button class="close-btn"
-              (click)="closeEngineSpecs()"
-              aria-label="Close dialog">&times;</button>
-    </header>
-    <div class="dialog-content">
-      <div class="spec-group">
-        <div class="group-header">Engine Specifications</div>
-        <!-- Base Specs -->
-        <div class="spec-row">
-          <span class="spec-label">Bore x Stroke</span>
-          <span class="spec-value">{{ engine.specs.bore_stroke }}</span>
+  <!-- Updated Engine Details Dialog -->
+  <div class="engine-dialog-overlay"
+       *ngIf="showEngineDialog() && selectedEngine() as engine"
+       role="dialog"
+       [attr.aria-label]="engine.type.toUpperCase() + ' Engine Specifications'"
+       (click)="closeEngineSpecs()"
+       (keydown)="handleKeyboardEvent($event)">
+    <div class="engine-dialog-container" (click)="$event.stopPropagation()">
+      <header class="engine-dialog-header">
+        <div class="dialog-title-wrapper">
+          <div class="dialog-engine-icon" [ngClass]="engine.type.toLowerCase()"></div>
+          <h2>{{ engine.type === 'honda' ? 'Honda' : '4Power' }} {{ getEngineModel(engine) }}</h2>
         </div>
-        <div class="spec-row">
-          <span class="spec-label">Displacement</span>
-          <span class="spec-value">{{ engine.specs.displacement }}</span>
+        <button class="dialog-close-btn"
+                (click)="closeEngineSpecs()"
+                aria-label="Close dialog">&times;</button>
+      </header>
+
+      <div class="engine-dialog-content">
+        <div class="dialog-overview">
+          <div class="dialog-power">
+            <span class="dialog-spec-label">Max Power</span>
+            <span class="dialog-spec-value highlight">{{ engine.specs.max_power }}</span>
+          </div>
+          <div class="dialog-torque">
+            <span class="dialog-spec-label">Max Torque</span>
+            <span class="dialog-spec-value highlight">{{ engine.specs.max_torque }}</span>
+          </div>
         </div>
-        <div class="spec-row">
-          <span class="spec-label">Compression Ratio</span>
-          <span class="spec-value">{{ engine.specs.compression_ratio }}</span>
-        </div>
-        <!-- Performance Specs -->
-        <div class="spec-row">
-          <span class="spec-label">Max Power</span>
-          <span class="spec-value">{{ engine.specs.max_power }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Max Torque</span>
-          <span class="spec-value">{{ engine.specs.max_torque }}</span>
-        </div>
-        <!-- Operational Specs -->
-        <div class="spec-row">
-          <span class="spec-label">Start Model</span>
-          <span class="spec-value">{{ engine.specs.start_model }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Ignition System</span>
-          <span class="spec-value">{{ engine.specs.ignition_system }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Fuel Consumption</span>
-          <span class="spec-value">{{ engine.specs.fuel_consumption || 'N/A' }}</span>
-        </div>
-        <!-- Capacity Specs -->
-        <div class="spec-row">
-          <span class="spec-label">Oil Capacity</span>
-          <span class="spec-value">{{ engine.specs.oil_capacity }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Fuel Tank Capacity</span>
-          <span class="spec-value">{{ engine.specs.fuel_tank || 'N/A' }}</span>
-        </div>
-        <!-- Physical Specs -->
-        <div class="spec-row">
-          <span class="spec-label">Dimensions</span>
-          <span class="spec-value">{{ engine.specs.dimensions }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Dry Weight</span>
-          <span class="spec-value">{{ engine.specs.dry_weight }}</span>
-        </div>
-        <!-- Additional Features -->
-        <div class="spec-row" *ngIf="engine.specs.additional_features && engine.specs.additional_features.length">
-          <span class="spec-label">Additional Features</span>
-          <ul class="features-list" role="list">
-            <li *ngFor="let feature of engine.specs.additional_features; trackBy: trackByFn" role="listitem">
-              {{ feature }}
-            </li>
-          </ul>
+
+        <div class="engine-dialog-sections">
+          <!-- Engine Dimensions Section -->
+          <div class="dialog-section">
+            <h3 class="dialog-section-title">Engine Dimensions</h3>
+            <div class="dialog-section-content">
+              <div class="dialog-spec-row">
+                <span class="dialog-spec-label">Bore x Stroke</span>
+                <span class="dialog-spec-value">{{ engine.specs.bore_stroke }}</span>
+              </div>
+              <div class="dialog-spec-row">
+                <span class="dialog-spec-label">Displacement</span>
+                <span class="dialog-spec-value">{{ engine.specs.displacement }}</span>
+              </div>
+              <div class="dialog-spec-row">
+                <span class="dialog-spec-label">Compression Ratio</span>
+                <span class="dialog-spec-value">{{ engine.specs.compression_ratio }}</span>
+              </div>
+              <div class="dialog-spec-row">
+                <span class="dialog-spec-label">Dimensions</span>
+                <span class="dialog-spec-value">{{ engine.specs.dimensions }}</span>
+              </div>
+              <div class="dialog-spec-row">
+                <span class="dialog-spec-label">Dry Weight</span>
+                <span class="dialog-spec-value">{{ engine.specs.dry_weight }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Operational Specs Section -->
+          <div class="dialog-section">
+            <h3 class="dialog-section-title">Operational Specifications</h3>
+            <div class="dialog-section-content">
+              <div class="dialog-spec-row">
+                <span class="dialog-spec-label">Start Model</span>
+                <span class="dialog-spec-value">{{ engine.specs.start_model }}</span>
+              </div>
+              <div class="dialog-spec-row">
+                <span class="dialog-spec-label">Ignition System</span>
+                <span class="dialog-spec-value">{{ engine.specs.ignition_system }}</span>
+              </div>
+              <div class="dialog-spec-row">
+                <span class="dialog-spec-label">Fuel Consumption</span>
+                <span class="dialog-spec-value">{{ engine.specs.fuel_consumption || 'N/A' }}</span>
+              </div>
+              <div class="dialog-spec-row">
+                <span class="dialog-spec-label">Oil Capacity</span>
+                <span class="dialog-spec-value">{{ engine.specs.oil_capacity }}</span>
+              </div>
+              <div class="dialog-spec-row">
+                <span class="dialog-spec-label">Fuel Tank Capacity</span>
+                <span class="dialog-spec-value">{{ engine.specs.fuel_tank || 'N/A' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Features Section -->
+          <div class="dialog-section" *ngIf="engine.specs.additional_features && engine.specs.additional_features.length">
+            <h3 class="dialog-section-title">Key Features</h3>
+            <div class="dialog-section-content">
+              <ul class="dialog-features-list" role="list">
+                <li *ngFor="let feature of engine.specs.additional_features" role="listitem">
+                  {{ feature }}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
+
+      <footer class="engine-dialog-footer">
+        <div class="dialog-compatibility">
+          <span class="dialog-compatibility-label">Compatible with:</span>
+          <span class="dialog-compatibility-model" *ngIf="isCompatibleWithMT370(engine)">
+            MT-370
+          </span>
+          <span class="dialog-compatibility-model" *ngIf="isCompatibleWithMT480(engine)">
+            MT-480
+          </span>
+        </div>
+        <button class="dialog-close-button"
+                (click)="closeEngineSpecs()"
+                aria-label="Close dialog">
+          Close
+        </button>
+      </footer>
     </div>
-    <footer class="dialog-footer">
-      <button class="btn-close"
-              (click)="closeEngineSpecs()"
-              aria-label="Close dialog">
-        Close
-      </button>
-    </footer>
   </div>
 </div>

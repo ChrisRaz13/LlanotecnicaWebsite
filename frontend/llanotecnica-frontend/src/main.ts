@@ -12,6 +12,7 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 
 // Firebase Config
 import { firebaseConfig } from './app/firebase.config';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 bootstrapApplication(AppComponent, {
   ...appConfig,
@@ -22,6 +23,6 @@ bootstrapApplication(AppComponent, {
     provideFirestore(() => getFirestore()), // Firestore Database
     provideAuth(() => getAuth()), // Firebase Authentication
     provideStorage(() => getStorage()), // Firebase Storage
-    ...(appConfig.providers || []),
+    ...(appConfig.providers || []), provideAnimationsAsync(),
   ],
 }).catch((err) => console.error(err));
