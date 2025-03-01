@@ -1,7 +1,7 @@
 import { Component, signal, computed, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, TemplateRef, TrackByFunction } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogConfig } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
 // Interfaces
@@ -108,6 +108,8 @@ export class ProductSectionComponent implements AfterViewInit {
   selectedEngine = signal<EngineSpecification | null>(null);
   showEngineDialog = signal<boolean>(false);
   activeEngineFilter = signal<EngineFilterType>('all');
+  // Add this property to store the current product model
+  currentProductModel: string = '';
 
   readonly productSpecs = signal<{ [key: string]: ProductSpecs }>({
     'MT-370': {
@@ -543,17 +545,57 @@ export class ProductSectionComponent implements AfterViewInit {
   trackByCategory: TrackByFunction<EngineCategory> = (index, category) => category.title;
   trackByFeature: TrackByFunction<string> = (index, feature) => index;
 
+  // Add this property to track active tabs for each product
+  activeProductTabs: { [key: string]: string } = {};
+
   constructor(
     private router: Router,
-    private dialog: MatDialog
+    // Make dialog public so it can be accessed from the template
+    public dialog: MatDialog
   ) {}
 
   ngAfterViewInit() {
     // Check if window is defined (to avoid errors during SSR)
     if (typeof window !== 'undefined') {
       this.setupLazyLoading();
-      this.setupSpecsTabs();
+
+      // Initialize active tabs for each product
+      this.productImages().forEach(product => {
+        this.activeProductTabs[product.model] = 'basic-specs-' + product.model;
+      });
+
+      // We'll replace the setupSpecsTabs() with our own logic
     }
+  }
+
+  // Method to switch tabs
+  switchTab(event: Event, tabId: string, productModel: string): void {
+    event.preventDefault();
+
+    // Get all tab buttons and content for this specific product
+    const productTabsContainer = (event.target as HTMLElement).closest('.specs-tabs');
+    if (!productTabsContainer) return;
+
+    const tabButtons = productTabsContainer.querySelectorAll('.specs-tab');
+    const productContent = productTabsContainer.closest('.product-content');
+
+    if (!productContent) return;
+
+    const tabContents = productContent.querySelectorAll('.specs-content');
+
+    // Deactivate all tabs within this product card only
+    tabButtons.forEach(tab => tab.classList.remove('active'));
+    tabContents.forEach(content => content.classList.remove('active'));
+
+    // Activate clicked tab and content
+    (event.target as HTMLElement).classList.add('active');
+    const content = document.getElementById(tabId);
+    if (content) {
+      content.classList.add('active');
+    }
+
+    // Update active tab for this product
+    this.activeProductTabs[productModel] = tabId;
   }
 
   private setupLazyLoading(): void {
@@ -787,19 +829,32 @@ export class ProductSectionComponent implements AfterViewInit {
     });
   }
 
+  // Updated openManualDialog method
   openManualDialog(model: string): void {
-    this.dialog.open(this.manualDialog, {
-      data: { productModel: model },
-      width: '350px',
-      panelClass: 'manual-dialog-panel'
-    });
+    const dialogConfig = new MatDialogConfig();
+
+    // Store the model in a component property so you can access it in downloadManual
+    this.currentProductModel = model;
+
+    dialogConfig.width = '350px';
+    dialogConfig.panelClass = 'manual-dialog-panel';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.backdropClass = 'manual-dialog-backdrop';
+    dialogConfig.disableClose = false;
+
+    // Remove the position settings that were causing the issue
+
+    // Open the dialog
+    this.dialog.open(this.manualDialog, dialogConfig);
   }
 
+  // Updated downloadManual method to use the currentProductModel
   downloadManual(model: string, language: 'en' | 'es'): void {
     const fileName = language === 'en' ? 'Manual-Eng.pdf' : 'Manual-Esp.pdf';
     const link = document.createElement('a');
     link.href = `assets/photos/${fileName}`;
-    link.download = `${model}-${fileName}`;
+    // Use the currentProductModel instead of the parameter
+    link.download = `${this.currentProductModel}-${fileName}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -838,20 +893,16 @@ export class ProductSectionComponent implements AfterViewInit {
   private mapEngineOptionToSpecKey(engine: EngineOption): string {
     switch (engine.type.toLowerCase()) {
       case 'honda':
-        // Honda engines follow GX naming convention
         return `GX${engine.power.replace('HP', '').trim()}H2`;
       case 'diesel':
-        // Diesel engines follow 4Power-D naming convention
         return `4Power-D${engine.power.replace(' HP', '')}`;
       case 'gas':
-        // 4Power Gasoline engines follow numerical naming
         const power = parseInt(engine.power);
         if (power === 7) return '170F';
         if (power === 9) return '177F';
         if (power === 13) return '188F';
         break;
       case 'electric':
-        // Electric engines follow power rating
         const powerRange = engine.power.split('-')[0];
         const hp = parseInt(powerRange);
         return `electric-${hp}hp`;

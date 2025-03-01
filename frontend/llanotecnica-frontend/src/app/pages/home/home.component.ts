@@ -7,10 +7,12 @@ import {
   ViewChild,
   ViewChildren,
   ElementRef,
-  QueryList
- } from '@angular/core';
- import { CommonModule, isPlatformBrowser } from '@angular/common';
- import {
+  QueryList,
+  HostListener,
+  AfterViewInit
+} from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import {
   animate,
   query,
   stagger,
@@ -18,22 +20,26 @@ import {
   transition,
   trigger,
   state
- } from '@angular/animations';
- import { Meta, Title } from '@angular/platform-browser';
-import { Router, RouterModule } from '@angular/router';
+} from '@angular/animations';
+import { Meta, Title } from '@angular/platform-browser';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 
- type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
- type CategoryType = FeatureCategory | 'all';
+type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
+type CategoryType = FeatureCategory | 'all';
 
- interface Feature {
+interface Feature {
   title: string;
   description: string;
   icon: string;
   highlight: string;
   category: FeatureCategory;
- }
+  detailedDescription?: string;
+  techSpecs?: { label: string; value: string }[];
+  imageUrl?: string;
+  animations?: string[];
+}
 
- interface Product {
+interface Product {
   name: string;
   description: string;
   features: string[];
@@ -43,29 +49,38 @@ import { Router, RouterModule } from '@angular/router';
     weight: string;
   };
   image: string;
- }
+  shortDesc?: string;
+}
 
- interface FAQ {
+interface FAQ {
   question: string;
   answer: string;
   videoUrl?: string;
   posterImage?: string;
- }
+}
 
- interface Flag {
+interface Flag {
   country: string;
   code: string;
   region: 'northAmerica' | 'caribbean' | 'centralAmerica' | 'southAmerica';
- }
+}
 
- interface CompanyStat {
+interface CompanyStat {
   icon: string;
   value: string;
   label: string;
   detail: string;
- }
+}
 
- @Component({
+interface CustomerReview {
+  name: string;
+  company: string;
+  text: string;
+  rating: number;
+  avatar: string;
+}
+
+@Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, RouterModule],
@@ -92,6 +107,12 @@ import { Router, RouterModule } from '@angular/router';
             animate('0.5s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
           ])
         ], { optional: true })
+      ])
+    ]),
+    trigger('staggerFadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(10px)' }),
+        animate('0.4s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ]),
     trigger('scrollIndicator', [
@@ -147,6 +168,15 @@ import { Router, RouterModule } from '@angular/router';
         animate('0.3s cubic-bezier(0.21, 1.02, 0.73, 1)')
       ])
     ]),
+    trigger('productTransition', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.95)' }),
+        animate('0.5s cubic-bezier(0.34, 1.56, 0.64, 1)', style({ opacity: 1, transform: 'scale(1)' }))
+      ]),
+      transition(':leave', [
+        animate('0.3s cubic-bezier(0.21, 1.02, 0.73, 1)', style({ opacity: 0, transform: 'scale(0.95)' }))
+      ])
+    ]),
     trigger('featureHighlight', [
       state('inactive', style({
         opacity: '0.7',
@@ -169,10 +199,19 @@ import { Router, RouterModule } from '@angular/router';
           ])
         ], { optional: true })
       ])
+    ]),
+    trigger('featureDetailTransition', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.95)' }),
+        animate('0.5s cubic-bezier(0.34, 1.56, 0.64, 1)', style({ opacity: 1, transform: 'scale(1)' }))
+      ]),
+      transition(':leave', [
+        animate('0.3s cubic-bezier(0.21, 1.02, 0.73, 1)', style({ opacity: 0, transform: 'scale(0.95)' }))
+      ])
     ])
   ]
- })
- export class HomeComponent implements OnInit, OnDestroy {
+})
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly Math = Math;
   @ViewChild('demoVideo') demoVideo?: ElementRef<HTMLVideoElement>;
   @ViewChild('heroVideo') heroVideo?: ElementRef<HTMLVideoElement>;
@@ -184,6 +223,21 @@ import { Router, RouterModule } from '@angular/router';
   showScrollIndicator = true;
   currentHeroBackground = 0;
   private scrollInterval: any;
+
+  // Feature section variables
+  activeFeatureCategory: CategoryType = 'all';
+  activeFeatureIndex: number | null = null;
+
+  // Product section variables
+  selectedProductIndex = 0;
+  productZoomLevel = 1;
+  productRotation = 0;
+
+  // Review section variables
+  currentReviewIndex = 0;
+
+  // Modal state
+  isModalOpen = false;
 
   productCardStates: string[] = ['default', 'default'];
   buttonStates: string[] = ['void', 'void', 'void'];
@@ -218,11 +272,14 @@ import { Router, RouterModule } from '@angular/router';
   readonly mixers: Product[] = [
     {
       name: 'Concrete Mixer MT-370',
-      description: 'Compact mixer perfect for small to medium projects',
+      shortDesc: 'Compact Mixer',
+      description: 'Compact mixer perfect for small to medium projects, engineered for versatility and reliability in residential construction.',
       features: [
         'Ideal for residential construction',
         'Easy to transport and maneuver',
-        'Durable steel construction'
+        'Durable steel construction',
+        'Low maintenance requirements',
+        'Fuel-efficient operation'
       ],
       specs: {
         capacity: '370 Liters',
@@ -233,11 +290,14 @@ import { Router, RouterModule } from '@angular/router';
     },
     {
       name: 'Concrete Mixer MT-480',
-      description: 'Heavy-duty mixer engineered for large commercial projects',
+      shortDesc: 'Commercial Mixer',
+      description: 'Heavy-duty mixer engineered for large commercial projects, delivering maximum mixing efficiency and durability for demanding worksites.',
       features: [
         'Perfect for commercial construction',
         'Maximum mixing efficiency',
-        'Heavy-duty construction'
+        'Heavy-duty construction',
+        'Enhanced durability components',
+        'High-torque power system'
       ],
       specs: {
         capacity: '480 Liters',
@@ -248,27 +308,126 @@ import { Router, RouterModule } from '@angular/router';
     }
   ];
 
+  readonly customerReviews: CustomerReview[] = [
+    {
+      name: 'Michael Rodriguez',
+      company: 'Rodriguez Construction',
+      text: 'The MT-370 has transformed our residential projects. Efficient, reliable, and surprisingly easy to maintain. Worth every penny.',
+      rating: 5,
+      avatar: '/assets/photos/reviewer-1.jpg'
+    },
+    {
+      name: 'Sarah Williams',
+      company: 'Williams & Sons Contractors',
+      text: 'After trying multiple mixers, we settled on the MT-480 for our commercial projects. Its capacity and durability have significantly improved our workflow.',
+      rating: 5,
+      avatar: '/assets/photos/reviewer-2.jpg'
+    },
+    {
+      name: 'David Chen',
+      company: 'Pacific Builders Inc.',
+      text: 'The customer service is just as impressive as the mixers themselves. When we needed parts, they arrived within days. Highly recommend.',
+      rating: 5,
+      avatar: '/assets/photos/reviewer-3.jpg'
+    }
+  ];
+
   readonly features: Feature[] = [
     {
       title: 'Reinforced Drum Design',
       description: 'Heavy-duty steel construction with double-reinforced joints and wear-resistant coating.',
       icon: 'fa-solid fa-shield',
       highlight: '50% increased lifespan',
-      category: 'design'
+      category: 'design',
+      detailedDescription: 'Our proprietary drum construction features 6mm high-grade steel with reinforced mixing blades and specialized wear-resistant interior coating that significantly reduces material buildup and extends operational life.',
+      techSpecs: [
+        { label: 'Steel Grade', value: 'Industrial S355JR' },
+        { label: 'Wall Thickness', value: '6mm reinforced' },
+        { label: 'Coating', value: 'Polymer-enhanced abrasion resistant' },
+        { label: 'Joint Type', value: 'Double-welded reinforced' }
+      ],
+      imageUrl: '/assets/photos/feature-drum.jpg',
+      animations: ['rotation', 'highlight-blades']
     },
     {
       title: 'Protected Gear Mechanism',
       description: 'Sealed gearbox system with automatic lubrication and debris protection.',
       icon: 'fa-solid fa-gears',
       highlight: '10,000+ operation hours',
-      category: 'performance'
+      category: 'performance',
+      detailedDescription: 'Our precision-engineered gearbox incorporates hardened steel gears with specialized sealing technology to prevent contamination, while maintaining optimal lubrication in all operating conditions.',
+      techSpecs: [
+        { label: 'Gear Material', value: 'Hardened alloy steel' },
+        { label: 'Lubrication', value: 'Self-regulating system' },
+        { label: 'Seal Type', value: 'Triple-barrier protection' },
+        { label: 'Expected Lifespan', value: '10,000+ hours' }
+      ],
+      imageUrl: '/assets/photos/feature-gears.jpg',
+      animations: ['rotation', 'oil-flow']
     },
     {
       title: 'Enhanced Safety Features',
       description: 'Multiple emergency stops, protective guards, and safety interlocks for operator protection.',
       icon: 'fa-solid fa-shield-halved',
       highlight: 'Triple safety system',
-      category: 'safety'
+      category: 'safety',
+      detailedDescription: 'Our comprehensive safety system includes strategically placed emergency stops, automatic drum locking during maintenance, and operator presence detection to prevent accidental operation.',
+      techSpecs: [
+        { label: 'Emergency Stops', value: '3 positions' },
+        { label: 'Guard Rating', value: 'Impact resistant' },
+        { label: 'Interlock System', value: 'Redundant circuits' },
+        { label: 'Safety Compliance', value: 'ISO 12100, EN 12151' }
+      ],
+      imageUrl: '/assets/photos/feature-safety.jpg',
+      animations: ['highlight-emergency', 'show-guards']
+    },
+    {
+      title: 'Precision Mixing Control',
+      description: 'Advanced mixing control system that ensures consistent concrete quality through precise drum rotation.',
+      icon: 'fa-solid fa-sliders',
+      highlight: 'Uniform mixing results',
+      category: 'operation',
+      detailedDescription: 'Our proprietary mixing control technology automatically adjusts drum speed and angle based on load weight and material viscosity, ensuring optimal mixing efficiency and consistent quality output.',
+      techSpecs: [
+        { label: 'Speed Range', value: '0-25 RPM variable' },
+        { label: 'Angle Control', value: 'Automated hydraulic' },
+        { label: 'Response Time', value: '<0.5 seconds' },
+        { label: 'Control Type', value: 'Digital precision system' }
+      ],
+      imageUrl: '/assets/photos/feature-control.jpg',
+      animations: ['control-panel', 'angle-adjustment']
+    },
+    {
+      title: 'All-Terrain Mobility',
+      description: 'Specialized chassis design with heavy-duty tires and stabilizers for secure operation on uneven surfaces.',
+      icon: 'fa-solid fa-truck-monster',
+      highlight: '30° incline capability',
+      category: 'operation',
+      detailedDescription: 'The reinforced chassis features independent suspension with auto-leveling capability, allowing safe operation on construction sites with up to 30° inclines while maintaining mixing performance.',
+      techSpecs: [
+        { label: 'Tire Type', value: 'All-terrain industrial' },
+        { label: 'Suspension', value: 'Heavy-duty independent' },
+        { label: 'Stabilizers', value: 'Hydraulic auto-leveling' },
+        { label: 'Max Safe Incline', value: '30 degrees' }
+      ],
+      imageUrl: '/assets/photos/feature-mobility.jpg',
+      animations: ['terrain-adaptation', 'stabilizer-movement']
+    },
+    {
+      title: 'Eco-Performance Engine',
+      description: 'Fuel-efficient engine technology that reduces consumption while maintaining optimal power delivery.',
+      icon: 'fa-solid fa-leaf',
+      highlight: '25% fuel savings',
+      category: 'performance',
+      detailedDescription: 'Our advanced engine management system dynamically adjusts power output based on load requirements, significantly reducing fuel consumption while maintaining torque delivery when needed most.',
+      techSpecs: [
+        { label: 'Fuel Efficiency', value: '25% better than standard' },
+        { label: 'Emissions Rating', value: 'Tier 4 compliant' },
+        { label: 'Power Management', value: 'Dynamic load sensing' },
+        { label: 'Engine Type', value: 'Commercial-grade industrial' }
+      ],
+      imageUrl: '/assets/photos/feature-eco.jpg',
+      animations: ['fuel-flow', 'efficiency-graph']
     }
   ];
 
@@ -335,7 +494,8 @@ import { Router, RouterModule } from '@angular/router';
     @Inject(PLATFORM_ID) private platformId: Object,
     private meta: Meta,
     private title: Title,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -344,6 +504,24 @@ import { Router, RouterModule } from '@angular/router';
       this.setupScrollIndicator();
       this.setupSEO();
       this.initializeFlagCarousel();
+      this.initializeReviewSlider();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      // Check for fragment after view initialization
+      this.route.fragment.subscribe(fragment => {
+        if (fragment === 'comparison') {
+          // Wait for DOM to be fully rendered
+          setTimeout(() => {
+            const element = document.getElementById('comparison');
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 800);
+        }
+      });
     }
   }
 
@@ -351,6 +529,164 @@ import { Router, RouterModule } from '@angular/router';
     if (this.scrollInterval) {
       clearInterval(this.scrollInterval);
     }
+  }
+
+  // Feature section methods
+  filterFeaturesByCategory(category: CategoryType): void {
+    this.activeFeatureCategory = category;
+    this.activeFeatureIndex = null; // Reset active feature when changing categories
+  }
+
+  toggleFeatureDetail(index: number): void {
+    this.activeFeatureIndex = this.activeFeatureIndex === index ? null : index;
+  }
+
+  get filteredFeatures(): Feature[] {
+    return this.activeFeatureCategory === 'all'
+      ? this.features
+      : this.features.filter(feature => feature.category === this.activeFeatureCategory);
+  }
+
+  // Method for scrolling to comparison section
+  scrollToComparison(): void {
+    // Navigate to products page with a fragment identifier
+    this.router.navigate(['/products'], { fragment: 'comparison' });
+
+    this.trackEvent('comparison_clicked', {
+      location: 'products_section',
+      button_type: 'accent'
+    });
+  }
+
+  // Added for modal functionality with ESC key
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Escape' && this.isModalOpen) {
+      this.closeCatalogModal();
+    }
+  }
+
+  // Modal backdrop click handler
+  onModalBackdropClick(event: MouseEvent): void {
+    if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
+      this.closeCatalogModal();
+    }
+  }
+
+  // Modal open/close methods
+  openCatalogModal(): void {
+    this.isModalOpen = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeCatalogModal(): void {
+    this.isModalOpen = false;
+    document.body.style.overflow = 'auto';
+  }
+
+  // Added for product details navigation
+  viewProductDetails(product: Product): void {
+    this.router.navigate(['/products']);
+
+    this.trackEvent('view_product_details', {
+      product_name: product.name,
+      source: 'product_card'
+    });
+  }
+
+  // Helper method to create URL-friendly slugs
+  private getProductSlug(productName: string): string {
+    return productName
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-');
+  }
+
+  // Product selector methods
+  selectProduct(index: number): void {
+    this.selectedProductIndex = index;
+    this.productZoomLevel = 1;
+    this.productRotation = 0;
+
+    this.trackEvent('product_selected', {
+      product_name: this.mixers[index].name
+    });
+  }
+
+  // Product view control methods
+  rotateProduct(direction: 'left' | 'right'): void {
+    const rotationAmount = direction === 'left' ? -90 : 90;
+    this.productRotation = (this.productRotation + rotationAmount) % 360;
+
+    const productImageContainer = document.querySelector('.product-display.active');
+    if (productImageContainer) {
+      (productImageContainer as HTMLElement).style.transform = `rotateY(${this.productRotation}deg) scale(${this.productZoomLevel})`;
+    }
+  }
+
+  zoomProduct(action: 'in' | 'out'): void {
+    const zoomFactor = action === 'in' ? 0.1 : -0.1;
+    const newZoom = this.productZoomLevel + zoomFactor;
+
+    // Limit zoom range
+    if (newZoom >= 0.5 && newZoom <= 1.5) {
+      this.productZoomLevel = newZoom;
+
+      const productImageContainer = document.querySelector('.product-display.active');
+      if (productImageContainer) {
+        (productImageContainer as HTMLElement).style.transform = `rotateY(${this.productRotation}deg) scale(${this.productZoomLevel})`;
+      }
+    }
+  }
+
+  // Review slider methods
+  nextReview(): void {
+    this.currentReviewIndex = (this.currentReviewIndex + 1) % this.customerReviews.length;
+    this.updateReviewSlider();
+  }
+
+  prevReview(): void {
+    this.currentReviewIndex = (this.currentReviewIndex - 1 + this.customerReviews.length) % this.customerReviews.length;
+    this.updateReviewSlider();
+  }
+
+  goToReview(index: number): void {
+    this.currentReviewIndex = index;
+    this.updateReviewSlider();
+  }
+
+  private updateReviewSlider(): void {
+    const slider = document.querySelector('.reviews-slider');
+    if (slider) {
+      const reviewWidth = slider.querySelector('.review-card')?.clientWidth || 0;
+      const translateX = -this.currentReviewIndex * (reviewWidth + 20); // Adding gap
+
+      const track = slider.querySelector('.review-track') as HTMLElement;
+      if (track) {
+        track.style.transform = `translateX(${translateX}px)`;
+      }
+    }
+  }
+
+  private initializeReviewSlider(): void {
+    // Start automatic slideshow
+    setInterval(() => {
+      this.nextReview();
+    }, 7000);
+  }
+
+  // consultation method
+  requestConsultation(): void {
+    this.router.navigate(['/contact'], {
+      queryParams: {
+        type: 'consultation',
+        source: 'product_comparison'
+      }
+    });
+
+    this.trackEvent('consultation_request', {
+      source: 'comparison_section'
+    });
   }
 
   private initializeFlagCarousel(): void {
@@ -473,16 +809,64 @@ import { Router, RouterModule } from '@angular/router';
     this.requestQuote();
   }
 
-  private notImplementedAlert(): void {
-    console.warn('Feature not yet implemented');
-  }
-
+  // Updated to use modal
   downloadCatalog(): void {
-    this.notImplementedAlert();
+    this.openCatalogModal();
+
+    this.trackEvent('catalog_download_clicked', {
+      location: 'products_section',
+      button_type: 'secondary'
+    });
   }
 
   navigateToComparison(): void {
-    this.notImplementedAlert();
+    this.scrollToSection('comparison');
+
+    this.trackEvent('comparison_clicked', {
+      location: 'products_section',
+      button_type: 'accent'
+    });
+  }
+
+  trackFeatureView(feature: Feature): void {
+    this.trackEvent('feature_viewed', {
+      feature_name: feature.title,
+      feature_category: feature.category,
+      section: 'features_section'
+    });
+  }
+
+  // Feature interactions
+  playFeatureAnimation(featureIndex: number, animationType: string): void {
+    const feature = this.filteredFeatures[featureIndex];
+    if (!feature.animations?.includes(animationType)) return;
+
+    // Animation logic would be implemented here
+    // This is a placeholder for future animation implementations
+    console.log(`Playing ${animationType} animation for ${feature.title}`);
+
+    this.trackEvent('feature_animation_played', {
+      feature: feature.title,
+      animation: animationType
+    });
+  }
+
+  // Method to handle tab focusing in the feature section
+  onFeatureTabFocus(event: FocusEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.classList.contains('feature-tab')) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  }
+
+  // Method to check if a feature belongs to a specific category
+  featureBelongsToCategory(feature: Feature, category: CategoryType): boolean {
+    return category === 'all' || feature.category === category;
+  }
+
+  // Get the number of features in each category (for displaying counts in tabs)
+  getCategoryCount(category: FeatureCategory): number {
+    return this.features.filter(feature => feature.category === category).length;
   }
 
   trackStatBy(index: number, stat: CompanyStat): string {

@@ -113,146 +113,463 @@
     </div>
   </section>
 
-  <!-- Products Section -->
-  <section id="products" class="products-section">
-    <div class="products-background">
-      <div class="geometric-pattern"></div>
-      <div class="gradient-overlay"></div>
-    </div>
+<!-- Products Section -->
+<section id="products" class="products-section">
+  <div class="products-background">
+    <div class="geometric-pattern"></div>
+    <div class="gradient-overlay"></div>
+  </div>
 
-    <div class="section-container">
-      <header class="section-header" @fadeIn>
-        <h2>Our Mixer Range</h2>
-        <p>Choose the perfect mixer for your construction needs</p>
-      </header>
+  <div class="section-container">
+    <header class="section-header" @fadeIn>
+      <div class="header-accent"></div>
+      <h2>Our Professional Mixer Range</h2>
+      <p>Engineered excellence for every project size - choose the perfect mixer for your construction needs</p>
+    </header>
 
-      <div class="products-layout" @productFadeIn>
-        <div class="products-grid">
-          <!-- First Product Card -->
-          <div class="product-card" [@productCardHover]="'idle'">
-            <div class="product-image-wrapper">
-              <img [src]="mixers[0].image" [alt]="mixers[0].name" class="product-image">
-              <div class="image-overlay"></div>
-            </div>
-            <div class="product-content">
-              <h3>{{mixers[0].name}}</h3>
-              <p class="product-description">{{mixers[0].description}}</p>
-              <div class="specs-grid">
-                <div class="spec">
-                  <span class="label">Capacity</span>
-                  <span class="value">{{mixers[0].specs.capacity}}</span>
-                </div>
-                <div class="spec">
-                  <span class="label">Power</span>
-                  <span class="value">{{mixers[0].specs.enginePower}}</span>
-                </div>
-                <div class="spec">
-                  <span class="label">Weight</span>
-                  <span class="value">{{mixers[0].specs.weight}}</span>
-                </div>
+    <!-- Product Grid Layout -->
+    <div class="product-display-grid">
+      <!-- First Mixer -->
+      <div class="product-card">
+        <div class="product-image-container">
+          <img [src]="mixers[0].image" [alt]="mixers[0].name" class="product-image">
+        </div>
+        <div class="product-content">
+          <h3>{{mixers[0].name}}</h3>
+          <p class="product-tagline">The compact powerhouse for versatile projects</p>
+
+          <div class="product-specs">
+            <div class="spec-item">
+              <div class="spec-icon"><i class="fas fa-ruler-combined"></i></div>
+              <div class="spec-info">
+                <span class="spec-label">Capacity</span>
+                <span class="spec-value">{{mixers[0].specs.capacity}}</span>
               </div>
-              <ul class="feature-list">
-                <li *ngFor="let feature of mixers[0].features">
-                  <i class="fas fa-check"></i>
-                  {{feature}}
-                </li>
-              </ul>
             </div>
-          </div>
-
-          <!-- Centered CTA Section -->
-          <div class="products-cta" @ctaFadeIn>
-            <div class="cta-content">
-              <h3>Find Your Perfect Mixer</h3>
-              <p>Take the next step in choosing your ideal concrete mixer</p>
-
-              <div class="cta-buttons">
-                <button
-                  class="cta-button btn-primary"
-                  (click)="requestQuote()"
-                  aria-label="Request a quote">
-                  <i class="fas fa-paper-plane"></i>
-                  Request a Quote
-                </button>
-
-                <button
-                  class="cta-button btn-secondary"
-                  (click)="downloadCatalog()"
-                  aria-label="Download product catalog">
-                  <i class="fas fa-file-pdf"></i>
-                  Download Catalog
-                </button>
-
-                <button
-                  class="cta-button btn-accent"
-                  (click)="navigateToComparison()"
-                  aria-label="Compare mixer models">
-                  <i class="fas fa-scale-balanced"></i>
-                  Compare Models
-                </button>
+            <div class="spec-item">
+              <div class="spec-icon"><i class="fas fa-bolt"></i></div>
+              <div class="spec-info">
+                <span class="spec-label">Power</span>
+                <span class="spec-value">{{mixers[0].specs.enginePower}}</span>
+              </div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-icon"><i class="fas fa-weight-hanging"></i></div>
+              <div class="spec-info">
+                <span class="spec-label">Weight</span>
+                <span class="spec-value">{{mixers[0].specs.weight}}</span>
               </div>
             </div>
           </div>
 
-          <!-- Second Product Card -->
-          <div class="product-card" [@productCardHover]="'idle'">
-            <div class="product-image-wrapper">
-              <img [src]="mixers[1].image" [alt]="mixers[1].name" class="product-image">
-              <div class="image-overlay"></div>
-            </div>
-            <div class="product-content">
-              <h3>{{mixers[1].name}}</h3>
-              <p class="product-description">{{mixers[1].description}}</p>
-              <div class="specs-grid">
-                <div class="spec">
-                  <span class="label">Capacity</span>
-                  <span class="value">{{mixers[1].specs.capacity}}</span>
-                </div>
-                <div class="spec">
-                  <span class="label">Power</span>
-                  <span class="value">{{mixers[1].specs.enginePower}}</span>
-                </div>
-                <div class="spec">
-                  <span class="label">Weight</span>
-                  <span class="value">{{mixers[1].specs.weight}}</span>
-                </div>
+          <div class="product-description">
+            <p>{{mixers[0].description}}</p>
+          </div>
+
+          <div class="product-features">
+            <h4>Key Features</h4>
+            <ul class="feature-list">
+              <li *ngFor="let feature of mixers[0].features">
+                <i class="fas fa-check-circle"></i>
+                <span>{{feature}}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="product-actions">
+            <button class="btn-primary" [routerLink]="['/products']">
+              View Details
+              <i class="fas fa-arrow-right"></i>
+            </button>
+            <button class="btn-secondary" (click)="requestQuote()">
+              Request Quote
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second Mixer -->
+      <div class="product-card">
+        <div class="product-image-container">
+          <img [src]="mixers[1].image" [alt]="mixers[1].name" class="product-image">
+        </div>
+        <div class="product-content">
+          <h3>{{mixers[1].name}}</h3>
+          <p class="product-tagline">Maximum power for demanding projects</p>
+
+          <div class="product-specs">
+            <div class="spec-item">
+              <div class="spec-icon"><i class="fas fa-ruler-combined"></i></div>
+              <div class="spec-info">
+                <span class="spec-label">Capacity</span>
+                <span class="spec-value">{{mixers[1].specs.capacity}}</span>
               </div>
-              <ul class="feature-list">
-                <li *ngFor="let feature of mixers[1].features">
-                  <i class="fas fa-check"></i>
-                  {{feature}}
-                </li>
-              </ul>
             </div>
+            <div class="spec-item">
+              <div class="spec-icon"><i class="fas fa-bolt"></i></div>
+              <div class="spec-info">
+                <span class="spec-label">Power</span>
+                <span class="spec-value">{{mixers[1].specs.enginePower}}</span>
+              </div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-icon"><i class="fas fa-weight-hanging"></i></div>
+              <div class="spec-info">
+                <span class="spec-label">Weight</span>
+                <span class="spec-value">{{mixers[1].specs.weight}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-description">
+            <p>{{mixers[1].description}}</p>
+          </div>
+
+          <div class="product-features">
+            <h4>Key Features</h4>
+            <ul class="feature-list">
+              <li *ngFor="let feature of mixers[1].features">
+                <i class="fas fa-check-circle"></i>
+                <span>{{feature}}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="product-actions">
+            <button class="btn-primary" [routerLink]="['/products']">
+              View Details
+              <i class="fas fa-arrow-right"></i>
+            </button>
+            <button class="btn-secondary" (click)="requestQuote()">
+              Request Quote
+              <i class="fas fa-paper-plane"></i>
+            </button>
           </div>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- Features Section -->
-  <section id="features" class="features-section">
-    <div class="section-container">
-      <header class="section-header" @fadeIn>
-        <h2>Advanced Features</h2>
-        <p>Engineering excellence in every detail</p>
-      </header>
-      <div class="features-grid" @staggerFade>
-        <div class="feature-card" *ngFor="let feature of features">
-          <div class="feature-icon">
-            <i [class]="feature.icon"></i>
+    <!-- Centered CTA Section -->
+    <div class="products-cta">
+      <div class="cta-content">
+        <h3>Find Your Perfect Mixer</h3>
+        <p>Take the next step in choosing your ideal concrete mixer solution</p>
+
+        <div class="cta-buttons">
+          <button
+            class="cta-button btn-primary"
+            (click)="requestQuote()"
+            aria-label="Request a quote">
+            <i class="fas fa-paper-plane"></i>
+            Request a Quote
+          </button>
+
+          <button
+            class="cta-button btn-secondary"
+            (click)="openCatalogModal()"
+            aria-label="Download product catalog">
+            <i class="fas fa-file-pdf"></i>
+            Download Catalog
+          </button>
+
+          <button
+            class="cta-button btn-accent"
+            (click)="scrollToComparison()"
+            aria-label="Compare mixer models">
+            <i class="fas fa-scale-balanced"></i>
+            Compare Models
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Comparison Table -->
+    <div id="comparison" class="comparison-section">
+      <h3 class="comparison-title">Quick Comparison</h3>
+      <div class="comparison-table-container">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Specification</th>
+              <th>MT-370</th>
+              <th>MT-480</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Drum Capacity</td>
+              <td class="table-center">370 L (13 cu. ft)</td>
+              <td class="table-center">480 L (15 cu. ft)</td>
+            </tr>
+            <tr>
+              <td>Mixing Capacity</td>
+              <td class="table-center">1 Bag (360 L)</td>
+              <td class="table-center">2 Bags (420 L)</td>
+            </tr>
+            <tr>
+              <td>Drum Opening</td>
+              <td class="table-center">18 in (450 mm)</td>
+              <td class="table-center">19 in (460 mm)</td>
+            </tr>
+            <tr>
+              <td>Drum Depth</td>
+              <td class="table-center">32 in (800 mm)</td>
+              <td class="table-center">41 in (1020 mm)</td>
+            </tr>
+            <tr>
+              <td>Best Use Case</td>
+              <td class="table-center">Small to Medium Projects</td>
+              <td class="table-center">Large Commercial Projects</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Download Catalog Modal - Angular style -->
+  <div class="modal-overlay" [class.active]="isModalOpen" (click)="onModalBackdropClick($event)">
+    <div class="modal-container">
+      <button class="modal-close" (click)="closeCatalogModal()">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <h3 class="modal-title">Download Product Catalog</h3>
+      <p class="modal-subtitle">Please select your preferred language:</p>
+
+      <div class="language-grid">
+        <a
+          href="/assets/photos/Catalog-Eng.pdf"
+          download
+          (click)="closeCatalogModal()"
+          class="language-option"
+        >
+          <img src="https://flagcdn.com/w80/us.png" alt="English" class="language-flag" />
+          <span class="language-label">English</span>
+        </a>
+
+        <a
+          href="/assets/photos/Catalog-Esp.pdf"
+          download
+          (click)="closeCatalogModal()"
+          class="language-option"
+        >
+          <img src="https://flagcdn.com/w80/es.png" alt="Español" class="language-flag" />
+          <span class="language-label">Español</span>
+        </a>
+      </div>
+
+      <div class="modal-footer">
+        Catalogs are available in PDF format (7.2 MB)
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features-section">
+  <div class="section-container">
+    <header class="section-header" @fadeIn>
+      <div class="header-accent"></div>
+      <h2>Engineering Excellence</h2>
+      <p>Advanced features that set our concrete mixers apart</p>
+    </header>
+
+    <!-- Category Filter Tabs -->
+    <div class="feature-filter-tabs" @staggerFadeIn>
+      <button
+        class="feature-tab"
+        [class.active]="activeFeatureCategory === 'all'"
+        (click)="filterFeaturesByCategory('all')"
+        (focus)="onFeatureTabFocus($event)">
+        <i class="fas fa-th-large"></i>
+        All Features
+        <span class="tab-counter">{{features.length}}</span>
+      </button>
+      <button
+        class="feature-tab"
+        [class.active]="activeFeatureCategory === 'design'"
+        (click)="filterFeaturesByCategory('design')"
+        (focus)="onFeatureTabFocus($event)">
+        <i class="fas fa-drafting-compass"></i>
+        Design
+        <span class="tab-counter">{{getCategoryCount('design')}}</span>
+      </button>
+      <button
+        class="feature-tab"
+        [class.active]="activeFeatureCategory === 'performance'"
+        (click)="filterFeaturesByCategory('performance')"
+        (focus)="onFeatureTabFocus($event)">
+        <i class="fas fa-tachometer-alt"></i>
+        Performance
+        <span class="tab-counter">{{getCategoryCount('performance')}}</span>
+      </button>
+      <button
+        class="feature-tab"
+        [class.active]="activeFeatureCategory === 'safety'"
+        (click)="filterFeaturesByCategory('safety')"
+        (focus)="onFeatureTabFocus($event)">
+        <i class="fas fa-hard-hat"></i>
+        Safety
+        <span class="tab-counter">{{getCategoryCount('safety')}}</span>
+      </button>
+      <button
+        class="feature-tab"
+        [class.active]="activeFeatureCategory === 'operation'"
+        (click)="filterFeaturesByCategory('operation')"
+        (focus)="onFeatureTabFocus($event)">
+        <i class="fas fa-cogs"></i>
+        Operation
+        <span class="tab-counter">{{getCategoryCount('operation')}}</span>
+      </button>
+    </div>
+
+    <!-- Featured Innovation Spotlight -->
+    <div class="featured-innovation" *ngIf="activeFeatureCategory === 'all' && activeFeatureIndex === null" @fadeIn>
+      <div class="innovation-content">
+        <div class="innovation-badge">Premium Technology</div>
+        <h3>SmartMix™ Precision Technology</h3>
+        <p>Our exclusive SmartMix™ system revolutionizes concrete mixing by dynamically adjusting drum rotation speed and angle based on load weight and material type, ensuring optimal mixing efficiency in all conditions.</p>
+
+        <div class="innovation-stats">
+          <div class="stat-item">
+            <div class="stat-value">15%</div>
+            <div class="stat-label">Faster Mixing</div>
           </div>
+          <div class="stat-item">
+            <div class="stat-value">20%</div>
+            <div class="stat-label">Less Wear</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Consistency</div>
+          </div>
+        </div>
+
+        <ul class="innovation-benefits">
+          <li><i class="fas fa-check-circle"></i> Consistent mix quality regardless of operator experience</li>
+          <li><i class="fas fa-check-circle"></i> Automatic adjustment to different material densities</li>
+          <li><i class="fas fa-check-circle"></i> Reduced mechanical stress and extended component life</li>
+        </ul>
+      </div>
+      <div class="innovation-image">
+        <img src="/assets/photos/smartmix-tech.jpg" alt="SmartMix Technology" class="tech-image">
+        <div class="tech-overlay"></div>
+      </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="features-grid" [class.detailed-view]="activeFeatureIndex !== null" @staggerFade>
+      <!-- When in detailed view mode -->
+      <div class="feature-detail-card" *ngIf="activeFeatureIndex !== null" @featureDetailTransition>
+        <button class="back-button" (click)="activeFeatureIndex = null">
+          <i class="fas fa-arrow-left"></i> Back to Features
+        </button>
+
+        <div class="feature-detail-content">
+          <div class="feature-detail-header">
+            <div class="feature-icon large">
+              <i [class]="filteredFeatures[activeFeatureIndex].icon"></i>
+            </div>
+            <div class="feature-title-area">
+              <h3>{{filteredFeatures[activeFeatureIndex].title}}</h3>
+              <div class="feature-category-badge">
+                {{filteredFeatures[activeFeatureIndex].category}}
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-detail-body">
+            <div class="feature-detail-image">
+              <img [src]="filteredFeatures[activeFeatureIndex].imageUrl || '/assets/photos/default-feature.jpg'"
+                  [alt]="filteredFeatures[activeFeatureIndex].title">
+
+              <div class="feature-controls" *ngIf="filteredFeatures[activeFeatureIndex].animations?.length">
+                <button
+                  *ngFor="let animation of filteredFeatures[activeFeatureIndex].animations"
+                  class="animation-control"
+                  (click)="playFeatureAnimation(activeFeatureIndex, animation)">
+                  <i class="fas"
+                     [class.fa-play]="animation === 'rotation' || animation === 'fuel-flow'"
+                     [class.fa-bullseye]="animation === 'highlight-blades' || animation === 'highlight-emergency'"
+                     [class.fa-eye]="animation === 'show-guards'"
+                     [class.fa-sliders-h]="animation === 'control-panel' || animation === 'angle-adjustment'"
+                     [class.fa-mountain]="animation === 'terrain-adaptation'"
+                     [class.fa-arrows-alt-v]="animation === 'stabilizer-movement'"
+                     [class.fa-chart-line]="animation === 'efficiency-graph'"
+                     [class.fa-tint]="animation === 'oil-flow'">
+                  </i>
+                  <span>{{animation | titlecase}}</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="feature-detail-description">
+              <p class="detailed-text">{{filteredFeatures[activeFeatureIndex].detailedDescription}}</p>
+
+              <div class="feature-specs">
+                <h4>Technical Specifications</h4>
+                <div class="specs-grid">
+                  <div class="spec-detail-item" *ngFor="let spec of filteredFeatures[activeFeatureIndex].techSpecs">
+                    <div class="spec-detail-label">{{spec.label}}</div>
+                    <div class="spec-detail-value">{{spec.value}}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="feature-highlight large">
+                <i class="fas fa-star-half-alt"></i>
+                <span>{{filteredFeatures[activeFeatureIndex].highlight}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Standard feature cards -->
+      <div class="feature-card"
+          *ngFor="let feature of filteredFeatures; let i = index"
+          (click)="toggleFeatureDetail(i); trackFeatureView(feature);"
+          [class.hidden]="activeFeatureIndex !== null && activeFeatureIndex !== i"
+          @featureHighlight>
+        <div class="feature-card-inner">
+          <div class="feature-header">
+            <div class="feature-icon">
+              <i [class]="feature.icon"></i>
+            </div>
+            <div class="feature-category">
+              <span class="category-badge">{{feature.category}}</span>
+            </div>
+          </div>
+
           <div class="feature-content">
             <h3>{{feature.title}}</h3>
             <p>{{feature.description}}</p>
             <div class="feature-highlight">
+              <i class="fas fa-star-half-alt"></i>
               <span>{{feature.highlight}}</span>
+            </div>
+            <div class="view-details">
+              <span>View Details</span>
+              <i class="fas fa-arrow-right"></i>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+
+    <!-- Feature Comparison CTA -->
+    <div class="feature-comparison-cta" *ngIf="activeFeatureIndex === null">
+      <h3>Compare All Technical Features</h3>
+      <p>Explore the full range of technical specifications and features available across all our concrete mixer models</p>
+      <button class="btn-primary" (click)="scrollToComparison()">
+        View Complete Comparison
+        <i class="fas fa-table"></i>
+      </button>
+    </div>
+  </div>
+</section>
 
   <!-- Company Section -->
   <section id="company" class="company-section">
@@ -269,7 +586,7 @@
         </div>
 
         <div class="company-stats-grid">
-          <div class="stat-card" *ngFor="let stat of companyStats; let i = index" @statFadeIn>
+          <div class="stat-card" *ngFor="let stat of companyStats; let i = index; trackBy: trackStatBy" @statFadeIn>
             <div class="stat-icon">{{stat.icon}}</div>
             <div class="stat-number">{{stat.value}}</div>
             <div class="stat-label">{{stat.label}}</div>
@@ -372,3 +689,9 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

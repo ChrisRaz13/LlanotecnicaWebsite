@@ -1,45 +1,29 @@
-<main class="about-container">
-  <!-- Hero Section -->
-  <section class="hero">
-    <!-- Background Elements -->
-    <div class="hero-bg"></div>
+<section class="hero">
+  <!-- Background Elements -->
+  <div class="hero-background">
+    <div class="hero-overlay"></div>
+    <div class="hero-wave"></div>
+  </div>
 
-    <!-- Main Container -->
-    <div class="hero-container">
-      <!-- Left Content Area -->
-      <div class="hero-content-left">
-        <span class="hero-eyebrow">Engineering Excellence</span>
-        <h1 class="hero-title">Redefining Concrete Technology</h1>
-        <p class="hero-subtitle">
-          Pioneering advanced mixing solutions since 2002, combining precision engineering
-          with sustainable practices to transform the construction industry.
-        </p>
+  <!-- Main Content -->
+  <div class="hero-wrapper">
+    <div class="hero-content" [class.visible]="heroContentVisible" #heroContent>
+      <div class="hero-tagline">Welcome to Our Story</div>
+      <h1 class="hero-title">Passionate About <br>Engineering Excellence</h1>
+      <div class="hero-description">
+        <p>Since 2007, we've been committed to delivering innovative solutions that transform how industries operate. With a focus on quality, precision, and sustainability, we're creating the technology that builds tomorrow.</p>
       </div>
-
-      <!-- Right Stats Area -->
-      <div class="hero-content-right">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-number" data-value="20">0</div>
-            <div class="stat-label">Years of Innovation</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" data-value="500">0</div>
-            <div class="stat-label">Projects Delivered</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" data-value="30">0</div>
-            <div class="stat-label">Countries Served</div>
-          </div>
-        </div>
-      </div>
+      <a routerLink="/contact" class="hero-button">
+        <span>Connect With Us</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
     </div>
+  </div>
 
-    <!-- Decorative Accents -->
-    <div class="hero-accent accent-dots"></div>
-    <div class="hero-accent accent-line"></div>
-    <div class="hero-accent accent-circle"></div>
-  </section>
+  <!-- Decorative Elements -->
+  <div class="hero-decoration hero-decoration-1"></div>
+  <div class="hero-decoration hero-decoration-2"></div>
+</section>
 
   <!-- Mission Section -->
   <section class="mission">
@@ -137,4 +121,4 @@
       </div>
     </div>
   </section>
-</main>
+

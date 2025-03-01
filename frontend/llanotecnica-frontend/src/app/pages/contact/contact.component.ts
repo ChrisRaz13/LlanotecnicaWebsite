@@ -1,9 +1,11 @@
-// Type declaration for Google reCAPTCHA
+// Type declaration for Google reCAPTCHA Enterprise
 declare global {
   interface Window {
     grecaptcha: {
-      ready: (callback: () => void) => void;
-      execute: (siteKey: string, options: { action: string }) => Promise<string>;
+      enterprise: {
+        ready: (callback: () => void) => void;
+        execute: (siteKey: string, options: { action: string }) => Promise<string>;
+      };
     };
   }
 }
@@ -141,11 +143,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.loadRecaptcha();
-
       this.loadCountries().then(() => {
         this.setupCountrySearch();
       });
-
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           this.loadCountries();
@@ -210,7 +210,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         .get<Country[]>('https://restcountries.com/v3.1/all?fields=name,cca2,flags,region')
         .pipe(map(countries => countries.sort((a, b) => a.name.common.localeCompare(b.name.common))))
         .toPromise();
-
       if (response) {
         this.countries = response;
         this.filteredCountries = [...this.countries];
@@ -331,15 +330,17 @@ export class ContactComponent implements OnInit, OnDestroy {
     if (!environment.recaptcha || !environment.recaptcha.siteKey || !isPlatformBrowser(this.platformId)) {
       return;
     }
+    // Create and load the reCAPTCHA Enterprise script
     this.recaptchaScript = document.createElement('script');
-    this.recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${environment.recaptcha.siteKey}`;
+    this.recaptchaScript.src = `https://www.google.com/recaptcha/enterprise.js?render=${environment.recaptcha.siteKey}`;
     this.recaptchaScript.async = true;
     this.recaptchaScript.defer = true;
     this.recaptchaScript.onload = () => {
       this.ngZone.run(() => {
         if (typeof window.grecaptcha !== 'undefined') {
-          window.grecaptcha.ready(() => {
-            console.log('✅ reCAPTCHA is ready');
+          // Use the enterprise API
+          window.grecaptcha.enterprise.ready(() => {
+            console.log('✅ reCAPTCHA Enterprise is ready');
           });
         }
       });
@@ -355,10 +356,12 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.submitError = false;
       this.errorMessage = '';
       try {
-        if (typeof window.grecaptcha === 'undefined') {
-          throw new Error('reCAPTCHA is not loaded.');
+        // Ensure reCAPTCHA Enterprise is loaded
+        if (typeof window.grecaptcha === 'undefined' || typeof window.grecaptcha.enterprise === 'undefined') {
+          throw new Error('reCAPTCHA Enterprise is not loaded.');
         }
-        const token = await window.grecaptcha.execute(environment.recaptcha.siteKey, {
+        // Request a token with your site key and action name
+        const token = await window.grecaptcha.enterprise.execute(environment.recaptcha.siteKey, {
           action: 'contact_form_submit'
         });
         const formData: ContactForm = {

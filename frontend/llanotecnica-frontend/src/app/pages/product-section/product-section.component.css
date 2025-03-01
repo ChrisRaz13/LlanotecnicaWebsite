@@ -1,6 +1,58 @@
 /* Import Montserrat font */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
+/* Add this to your product-section.component.css file at the very top */
+::ng-deep .cdk-overlay-container {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+::ng-deep .cdk-overlay-backdrop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+  opacity: 0;
+}
+
+::ng-deep .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+  opacity: 1;
+}
+
+::ng-deep .cdk-overlay-pane {
+  position: absolute;
+  pointer-events: auto;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: flex;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+::ng-deep .cdk-global-overlay-wrapper {
+  display: flex;
+  position: absolute;
+  z-index: 1000;
+  overflow: auto;
+  pointer-events: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Base Layout */
 body {
   font-family: 'Montserrat', sans-serif;
@@ -24,6 +76,28 @@ body {
   padding: 0 24px;
 }
 
+/* Section titles */
+.section-title {
+  font-size: 32px;
+  color: #008751;
+  text-align: center;
+  margin-bottom: 48px;
+  font-weight: 700;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #00a562, #008751);
+  border-radius: 3px;
+}
+
 /* Hero Section */
 .hero-section {
   background: linear-gradient(135deg, #008751 0%, #00a562 100%);
@@ -32,7 +106,10 @@ body {
   margin-bottom: 64px;
   position: relative;
   overflow: hidden;
+  border-radius: 0 0 30px 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
+
 .hero-section::before {
   content: '';
   position: absolute;
@@ -43,6 +120,7 @@ body {
   background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
   pointer-events: none;
 }
+
 .hero-section h1 {
   font-size: 42px;
   color: #ffffff;
@@ -51,6 +129,7 @@ body {
   letter-spacing: -0.5px;
   position: relative;
 }
+
 .subtitle {
   font-size: 20px;
   color: rgba(255,255,255,0.9);
@@ -65,6 +144,7 @@ body {
   gap: 32px;
   margin-bottom: 64px;
 }
+
 .product-card {
   background: #ffffff;
   border-radius: 16px;
@@ -73,6 +153,7 @@ body {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid rgba(0,135,81,0.1);
 }
+
 .product-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0,135,81,0.1), 0 16px 32px rgba(0,0,0,0.07);
@@ -89,6 +170,7 @@ body {
   border-bottom: 1px solid rgba(0,135,81,0.1);
   overflow: hidden;
 }
+
 .product-image img {
   width: 100%;
   height: 100%;
@@ -96,6 +178,7 @@ body {
   padding: 24px;
   transition: transform 0.3s ease;
 }
+
 .product-card:hover .product-image img {
   transform: scale(1.05);
 }
@@ -104,18 +187,21 @@ body {
 .product-content {
   padding: 32px;
 }
+
 .product-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
-.product-header h2 {
+
+.product-header h3 {
   color: #008751;
   font-size: 24px;
   font-weight: 600;
   margin: 0;
 }
+
 .product-badge {
   background: linear-gradient(135deg, #008751 0%, #00a562 100%);
   color: #ffffff;
@@ -125,6 +211,7 @@ body {
   font-weight: 500;
   box-shadow: 0 2px 4px rgba(0,135,81,0.2);
 }
+
 .product-description {
   color: #495057;
   margin-bottom: 28px;
@@ -132,120 +219,245 @@ body {
   line-height: 1.6;
 }
 
-/* Key Specs */
-.key-specs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-  padding: 16px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
+/* Specs Tabs */
+.specs-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(0,135,81,0.2);
+  margin-bottom: 20px;
 }
+
+.specs-tab {
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.specs-tab.active {
+  color: #008751;
+}
+
+.specs-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #008751;
+}
+
+/* Specs Content */
+.specs-content {
+  display: none;
+  margin-bottom: 24px;
+}
+
+.specs-content.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.features-list {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.features-list li {
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.features-list li::before {
+  content: "✓";
+  position: absolute;
+  left: -20px;
+  color: #008751;
+  font-weight: bold;
+}
+
+/* Key Specs */
 .spec-item {
+  margin-bottom: 10px;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
+
 .spec-label {
   color: #6c757d;
   font-size: 13px;
   font-weight: 500;
 }
+
 .spec-value {
   color: #212529;
   font-size: 15px;
   font-weight: 600;
 }
+
 .spec-value.highlight {
   background: linear-gradient(135deg, rgba(0,135,81,0.05) 0%, rgba(0,165,98,0.05) 100%);
   font-weight: 500;
   color: #008751;
 }
 
+/* Engine Options */
+.engine-options {
+  margin-bottom: 24px;
+}
+
+.engine-options-title {
+  font-size: 15px;
+  color: #495057;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.engine-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.engine-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f8f9fa;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #495057;
+}
+
+.tag-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.tag-icon.electric {
+  background-color: #3498db;
+}
+
+.tag-icon.gas {
+  background-color: #e74c3c;
+}
+
+.tag-icon.diesel {
+  background-color: #2c3e50;
+}
+
 /* Buttons */
+.product-actions {
+  display: flex;
+  gap: 16px;
+}
+
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 28px;
+  gap: 8px;
+  padding: 14px 16px;
   background: linear-gradient(135deg, #008751 0%, #00a562 100%);
   color: #ffffff;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  width: 100%;
+  flex: 1;
   box-shadow: 0 2px 4px rgba(0,135,81,0.2);
 }
+
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,135,81,0.3);
 }
+
 .btn-download {
   display: flex;
   align-items: center;
-  padding: 12px 20px;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 16px;
   border: 2px solid #008751;
   color: #008751;
   background-color: transparent;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   flex: 1;
 }
+
 .btn-download:hover {
   background: linear-gradient(135deg, #008751 0%, #00a562 100%);
   color: #ffffff;
   border-color: transparent;
   transform: translateY(-2px);
 }
+
+.btn-primary .icon,
 .btn-download .icon {
   width: 18px;
   height: 18px;
-  margin-right: 10px;
-  stroke-width: 2;
   transition: transform 0.2s ease;
 }
+
 .btn-download:hover .icon {
   transform: translateY(2px);
 }
 
-/* =================================== */
-/* COMPARE MODELS SECTION STYLES */
-/* =================================== */
+/* ====================== */
+/* COMPARISON SECTION */
+/* ====================== */
 
 .comparison-section {
   padding: 80px 0;
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   border-top: 1px solid rgba(0,135,81,0.1);
 }
+
 .comparison-header {
   text-align: center;
   margin-bottom: 48px;
 }
-.comparison-header h2 {
-  font-size: 32px;
-  color: #008751;
-  margin-bottom: 16px;
-  font-weight: 600;
-}
+
 .comparison-subtitle {
   color: #495057;
   font-size: 18px;
   max-width: 600px;
   margin: 0 auto 32px;
 }
+
 .comparison-tabs {
   display: flex;
   justify-content: center;
   gap: 24px;
   margin-bottom: 48px;
 }
+
 .comparison-tabs button {
   display: flex;
   align-items: center;
@@ -260,10 +472,12 @@ body {
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
 }
+
 .comparison-tabs button.active {
   color: #008751;
   border-bottom-color: #008751;
 }
+
 .tab-icon {
   width: 20px;
   height: 20px;
@@ -278,6 +492,7 @@ body {
   overflow: hidden;
   border: 1px solid rgba(0,135,81,0.1);
 }
+
 .comparison-table .table-header {
   display: grid;
   grid-template-columns: 250px repeat(2, 1fr);
@@ -285,6 +500,7 @@ body {
   color: #ffffff;
   font-weight: 500;
 }
+
 .comparison-table .header-cell {
   padding: 16px 20px;
   text-align: left;
@@ -294,6 +510,7 @@ body {
 .comparison-table .spec-group {
   border-bottom: 1px solid rgba(0,135,81,0.1);
 }
+
 .comparison-table .group-header {
   padding: 16px 20px;
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
@@ -302,20 +519,24 @@ body {
   font-size: 16px;
   border-bottom: 1px solid rgba(0,135,81,0.1);
 }
+
 .comparison-table .spec-row {
   display: grid;
   grid-template-columns: 250px repeat(2, 1fr);
   border-bottom: 1px solid rgba(0,135,81,0.05);
   transition: background-color 0.2s ease;
 }
+
 .comparison-table .spec-row:hover {
   background-color: rgba(0,135,81,0.02);
 }
+
 .comparison-table .spec-name {
   padding: 16px 20px;
   color: #000000;
   font-weight: 500;
 }
+
 .comparison-table .header-cell.spec-name {
   background: linear-gradient(135deg, #008751 0%, #00a562 100%);
   color: #ffffff;
@@ -323,10 +544,12 @@ body {
   text-align: left;
   padding: 16px 20px;
 }
+
 .comparison-table .spec-value {
   padding: 16px 20px;
   color: #212529;
 }
+
 .comparison-table .spec-value.highlight {
   background: linear-gradient(135deg, rgba(0,135,81,0.05) 0%, rgba(0,165,98,0.05) 100%);
   font-weight: 500;
@@ -341,16 +564,19 @@ body {
   box-shadow: 0 4px 6px rgba(0,0,0,0.07);
   border: 1px solid rgba(0,135,81,0.1);
 }
+
 .engine-table {
   width: 100%;
 }
+
 .engine-table .table-header {
   display: grid;
   grid-template-columns: minmax(250px, 2fr) minmax(200px, 1.5fr) minmax(100px, 1fr) minmax(100px, 1fr);
-  background-color: #4B9969;
+  background-color: #008751;
   color: #ffffff;
   padding: 16px;
 }
+
 .engine-table .category-header {
   padding: 16px;
   color: #4B9969;
@@ -359,6 +585,7 @@ body {
   background-color: #f8f9fa;
   border-bottom: 1px solid rgba(0,0,0,0.05);
 }
+
 .engine-table .engine-row {
   display: grid;
   grid-template-columns: minmax(250px, 2fr) minmax(200px, 1.5fr) minmax(100px, 1fr) minmax(100px, 1fr);
@@ -366,9 +593,11 @@ body {
   padding: 12px 16px;
   align-items: center;
 }
+
 .engine-table .engine-row:hover {
   background-color: rgba(0,135,81,0.02);
 }
+
 .engine-table .engine-name {
   display: flex;
   align-items: center;
@@ -376,6 +605,7 @@ body {
   color: #212529;
   font-weight: 500;
 }
+
 .engine-table .engine-icon {
   width: 32px;
   height: 32px;
@@ -386,37 +616,44 @@ body {
   align-items: center;
   justify-content: center;
 }
+
 .engine-table .engine-icon.gas::before {
   content: "⛽";
   color: #ffffff;
   font-size: 14px;
 }
+
 .engine-table .engine-icon.diesel::before {
   content: "🛢️";
   color: #ffffff;
   font-size: 14px;
 }
+
 .engine-table .engine-icon.electric::before {
   content: "⚡";
   color: #ffffff;
   font-size: 14px;
 }
+
 .engine-table .engine-icon.honda::before {
   content: "H";
   color: #ffffff;
   font-weight: bold;
   font-size: 14px;
 }
+
 .engine-table .engine-power {
   padding-right: 24px;
   color: #495057;
 }
+
 .engine-table .compatibility {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 8px;
 }
+
 .engine-table .compatibility-icon {
   width: 28px;
   height: 28px;
@@ -425,45 +662,16 @@ body {
   justify-content: center;
   border-radius: 50%;
 }
+
 .engine-table .compatibility-icon.compatible {
   background-color: #4B9969;
   color: #ffffff;
 }
+
 .engine-table .compatibility-icon:not(.compatible) {
   background-color: transparent;
   border: 1px solid #dee2e6;
   color: #6c757d;
-}
-
-/* Engine Tags */
-.engine-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.engine-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background-color: #f8f9fa;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 14px;
-  color: #495057;
-}
-.tag-icon {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-}
-.tag-icon.electric {
-  background-color: #3498db;
-}
-.tag-icon.gas {
-  background-color: #e74c3c;
-}
-.tag-icon.diesel {
-  background-color: #2c3e50;
 }
 
 /* =================================== */
@@ -479,27 +687,6 @@ body {
 .engine-showcase-header {
   text-align: center;
   margin-bottom: 48px;
-}
-
-.engine-showcase-title {
-  font-size: 36px;
-  color: #008751;
-  margin-bottom: 16px;
-  font-weight: 700;
-  position: relative;
-  display: inline-block;
-}
-
-.engine-showcase-title::after {
-  content: '';
-  position: absolute;
-  bottom: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(90deg, #00a562, #008751);
-  border-radius: 3px;
 }
 
 .engine-showcase-description {
@@ -686,11 +873,6 @@ body {
   box-shadow: 0 4px 8px rgba(0,135,81,0.3);
 }
 
-.engine-showcase-categories {
-  display: grid;
-  gap: 48px;
-}
-
 /* Category Styling */
 .engine-showcase-category {
   background: #ffffff;
@@ -699,17 +881,6 @@ body {
   overflow: hidden;
   margin-bottom: 40px;
   animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .category-header {
@@ -807,6 +978,7 @@ body {
   width: 100%;
   text-align: left;
   margin-bottom: 8px;
+  height: 100%;
 }
 
 .engine-showcase-card:hover {
@@ -821,6 +993,23 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+/* Different header backgrounds for engine types */
+.engine-card-header.honda {
+  background: linear-gradient(to right, #ffe9e3, #ffffff);
+}
+
+.engine-card-header.power-gas {
+  background: linear-gradient(to right, #e9f7ef, #ffffff);
+}
+
+.engine-card-header.diesel {
+  background: linear-gradient(to right, #e8eaed, #ffffff);
+}
+
+.engine-card-header.electric {
+  background: linear-gradient(to right, #e3f2fd, #ffffff);
 }
 
 .engine-brand-model {
@@ -900,7 +1089,100 @@ body {
 
 .engine-card-content {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
+
+
+.engine-card-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.specs-container {
+  display: flex;
+  width: 100%;
+  gap: 15px;
+}
+
+.specs-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.spec-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.spec-label {
+  color: #6c757d;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.spec-value {
+  color: #212529;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Modified view specs button */
+.view-specs-btn {
+  color: #008751;
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  width: 100%;
+  border: 1px solid rgba(0, 135, 81, 0.2);
+}
+
+.view-specs-btn::after {
+  content: "→";
+  margin-left: 6px;
+  transition: transform 0.2s;
+}
+
+.view-specs-btn:hover {
+  color: #ffffff;
+  background-color: #008751;
+}
+
+.view-specs-btn:hover::after {
+  transform: translateX(3px);
+  color: #ffffff;
+}
+
+/* Responsive styles */
+@media (max-width: 576px) {
+  .specs-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .specs-column {
+    gap: 10px;
+  }
+
+  .spec-field {
+    gap: 3px;
+  }
+}
+
+
 
 .specs-grid {
   display: grid;
@@ -908,31 +1190,39 @@ body {
   gap: 16px;
 }
 
-.spec-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+/* New compatibility section */
+.compatibility-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.spec-label {
+.compatibility-label {
   color: #6c757d;
   font-size: 13px;
   font-weight: 500;
+  margin-bottom: 6px;
 }
 
-.spec-value {
-  color: #212529;
-  font-size: 15px;
-  font-weight: 600;
+.compatibility-models {
   display: flex;
-  align-items: center;
-  gap: 6px;
+  gap: 8px;
+}
+
+.compatibility-model {
+  background-color: #f0f7f4;
+  color: #008751;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 13px;
 }
 
 .engine-card-footer {
   padding: 15px 20px;
   border-top: 1px solid rgba(0,0,0,0.05);
   text-align: center;
+  margin-top: auto;
 }
 
 .view-specs-btn {
@@ -944,6 +1234,12 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  width: 100%;
+  justify-content: center;
+  border: 1px solid rgba(0, 135, 81, 0.2);
 }
 
 .view-specs-btn::after {
@@ -952,30 +1248,16 @@ body {
 }
 
 .view-specs-btn:hover {
-  color: #00a562;
+  color: #ffffff;
+  background-color: #008751;
 }
 
 .view-specs-btn:hover::after {
   transform: translateX(3px);
+  color: #ffffff;
 }
 
-.engine-feature-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: rgba(239, 248, 244, 0.9);
-  color: #008751;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(0,135,81,0.2);
-}
-
-/* =================================== */
-/* ENGINE DIALOG/MODAL STYLES */
-/* =================================== */
-
+/* Engine Dialog/Modal Styles */
 .engine-dialog-overlay {
   position: fixed;
   top: 0;
@@ -1102,12 +1384,6 @@ body {
 .dialog-close-btn:hover {
   background-color: rgba(0, 0, 0, 0.05);
   color: #343a40;
-}
-
-.engine-dialog-content {
-  padding: 0;
-  flex: 1;
-  overflow-y: auto;
 }
 
 .dialog-overview {
@@ -1255,10 +1531,103 @@ body {
   box-shadow: 0 4px 8px rgba(0,135,81,0.3);
 }
 
-/* =================================== */
-/* RESPONSIVE DESIGN */
-/* =================================== */
+/* Manual Dialog Styles */
+.manual-dialog-header {
+  background-color: #008751;
+  color: white;
+  padding: 20px;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+}
 
+.manual-dialog-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.manual-dialog-content {
+  padding: 24px;
+}
+
+.manual-dialog-content p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #495057;
+  text-align: center;
+}
+
+.manual-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.manual-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(0,135,81,0.2);
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.manual-option:hover {
+  background-color: #e9f7ef;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.manual-icon {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.manual-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: #008751;
+}
+
+.manual-language {
+  font-size: 16px;
+  font-weight: 500;
+  color: #008751;
+}
+
+.manual-dialog-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: center;
+}
+
+.dialog-cancel-button {
+  padding: 8px 16px;
+  border: 1px solid #ced4da;
+  background-color: #f8f9fa;
+  color: #495057;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dialog-cancel-button:hover {
+  background-color: #e9ecef;
+}
+
+/* Responsive Design */
 @media (max-width: 992px) {
   .container {
     padding: 0 20px;
@@ -1321,26 +1690,67 @@ body {
     padding: 24px;
   }
 
-  /* Compare models section responsive */
-  .comparison-tabs {
-    flex-direction: column;
-    gap: 12px;
+  /* Compare models section responsive - OPTIMIZED FOR MOBILE */
+  .comparison-subtitle {
+    font-size: 16px;
+    margin-bottom: 24px;
   }
-  .comparison-tabs button {
-    width: 100%;
+
+  .comparison-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
     justify-content: center;
   }
-  .comparison-table .spec-row,
-  .engine-table .engine-row {
-    grid-template-columns: 150px repeat(2, 1fr);
+
+  .comparison-tabs button {
+    width: auto;
+    min-width: 120px;
+    justify-content: center;
+    padding: 10px 16px;
+  }
+
+  /* Responsive table fixes */
+  .comparison-table {
+    border-radius: 10px;
+    overflow-x: auto;
+    display: block;
+    width: 100%;
+  }
+
+  .comparison-table .table-header,
+  .comparison-table .spec-row {
+    grid-template-columns: 130px repeat(2, 1fr);
     font-size: 14px;
   }
+
   .comparison-table .header-cell,
   .comparison-table .spec-name,
-  .comparison-table .spec-value,
+  .comparison-table .spec-value {
+    padding: 12px 10px;
+    min-width: 90px;
+  }
+
+  /* Engine table mobile optimization */
+  .engine-compatibility {
+    overflow-x: auto;
+    display: block;
+    width: 100%;
+  }
+
+  .engine-table {
+    min-width: 600px;
+  }
+
+  .engine-table .table-header,
+  .engine-table .engine-row {
+    grid-template-columns: minmax(180px, 2fr) minmax(140px, 1.5fr) minmax(80px, 1fr) minmax(80px, 1fr);
+    font-size: 14px;
+  }
+
   .engine-table .engine-name,
   .engine-table .engine-power {
-    padding: 12px 16px;
+    padding: 12px 10px;
   }
 
   /* Engine showcase responsive */
@@ -1408,6 +1818,11 @@ body {
   .engine-card-content {
     padding: 16px;
   }
+
+  /* Product actions responsive */
+  .product-actions {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 576px) {
@@ -1427,23 +1842,49 @@ body {
     padding: 16px;
   }
 
-  /* Compare models section responsive */
-  .comparison-table .spec-row,
-  .engine-table .engine-row {
-    grid-template-columns: 120px repeat(2, 1fr);
+  /* Compare models section responsive - SMALL MOBILE */
+  .comparison-table .table-header,
+  .comparison-table .spec-row {
+    grid-template-columns: 100px repeat(2, minmax(80px, 1fr));
     font-size: 13px;
   }
+
+  .comparison-table .header-cell,
+  .comparison-table .spec-name,
+  .comparison-table .spec-value {
+    padding: 10px 8px;
+    min-width: 70px;
+  }
+
+  .comparison-table .group-header {
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+
+  /* Engine table improvements for very small screens */
+  .engine-table .table-header,
+  .engine-table .engine-row {
+    grid-template-columns: minmax(150px, 2fr) minmax(100px, 1.2fr) minmax(60px, 0.9fr) minmax(60px, 0.9fr);
+    font-size: 13px;
+    padding: 8px;
+  }
+
   .engine-table .compatibility-icon {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     font-size: 12px;
+  }
+
+  .engine-table .category-header {
+    padding: 10px;
+    font-size: 14px;
   }
 
   /* Engine showcase responsive */
   .engine-showcase {
     padding: 40px 0;
   }
-  .engine-showcase-title {
+  .section-title {
     font-size: 24px;
   }
   .engine-showcase-description {
@@ -1466,15 +1907,23 @@ body {
     gap: 16px;
   }
 
-  /* Filter tabs responsive */
+  /* Filter tabs responsive - better for small screens */
   .engine-filter-tabs {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
 
   .engine-filter-tab {
     width: 100%;
     min-width: 100%;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .filter-icon {
+    width: 16px;
+    height: 16px;
   }
 
   /* Card responsive */
@@ -1504,11 +1953,37 @@ body {
   .dialog-spec-value {
     font-size: 18px;
   }
-}
 
-/* =================================== */
-/* ACCESSIBILITY & PRINT STYLES */
-/* =================================== */
+  /* Specs tabs responsive */
+  .specs-tabs {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .specs-tab {
+    white-space: nowrap;
+    padding: 8px 12px;
+  }
+
+  /* Manual dialog responsive improvements */
+  .manual-dialog-content {
+    padding: 20px 16px;
+  }
+
+  .manual-option {
+    padding: 12px;
+  }
+
+  .manual-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .manual-language {
+    font-size: 14px;
+  }
+}
 
 /* Focus States & Accessibility */
 .btn-primary:focus,
@@ -1518,7 +1993,8 @@ body {
 .engine-filter-tab:focus,
 .dialog-close-btn:focus,
 .dialog-close-button:focus,
-.reset-filter-btn:focus {
+.reset-filter-btn:focus,
+.manual-option:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(0,135,81,0.3);
 }
@@ -1596,4 +2072,74 @@ body {
     background: #006B41 !important;
     background-image: none !important;
   }
+}
+
+/* Manual Dialog Animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.manual-dialog-panel .mat-dialog-container {
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0;
+  animation: slideIn 0.3s ease-out;
+}
+
+.specs-content {
+  animation-fill-mode: both;
+}
+
+.specs-tab:hover {
+  color: #008751;
+  background-color: rgba(0, 135, 81, 0.05);
+}
+
+/* Manual Dialog Angular Material Styling */
+::ng-deep .manual-dialog-panel {
+  position: relative !important;
+}
+
+::ng-deep .manual-dialog-panel .mat-mdc-dialog-container {
+  padding: 0 !important;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+::ng-deep .manual-dialog-panel .mat-mdc-dialog-surface {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+::ng-deep .cdk-overlay-container {
+  z-index: 1000;
+}
+
+::ng-deep .cdk-overlay-backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+}
+
+::ng-deep .manual-dialog-panel mat-dialog-container {
+  padding: 0;
+}
+
+/* Ensure global overlay wrapper is centered on mobile */
+::ng-deep .cdk-global-overlay-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Fix for mobile scrolling in comparison tables */
+.comparison-content {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }

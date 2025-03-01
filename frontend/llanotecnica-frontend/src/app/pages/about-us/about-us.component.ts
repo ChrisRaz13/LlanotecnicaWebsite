@@ -199,7 +199,7 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
       setTimeout(() => {
         this.setupIntersectionObservers();
         this.setupFinalCtaObserver();
-        this.setupHeroObserver();
+        this.setupHeroAnimation();
         this.setupStatsAnimation();
       }, 0);
     }
@@ -324,11 +324,12 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private setupHeroObserver(): void {
+  private setupHeroAnimation(): void {
     if (!isPlatformBrowser(this.platformId)) {
       this.heroContentVisible = true;
       return;
     }
+
     if (this.heroContent) {
       this.heroObserver = new IntersectionObserver(
         (entries) => {
@@ -342,10 +343,20 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
             }
           });
         },
-        { threshold: 0.2, rootMargin: '0px' }
+        { threshold: 0.1 }
       );
       this.heroObserver.observe(this.heroContent.nativeElement);
+    } else {
+      // If the hero content element isn't available yet, make it visible anyway
+      setTimeout(() => {
+        this.heroContentVisible = true;
+      }, 100);
     }
+  }
+
+  // Legacy method kept for backward compatibility
+  private setupHeroObserver(): void {
+    this.setupHeroAnimation();
   }
 
   onSubmit(): void {
