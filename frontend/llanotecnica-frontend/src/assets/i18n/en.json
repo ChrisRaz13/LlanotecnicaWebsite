@@ -6,7 +6,13 @@
     "ABOUT_US": "About Us",
     "PRODUCTS": "Products",
     "CONTACT": "Contact",
-    "DOWNLOAD_CATALOG": "Download Catalog"
+    "DOWNLOAD_CATALOG": "Download Catalog",
+    "CATALOG_MODAL": {
+      "TITLE": "Download Product Catalog",
+      "SUBTITLE": "Please select your preferred language:",
+      "ENGLISH": "English",
+      "SPANISH": "Español"
+    }
   },
   "FOOTER": {
     "COMPANY_INFO": {
@@ -40,9 +46,21 @@
       { "TEXT": "Download Catalog", "ROUTE": "/catalog" }
     ],
     "COPYRIGHT": "© {{currentYear}} Llanotecnica",
-    "ALL_RIGHTS_RESERVED": "All rights reserved"
+    "ALL_RIGHTS_RESERVED": "All rights reserved",
+    "COMPANY_DESCRIPTION": "Empowering construction projects with innovative concrete mixing solutions since 2002. Quality, reliability, and excellence in every machine.",
+    "PRIVACY_POLICY": "Privacy Policy",
+    "TERMS_OF_SERVICE": "Terms of Service",
+    "SELECT_MANUAL_LANGUAGE": "Select Manual Language",
+    "SELECT_CATALOG": "Select Catalog",
+    "LANGUAGE_ENGLISH": "English",
+    "LANGUAGE_SPANISH": "Español",
+    "CANCEL": "Cancel"
   },
   "HOME_PAGE": {
+    "SEO": {
+      "TITLE": "Professional Concrete Mixers | Industrial Mixing Solutions",
+      "DESCRIPTION": "Professional-grade concrete mixers delivering reliability and performance for over two decades. Explore our range of industrial mixing solutions."
+    },
     "HERO": {
       "TITLE": "Engineered for Strength, Built to Last",
       "DESCRIPTION": "Professional-grade concrete mixers delivering unmatched reliability and performance for over two decades. Experience the power of precision engineering in every pour.",
@@ -58,14 +76,91 @@
       "HEADING": "Instructional Video",
       "VIDEO_POSTER_ALT": "Mixer Video Poster"
     },
+    "MIXERS": {
+      "MT370": {
+        "NAME": "Concrete Mixer MT-370",
+        "SHORT_DESC": "Compact Mixer",
+        "DESC": "Compact mixer perfect for small to medium projects, engineered for versatility and reliability in residential construction.",
+        "FEATURES": {
+          "1": "Ideal for residential construction",
+          "2": "Easy to transport and maneuver",
+          "3": "Durable steel construction",
+          "4": "Low maintenance requirements",
+          "5": "Fuel-efficient operation"
+        },
+        "SPECS": {
+          "CAPACITY": "370 Liters",
+          "POWER": "7-9 HP",
+          "WEIGHT": "750 kg"
+        }
+      },
+      "MT480": {
+        "NAME": "Concrete Mixer MT-480",
+        "SHORT_DESC": "Commercial Mixer",
+        "DESC": "Heavy-duty mixer engineered for large commercial projects, delivering maximum mixing efficiency and durability for demanding worksites.",
+        "FEATURES": {
+          "1": "Perfect for commercial construction",
+          "2": "Maximum mixing efficiency",
+          "3": "Heavy-duty construction",
+          "4": "Enhanced durability components",
+          "5": "High-torque power system"
+        },
+        "SPECS": {
+          "CAPACITY": "480 Liters",
+          "POWER": "13+ HP",
+          "WEIGHT": "950 kg"
+        }
+      }
+    },
     "PRODUCTS_SECTION": {
       "SECTION_TITLE": "Our Mixer Range",
       "SECTION_SUBTITLE": "Choose the perfect mixer for your construction needs",
+      "FIRST_MIXER_TAGLINE": "The compact powerhouse for versatile projects",
+      "SECOND_MIXER_TAGLINE": "Maximum power for demanding projects",
+      "CAPACITY": "Capacity",
+      "POWER": "Power",
+      "WEIGHT": "Weight",
+      "KEY_FEATURES": "Key Features",
+      "VIEW_DETAILS": "View Details",
+      "REQUEST_QUOTE": "Request Quote",
       "PRODUCTS_CTA_TITLE": "Find Your Perfect Mixer",
       "PRODUCTS_CTA_SUBTITLE": "Take the next step in choosing your ideal concrete mixer",
       "CTA_REQUEST_QUOTE": "Request a Quote",
       "CTA_DOWNLOAD": "Download Catalog",
-      "CTA_COMPARE": "Compare Models"
+      "CTA_COMPARE": "Compare Models",
+      "COMPARISON_TITLE": "Quick Comparison",
+      "SPECIFICATION": "Specification",
+      "DRUM_CAPACITY": "Drum Capacity",
+      "MIXING_CAPACITY": "Mixing Capacity",
+      "DRUM_OPENING": "Drum Opening",
+      "DRUM_DEPTH": "Drum Depth",
+      "BEST_USE_CASE": "Best Use Case",
+      "SMALL_TO_MEDIUM": "Small to Medium Projects",
+      "LARGE_COMMERCIAL": "Large Commercial Projects"
+    },
+    "MODAL": {
+      "TITLE": "Download Product Catalog",
+      "SUBTITLE": "Please select your preferred language:",
+      "ENGLISH": "English",
+      "SPANISH": "Español",
+      "FILE_INFO": "Catalogs are available in PDF format (7.2 MB)"
+    },
+    "FEATURES": {
+      "DRUM_DESIGN": {
+        "TITLE": "Reinforced Drum Design",
+        "DESCRIPTION": "Heavy-duty steel construction with double-reinforced joints and wear-resistant coating.",
+        "HIGHLIGHT": "50% increased lifespan"
+      },
+      "GEAR_MECHANISM": {
+        "TITLE": "Protected Gear Mechanism",
+        "DESCRIPTION": "Sealed gearbox system with automatic lubrication and debris protection.",
+        "HIGHLIGHT": "10,000+ operation hours"
+      },
+      "SAFETY": {
+        "TITLE": "Enhanced Safety Features",
+        "DESCRIPTION": "Multiple emergency stops, protective guards, and safety interlocks for operator protection.",
+        "HIGHLIGHT": "Triple safety system"
+      }
     },
     "FEATURES_SECTION": {
       "SECTION_TITLE": "Advanced Features",
@@ -77,7 +172,10 @@
       "STATS_YEARS_EXPERIENCE": "Years Experience",
       "STATS_MIXERS_DELIVERED": "Mixers Delivered",
       "STATS_COUNTRIES_SERVED": "Countries Served",
-      "LEARN_MORE_BUTTON": "Learn More About Us"
+      "LEARN_MORE_BUTTON": "Learn More About Us",
+      "DETAIL_YEARS": "Industry leadership since 2002",
+      "DETAIL_MIXERS": "Serving global construction needs",
+      "DETAIL_COUNTRIES": "Global presence and support"
     },
     "FAQ_SECTION": {
       "SECTION_TITLE": "Frequently Asked Questions",
@@ -94,9 +192,13 @@
       "FAQ_5_ANSWER": "Yes, we maintain a complete inventory of spare parts with next-day delivery for most components.",
       "VIDEO_STEPS_TITLE": "Operating Your Mixer: Step-by-Step Guide",
       "STEP_PREOP": "Pre-Operation Check",
+      "STEP_PREOP_DESC": "Check engine oil level and mechanical parts",
       "STEP_START_ENGINE": "Start Engine",
+      "STEP_START_ENGINE_DESC": "Pull starter yo-yo until engine runs smoothly",
       "STEP_CONTROL_POSITION": "Control Position",
-      "STEP_LOAD_MATERIALS": "Load Materials"
+      "STEP_CONTROL_POSITION_DESC": "Use foot pedal to adjust drum angle",
+      "STEP_LOAD_MATERIALS": "Load Materials",
+      "STEP_LOAD_MATERIALS_DESC": "Fill to max capacity (MT-370: 370L, MT-480: 480L)"
     }
   }
 }

@@ -6,7 +6,13 @@
     "ABOUT_US": "Sobre Nosotros",
     "PRODUCTS": "Productos",
     "CONTACT": "Contacto",
-    "DOWNLOAD_CATALOG": "Descargar Catálogo"
+    "DOWNLOAD_CATALOG": "Descargar Catálogo",
+    "CATALOG_MODAL": {
+      "TITLE": "Descargar Catálogo de Productos",
+      "SUBTITLE": "Por favor seleccione su idioma preferido:",
+      "ENGLISH": "English",
+      "SPANISH": "Español"
+    }
   },
   "FOOTER": {
     "COMPANY_INFO": {
@@ -40,9 +46,21 @@
       { "TEXT": "Descargar Catálogo", "ROUTE": "/catalog" }
     ],
     "COPYRIGHT": "© {{currentYear}} Llanotecnica",
-    "ALL_RIGHTS_RESERVED": "Todos los derechos reservados"
+    "ALL_RIGHTS_RESERVED": "Todos los derechos reservados",
+    "COMPANY_DESCRIPTION": "Potenciando proyectos de construcción con soluciones innovadoras de mezcla de concreto desde 2002. Calidad, confiabilidad y excelencia en cada máquina.",
+    "PRIVACY_POLICY": "Política de Privacidad",
+    "TERMS_OF_SERVICE": "Términos de Servicio",
+    "SELECT_MANUAL_LANGUAGE": "Seleccionar Idioma del Manual",
+    "SELECT_CATALOG": "Seleccionar Catálogo",
+    "LANGUAGE_ENGLISH": "English",
+    "LANGUAGE_SPANISH": "Español",
+    "CANCEL": "Cancelar"
   },
   "HOME_PAGE": {
+    "SEO": {
+      "TITLE": "Mezcladoras de Concreto Profesionales | Soluciones Industriales de Mezcla",
+      "DESCRIPTION": "Mezcladoras de concreto de grado profesional que brindan confiabilidad y rendimiento por más de dos décadas. Explore nuestra gama de soluciones industriales de mezcla."
+    },
     "HERO": {
       "TITLE": "Diseñadas para Fuerza, Construidas para Durar",
       "DESCRIPTION": "Mezcladoras de concreto de grado profesional que brindan confiabilidad y rendimiento incomparables durante más de dos décadas. Descubre la potencia de la ingeniería de precisión en cada vertida.",
@@ -58,14 +76,91 @@
       "HEADING": "Video Instructivo",
       "VIDEO_POSTER_ALT": "Póster del Video de Mezcladora"
     },
+    "MIXERS": {
+      "MT370": {
+        "NAME": "Mezcladora de Concreto MT-370",
+        "SHORT_DESC": "Mezcladora Compacta",
+        "DESC": "Mezcladora compacta perfecta para proyectos pequeños y medianos, diseñada para versatilidad y confiabilidad en construcción residencial.",
+        "FEATURES": {
+          "1": "Ideal para construcción residencial",
+          "2": "Fácil de transportar y maniobrar",
+          "3": "Construcción duradera de acero",
+          "4": "Requisitos mínimos de mantenimiento",
+          "5": "Operación eficiente en combustible"
+        },
+        "SPECS": {
+          "CAPACITY": "370 Litros",
+          "POWER": "7-9 HP",
+          "WEIGHT": "750 kg"
+        }
+      },
+      "MT480": {
+        "NAME": "Mezcladora de Concreto MT-480",
+        "SHORT_DESC": "Mezcladora Comercial",
+        "DESC": "Mezcladora de uso intensivo diseñada para grandes proyectos comerciales, ofreciendo máxima eficiencia de mezcla y durabilidad para sitios de trabajo exigentes.",
+        "FEATURES": {
+          "1": "Perfecta para construcción comercial",
+          "2": "Máxima eficiencia de mezcla",
+          "3": "Construcción de alta resistencia",
+          "4": "Componentes de durabilidad mejorada",
+          "5": "Sistema de alto torque"
+        },
+        "SPECS": {
+          "CAPACITY": "480 Litros",
+          "POWER": "13+ HP",
+          "WEIGHT": "950 kg"
+        }
+      }
+    },
     "PRODUCTS_SECTION": {
       "SECTION_TITLE": "Nuestra Gama de Mezcladoras",
       "SECTION_SUBTITLE": "Elige la mezcladora perfecta para tus necesidades de construcción",
+      "FIRST_MIXER_TAGLINE": "El equipo compacto y potente para proyectos versátiles",
+      "SECOND_MIXER_TAGLINE": "Máxima potencia para proyectos exigentes",
+      "CAPACITY": "Capacidad",
+      "POWER": "Potencia",
+      "WEIGHT": "Peso",
+      "KEY_FEATURES": "Características Principales",
+      "VIEW_DETAILS": "Ver Detalles",
+      "REQUEST_QUOTE": "Solicitar Cotización",
       "PRODUCTS_CTA_TITLE": "Encuentra tu Mezcladora Ideal",
       "PRODUCTS_CTA_SUBTITLE": "Da el siguiente paso para elegir tu mezcladora de concreto ideal",
       "CTA_REQUEST_QUOTE": "Solicitar Cotización",
       "CTA_DOWNLOAD": "Descargar Catálogo",
-      "CTA_COMPARE": "Comparar Modelos"
+      "CTA_COMPARE": "Comparar Modelos",
+      "COMPARISON_TITLE": "Comparación Rápida",
+      "SPECIFICATION": "Especificación",
+      "DRUM_CAPACITY": "Capacidad del Tambor",
+      "MIXING_CAPACITY": "Capacidad de Mezcla",
+      "DRUM_OPENING": "Abertura del Tambor",
+      "DRUM_DEPTH": "Profundidad del Tambor",
+      "BEST_USE_CASE": "Mejor Uso",
+      "SMALL_TO_MEDIUM": "Proyectos Pequeños a Medianos",
+      "LARGE_COMMERCIAL": "Proyectos Comerciales Grandes"
+    },
+    "MODAL": {
+      "TITLE": "Descargar Catálogo de Productos",
+      "SUBTITLE": "Por favor seleccione su idioma preferido:",
+      "ENGLISH": "English",
+      "SPANISH": "Español",
+      "FILE_INFO": "Los catálogos están disponibles en formato PDF (7.2 MB)"
+    },
+    "FEATURES": {
+      "DRUM_DESIGN": {
+        "TITLE": "Diseño de Tambor Reforzado",
+        "DESCRIPTION": "Construcción de acero resistente con juntas doblemente reforzadas y revestimiento resistente al desgaste.",
+        "HIGHLIGHT": "50% más de vida útil"
+      },
+      "GEAR_MECHANISM": {
+        "TITLE": "Mecanismo de Engranaje Protegido",
+        "DESCRIPTION": "Sistema de caja de engranajes sellado con lubricación automática y protección contra residuos.",
+        "HIGHLIGHT": "Más de 10,000 horas de operación"
+      },
+      "SAFETY": {
+        "TITLE": "Características de Seguridad Mejoradas",
+        "DESCRIPTION": "Múltiples paradas de emergencia, protectores y enclavamientos de seguridad para la protección del operador.",
+        "HIGHLIGHT": "Sistema de triple seguridad"
+      }
     },
     "FEATURES_SECTION": {
       "SECTION_TITLE": "Funciones Avanzadas",
@@ -77,7 +172,10 @@
       "STATS_YEARS_EXPERIENCE": "Años de Experiencia",
       "STATS_MIXERS_DELIVERED": "Mezcladoras Entregadas",
       "STATS_COUNTRIES_SERVED": "Países Atendidos",
-      "LEARN_MORE_BUTTON": "Conoce Más Sobre Nosotros"
+      "LEARN_MORE_BUTTON": "Conoce Más Sobre Nosotros",
+      "DETAIL_YEARS": "Liderazgo en la industria desde 2002",
+      "DETAIL_MIXERS": "Sirviendo necesidades de construcción global",
+      "DETAIL_COUNTRIES": "Presencia y soporte global"
     },
     "FAQ_SECTION": {
       "SECTION_TITLE": "Preguntas Frecuentes",
@@ -90,13 +188,17 @@
       "FAQ_3_ANSWER": "La MT-370 es ideal para proyectos residenciales y comerciales pequeños, mientras que la MT-480 está diseñada para aplicaciones comerciales de gran tamaño.",
       "FAQ_4_QUESTION": "¿Qué garantía ofrecen?",
       "FAQ_4_ANSWER": "Ofrecemos una garantía completa de 2 años en todos los componentes, con opciones de garantía extendida disponibles.",
-      "FAQ_5_QUESTION": "¿Hay repuestos disponibles?",
+      "FAQ_5_QUESTION": "¿Están disponibles los repuestos?",
       "FAQ_5_ANSWER": "Sí, mantenemos un inventario completo de repuestos con entrega al día siguiente para la mayoría de componentes.",
       "VIDEO_STEPS_TITLE": "Operando Tu Mezcladora: Guía Paso a Paso",
       "STEP_PREOP": "Chequeo Pre-Operativo",
+      "STEP_PREOP_DESC": "Revisa el nivel de aceite del motor y las partes mecánicas",
       "STEP_START_ENGINE": "Encender el Motor",
+      "STEP_START_ENGINE_DESC": "Tira del arrancador hasta que el motor funcione suavemente",
       "STEP_CONTROL_POSITION": "Control de Posición",
-      "STEP_LOAD_MATERIALS": "Cargar Materiales"
+      "STEP_CONTROL_POSITION_DESC": "Usa el pedal para ajustar el ángulo del tambor",
+      "STEP_LOAD_MATERIALS": "Cargar Materiales",
+      "STEP_LOAD_MATERIALS_DESC": "Llena a capacidad máxima (MT-370: 370L, MT-480: 480L)"
     }
   }
 }

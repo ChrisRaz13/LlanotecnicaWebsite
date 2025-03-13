@@ -1,52 +1,106 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageSelectorComponent } from '../../services/language-selector/language-selector.component';
 
+interface LinkItem {
+  text: string;
+  route: string;
+  action?: string; // Special action like 'manual', 'faq', 'catalog'
+}
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule, LanguageSelectorComponent],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css']
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit {
   currentYear = new Date().getFullYear();
 
   companyInfo = {
-    phone: '+507 6566-4942',
-    whatsapp: 'https://wa.me/50765664942',
-    email: 'ventas@llanotecnica.com',
-    address: 'Llanotecnica SA, Rio Chico, Calle Principal, Corregimiento de, Pacora, Provincia de Panamá, Panamá',
+    phone: '',
+    whatsapp: '',
+    email: '',
+    address: '',
     socialLinks: {
-      facebook: 'https://facebook.com/llanotecnica',
-      instagram: 'https://instagram.com/llanotecnica'
+      facebook: '',
+      instagram: ''
     }
   };
 
-  quickLinks = [
-    { text: 'Home', route: '/' },
-    { text: 'About Us', route: '/about-us' },
-    { text: 'Products', route: '/products' },
-    { text: 'Contact', route: '/contact' }
-  ];
-
-  products = [
-    { text: 'MT-370 Mixer', route: '/products' },
-    { text: 'MT-480 Mixer', route: '/products' },
-    { text: 'Engines', route: '/products' }
-  ];
-
-  support = [
-    { text: 'Mixer Manual', route: null },
-    { text: 'FAQ', route: null },
-    { text: 'Download Catalog', route: null }
-  ];
+  quickLinks: LinkItem[] = [];
+  products: LinkItem[] = [];
+  support: LinkItem[] = [];
 
   showManualModal = false;
   showCatalogModal = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private translate: TranslateService
+  ) {}
+
+  ngOnInit() {
+    this.loadTranslations();
+    this.translate.onLangChange.subscribe(() => {
+      this.loadTranslations();
+    });
+  }
+
+  loadTranslations() {
+    this.translate.get('FOOTER.COMPANY_INFO').subscribe((data: any) => {
+      this.companyInfo = {
+        phone: data?.PHONE || '',
+        whatsapp: data?.WHATSAPP_URL || '',
+        email: data?.EMAIL || '',
+        address: data?.ADDRESS || '',
+        socialLinks: {
+          facebook: data?.SOCIAL_LINKS?.FACEBOOK_URL || '',
+          instagram: data?.SOCIAL_LINKS?.INSTAGRAM_URL || ''
+        }
+      };
+    });
+
+    // Quick links now only include "Sobre Nosotros", "Productos", and "Contacto"
+    this.quickLinks = [
+      { text: this.translate.instant('FOOTER.QUICK_LINKS.0.TEXT'), route: '/about-us' },
+      { text: this.translate.instant('FOOTER.QUICK_LINKS.1.TEXT'), route: '/products' },
+      { text: this.translate.instant('FOOTER.QUICK_LINKS.3.TEXT'), route: '/contact' }
+    ];
+
+    // Product links: all go to the Products page (/products)
+    this.products = [
+      { text: this.translate.instant('FOOTER.PRODUCTS.0.TEXT'), route: '/products' },
+      { text: this.translate.instant('FOOTER.PRODUCTS.1.TEXT'), route: '/products' },
+      { text: this.translate.instant('FOOTER.PRODUCTS.2.TEXT'), route: '/products' }
+    ];
+
+    // Support remains unchanged
+    this.support = [
+      { text: this.translate.instant('FOOTER.SUPPORT.1.TEXT'), action: 'manual', route: '' },
+      { text: this.translate.instant('FOOTER.SUPPORT.2.TEXT'), action: 'faq', route: '' },
+      { text: this.translate.instant('FOOTER.SUPPORT.3.TEXT'), action: 'catalog', route: '' }
+    ];
+  }
+
+  // Navigation using Angular's router
+  handleLinkClick(item: LinkItem) {
+    console.log('Navigating to:', item.route);
+    this.router.navigate([item.route]);
+  }
+
+  handleSupportAction(item: LinkItem) {
+    if (item.action === 'manual') {
+      this.toggleManualModal();
+    } else if (item.action === 'faq') {
+      this.goToFaq();
+    } else if (item.action === 'catalog') {
+      this.toggleCatalogModal();
+    }
+  }
 
   toggleManualModal() {
     this.showManualModal = !this.showManualModal;

@@ -25,40 +25,59 @@
         </a>
       </li>
       <li>
-        <a
-          routerLink="/about-us"
-          routerLinkActive="active"
-          (click)="closeMenu()">
+        <a routerLink="/about-us" routerLinkActive="active" (click)="closeMenu()">
           {{ 'NAV.ABOUT_US' | translate }}
         </a>
       </li>
       <li>
-        <a
-          routerLink="/products"
-          routerLinkActive="active"
-          (click)="closeMenu()">
+        <a routerLink="/products" routerLinkActive="active" (click)="closeMenu()">
           {{ 'NAV.PRODUCTS' | translate }}
         </a>
       </li>
       <li>
-        <a
-          routerLink="/contact"
-          routerLinkActive="active"
-          (click)="closeMenu()">
+        <a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">
           {{ 'NAV.CONTACT' | translate }}
         </a>
       </li>
 
-      <!-- Mobile-Only: Download Catalog Link -->
+      <!-- Mobile-Only: Download Catalog Link (opens language selector modal) -->
       <li class="mobile-only">
-        <a href="assets/downloads/catalog.pdf" download (click)="closeMenu()">
+        <a (click)="openCatalogModal(); closeMenu()">
           <img src="assets/photos/pdf.png" alt="PDF Icon" class="download-icon" />
           {{ 'NAV.DOWNLOAD_CATALOG' | translate }}
         </a>
       </li>
+
+      <!-- Mobile-Only: Language Selector -->
+      <li class="mobile-only language-selector-mobile">
+        <app-language-selector></app-language-selector>
+      </li>
     </ul>
 
-    <!-- Language Selector -->
-    <app-language-selector></app-language-selector>
+    <!-- Desktop Language Selector -->
+    <div class="desktop-language-selector">
+      <app-language-selector></app-language-selector>
+    </div>
   </div>
 </nav>
+
+<!-- Catalog Modal Overlay (placed outside the nav for proper centering) -->
+<div class="catalog-modal-overlay" *ngIf="isCatalogModalOpen" (click)="closeCatalogModal()">
+  <div class="catalog-modal" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="closeCatalogModal()">
+      <i class="fas fa-times"></i>
+    </button>
+    <h3>{{ 'NAV.CATALOG_MODAL.TITLE' | translate }}</h3>
+    <p>{{ 'NAV.CATALOG_MODAL.SUBTITLE' | translate }}</p>
+    <div class="language-options">
+      <button (click)="downloadCatalog('en'); closeCatalogModal()">
+        <img src="https://flagcdn.com/w80/us.png" alt="English" />
+        {{ 'NAV.CATALOG_MODAL.ENGLISH' | translate }}
+      </button>
+      <button (click)="downloadCatalog('es'); closeCatalogModal()">
+        <img src="https://flagcdn.com/w80/es.png" alt="Español" />
+        {{ 'NAV.CATALOG_MODAL.SPANISH' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -10,7 +10,6 @@ nav {
   transform: translateY(0);
   will-change: transform, position;
   transition: transform 0.3s ease;
-
 }
 
 nav.scrolled {
@@ -82,7 +81,6 @@ nav.scrolled {
   white-space: nowrap;
 }
 
-/* Hover/Active States */
 .nav-links li a:after {
   content: '';
   position: absolute;
@@ -113,13 +111,13 @@ nav.scrolled {
   gap: 5px;
   padding: 5px 10px;
   border-radius: 5px;
-  background: rgba(0,135,81,0.1);
+  background: rgba(0, 135, 81, 0.1);
   transition: all 0.3s ease;
   z-index: 100;
 }
 
 .lang-toggle:hover {
-  background: rgba(0,135,81,0.2);
+  background: rgba(0, 135, 81, 0.2);
 }
 
 .lang-toggle span {
@@ -187,9 +185,18 @@ nav.scrolled {
   margin-right: 5px;
 }
 
+/* DESKTOP LANGUAGE SELECTOR */
+.desktop-language-selector {
+  display: block;
+}
+
+/* MOBILE LANGUAGE SELECTOR */
+.language-selector-mobile {
+  display: none;
+}
+
 /* MOBILE STYLES */
 @media (max-width: 768px) {
-  /* NAV WRAPPER BECOMES FIXED */
   nav {
     position: fixed;
     top: 0;
@@ -199,8 +206,6 @@ nav.scrolled {
     z-index: 1000;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
-
-  /* HAMBURGER VISIBLE */
   .hamburger {
     display: flex;
     position: fixed;
@@ -208,8 +213,6 @@ nav.scrolled {
     top: 23px;
     z-index: 1002;
   }
-
-  /* LOGO CONTAINER */
   .logo-container {
     opacity: 1;
     transform: translateX(0) scale(1);
@@ -221,16 +224,12 @@ nav.scrolled {
     display: flex;
     align-items: center;
   }
-
   .company-name {
     font-size: 1.4em;
   }
-
   .logo {
     height: 30px;
   }
-
-  /* NAV LINKS TRANSFORM INTO MOBILE MENU */
   .nav-links {
     position: fixed;
     top: 70px;
@@ -245,13 +244,11 @@ nav.scrolled {
     padding-top: 20px;
     transition: all 0.3s ease;
     z-index: 1001;
-    gap: 20px; /* for spacing in mobile menu */
+    gap: 20px;
   }
-
   .nav-links.show-mobile {
     right: 0;
   }
-
   .nav-links::before {
     content: '';
     position: fixed;
@@ -262,7 +259,6 @@ nav.scrolled {
     background: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
-
   .nav-links li a {
     font-size: 1.4em;
     padding: 15px 30px;
@@ -270,12 +266,19 @@ nav.scrolled {
     width: 100%;
     text-align: center;
   }
-
   .mobile-only {
     display: block;
     margin-top: 10px;
   }
-
+  .language-selector-mobile {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 15px 0;
+  }
+  .desktop-language-selector {
+    display: none;
+  }
   .lang-toggle {
     position: fixed;
     bottom: 50px;
@@ -283,15 +286,90 @@ nav.scrolled {
     transform: translateX(-50%);
     margin: 0;
     padding: 12px 25px;
-    background: rgba(0,135,81,0.1);
+    background: rgba(0, 135, 81, 0.1);
     border-radius: 25px;
     z-index: 1001;
   }
-
   .nav-links.scrolled-nav {
     justify-content: flex-start;
     margin-right: 0;
     gap: 20px;
     transform: none;
   }
+}
+
+/* MODAL OVERLAY & CONTAINER */
+.catalog-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.catalog-modal {
+  background: #ffffff;
+  width: 90%;
+  max-width: 400px;
+  padding: 1.5rem;
+  border-radius: 8px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  max-height: 80vh;
+  overflow-y: auto;
+  margin: 1rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.language-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.language-options button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #008751;
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+  justify-content: center;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.language-options button:hover {
+  background: #006f43;
+}
+
+.language-options button img {
+  width: 28px;
+  height: auto;
+  border-radius: 2px;
 }

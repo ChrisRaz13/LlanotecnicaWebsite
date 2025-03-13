@@ -1,6 +1,7 @@
-import { Component, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { PLATFORM_ID } from '@angular/core';
 
 @Component({
   selector: 'app-language-selector',
@@ -9,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './language-selector.component.html',
   styleUrls: ['./language-selector.component.css']
 })
-export class LanguageSelectorComponent {
+export class LanguageSelectorComponent implements OnInit {
   currentLang: 'en' | 'es' = 'en';
 
   constructor(
@@ -17,29 +18,31 @@ export class LanguageSelectorComponent {
     private translate: TranslateService
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      // Check localStorage
-      const savedLang = localStorage.getItem('preferredLanguage') as 'en' | 'es' | null;
-
+      const savedLang = localStorage.getItem('preferredLanguage');
       if (savedLang === 'en' || savedLang === 'es') {
         this.currentLang = savedLang;
         this.translate.use(savedLang);
       } else {
-        // Default to English (or Spanish) if nothing is saved
-        this.translate.use('en');
+        const browserLang = navigator.language.split('-')[0];
+        this.currentLang = browserLang === 'es' ? 'es' : 'en';
+        this.translate.use(this.currentLang);
+        localStorage.setItem('preferredLanguage', this.currentLang);
       }
     }
   }
 
-  toggleLanguage() {
-    console.log('Language toggle clicked');
+  ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // Swap languages
+      this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+        this.currentLang = event.lang as 'en' | 'es';
+      });
+    }
+  }
+
+  toggleLanguage(): void {
+    if (isPlatformBrowser(this.platformId)) {
       this.currentLang = this.currentLang === 'en' ? 'es' : 'en';
-
-      // Save preference in localStorage
       localStorage.setItem('preferredLanguage', this.currentLang);
-
-      // Tell ngx-translate to load the new language from /assets/i18n/<lang>.json
       this.translate.use(this.currentLang);
     }
   }

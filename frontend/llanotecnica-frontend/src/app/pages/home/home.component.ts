@@ -23,6 +23,7 @@ import {
 } from '@angular/animations';
 import { Meta, Title } from '@angular/platform-browser';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
 type CategoryType = FeatureCategory | 'all';
@@ -33,10 +34,6 @@ interface Feature {
   icon: string;
   highlight: string;
   category: FeatureCategory;
-  detailedDescription?: string;
-  techSpecs?: { label: string; value: string }[];
-  imageUrl?: string;
-  animations?: string[];
 }
 
 interface Product {
@@ -83,7 +80,7 @@ interface CustomerReview {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   animations: [
@@ -199,15 +196,6 @@ interface CustomerReview {
           ])
         ], { optional: true })
       ])
-    ]),
-    trigger('featureDetailTransition', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.95)' }),
-        animate('0.5s cubic-bezier(0.34, 1.56, 0.64, 1)', style({ opacity: 1, transform: 'scale(1)' }))
-      ]),
-      transition(':leave', [
-        animate('0.3s cubic-bezier(0.21, 1.02, 0.73, 1)', style({ opacity: 0, transform: 'scale(0.95)' }))
-      ])
     ])
   ]
 })
@@ -223,10 +211,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   showScrollIndicator = true;
   currentHeroBackground = 0;
   private scrollInterval: any;
-
-  // Feature section variables
-  activeFeatureCategory: CategoryType = 'all';
-  activeFeatureIndex: number | null = null;
 
   // Product section variables
   selectedProductIndex = 0;
@@ -269,42 +253,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   duplicatedFlags = [...this.flags, ...this.flags];
 
-  readonly mixers: Product[] = [
+  mixers: Product[] = [];
+  features: Feature[] = [];
+  faqs: FAQ[] = [];
+  companyStats: CompanyStat[] = [];
+
+  readonly heroBackgrounds = [
     {
-      name: 'Concrete Mixer MT-370',
-      shortDesc: 'Compact Mixer',
-      description: 'Compact mixer perfect for small to medium projects, engineered for versatility and reliability in residential construction.',
-      features: [
-        'Ideal for residential construction',
-        'Easy to transport and maneuver',
-        'Durable steel construction',
-        'Low maintenance requirements',
-        'Fuel-efficient operation'
-      ],
-      specs: {
-        capacity: '370 Liters',
-        enginePower: '7-9 HP',
-        weight: '750 kg'
-      },
-      image: '/assets/photos/MT-370.jpg'
+      type: 'image',
+      src: '/assets/photos/twomixers1.jpg',
+      alt: 'Industrial cement mixer in action'
     },
     {
-      name: 'Concrete Mixer MT-480',
-      shortDesc: 'Commercial Mixer',
-      description: 'Heavy-duty mixer engineered for large commercial projects, delivering maximum mixing efficiency and durability for demanding worksites.',
-      features: [
-        'Perfect for commercial construction',
-        'Maximum mixing efficiency',
-        'Heavy-duty construction',
-        'Enhanced durability components',
-        'High-torque power system'
-      ],
-      specs: {
-        capacity: '480 Liters',
-        enginePower: '13+ HP',
-        weight: '950 kg'
-      },
-      image: '/assets/photos/MT-480.jpg'
+      type: 'video',
+      src: '/assets/videos/homepage3.mp4',
+      poster: '/assets/photos/hero-video-poster.jpg'
     }
   ];
 
@@ -332,170 +295,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   ];
 
-  readonly features: Feature[] = [
-    {
-      title: 'Reinforced Drum Design',
-      description: 'Heavy-duty steel construction with double-reinforced joints and wear-resistant coating.',
-      icon: 'fa-solid fa-shield',
-      highlight: '50% increased lifespan',
-      category: 'design',
-      detailedDescription: 'Our proprietary drum construction features 6mm high-grade steel with reinforced mixing blades and specialized wear-resistant interior coating that significantly reduces material buildup and extends operational life.',
-      techSpecs: [
-        { label: 'Steel Grade', value: 'Industrial S355JR' },
-        { label: 'Wall Thickness', value: '6mm reinforced' },
-        { label: 'Coating', value: 'Polymer-enhanced abrasion resistant' },
-        { label: 'Joint Type', value: 'Double-welded reinforced' }
-      ],
-      imageUrl: '/assets/photos/feature-drum.jpg',
-      animations: ['rotation', 'highlight-blades']
-    },
-    {
-      title: 'Protected Gear Mechanism',
-      description: 'Sealed gearbox system with automatic lubrication and debris protection.',
-      icon: 'fa-solid fa-gears',
-      highlight: '10,000+ operation hours',
-      category: 'performance',
-      detailedDescription: 'Our precision-engineered gearbox incorporates hardened steel gears with specialized sealing technology to prevent contamination, while maintaining optimal lubrication in all operating conditions.',
-      techSpecs: [
-        { label: 'Gear Material', value: 'Hardened alloy steel' },
-        { label: 'Lubrication', value: 'Self-regulating system' },
-        { label: 'Seal Type', value: 'Triple-barrier protection' },
-        { label: 'Expected Lifespan', value: '10,000+ hours' }
-      ],
-      imageUrl: '/assets/photos/feature-gears.jpg',
-      animations: ['rotation', 'oil-flow']
-    },
-    {
-      title: 'Enhanced Safety Features',
-      description: 'Multiple emergency stops, protective guards, and safety interlocks for operator protection.',
-      icon: 'fa-solid fa-shield-halved',
-      highlight: 'Triple safety system',
-      category: 'safety',
-      detailedDescription: 'Our comprehensive safety system includes strategically placed emergency stops, automatic drum locking during maintenance, and operator presence detection to prevent accidental operation.',
-      techSpecs: [
-        { label: 'Emergency Stops', value: '3 positions' },
-        { label: 'Guard Rating', value: 'Impact resistant' },
-        { label: 'Interlock System', value: 'Redundant circuits' },
-        { label: 'Safety Compliance', value: 'ISO 12100, EN 12151' }
-      ],
-      imageUrl: '/assets/photos/feature-safety.jpg',
-      animations: ['highlight-emergency', 'show-guards']
-    },
-    {
-      title: 'Precision Mixing Control',
-      description: 'Advanced mixing control system that ensures consistent concrete quality through precise drum rotation.',
-      icon: 'fa-solid fa-sliders',
-      highlight: 'Uniform mixing results',
-      category: 'operation',
-      detailedDescription: 'Our proprietary mixing control technology automatically adjusts drum speed and angle based on load weight and material viscosity, ensuring optimal mixing efficiency and consistent quality output.',
-      techSpecs: [
-        { label: 'Speed Range', value: '0-25 RPM variable' },
-        { label: 'Angle Control', value: 'Automated hydraulic' },
-        { label: 'Response Time', value: '<0.5 seconds' },
-        { label: 'Control Type', value: 'Digital precision system' }
-      ],
-      imageUrl: '/assets/photos/feature-control.jpg',
-      animations: ['control-panel', 'angle-adjustment']
-    },
-    {
-      title: 'All-Terrain Mobility',
-      description: 'Specialized chassis design with heavy-duty tires and stabilizers for secure operation on uneven surfaces.',
-      icon: 'fa-solid fa-truck-monster',
-      highlight: '30° incline capability',
-      category: 'operation',
-      detailedDescription: 'The reinforced chassis features independent suspension with auto-leveling capability, allowing safe operation on construction sites with up to 30° inclines while maintaining mixing performance.',
-      techSpecs: [
-        { label: 'Tire Type', value: 'All-terrain industrial' },
-        { label: 'Suspension', value: 'Heavy-duty independent' },
-        { label: 'Stabilizers', value: 'Hydraulic auto-leveling' },
-        { label: 'Max Safe Incline', value: '30 degrees' }
-      ],
-      imageUrl: '/assets/photos/feature-mobility.jpg',
-      animations: ['terrain-adaptation', 'stabilizer-movement']
-    },
-    {
-      title: 'Eco-Performance Engine',
-      description: 'Fuel-efficient engine technology that reduces consumption while maintaining optimal power delivery.',
-      icon: 'fa-solid fa-leaf',
-      highlight: '25% fuel savings',
-      category: 'performance',
-      detailedDescription: 'Our advanced engine management system dynamically adjusts power output based on load requirements, significantly reducing fuel consumption while maintaining torque delivery when needed most.',
-      techSpecs: [
-        { label: 'Fuel Efficiency', value: '25% better than standard' },
-        { label: 'Emissions Rating', value: 'Tier 4 compliant' },
-        { label: 'Power Management', value: 'Dynamic load sensing' },
-        { label: 'Engine Type', value: 'Commercial-grade industrial' }
-      ],
-      imageUrl: '/assets/photos/feature-eco.jpg',
-      animations: ['fuel-flow', 'efficiency-graph']
-    }
-  ];
-
-  readonly faqs: FAQ[] = [
-    {
-      question: 'How do I operate the MT-370 and MT-480 mixers?',
-      answer: 'Watch our detailed demonstration video below:',
-      videoUrl: '/assets/videos/instruction.mp4',
-      posterImage: '/assets/photos/instruction-poster.png'
-    },
-    {
-      question: 'What maintenance is required?',
-      answer: 'Regular maintenance includes daily cleaning, weekly lubrication checks, and monthly mechanical inspections.'
-    },
-    {
-      question: 'Which mixer is right for my project?',
-      answer: 'The MT-370 is ideal for residential and small commercial projects, while the MT-480 is designed for larger commercial applications.'
-    },
-    {
-      question: 'What warranty do you offer?',
-      answer: 'Our concrete mixers are covered by a 6-month warranty against any manufacturing defects. For more information, please contact technical support.'
-    },
-    {
-      question: 'Are spare parts readily available?',
-      answer: 'Yes, we maintain a complete inventory of spare parts with delivery on request.'
-    }
-  ];
-
-  readonly companyStats: CompanyStat[] = [
-    {
-      icon: '🏭',
-      value: '20+',
-      label: 'Years Experience',
-      detail: 'Industry leadership since 2002'
-    },
-    {
-      icon: '🚛',
-      value: '5000+',
-      label: 'Mixers Delivered',
-      detail: 'Serving global construction needs'
-    },
-    {
-      icon: '🌍',
-      value: '30+',
-      label: 'Countries Served',
-      detail: 'Global presence and support'
-    }
-  ];
-
-  readonly heroBackgrounds = [
-    {
-      type: 'image',
-      src: '/assets/photos/twomixers1.jpg',
-      alt: 'Industrial cement mixer in action'
-    },
-    {
-      type: 'video',
-      src: '/assets/videos/homepage3.mp4',
-      poster: '/assets/photos/hero-video-poster.jpg'
-    }
-  ];
-
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private meta: Meta,
     private title: Title,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -505,6 +311,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.setupSEO();
       this.initializeFlagCarousel();
       this.initializeReviewSlider();
+
+      // Load translation data for dynamic content
+      this.loadTranslations();
+
+      // Subscribe to language changes to update content
+      this.translate.onLangChange.subscribe(() => {
+        this.loadTranslations();
+        this.setupSEO(); // Update SEO meta tags
+      });
     }
   }
 
@@ -531,20 +346,189 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  // Feature section methods
-  filterFeaturesByCategory(category: CategoryType): void {
-    this.activeFeatureCategory = category;
-    this.activeFeatureIndex = null; // Reset active feature when changing categories
+  // Load translated content for dynamic elements
+  private loadTranslations(): void {
+    // Load features translations
+    this.loadFeaturesTranslations();
+
+    // Load mixers translations
+    this.loadMixersTranslations();
+
+    // Load FAQ translations
+    this.loadFaqsTranslations();
+
+    // Load company stats translations
+    this.loadCompanyStatsTranslations();
   }
 
-  toggleFeatureDetail(index: number): void {
-    this.activeFeatureIndex = this.activeFeatureIndex === index ? null : index;
+  private loadFeaturesTranslations(): void {
+    this.translate.get([
+      'HOME_PAGE.FEATURES.DRUM_DESIGN.TITLE',
+      'HOME_PAGE.FEATURES.DRUM_DESIGN.DESCRIPTION',
+      'HOME_PAGE.FEATURES.DRUM_DESIGN.HIGHLIGHT',
+      'HOME_PAGE.FEATURES.GEAR_MECHANISM.TITLE',
+      'HOME_PAGE.FEATURES.GEAR_MECHANISM.DESCRIPTION',
+      'HOME_PAGE.FEATURES.GEAR_MECHANISM.HIGHLIGHT',
+      'HOME_PAGE.FEATURES.SAFETY.TITLE',
+      'HOME_PAGE.FEATURES.SAFETY.DESCRIPTION',
+      'HOME_PAGE.FEATURES.SAFETY.HIGHLIGHT'
+    ]).subscribe(translations => {
+      this.features = [
+        {
+          title: translations['HOME_PAGE.FEATURES.DRUM_DESIGN.TITLE'] || 'Reinforced Drum Design',
+          description: translations['HOME_PAGE.FEATURES.DRUM_DESIGN.DESCRIPTION'] || 'Heavy-duty steel construction with double-reinforced joints and wear-resistant coating.',
+          icon: 'fa-solid fa-shield',
+          highlight: translations['HOME_PAGE.FEATURES.DRUM_DESIGN.HIGHLIGHT'] || '50% increased lifespan',
+          category: 'design'
+        },
+        {
+          title: translations['HOME_PAGE.FEATURES.GEAR_MECHANISM.TITLE'] || 'Protected Gear Mechanism',
+          description: translations['HOME_PAGE.FEATURES.GEAR_MECHANISM.DESCRIPTION'] || 'Sealed gearbox system with automatic lubrication and debris protection.',
+          icon: 'fa-solid fa-gears',
+          highlight: translations['HOME_PAGE.FEATURES.GEAR_MECHANISM.HIGHLIGHT'] || '10,000+ operation hours',
+          category: 'performance'
+        },
+        {
+          title: translations['HOME_PAGE.FEATURES.SAFETY.TITLE'] || 'Enhanced Safety Features',
+          description: translations['HOME_PAGE.FEATURES.SAFETY.DESCRIPTION'] || 'Multiple emergency stops, protective guards, and safety interlocks for operator protection.',
+          icon: 'fa-solid fa-shield-halved',
+          highlight: translations['HOME_PAGE.FEATURES.SAFETY.HIGHLIGHT'] || 'Triple safety system',
+          category: 'safety'
+        }
+      ];
+    });
   }
 
-  get filteredFeatures(): Feature[] {
-    return this.activeFeatureCategory === 'all'
-      ? this.features
-      : this.features.filter(feature => feature.category === this.activeFeatureCategory);
+  private loadMixersTranslations(): void {
+    this.translate.get([
+      'HOME_PAGE.MIXERS.MT370.NAME',
+      'HOME_PAGE.MIXERS.MT370.SHORT_DESC',
+      'HOME_PAGE.MIXERS.MT370.DESC',
+      'HOME_PAGE.MIXERS.MT370.FEATURES.1',
+      'HOME_PAGE.MIXERS.MT370.FEATURES.2',
+      'HOME_PAGE.MIXERS.MT370.FEATURES.3',
+      'HOME_PAGE.MIXERS.MT370.FEATURES.4',
+      'HOME_PAGE.MIXERS.MT370.FEATURES.5',
+      'HOME_PAGE.MIXERS.MT370.SPECS.CAPACITY',
+      'HOME_PAGE.MIXERS.MT370.SPECS.POWER',
+      'HOME_PAGE.MIXERS.MT370.SPECS.WEIGHT',
+      'HOME_PAGE.MIXERS.MT480.NAME',
+      'HOME_PAGE.MIXERS.MT480.SHORT_DESC',
+      'HOME_PAGE.MIXERS.MT480.DESC',
+      'HOME_PAGE.MIXERS.MT480.FEATURES.1',
+      'HOME_PAGE.MIXERS.MT480.FEATURES.2',
+      'HOME_PAGE.MIXERS.MT480.FEATURES.3',
+      'HOME_PAGE.MIXERS.MT480.FEATURES.4',
+      'HOME_PAGE.MIXERS.MT480.FEATURES.5',
+      'HOME_PAGE.MIXERS.MT480.SPECS.CAPACITY',
+      'HOME_PAGE.MIXERS.MT480.SPECS.POWER',
+      'HOME_PAGE.MIXERS.MT480.SPECS.WEIGHT'
+    ]).subscribe(translations => {
+      this.mixers = [
+        {
+          name: translations['HOME_PAGE.MIXERS.MT370.NAME'] || 'Concrete Mixer MT-370',
+          shortDesc: translations['HOME_PAGE.MIXERS.MT370.SHORT_DESC'] || 'Compact Mixer',
+          description: translations['HOME_PAGE.MIXERS.MT370.DESC'] || 'Compact mixer perfect for small to medium projects, engineered for versatility and reliability in residential construction.',
+          features: [
+            translations['HOME_PAGE.MIXERS.MT370.FEATURES.1'] || 'Ideal for residential construction',
+            translations['HOME_PAGE.MIXERS.MT370.FEATURES.2'] || 'Easy to transport and maneuver',
+            translations['HOME_PAGE.MIXERS.MT370.FEATURES.3'] || 'Durable steel construction',
+            translations['HOME_PAGE.MIXERS.MT370.FEATURES.4'] || 'Low maintenance requirements',
+            translations['HOME_PAGE.MIXERS.MT370.FEATURES.5'] || 'Fuel-efficient operation'
+          ],
+          specs: {
+            capacity: translations['HOME_PAGE.MIXERS.MT370.SPECS.CAPACITY'] || '370 Liters',
+            enginePower: translations['HOME_PAGE.MIXERS.MT370.SPECS.POWER'] || '7-9 HP',
+            weight: translations['HOME_PAGE.MIXERS.MT370.SPECS.WEIGHT'] || '750 kg'
+          },
+          image: '/assets/photos/MT-370.jpg'
+        },
+        {
+          name: translations['HOME_PAGE.MIXERS.MT480.NAME'] || 'Concrete Mixer MT-480',
+          shortDesc: translations['HOME_PAGE.MIXERS.MT480.SHORT_DESC'] || 'Commercial Mixer',
+          description: translations['HOME_PAGE.MIXERS.MT480.DESC'] || 'Heavy-duty mixer engineered for large commercial projects, delivering maximum mixing efficiency and durability for demanding worksites.',
+          features: [
+            translations['HOME_PAGE.MIXERS.MT480.FEATURES.1'] || 'Perfect for commercial construction',
+            translations['HOME_PAGE.MIXERS.MT480.FEATURES.2'] || 'Maximum mixing efficiency',
+            translations['HOME_PAGE.MIXERS.MT480.FEATURES.3'] || 'Heavy-duty construction',
+            translations['HOME_PAGE.MIXERS.MT480.FEATURES.4'] || 'Enhanced durability components',
+            translations['HOME_PAGE.MIXERS.MT480.FEATURES.5'] || 'High-torque power system'
+          ],
+          specs: {
+            capacity: translations['HOME_PAGE.MIXERS.MT480.SPECS.CAPACITY'] || '480 Liters',
+            enginePower: translations['HOME_PAGE.MIXERS.MT480.SPECS.POWER'] || '13+ HP',
+            weight: translations['HOME_PAGE.MIXERS.MT480.SPECS.WEIGHT'] || '950 kg'
+          },
+          image: '/assets/photos/MT-480.jpg'
+        }
+      ];
+    });
+  }
+
+  private loadFaqsTranslations(): void {
+    // For demonstration, we'll only load the first FAQ, but in a real app you would load all
+    this.translate.get([
+      'HOME_PAGE.FAQ_SECTION.FAQ_1_QUESTION',
+      'HOME_PAGE.FAQ_SECTION.FAQ_1_ANSWER'
+    ]).subscribe(translations => {
+      // In a real application, you'd load all FAQs similarly
+      this.faqs = [
+        {
+          question: translations['HOME_PAGE.FAQ_SECTION.FAQ_1_QUESTION'] || 'How do I operate the MT-370 and MT-480 mixers?',
+          answer: translations['HOME_PAGE.FAQ_SECTION.FAQ_1_ANSWER'] || 'Watch our detailed demonstration video below:',
+          videoUrl: '/assets/videos/instruction.mp4',
+          posterImage: '/assets/photos/instruction-poster.png'
+        },
+        {
+          question: 'What maintenance is required?',
+          answer: 'Regular maintenance includes daily cleaning, weekly lubrication checks, and monthly mechanical inspections.'
+        },
+        {
+          question: 'Which mixer is right for my project?',
+          answer: 'The MT-370 is ideal for residential and small commercial projects, while the MT-480 is designed for larger commercial applications.'
+        },
+        {
+          question: 'What warranty do you offer?',
+          answer: 'Our concrete mixers are covered by a 6-month warranty against any manufacturing defects. For more information, please contact technical support.'
+        },
+        {
+          question: 'Are spare parts readily available?',
+          answer: 'Yes, we maintain a complete inventory of spare parts with delivery on request.'
+        }
+      ];
+    });
+  }
+
+  private loadCompanyStatsTranslations(): void {
+    this.translate.get([
+      'HOME_PAGE.COMPANY_SECTION.STATS_YEARS_EXPERIENCE',
+      'HOME_PAGE.COMPANY_SECTION.STATS_MIXERS_DELIVERED',
+      'HOME_PAGE.COMPANY_SECTION.STATS_COUNTRIES_SERVED',
+      'HOME_PAGE.COMPANY_SECTION.DETAIL_YEARS',
+      'HOME_PAGE.COMPANY_SECTION.DETAIL_MIXERS',
+      'HOME_PAGE.COMPANY_SECTION.DETAIL_COUNTRIES'
+    ]).subscribe(translations => {
+      this.companyStats = [
+        {
+          icon: '🏭',
+          value: '20+',
+          label: translations['HOME_PAGE.COMPANY_SECTION.STATS_YEARS_EXPERIENCE'] || 'Years Experience',
+          detail: translations['HOME_PAGE.COMPANY_SECTION.DETAIL_YEARS'] || 'Industry leadership since 2002'
+        },
+        {
+          icon: '🚛',
+          value: '5000+',
+          label: translations['HOME_PAGE.COMPANY_SECTION.STATS_MIXERS_DELIVERED'] || 'Mixers Delivered',
+          detail: translations['HOME_PAGE.COMPANY_SECTION.DETAIL_MIXERS'] || 'Serving global construction needs'
+        },
+        {
+          icon: '🌍',
+          value: '30+',
+          label: translations['HOME_PAGE.COMPANY_SECTION.STATS_COUNTRIES_SERVED'] || 'Countries Served',
+          detail: translations['HOME_PAGE.COMPANY_SECTION.DETAIL_COUNTRIES'] || 'Global presence and support'
+        }
+      ];
+    });
   }
 
   // Method for scrolling to comparison section
@@ -711,10 +695,29 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private setupSEO(): void {
-    this.title.setTitle('Professional Concrete Mixers | Industrial Mixing Solutions');
-    this.meta.updateTag({
-      name: 'description',
-      content: 'Professional-grade concrete mixers delivering reliability and performance for over two decades. Explore our range of industrial mixing solutions.'
+    // Use TranslateService for SEO titles and descriptions
+    this.translate.get('HOME_PAGE.SEO.TITLE').subscribe((res: string) => {
+      if (res) {
+        this.title.setTitle(res);
+      } else {
+        // Fallback if translation key doesn't exist
+        this.title.setTitle('Professional Concrete Mixers | Industrial Mixing Solutions');
+      }
+    });
+
+    this.translate.get('HOME_PAGE.SEO.DESCRIPTION').subscribe((res: string) => {
+      if (res) {
+        this.meta.updateTag({
+          name: 'description',
+          content: res
+        });
+      } else {
+        // Fallback if translation key doesn't exist
+        this.meta.updateTag({
+          name: 'description',
+          content: 'Professional-grade concrete mixers delivering reliability and performance for over two decades. Explore our range of industrial mixing solutions.'
+        });
+      }
     });
 
     const structuredData = {
@@ -826,47 +829,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       location: 'products_section',
       button_type: 'accent'
     });
-  }
-
-  trackFeatureView(feature: Feature): void {
-    this.trackEvent('feature_viewed', {
-      feature_name: feature.title,
-      feature_category: feature.category,
-      section: 'features_section'
-    });
-  }
-
-  // Feature interactions
-  playFeatureAnimation(featureIndex: number, animationType: string): void {
-    const feature = this.filteredFeatures[featureIndex];
-    if (!feature.animations?.includes(animationType)) return;
-
-    // Animation logic would be implemented here
-    // This is a placeholder for future animation implementations
-    console.log(`Playing ${animationType} animation for ${feature.title}`);
-
-    this.trackEvent('feature_animation_played', {
-      feature: feature.title,
-      animation: animationType
-    });
-  }
-
-  // Method to handle tab focusing in the feature section
-  onFeatureTabFocus(event: FocusEvent): void {
-    const target = event.target as HTMLElement;
-    if (target.classList.contains('feature-tab')) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
-  }
-
-  // Method to check if a feature belongs to a specific category
-  featureBelongsToCategory(feature: Feature, category: CategoryType): boolean {
-    return category === 'all' || feature.category === category;
-  }
-
-  // Get the number of features in each category (for displaying counts in tabs)
-  getCategoryCount(category: FeatureCategory): number {
-    return this.features.filter(feature => feature.category === category).length;
   }
 
   trackStatBy(index: number, stat: CompanyStat): string {
