@@ -1,6 +1,40 @@
-<div class="lang-toggle" (click)="toggleLanguage()">
-  <img
-    [src]="currentLang === 'en' ? 'assets/flags/gb.svg' : 'assets/flags/es.svg'"
-    [alt]="currentLang === 'en' ? 'English' : 'Español'"
-    class="flag-icon" />
+<div class="language-selector">
+  <div
+    class="lang-toggle"
+    (click)="toggleDropdown($event)"
+    [attr.aria-label]="'COMMON.CHANGE_LANGUAGE' | translate">
+
+    <!-- Flag Toggle (Both Desktop and Mobile) -->
+    <div class="flag-option" [class.active]="currentLang === 'en'" (click)="switchLanguage('en', $event)">
+      <img src="assets/flags/gb.svg" alt="English" class="flag-icon" />
+    </div>
+
+    <span class="divider">|</span>
+
+    <div class="flag-option" [class.active]="currentLang === 'es'" (click)="switchLanguage('es', $event)">
+      <img src="assets/flags/es.svg" alt="Español" class="flag-icon" />
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown (Only shown when dropdown is explicitly opened) -->
+  <div class="language-dropdown" *ngIf="isDropdownOpen && isMobile" role="menu" [attr.aria-label]="'COMMON.LANGUAGE_SELECTION' | translate">
+    <div class="dropdown-header">
+      <span>{{ 'COMMON.SELECT_LANGUAGE' | translate }}</span>
+    </div>
+    <div class="dropdown-items">
+      <button
+        *ngFor="let language of languages"
+        class="language-option"
+        [class.active]="language.key === currentLang"
+        (click)="switchLanguage(language.key, $event)"
+        role="menuitem">
+        <img
+          [src]="'assets/flags/' + (language.key === 'en' ? 'gb' : language.key) + '.svg'"
+          [alt]="language.name"
+          class="flag-icon" />
+        <span class="language-name">{{language.nativeName}}</span>
+        <span class="language-check" *ngIf="language.key === currentLang">✓</span>
+      </button>
+    </div>
+  </div>
 </div>

@@ -2,8 +2,8 @@
   <div class="nav-content">
     <!-- Logo Container -->
     <div class="logo-container" [class.show]="isScrolled">
-      <img src="assets/photos/logo.png" alt="Llanotecnica Logo" class="logo" />
-      <span class="company-name">Llanotecnica</span>
+      <img src="assets/photos/logo.png" alt="{{ 'NAV.LOGO_ALT' | translate }}" class="logo" />
+      <span class="company-name">{{ 'NAV.COMPANY_NAME' | translate }}</span>
     </div>
 
     <!-- Hamburger Menu Button -->
@@ -13,11 +13,14 @@
       <span></span>
     </button>
 
+    <!-- Language Selector for Mobile (Always visible) -->
+    <app-language-selector class="mobile-language-selector"></app-language-selector>
+
     <!-- Nav Links -->
     <ul class="nav-links" [class.show-mobile]="isMenuOpen" [class.scrolled-nav]="isScrolled">
       <li>
         <a
-          routerLink="/"
+          [routerLink]="getRoutePath('')"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{exact: true}"
           (click)="closeMenu()">
@@ -25,17 +28,26 @@
         </a>
       </li>
       <li>
-        <a routerLink="/about-us" routerLinkActive="active" (click)="closeMenu()">
+        <a
+          [routerLink]="getRoutePath('about-us')"
+          routerLinkActive="active"
+          (click)="closeMenu()">
           {{ 'NAV.ABOUT_US' | translate }}
         </a>
       </li>
       <li>
-        <a routerLink="/products" routerLinkActive="active" (click)="closeMenu()">
+        <a
+          [routerLink]="getRoutePath('products')"
+          routerLinkActive="active"
+          (click)="closeMenu()">
           {{ 'NAV.PRODUCTS' | translate }}
         </a>
       </li>
       <li>
-        <a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">
+        <a
+          [routerLink]="getRoutePath('contact')"
+          routerLinkActive="active"
+          (click)="closeMenu()">
           {{ 'NAV.CONTACT' | translate }}
         </a>
       </li>
@@ -46,11 +58,6 @@
           <img src="assets/photos/pdf.png" alt="PDF Icon" class="download-icon" />
           {{ 'NAV.DOWNLOAD_CATALOG' | translate }}
         </a>
-      </li>
-
-      <!-- Mobile-Only: Language Selector -->
-      <li class="mobile-only language-selector-mobile">
-        <app-language-selector></app-language-selector>
       </li>
     </ul>
 
@@ -70,12 +77,12 @@
     <h3>{{ 'NAV.CATALOG_MODAL.TITLE' | translate }}</h3>
     <p>{{ 'NAV.CATALOG_MODAL.SUBTITLE' | translate }}</p>
     <div class="language-options">
-      <button (click)="downloadCatalog('en'); closeCatalogModal()">
-        <img src="https://flagcdn.com/w80/us.png" alt="English" />
+      <button (click)="downloadCatalog('en')">
+        <img src="assets/flags/gb.svg" alt="English" />
         {{ 'NAV.CATALOG_MODAL.ENGLISH' | translate }}
       </button>
-      <button (click)="downloadCatalog('es'); closeCatalogModal()">
-        <img src="https://flagcdn.com/w80/es.png" alt="Español" />
+      <button (click)="downloadCatalog('es')">
+        <img src="assets/flags/es.svg" alt="Español" />
         {{ 'NAV.CATALOG_MODAL.SPANISH' | translate }}
       </button>
     </div>

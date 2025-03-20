@@ -1,56 +1,62 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine } from '@angular/ssr';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
+import fs from 'fs';
 import bootstrap from './src/main.server';
 
-// The Express app is exported so that it can be used by serverless Functions.
+// Determine folder paths
+const serverDistFolder = dirname(fileURLToPath(import.meta.url));
+const browserDistFolder = join(serverDistFolder, '../browser');
+
+const engineFunction = (
+  filePath: string,
+  options: { [key: string]: any },
+  callback: (e: any, rendered?: string) => void
+) => {
+  // Read the HTML template if not provided in options
+  let document = options['document'];
+  if (!document) {
+    try {
+      document = fs.readFileSync(filePath, 'utf-8');
+    } catch (err) {
+      return callback(err);
+    }
+  }
+  const req = options['req'];
+  if (!req) {
+    return callback(new Error('Request object is missing in render options.'));
+  }
+  const providers = options['providers'] || [];
+  bootstrap({
+    document,
+    url: req.url,
+    providers,
+  })
+    .then((html: string) => callback(null, html))
+    .catch((err: any) => callback(err));
+};
+
 export function app(): express.Express {
   const server = express();
-  const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-  const browserDistFolder = resolve(serverDistFolder, '../browser');
-  const indexHtml = join(serverDistFolder, 'index.server.html');
-
-  const commonEngine = new CommonEngine();
-
+  server.engine('html', engineFunction);
   server.set('view engine', 'html');
-  server.set('views', browserDistFolder);
+  server.set('views', serverDistFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  // Serve static files from /browser
-  server.get('*.*', express.static(browserDistFolder, {
-    maxAge: '1y'
-  }));
-
-  // All regular routes use the Angular engine
-  server.get('*', (req, res, next) => {
-    const { protocol, originalUrl, baseUrl, headers } = req;
-
-    commonEngine
-      .render({
-        bootstrap,
-        documentFilePath: indexHtml,
-        url: `${protocol}://${headers.host}${originalUrl}`,
-        publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
-      })
-      .then((html) => res.send(html))
-      .catch((err) => next(err));
+  server.get('*.*', express.static(browserDistFolder, { maxAge: '1y' }));
+  server.get('*', (req, res) => {
+    res.render('index', {
+      req,
+      providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
+    });
   });
-
   return server;
 }
 
-function run(): void {
-  const port = process.env['PORT'] || 4000;
-
-  // Start up the Node server
+if (require.main === module) {
+  const PORT = process.env['PORT'] || 4000;
   const server = app();
-  server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
+  server.listen(PORT, () => {
+    console.log(`Listening on http://localhost:${PORT}`);
   });
 }
-
-run();

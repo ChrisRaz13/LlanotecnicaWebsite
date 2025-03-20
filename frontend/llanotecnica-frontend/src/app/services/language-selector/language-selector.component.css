@@ -1,31 +1,140 @@
-/* language-selector.component.css */
+/* Base Container */
+.language-selector {
+  position: relative;
+}
+
+/* Language Toggle */
 .lang-toggle {
   cursor: pointer;
   display: flex;
   align-items: center;
-  padding: 5px;
+  gap: 5px;
+  padding: 5px 10px;
   border-radius: 5px;
+  background: rgba(0, 135, 81, 0.1);
   transition: all 0.3s ease;
   margin-left: 30px;
 }
 
 .lang-toggle:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 135, 81, 0.2);
 }
 
+/* Flag options */
+.flag-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.flag-option.active {
+  background: rgba(0, 135, 81, 0.2);
+  transform: scale(1.1);
+}
+
+/* Divider */
+.lang-toggle .divider {
+  color: #999;
+  font-weight: 300;
+  cursor: default;
+}
+
+/* Flag icon */
 .flag-icon {
   width: 24px;
-  height: 24px;
-  border-radius: 4px;
+  height: 16px;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
 }
 
+/* Mobile Dropdown Menu */
+.language-dropdown {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: 50vh;
+  background: white;
+  border-radius: 15px 15px 0 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1100;
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* Dropdown header */
+.dropdown-header {
+  padding: 15px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #eaeaea;
+  color: #333;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Dropdown items container */
+.dropdown-items {
+  max-height: calc(50vh - 50px);
+  overflow-y: auto;
+}
+
+/* Language option */
+.language-option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  gap: 10px;
+  font-size: 1rem;
+}
+
+.language-option:hover {
+  background: #f5f5f5;
+}
+
+.language-option.active {
+  background: rgba(0, 135, 81, 0.05);
+  color: #008751;
+}
+
+/* Language name */
+.language-name {
+  flex-grow: 1;
+}
+
+/* Check mark for selected language */
+.language-check {
+  color: #008751;
+  font-weight: bold;
+}
+
+/* Mobile styles adjustments */
 @media (max-width: 768px) {
   .lang-toggle {
+    margin-left: 0;
     position: fixed;
     top: 20px;
     right: 70px;
-    margin-left: 0;
-    background: white;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1002;
   }
 }

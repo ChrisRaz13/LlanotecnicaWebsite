@@ -32,6 +32,9 @@ import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operato
 import { Subject } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 
+// Import TranslateModule to make the translation pipe available in your template
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 interface Country {
   name: {
     common: string;
@@ -65,9 +68,10 @@ interface SubmitResponse {
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.scss'],
+  styleUrls: ['./contact.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  // Added TranslateModule to the imports array so that the translate pipe works in your template
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   animations: [
     trigger('fadeSlideInOut', [
       transition(':enter', [
@@ -132,7 +136,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private cd: ChangeDetectorRef,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    // Added TranslateService to constructor for localized error messages
+    private translate: TranslateService
   ) {
     this.initializeForm();
     if (isPlatformBrowser(this.platformId)) {
@@ -146,6 +152,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.loadCountries().then(() => {
         this.setupCountrySearch();
       });
+
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           this.loadCountries();
@@ -385,19 +392,19 @@ export class ContactComponent implements OnInit, OnDestroy {
           if (error instanceof HttpErrorResponse) {
             switch (error.status) {
               case 400:
-                this.errorMessage = 'Please check your form inputs and try again.';
+                this.errorMessage = this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
                 break;
               case 403:
-                this.errorMessage = 'Security verification failed. Please try again.';
+                this.errorMessage = this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
                 break;
               case 429:
-                this.errorMessage = 'Too many attempts. Please try again later.';
+                this.errorMessage = this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
                 break;
               default:
-                this.errorMessage = 'An error occurred. Please try again later.';
+                this.errorMessage = this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
             }
           } else {
-            this.errorMessage = 'An unexpected error occurred. Please try again.';
+            this.errorMessage = this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
           }
           console.error('🔥 Form submission error:', error);
         });
@@ -423,27 +430,44 @@ export class ContactComponent implements OnInit, OnDestroy {
   getErrorMessage(controlName: string): string {
     const control = this.contactForm.get(controlName);
     if (!control || !control.errors || !control.touched) return '';
-    const errors = {
-      required: 'This field is required',
-      email: 'Please enter a valid email address',
-      minlength: `Minimum length is ${control.errors?.['minlength']?.requiredLength} characters`,
-      maxlength: `Maximum length is ${control.errors?.['maxlength']?.requiredLength} characters`,
-      pattern: this.getPatternErrorMessage(controlName)
-    };
-    const firstError = Object.keys(control.errors)[0] as keyof typeof errors;
-    return errors[firstError] || 'Invalid input';
+
+    // Required
+    if (control.errors['required']) {
+      return this.translate.instant('CONTACT_PAGE.ERROR_REQUIRED');
+    }
+    // Email
+    if (control.errors['email']) {
+      return this.translate.instant('CONTACT_PAGE.ERROR_EMAIL');
+    }
+    // Min length
+    if (control.errors['minlength']) {
+      const requiredLength = control.errors['minlength'].requiredLength;
+      return this.translate.instant('CONTACT_PAGE.ERROR_MINLENGTH', { value: requiredLength });
+    }
+    // Max length
+    if (control.errors['maxlength']) {
+      const requiredLength = control.errors['maxlength'].requiredLength;
+      return this.translate.instant('CONTACT_PAGE.ERROR_MAXLENGTH', { value: requiredLength });
+    }
+    // Pattern
+    if (control.errors['pattern']) {
+      return this.translate.instant('CONTACT_PAGE.ERROR_PATTERN');
+    }
+
+    // Fallback
+    return this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
   }
 
   private getPatternErrorMessage(controlName: string): string {
     switch (controlName) {
       case 'name':
-        return 'Please enter a valid name (letters only)';
+        return this.translate.instant('CONTACT_PAGE.ERROR_PATTERN_NAME');
       case 'email':
-        return 'Please enter a valid email address';
+        return this.translate.instant('CONTACT_PAGE.ERROR_PATTERN_EMAIL');
       case 'phone':
-        return 'Please enter a valid phone number';
+        return this.translate.instant('CONTACT_PAGE.ERROR_PATTERN_PHONE');
       default:
-        return 'Invalid format';
+        return this.translate.instant('CONTACT_PAGE.ERROR_PATTERN');
     }
   }
 }

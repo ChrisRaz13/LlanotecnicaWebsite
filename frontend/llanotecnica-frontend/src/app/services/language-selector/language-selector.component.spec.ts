@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LanguageSelectorComponent } from './language-selector.component';
+import { LanguageSelectorComponent } from '../../core/i18n/language-selector.component';
 
 describe('LanguageSelectorComponent', () => {
   let component: LanguageSelectorComponent;

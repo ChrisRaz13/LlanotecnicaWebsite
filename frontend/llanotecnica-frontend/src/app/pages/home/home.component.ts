@@ -82,7 +82,7 @@ interface CustomerReview {
   standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  styleUrls: ['./home.component.css'],
   animations: [
     trigger('fadeIn', [
       transition(':enter', [

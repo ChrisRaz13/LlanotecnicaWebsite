@@ -1,17 +1,24 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { BannerComponent } from './components/banner/banner.component';
 import { FooterComponent } from "./components/footer/footer.component";
-import { TranslateService } from '@ngx-translate/core';
-import { Title } from '@angular/platform-browser';
-import { HttpClient } from '@angular/common/http';
-import { isPlatformBrowser } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Title, Meta } from '@angular/platform-browser';
+import { filter } from 'rxjs/operators';
+import { SeoLanguageService } from './services/language-selector/seo-language.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, BannerComponent, FooterComponent],
+  imports: [
+    RouterOutlet,
+    NavbarComponent,
+    BannerComponent,
+    FooterComponent,
+    TranslateModule
+  ],
   template: `
     <app-banner></app-banner>
     <app-navbar></app-navbar>
@@ -25,50 +32,86 @@ export class AppComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     private titleService: Title,
-    private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object
+    private router: Router,
+    private seoService: SeoLanguageService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(DOCUMENT) private document: Document
   ) {
+    // Set available languages and default
+    this.translate.addLangs(['en', 'es']);
     this.translate.setDefaultLang('en');
+
+    // Initialize language
+    this.initializeLanguage();
   }
 
-  ngOnInit(): void {
-    this.setLanguageBasedOnIPAndBrowser();
-    this.updatePageTitle();
-  }
-
-  private setLanguageBasedOnIPAndBrowser(): void {
+  private initializeLanguage(): void {
+    // Only access localStorage in browser environment
     if (isPlatformBrowser(this.platformId)) {
-      const storedLang = localStorage.getItem('lang');
-      if (storedLang) {
-        this.translate.use(storedLang);
-      } else {
-        let browserLang = navigator.language.split('-')[0];
-        this.http.get('https://ipapi.co/json/').subscribe((res: any) => {
-          if (res && res.country_code) {
-            const spanishCountries = ['ES', 'MX', 'AR', 'CO', 'PE', 'CL', 'VE', 'EC', 'GT', 'CU', 'BO', 'DO', 'HN', 'NI', 'SV', 'CR', 'PA'];
-            const selectedLang = spanishCountries.includes(res.country_code) ? 'es' : (browserLang || 'en');
-            this.translate.use(selectedLang);
-            localStorage.setItem('lang', selectedLang);
-          } else {
-            this.translate.use(browserLang || 'en');
-            localStorage.setItem('lang', browserLang || 'en');
-          }
-          this.updatePageTitle();
-        }, (error) => {
-          this.translate.use(browserLang || 'en');
-          localStorage.setItem('lang', browserLang || 'en');
-          this.updatePageTitle();
-        });
+      try {
+        // Use the stored language preference if available
+        const storedLang = localStorage.getItem('preferredLanguage');
+        if (storedLang === 'en' || storedLang === 'es') {
+          this.translate.use(storedLang);
+        } else {
+          // Simple browser language detection
+          const browserLang = navigator.language || '';
+          const langCode = browserLang.split('-')[0].toLowerCase();
+          const useLang = langCode === 'es' ? 'es' : 'en';
+          this.translate.use(useLang);
+          localStorage.setItem('preferredLanguage', useLang);
+        }
+      } catch (error) {
+        // Fallback to default language if browser detection fails
+        this.translate.use('en');
+        localStorage.setItem('preferredLanguage', 'en');
       }
     } else {
+      // In SSR, just use default language
+      // This will be overridden by the server-side language detection if available
       this.translate.use('en');
     }
   }
 
+  ngOnInit(): void {
+    // Initialize SEO service
+    this.seoService.initialize();
+
+    // Only subscribe to router events in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      // Set document language
+      this.document.documentElement.lang = this.translate.currentLang || 'en';
+
+      // Listen for route changes to update page title
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe(() => {
+        this.updatePageTitle();
+      });
+
+      // Listen for language changes
+      this.translate.onLangChange.subscribe(() => {
+        this.document.documentElement.lang = this.translate.currentLang;
+        this.updatePageTitle();
+      });
+    }
+  }
+
+  // Update page title based on current route
   private updatePageTitle(): void {
-    this.translate.get('HOME_PAGE.SEO.TITLE').subscribe((res: string) => {
-      const finalTitle = (res && res !== 'HOME_PAGE.SEO.TITLE') ? res : 'Professional Concrete Mixers | Industrial Mixing Solutions';
-      this.titleService.setTitle(finalTitle);
+    const currentPath = this.router.url;
+    let titleKey = 'HOME_PAGE.SEO.TITLE';
+
+    if (currentPath.includes('/about-us') || currentPath.includes('/sobre-nosotros')) {
+      titleKey = 'ABOUT_US_PAGE.SEO.TITLE';
+    } else if (currentPath.includes('/products') || currentPath.includes('/productos')) {
+      titleKey = 'HOME_PAGE.SEO.TITLE'; // Update this if you have a product page title
+    } else if (currentPath.includes('/contact') || currentPath.includes('/contacto')) {
+      titleKey = 'HOME_PAGE.SEO.TITLE'; // Update this if you have a contact page title
+    }
+
+    this.translate.get(titleKey).subscribe((res: string) => {
+      this.titleService.setTitle(res !== titleKey ? res : 'Llanotecnica');
     });
   }
 }

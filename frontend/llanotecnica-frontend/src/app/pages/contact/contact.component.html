@@ -9,17 +9,17 @@
       <div class="contact-form-card">
         <h2 class="section-title">
           <i class="fas fa-envelope-open-text me-2"></i>
-          Get in Touch
+          {{ 'CONTACT_PAGE.GET_IN_TOUCH' | translate }}
         </h2>
 
         <!-- Alert Messages -->
         <div *ngIf="submitSuccess" class="alert alert-success" role="alert" [@fadeSlideInOut]>
           <i class="fas fa-check-circle me-2"></i>
-          Thank you for your message! We'll respond shortly.
+          {{ 'CONTACT_PAGE.SUCCESS_MESSAGE' | translate }}
         </div>
         <div *ngIf="submitError" class="alert alert-danger" role="alert" [@fadeSlideInOut]>
           <i class="fas fa-exclamation-circle me-2"></i>
-          {{ errorMessage || 'There was an error sending your message. Please try again.' }}
+          {{ errorMessage || ('CONTACT_PAGE.ERROR_MESSAGE' | translate) }}
         </div>
 
         <!-- Contact Form -->
@@ -28,7 +28,7 @@
           <div class="form-group">
             <label for="name" class="form-label">
               <i class="fas fa-user me-2"></i>
-              Full Name *
+              {{ 'CONTACT_PAGE.FULL_NAME' | translate }} *
             </label>
             <input
               type="text"
@@ -36,9 +36,8 @@
               formControlName="name"
               class="form-control"
               [class.is-invalid]="contactForm.get('name')?.touched && contactForm.get('name')?.invalid"
-              placeholder="Enter your full name"
-              autocomplete="name"
-            >
+              placeholder="{{ 'CONTACT_PAGE.FULL_NAME_PLACEHOLDER' | translate }}"
+              autocomplete="name">
             <div class="invalid-feedback" [@fadeSlideInOut]>
               {{ getErrorMessage('name') }}
             </div>
@@ -48,7 +47,7 @@
           <div class="form-group">
             <label for="email" class="form-label">
               <i class="fas fa-envelope me-2"></i>
-              Email Address *
+              {{ 'CONTACT_PAGE.EMAIL_ADDRESS' | translate }} *
             </label>
             <input
               type="email"
@@ -56,9 +55,8 @@
               formControlName="email"
               class="form-control"
               [class.is-invalid]="contactForm.get('email')?.touched && contactForm.get('email')?.invalid"
-              placeholder="Enter your email address"
-              autocomplete="email"
-            >
+              placeholder="{{ 'CONTACT_PAGE.EMAIL_ADDRESS_PLACEHOLDER' | translate }}"
+              autocomplete="email">
             <div class="invalid-feedback" [@fadeSlideInOut]>
               {{ getErrorMessage('email') }}
             </div>
@@ -68,7 +66,7 @@
           <div class="form-group">
             <label for="phone" class="form-label">
               <i class="fas fa-phone me-2"></i>
-              Phone Number
+              {{ 'CONTACT_PAGE.PHONE_NUMBER' | translate }}
             </label>
             <input
               type="tel"
@@ -76,9 +74,8 @@
               formControlName="phone"
               class="form-control"
               [class.is-invalid]="contactForm.get('phone')?.touched && contactForm.get('phone')?.invalid"
-              placeholder="Enter your phone number (optional)"
-              autocomplete="tel"
-            >
+              placeholder="{{ 'CONTACT_PAGE.PHONE_NUMBER_PLACEHOLDER' | translate }}"
+              autocomplete="tel">
             <div class="invalid-feedback" [@fadeSlideInOut]>
               {{ getErrorMessage('phone') }}
             </div>
@@ -88,7 +85,7 @@
           <div class="form-group">
             <label for="country" class="form-label">
               <i class="fas fa-globe me-2"></i>
-              Country *
+              {{ 'CONTACT_PAGE.COUNTRY' | translate }} *
             </label>
             <div class="country-selector" (clickOutside)="onClickOutside($event)">
               <div class="input-group">
@@ -99,17 +96,16 @@
                   formControlName="country"
                   class="form-control"
                   [class.is-invalid]="contactForm.get('country')?.touched && contactForm.get('country')?.invalid"
-                  placeholder="Type to search countries"
+                  placeholder="{{ 'CONTACT_PAGE.COUNTRY_PLACEHOLDER' | translate }}"
                   (focus)="onCountryInputFocus()"
-                  autocomplete="off"
-                >
+                  autocomplete="off">
                 <span class="input-group-text" *ngIf="isLoadingCountries">
                   <div class="spinner-border spinner-border-sm text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">{{ 'CONTACT_PAGE.LOADING' | translate }}</span>
                   </div>
                 </span>
                 <span class="input-group-text" *ngIf="!isLoadingCountries && getSelectedCountryFlag()">
-                  <img [src]="getSelectedCountryFlag()" alt="Selected country flag" class="country-flag">
+                  <img [src]="getSelectedCountryFlag()" alt="{{ 'CONTACT_PAGE.COUNTRY_FLAG_ALT' | translate }}" class="country-flag">
                 </span>
               </div>
 
@@ -119,13 +115,12 @@
                   class="country-option"
                   [class.selected]="i === selectedCountryIndex"
                   (click)="selectCountry(country)"
-                  (mouseenter)="selectedCountryIndex = i"
-                >
+                  (mouseenter)="selectedCountryIndex = i">
                   <img [src]="country.flags.svg" [alt]="country.name.common + ' flag'" class="country-flag">
                   <span>{{ country.name.common }}</span>
                 </div>
                 <div class="p-3 text-center text-muted" *ngIf="filteredCountries.length === 0">
-                  No countries found
+                  {{ 'CONTACT_PAGE.NO_COUNTRIES_FOUND' | translate }}
                 </div>
               </div>
 
@@ -139,17 +134,16 @@
           <div class="form-group">
             <label for="inquiryType" class="form-label">
               <i class="fas fa-question-circle me-2"></i>
-              Inquiry Type *
+              {{ 'CONTACT_PAGE.INQUIRY_TYPE' | translate }} *
             </label>
             <select
               id="inquiryType"
               formControlName="inquiryType"
               class="form-control"
-              [class.is-invalid]="contactForm.get('inquiryType')?.touched && contactForm.get('inquiryType')?.invalid"
-            >
-              <option value="">Select an inquiry type</option>
+              [class.is-invalid]="contactForm.get('inquiryType')?.touched && contactForm.get('inquiryType')?.invalid">
+              <option value="">{{ 'CONTACT_PAGE.SELECT_INQUIRY_TYPE' | translate }}</option>
               <option *ngFor="let type of inquiryTypes" [value]="type">
-                {{ type }}
+                {{ ('CONTACT_FORM.INQUIRY_TYPES.' + type) | translate }}
               </option>
             </select>
             <div class="invalid-feedback" [@fadeSlideInOut]>
@@ -161,7 +155,7 @@
           <div class="form-group">
             <label for="message" class="form-label">
               <i class="fas fa-comment me-2"></i>
-              Message *
+              {{ 'CONTACT_PAGE.MESSAGE' | translate }} *
             </label>
             <textarea
               id="message"
@@ -169,8 +163,7 @@
               class="form-control"
               rows="5"
               [class.is-invalid]="contactForm.get('message')?.touched && contactForm.get('message')?.invalid"
-              placeholder="Enter your message here"
-            ></textarea>
+              placeholder="{{ 'CONTACT_PAGE.MESSAGE_PLACEHOLDER' | translate }}"></textarea>
             <div class="invalid-feedback" [@fadeSlideInOut]>
               {{ getErrorMessage('message') }}
             </div>
@@ -184,14 +177,13 @@
             type="submit"
             class="btn btn-primary w-100"
             [disabled]="isSubmitting || contactForm.invalid"
-            [class.loading]="isSubmitting"
-          >
+            [class.loading]="isSubmitting">
             <div class="button-content">
               <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status">
-                <span class="visually-hidden">Loading...</span>
+                <span class="visually-hidden">{{ 'CONTACT_PAGE.LOADING' | translate }}</span>
               </span>
               <i class="fas" [class.fa-paper-plane]="!isSubmitting" [class.fa-spinner]="isSubmitting"></i>
-              {{ isSubmitting ? 'Sending...' : 'Send Message' }}
+              {{ isSubmitting ? ('CONTACT_PAGE.SENDING' | translate) : ('CONTACT_PAGE.SEND_MESSAGE' | translate) }}
             </div>
           </button>
         </form>
@@ -203,61 +195,55 @@
       <div class="company-info-card">
         <h3 class="section-title">
           <i class="fas fa-building me-2"></i>
-          Contact Information
+          {{ 'CONTACT_PAGE.CONTACT_INFORMATION' | translate }}
         </h3>
-
         <div class="card-content">
           <div class="contact-details">
             <!-- Phone -->
-            <a href="tel:{{ companyDetails.phone }}" class="contact-item" aria-label="Call us">
+            <a href="tel:{{ companyDetails.phone }}" class="contact-item" [attr.aria-label]=" 'CONTACT_PAGE.CALL_US' | translate ">
               <i class="fas fa-phone"></i>
               <div>
-                <p><strong>Phone</strong></p>
+                <p><strong>{{ 'CONTACT_PAGE.PHONE' | translate }}</strong></p>
                 <p>{{ companyDetails.phone }}</p>
               </div>
             </a>
-
             <!-- WhatsApp -->
-            <a [href]="companyDetails.whatsapp" target="_blank" class="contact-item" aria-label="Contact on WhatsApp">
+            <a [href]="companyDetails.whatsapp" target="_blank" class="contact-item" [attr.aria-label]=" 'CONTACT_PAGE.WHATSAPP' | translate ">
               <i class="fab fa-whatsapp"></i>
               <div>
-                <p><strong>WhatsApp</strong></p>
+                <p><strong>{{ 'CONTACT_PAGE.WHATSAPP' | translate }}</strong></p>
                 <p>{{ companyDetails.phone }}</p>
               </div>
             </a>
-
             <!-- Email -->
-            <a [href]="'mailto:' + companyDetails.email" class="contact-item" aria-label="Email us">
+            <a [href]="'mailto:' + companyDetails.email" class="contact-item" [attr.aria-label]=" 'CONTACT_PAGE.EMAIL_US' | translate ">
               <i class="fas fa-envelope"></i>
               <div>
-                <p><strong>Email</strong></p>
+                <p><strong>{{ 'CONTACT_PAGE.EMAIL' | translate }}</strong></p>
                 <p>{{ companyDetails.email }}</p>
               </div>
             </a>
-
             <!-- Address -->
             <div class="contact-item">
               <i class="fas fa-map-marker-alt"></i>
               <div>
-                <p><strong>Address</strong></p>
+                <p><strong>{{ 'CONTACT_PAGE.ADDRESS' | translate }}</strong></p>
                 <p>{{ companyDetails.address }}</p>
               </div>
             </div>
           </div>
-
           <!-- Social Media Links -->
           <div class="social-links">
-            <a [href]="socialLinks.facebook" target="_blank" class="social-icon facebook" aria-label="Facebook">
+            <a [href]="socialLinks.facebook" target="_blank" class="social-icon facebook" [attr.aria-label]=" 'CONTACT_PAGE.FACEBOOK' | translate ">
               <i class="fab fa-facebook-f"></i>
             </a>
-            <a [href]="socialLinks.instagram" target="_blank" class="social-icon instagram" aria-label="Instagram">
+            <a [href]="socialLinks.instagram" target="_blank" class="social-icon instagram" [attr.aria-label]=" 'CONTACT_PAGE.INSTAGRAM' | translate ">
               <i class="fab fa-instagram"></i>
             </a>
-            <a [href]="companyDetails.whatsapp" target="_blank" class="social-icon whatsapp" aria-label="WhatsApp">
+            <a [href]="companyDetails.whatsapp" target="_blank" class="social-icon whatsapp" [attr.aria-label]=" 'CONTACT_PAGE.WHATSAPP' | translate ">
               <i class="fab fa-whatsapp"></i>
             </a>
           </div>
-
           <!-- Google Maps -->
           <div class="google-map">
             <iframe
@@ -268,8 +254,8 @@
               loading="lazy"
               allowfullscreen
               referrerpolicy="no-referrer-when-downgrade"
-              title="Company Location on Google Maps"
-            ></iframe>
+              [attr.title]=" 'CONTACT_PAGE.GOOGLE_MAP_TITLE' | translate ">
+            </iframe>
           </div>
         </div>
       </div>

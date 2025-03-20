@@ -19,8 +19,12 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/assets/favicon",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/assets/i18n",
+                "output": "assets/i18n/"
+              }
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
@@ -28,16 +32,11 @@
               "src/styles.css"
             ],
             "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            },
             "allowedCommonJsDependencies": [
-            "@firebase/firestore",
-            "@grpc/grpc-js",
-            "@grpc/proto-loader",
-            "undici"
+              "@firebase/firestore",
+              "@grpc/grpc-js",
+              "@grpc/proto-loader",
+              "undici"
             ]
           },
           "configurations": {
@@ -61,8 +60,8 @@
                 },
                 {
                   "type": "any",
-                  "maximumWarning": "800kb",
-                  "maximumError": "1000kb"
+                  "maximumWarning": "1.8mb",
+                  "maximumError": "2mb"
                 }
               ],
               "outputHashing": "all"
@@ -93,6 +92,14 @@
           },
           "defaultConfiguration": "development"
         },
+        "serve:ssr": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/llanotecnica/server",
+            "main": "src/main.server.ts",
+            "tsConfig": "tsconfig.server.json"
+          }
+        },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
@@ -108,8 +115,12 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              "src/assets/favicon",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/assets/i18n",
+                "output": "/assets/i18n/"
+              }
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
@@ -120,6 +131,22 @@
               "node_modules/aos/dist/aos.js"
             ]
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/llanotecnica/server",
+            "main": "src/main.server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "sourceMap": false,
+              "optimization": true
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

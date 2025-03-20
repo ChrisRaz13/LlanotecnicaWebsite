@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom, PLATFORM_ID } from '@angular/core';
-import { provideRouter, withViewTransitions, withInMemoryScrolling, withPreloading, PreloadAllModules } from '@angular/router';
+import { provideRouter, withViewTransitions, withInMemoryScrolling } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
@@ -30,8 +30,7 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
         anchorScrolling: 'enabled',
-      }),
-      withPreloading(PreloadAllModules) // Add preloading strategy for lazy loaded modules
+      })
     ),
     provideAnimations(),
     provideHttpClient(),

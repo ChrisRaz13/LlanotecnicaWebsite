@@ -1,4 +1,13 @@
 {
+  "MT-370 Series": "MT-370 Series",
+  "Medium Duty": "Medium Duty",
+  "Heavy Duty": "Heavy Duty",
+  "MT-480 Series": "MT-480 Series",
+  "MT370 Series": "MT-370 Series",
+  "MT480 Series": "MT-480 Series",
+  "Durable & High-Performance Concrete Mixers": "Durable & High-Performance Concrete Mixers",
+  "Designed for any job—from mid-sized projects to heavy-duty tasks—built for strength, efficiency, and reliable performance.": "Designed for any job—from mid-sized projects to heavy-duty tasks—built for strength, efficiency, and reliable performance.",
+  "Our Professional Mixer Models": "Our Professional Mixer Models",
   "NAV": {
     "LOGO_ALT": "Llanotecnica Logo",
     "COMPANY_NAME": "Llanotecnica",
@@ -200,5 +209,298 @@
       "STEP_LOAD_MATERIALS": "Load Materials",
       "STEP_LOAD_MATERIALS_DESC": "Fill to max capacity (MT-370: 370L, MT-480: 480L)"
     }
-  }
+  },
+  "ABOUT_US_PAGE": {
+    "SEO": {
+      "TITLE": "About Us | Llanotecnica | Professional Mixing Solutions",
+      "DESCRIPTION": "Discover our journey of manufacturing high-quality concrete mixers, our values, and commitment to innovation since 2007."
+    },
+    "HERO": {
+      "TAGLINE": "Welcome to Our Story",
+      "TITLE": "Passionate About Engineering Excellence",
+      "DESCRIPTION": "Since 2007, we've been committed to delivering innovative solutions that transform how industries operate. With a focus on quality, precision, and sustainability, we're creating the technology that builds tomorrow.",
+      "CTA_BUTTON": "Connect With Us"
+    },
+    "MISSION": {
+      "TITLE": "Our Mission",
+      "LOGO_ALT": "Company Logo",
+      "PARAGRAPH_1": "At Llanotecnica, we believe the future of construction hinges on <span class=\"highlighted-text\">pioneering mixing solutions</span> that raise the bar for <span class=\"highlighted-text\">efficiency, reliability, and sustainability</span>.",
+      "PARAGRAPH_2": "We're committed to <span class=\"highlighted-text\">transforming the construction landscape</span> through cutting-edge technology, robust design, and environmentally conscious engineering.",
+      "TEAM_IMAGE_ALT": "Team in Factory"
+    },
+    "VALUES": {
+      "TITLE": "Our Values",
+      "VALUES_LIST": [
+        {
+          "ICON": "fas fa-lightbulb",
+          "TITLE": "Innovation",
+          "DESCRIPTION": "Pushing boundaries in mixing technology with cutting-edge solutions"
+        },
+        {
+          "ICON": "fas fa-shield-alt",
+          "TITLE": "Quality",
+          "DESCRIPTION": "Unwavering commitment to excellence in every machine we produce"
+        },
+        {
+          "ICON": "fas fa-leaf",
+          "TITLE": "Sustainability",
+          "DESCRIPTION": "Environmental responsibility through efficient, eco-friendly designs"
+        },
+        {
+          "ICON": "fas fa-handshake",
+          "TITLE": "Partnership",
+          "DESCRIPTION": "Building lasting relationships through trust and mutual success"
+        }
+      ]
+    },
+    "PRODUCTION_STORY": {
+      "TITLE": "Our Team in Action",
+      "SUBTITLE": "A look inside our factory where expert craftsmanship meets innovation.",
+      "STAGE_LABEL": "Stage",
+      "STAGES": [
+        {
+          "TITLE": "Precision Welding",
+          "DESCRIPTION": "Ensuring durability & strength in every frame."
+        },
+        {
+          "TITLE": "Expert Assembly",
+          "DESCRIPTION": "Every part meticulously placed for peak performance."
+        },
+        {
+          "TITLE": "Quality Assurance",
+          "DESCRIPTION": "Rigorous testing to meet industry standards."
+        },
+        {
+          "TITLE": "Final Inspections",
+          "DESCRIPTION": "Ensuring perfection before shipping out."
+        },
+        {
+          "TITLE": "Premium Finishing",
+          "DESCRIPTION": "High-quality coatings for a lasting impact."
+        },
+        {
+          "TITLE": "Final Quality Check",
+          "DESCRIPTION": "A comprehensive final inspection ensuring every machine meets our rigorous standards."
+        }
+      ]
+    },
+    "FINAL_CTA": {
+      "TITLE": "Excellence in Every Detail",
+      "TEXT": "The culmination of our craftsmanship and expertise - creating reliable, efficient concrete mixing solutions that help build a stronger tomorrow.",
+      "CTA_BUTTON": "Contact Us",
+      "VIDEO_ARIA_LABEL": "Background video showing concrete mixer"
+    },
+    "COMPANY_DETAILS": {
+      "PHONE": "+507 6566-4942",
+      "EMAIL": "info@llanotecnica.com",
+      "ADDRESS": "Panama City, Panama"
+    }
+  },
+  "CONTACT_PAGE": {
+    "GET_IN_TOUCH": "Get in Touch",
+    "SUCCESS_MESSAGE": "Thank you for your message! We'll respond shortly.",
+    "ERROR_MESSAGE": "There was an error sending your message. Please try again.",
+    "FULL_NAME": "Full Name",
+    "FULL_NAME_PLACEHOLDER": "Enter your full name",
+    "EMAIL_ADDRESS": "Email Address",
+    "EMAIL_ADDRESS_PLACEHOLDER": "Enter your email address",
+    "PHONE_NUMBER": "Phone Number",
+    "PHONE_NUMBER_PLACEHOLDER": "Enter your phone number (optional)",
+    "COUNTRY": "Country",
+    "COUNTRY_PLACEHOLDER": "Type to search countries",
+    "LOADING": "Loading...",
+    "COUNTRY_FLAG_ALT": "Selected country flag",
+    "NO_COUNTRIES_FOUND": "No countries found",
+    "INQUIRY_TYPE": "Inquiry Type",
+    "SELECT_INQUIRY_TYPE": "Select an inquiry type",
+    "MESSAGE": "Message",
+    "MESSAGE_PLACEHOLDER": "Enter your message here",
+    "SENDING": "Sending...",
+    "SEND_MESSAGE": "Send Message",
+    "CONTACT_INFORMATION": "Contact Information",
+    "CALL_US": "Call us",
+    "PHONE": "Phone",
+    "EMAIL_US": "Email us",
+    "EMAIL": "Email",
+    "ADDRESS": "Address",
+    "FACEBOOK": "Facebook",
+    "INSTAGRAM": "Instagram",
+    "GOOGLE_MAP_TITLE": "Company Location on Google Maps",
+    "ERROR_REQUIRED": "This field is required",
+    "ERROR_EMAIL": "Please enter a valid email address",
+    "ERROR_MINLENGTH": "Minimum length is {{value}} characters",
+    "ERROR_MAXLENGTH": "Maximum length is {{value}} characters",
+    "ERROR_PATTERN": "Invalid format",
+    "ERROR_PATTERN_NAME": "Please enter a valid name (letters only)",
+    "ERROR_PATTERN_EMAIL": "Please enter a valid email address",
+    "ERROR_PATTERN_PHONE": "Please enter a valid phone number",
+    "WHATSAPP": "WhatsApp"
+  },
+  "CONTACT_FORM": {
+    "INQUIRY_TYPES": {
+      "Product Information": "Product Information",
+      "Price Quote": "Price Quote",
+      "Spare Parts": "Spare Parts",
+      "Technical Support": "Technical Support",
+      "Maintenance Service": "Maintenance Service",
+      "Dealer/Distribution": "Dealer/Distribution",
+      "Warranty Claim": "Warranty Claim",
+      "General Inquiry": "General Inquiry"
+    }
+  },
+  "PRODUCTS_PAGE": {
+    "HERO": {
+      "TITLE": "Durable & High-Performance Concrete Mixers",
+      "DESCRIPTION": "Designed for any job-from mid-sized projects to heavy-duty tasks-built for strength, efficiency, and reliable performance."
+    },
+    "PRODUCTS_SECTION": {
+      "HEADING": "Our Professional Mixer Models",
+      "MT370": {
+        "TITLE": "MT-370 Series",
+        "BADGE": "Medium Duty",
+        "DESCRIPTION": "Perfect for mid-scale construction tasks, this mixer offers a 370L drum with 360° rotation for flexible loading and versatile discharge postions. Its tubular T-reinforced chassis and optimized drum vanes ensure efficient mixing and extended durability. A V-belt transmission minimizes vibration, while pedal-controlled positioning and cast iron-toothed parts simplify single-operator use. Built from highly resistant steel, the MT-370 stands up to continuous mixing demands on every worksite.",
+        "SERIES_TITLE": "MT-370 Series",
+        "DUTY_LABEL": "Medium Duty",
+        "DETAILED_DESCRIPTION": "Perfect for mid-scale construction tasks, this mixer offers a 370L drum with 360° rotation for flexible loading and versatile discharge positions. Its tubular T-reinforced chassis and optimized drum vanes ensure efficient mixing and extended durability. A V-belt transmission minimizes vibration, while pedal-controlled positioning and cast iron-toothed parts simplify single-operator use. Built from highly resistant steel, the MT-370 stands up to continuous mixing demands on every worksite."
+      },
+      "MT480": {
+        "TITLE": "MT-480 Series",
+        "BADGE": "Heavy Duty",
+        "DESCRIPTION": "Built for large-scale construction needs, this mixer features a 420L drum with 360° rotation for enhanced loading and multiple discharge positions. Its tubular T-reinforced chassis and optimized blade vanes provide reliable, high-volume performance. A V-belt transmission reduces vibrations for smoother operation, while pedal-controlled positioning and cast iron-toothed parts enable single-operator handing. The MT-480 thrives under continuous mixing in demanding jobsites.",
+        "SERIES_TITLE": "MT-480 Series",
+        "DUTY_LABEL": "Heavy Duty",
+        "DETAILED_DESCRIPTION": "Built for large-scale construction needs, this mixer features a 420L drum with 360° rotation for enhanced loading and multiple discharge positions. Its tubular T-reinforced chassis and optimized blade vanes provide reliable, high-volume performance. A V-belt transmission reduces vibrations for smoother operation, while pedal-controlled positioning and cast iron-toothed parts enable single-operator handling. The MT-480 thrives under continuous mixing in demanding jobsites."
+      },
+      "MT-370": {
+        "TITLE": "Series",
+        "BADGE": "Bestseller",
+        "DESCRIPTION": "Our compact 370-liter mixer, designed to deliver maximum mobility and efficiency for residential and small commercial projects.",
+        "SERIES_TITLE": "MT-370 Series",
+        "DUTY_LABEL": "Medium Duty",
+        "DETAILED_DESCRIPTION": "Perfect for mid-scale construction tasks, this mixer offers a 370L drum with 360° rotation for flexible loading and versatile discharge positions. Its tubular T-reinforced chassis and optimized drum vanes ensure efficient mixing and extended durability. A V-belt transmission minimizes vibration, while pedal-controlled positioning and cast iron-toothed parts simplify single-operator use. Built from highly resistant steel, the MT-370 stands up to continuous mixing demands on every worksite."
+      },
+      "MT-480": {
+        "TITLE": "Series",
+        "BADGE": "Professional",
+        "DESCRIPTION": "Our powerful 480-liter mixer, designed for efficient concrete production in larger-scale commercial and industrial projects.",
+        "SERIES_TITLE": "MT-480 Series",
+        "DUTY_LABEL": "Heavy Duty",
+        "DETAILED_DESCRIPTION": "Built for large-scale construction needs, this mixer features a 420L drum with 360° rotation for enhanced loading and multiple discharge positions. Its tubular T-reinforced chassis and optimized blade vanes provide reliable, high-volume performance. A V-belt transmission reduces vibrations for smoother operation, while pedal-controlled positioning and cast iron-toothed parts enable single-operator handling. The MT-480 thrives under continuous mixing in demanding jobsites."
+      },
+      "TABS": {
+        "KEY_SPECS": "Key Specs",
+        "FEATURES": "Features",
+        "DIMENSIONS": "Dimensions"
+      },
+      "SPECS": {
+        "CAPACITY": "Capacity",
+        "DRUM_OPENING": "Drum Opening",
+        "DRUM_DEPTH": "Drum Depth",
+        "LENGTH": "Length",
+        "WIDTH": "Width",
+        "HEIGHT": "Height",
+        "WEIGHT": "Weight"
+      },
+      "ACTIONS": {
+        "REQUEST_QUOTE": "Request Quote",
+        "DOWNLOAD_MANUAL": "Download Manual"
+      }
+    },
+    "COMPARISON_SECTION": {
+      "TITLE": "Model Comparison",
+      "SUBTITLE": "Find the perfect mixer for your project by comparing detailed specifications",
+      "TABS": {
+        "SPECIFICATIONS": "Specifications",
+        "ENGINE_OPTIONS": "Engine Options"
+      },
+      "TABLES": {
+        "SPECIFICATION": "Specification",
+        "DRUM_SPECIFICATIONS": "Drum Specifications",
+        "UNIT_SPECIFICATIONS": "Unit Specifications",
+        "DIMENSIONS": "Dimensions",
+        "ENGINE_TYPE": "Engine Type",
+        "POWER_RATING": "Power Rating",
+        "MANAGEMENT_SYSTEM": "Management System",
+        "DISCHARGE_HEIGHT": "Discharge Height",
+        "WHEEL_SIZE": "Wheel Size"
+      }
+    },
+    "ENGINE_SECTION": {
+      "TITLE": "Engine Options",
+      "DESCRIPTION": "Our mixers are compatible with a variety of engines to suit your specific needs",
+      "RECOMMENDED_MT370": "Honda GX270 (9HP) or 4Power Gasoline (7HP)",
+      "RECOMMENDED_MT480": "Honda GX390 (13HP) or 4Power Diesel (9HP)",
+      "FILTERS": {
+        "ALL_ENGINES": "All Engines",
+        "GASOLINE": "Gasoline",
+        "DIESEL": "Diesel",
+        "ELECTRIC": "Electric"
+      },
+      "CATEGORIES": {
+        "GASOLINE_ENGINES": "Gasoline Engines",
+        "DIESEL_ENGINES": "Diesel Engines",
+        "ELECTRIC_MOTORS": "Electric Motors"
+      },
+      "BADGES": {
+        "PREMIUM_PERFORMANCE": "Premium Performance",
+        "FUEL_EFFICIENT": "Fuel Efficient",
+        "ZERO_EMISSIONS": "Zero Emissions"
+      },
+      "ENGINE_CARD": {
+        "GASOLINE_ENGINE": "Gasoline Engine",
+        "DIESEL_ENGINE": "Diesel Engine",
+        "ELECTRIC_MOTOR": "Electric Motor",
+        "DISPLACEMENT": "Displacement",
+        "WEIGHT": "Weight",
+        "TORQUE": "Torque",
+        "COMPATIBLE_WITH": "Compatible with",
+        "VIEW_SPECS": "View Specs",
+        "SPEED": "Speed",
+        "POWER_TYPE": "Power Type",
+        "SINGLE_PHASE": "Single Phase",
+        "THREE_PHASE": "Three Phase"
+      },
+      "NO_RESULTS": {
+        "TITLE": "No engines found",
+        "DESCRIPTION": "No engines are available with the selected filters",
+        "SHOW_ALL": "Show All"
+      }
+    },
+    "ENGINE_DIALOG": {
+      "MAX_POWER": "Maximum Power",
+      "MAX_TORQUE": "Maximum Torque",
+      "ENGINE_DIMENSIONS": "Engine Dimensions",
+      "BORE_STROKE": "Bore x Stroke",
+      "DISPLACEMENT": "Displacement",
+      "COMPRESSION_RATIO": "Compression Ratio",
+      "DIMENSIONS": "Dimensions",
+      "DRY_WEIGHT": "Dry Weight",
+      "OPERATIONAL_SPECS": "Operational Specs",
+      "START_MODEL": "Starting System",
+      "IGNITION_SYSTEM": "Ignition System",
+      "FUEL_CONSUMPTION": "Fuel Consumption",
+      "OIL_CAPACITY": "Oil Capacity",
+      "FUEL_TANK": "Fuel Tank",
+      "KEY_FEATURES": "Key Features",
+      "COMPATIBLE_WITH": "Compatible with",
+      "CLOSE": "Close",
+      "HONDA_ENGINE_MODEL": "GX {{power}} HP Engine",
+      "GAS_ENGINE_MODEL": "{{power}} HP Gasoline Engine",
+      "DIESEL_ENGINE_MODEL": "{{power}} HP Diesel Engine",
+      "ELECTRIC_ENGINE_MODEL": "{{power}} HP Electric Motor"
+    },
+    "MANUAL_DIALOG": {
+      "TITLE": "Download Manual for",
+      "SELECT_LANGUAGE": "Select manual language:",
+      "ENGLISH": "English",
+      "SPANISH": "Spanish",
+      "CANCEL": "Cancel"
+    }
+  },
+  "PRODUCTS_PAGE.MT-370.SERIES_TITLE": "MT-370 Series",
+  "PRODUCTS_PAGE.MT-480.SERIES_TITLE": "MT-480 Series",
+  "PRODUCTS_PAGE.MT-370.DUTY_LABEL": "Medium Duty",
+  "PRODUCTS_PAGE.MT-480.DUTY_LABEL": "Heavy Duty",
+  "PRODUCTS_PAGE.MT-370.DETAILED_DESCRIPTION": "Perfect for mid-scale construction tasks, this mixer offers a 370L drum with 360° rotation for flexible loading and versatile discharge positions. Its tubular T-reinforced chassis and optimized drum vanes ensure efficient mixing and extended durability. A V-belt transmission minimizes vibration, while pedal-controlled positioning and cast iron-toothed parts simplify single-operator use. Built from highly resistant steel, the MT-370 stands up to continuous mixing demands on every worksite.",
+  "PRODUCTS_PAGE.MT-480.DETAILED_DESCRIPTION": "Built for large-scale construction needs, this mixer features a 420L drum with 360° rotation for enhanced loading and multiple discharge positions. Its tubular T-reinforced chassis and optimized blade vanes provide reliable, high-volume performance. A V-belt transmission reduces vibrations for smoother operation, while pedal-controlled positioning and cast iron-toothed parts enable single-operator handling. The MT-480 thrives under continuous mixing in demanding jobsites."
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog, MatDialogModule, MatDialogConfig } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 
 // Interfaces
 interface EngineCompatibility {
@@ -98,7 +99,7 @@ type EngineFilterType = 'all' | 'gas' | 'diesel' | 'electric';
 @Component({
   selector: 'app-product-section',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatDialogModule, MatButtonModule],
+  imports: [CommonModule, RouterModule, MatDialogModule, MatButtonModule, TranslateModule],
   templateUrl: './product-section.component.html',
   styleUrls: ['./product-section.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

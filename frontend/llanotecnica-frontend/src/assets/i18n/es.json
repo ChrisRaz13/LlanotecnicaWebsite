@@ -1,4 +1,13 @@
 {
+  "MT-370 Series": "Serie MT-370",
+  "Medium Duty": "Uso Medio",
+  "Heavy Duty": "Uso Pesado",
+  "MT-480 Series": "Serie MT-480",
+  "MT370 Series": "Serie MT-370",
+  "MT480 Series": "Serie MT-480",
+  "Durable & High-Performance Concrete Mixers": "Mezcladoras de Concreto Durables y de Alto Rendimiento",
+  "Designed for any job—from mid-sized projects to heavy-duty tasks—built for strength, efficiency, and reliable performance.": "Diseñadas para cualquier trabajo—desde proyectos de tamaño medio hasta tareas pesadas—construidas para fuerza, eficiencia y rendimiento confiable.",
+  "Our Professional Mixer Models": "Nuestros Modelos de Mezcladoras Profesionales",
   "NAV": {
     "LOGO_ALT": "Logotipo de Llanotecnica",
     "COMPANY_NAME": "Llanotecnica",
@@ -200,5 +209,298 @@
       "STEP_LOAD_MATERIALS": "Cargar Materiales",
       "STEP_LOAD_MATERIALS_DESC": "Llena a capacidad máxima (MT-370: 370L, MT-480: 480L)"
     }
-  }
+  },
+  "ABOUT_US_PAGE": {
+    "SEO": {
+      "TITLE": "Sobre Nosotros | Llanotecnica | Soluciones Profesionales de Mezcla",
+      "DESCRIPTION": "Descubre nuestra trayectoria fabricando mezcladoras de concreto de alta calidad, nuestros valores y compromiso con la innovación desde 2007."
+    },
+    "HERO": {
+      "TAGLINE": "Bienvenido a Nuestra Historia",
+      "TITLE": "Apasionados por la Excelencia en Ingeniería",
+      "DESCRIPTION": "Desde 2007, nos hemos comprometido a ofrecer soluciones innovadoras que transforman el funcionamiento de las industrias. Con un enfoque en calidad, precisión y sostenibilidad, estamos creando la tecnología que construye el mañana.",
+      "CTA_BUTTON": "Contáctanos"
+    },
+    "MISSION": {
+      "TITLE": "Nuestra Misión",
+      "LOGO_ALT": "Logotipo de la Empresa",
+      "PARAGRAPH_1": "En Llanotecnica, creemos que el futuro de la construcción depende de <span class=\"highlighted-text\">soluciones de mezcla pioneras</span> que elevan el estándar de <span class=\"highlighted-text\">eficiencia, fiabilidad y sostenibilidad</span>.",
+      "PARAGRAPH_2": "Estamos comprometidos con <span class=\"highlighted-text\">transformar el panorama de la construcción</span> a través de tecnología de vanguardia, diseño robusto e ingeniería respetuosa con el medio ambiente.",
+      "TEAM_IMAGE_ALT": "Equipo en la Fábrica"
+    },
+    "VALUES": {
+      "TITLE": "Nuestros Valores",
+      "VALUES_LIST": [
+        {
+          "ICON": "fas fa-lightbulb",
+          "TITLE": "Innovación",
+          "DESCRIPTION": "Ampliando las fronteras en tecnología de mezcla con soluciones vanguardistas"
+        },
+        {
+          "ICON": "fas fa-shield-alt",
+          "TITLE": "Calidad",
+          "DESCRIPTION": "Compromiso inquebrantable con la excelencia en cada máquina que producimos"
+        },
+        {
+          "ICON": "fas fa-leaf",
+          "TITLE": "Sostenibilidad",
+          "DESCRIPTION": "Responsabilidad ambiental a través de diseños eficientes y ecológicos"
+        },
+        {
+          "ICON": "fas fa-handshake",
+          "TITLE": "Colaboración",
+          "DESCRIPTION": "Construyendo relaciones duraderas basadas en la confianza y el éxito mutuo"
+        }
+      ]
+    },
+    "PRODUCTION_STORY": {
+      "TITLE": "Nuestro Equipo en Acción",
+      "SUBTITLE": "Un vistazo al interior de nuestra fábrica donde la artesanía experta se encuentra con la innovación.",
+      "STAGE_LABEL": "Etapa",
+      "STAGES": [
+        {
+          "TITLE": "Soldadura de Precisión",
+          "DESCRIPTION": "Garantizando durabilidad y resistencia en cada estructura."
+        },
+        {
+          "TITLE": "Ensamblaje Experto",
+          "DESCRIPTION": "Cada pieza meticulosamente colocada para un rendimiento óptimo."
+        },
+        {
+          "TITLE": "Control de Calidad",
+          "DESCRIPTION": "Pruebas rigurosas para cumplir con los estándares de la industria."
+        },
+        {
+          "TITLE": "Inspecciones Finales",
+          "DESCRIPTION": "Asegurando la perfección antes del envío."
+        },
+        {
+          "TITLE": "Acabado Premium",
+          "DESCRIPTION": "Revestimientos de alta calidad para un impacto duradero."
+        },
+        {
+          "TITLE": "Verificación Final de Calidad",
+          "DESCRIPTION": "Una inspección final integral que garantiza que cada máquina cumple con nuestros rigurosos estándares."
+        }
+      ]
+    },
+    "FINAL_CTA": {
+      "TITLE": "Excelencia en Cada Detalle",
+      "TEXT": "La culminación de nuestra artesanía y experiencia - creando soluciones de mezcla de concreto confiables y eficientes que ayudan a construir un mañana más sólido.",
+      "CTA_BUTTON": "Contáctanos",
+      "VIDEO_ARIA_LABEL": "Video de fondo mostrando mezcladora de concreto"
+    },
+    "COMPANY_DETAILS": {
+      "PHONE": "+507 6566-4942",
+      "EMAIL": "info@llanotecnica.com",
+      "ADDRESS": "Ciudad de Panamá, Panamá"
+    }
+  },
+  "CONTACT_PAGE": {
+    "GET_IN_TOUCH": "Contáctanos",
+    "SUCCESS_MESSAGE": "¡Gracias por tu mensaje! Te responderemos a la brevedad.",
+    "ERROR_MESSAGE": "Ocurrió un error al enviar tu mensaje. Por favor, inténtalo de nuevo.",
+    "FULL_NAME": "Nombre Completo",
+    "FULL_NAME_PLACEHOLDER": "Ingresa tu nombre completo",
+    "EMAIL_ADDRESS": "Correo Electrónico",
+    "EMAIL_ADDRESS_PLACEHOLDER": "Ingresa tu correo electrónico",
+    "PHONE_NUMBER": "Número de Teléfono",
+    "PHONE_NUMBER_PLACEHOLDER": "Ingresa tu número de teléfono (opcional)",
+    "COUNTRY": "País",
+    "COUNTRY_PLACEHOLDER": "Escribe para buscar países",
+    "LOADING": "Cargando...",
+    "COUNTRY_FLAG_ALT": "Bandera del país seleccionado",
+    "NO_COUNTRIES_FOUND": "No se encontraron países",
+    "INQUIRY_TYPE": "Tipo de Consulta",
+    "SELECT_INQUIRY_TYPE": "Selecciona un tipo de consulta",
+    "MESSAGE": "Mensaje",
+    "MESSAGE_PLACEHOLDER": "Escribe tu mensaje aquí",
+    "SENDING": "Enviando...",
+    "SEND_MESSAGE": "Enviar Mensaje",
+    "CONTACT_INFORMATION": "Información de Contacto",
+    "CALL_US": "Llámanos",
+    "PHONE": "Teléfono",
+    "EMAIL_US": "Envíanos un correo",
+    "EMAIL": "Correo",
+    "ADDRESS": "Dirección",
+    "FACEBOOK": "Facebook",
+    "INSTAGRAM": "Instagram",
+    "GOOGLE_MAP_TITLE": "Ubicación de la empresa en Google Maps",
+    "ERROR_REQUIRED": "Este campo es obligatorio",
+    "ERROR_EMAIL": "Por favor ingresa un correo electrónico válido",
+    "ERROR_MINLENGTH": "La longitud mínima es {{value}} caracteres",
+    "ERROR_MAXLENGTH": "La longitud máxima es {{value}} caracteres",
+    "ERROR_PATTERN": "Formato inválido",
+    "ERROR_PATTERN_NAME": "Por favor ingresa un nombre válido (solo letras)",
+    "ERROR_PATTERN_EMAIL": "Por favor ingresa un correo electrónico válido",
+    "ERROR_PATTERN_PHONE": "Por favor ingresa un número de teléfono válido",
+    "WHATSAPP": "WhatsApp"
+  },
+  "CONTACT_FORM": {
+    "INQUIRY_TYPES": {
+      "Product Information": "Información de Producto",
+      "Price Quote": "Cotización de Precio",
+      "Spare Parts": "Repuestos",
+      "Technical Support": "Soporte Técnico",
+      "Maintenance Service": "Servicio de Mantenimiento",
+      "Dealer/Distribution": "Distribuidor/Distribución",
+      "Warranty Claim": "Reclamo de Garantía",
+      "General Inquiry": "Consulta General"
+    }
+  },
+  "PRODUCTS_PAGE": {
+    "HERO": {
+      "TITLE": "Mezcladoras de Concreto Durables y de Alto Rendimiento",
+      "DESCRIPTION": "Diseñadas para cualquier trabajo—desde proyectos de tamaño medio hasta tareas pesadas—construidas para fuerza, eficiencia y rendimiento confiable."
+    },
+    "PRODUCTS_SECTION": {
+      "HEADING": "Nuestros Modelos de Mezcladoras Profesionales",
+      "MT370": {
+        "TITLE": "Serie MT-370",
+        "BADGE": "Uso Medio",
+        "DESCRIPTION": "Perfecta para tareas de construcción de mediana escala, esta mezcladora ofrece un tambor de 370L con rotación de 360° para carga flexible y posiciones de descarga versátiles. Su chasis tubular reforzado en T y paletas de tambor optimizadas garantizan una mezcla eficiente y durabilidad extendida. La transmisión por correa en V minimiza la vibración, mientras que el posicionamiento controlado por pedal y las piezas dentadas de hierro fundido simplifican el uso por un solo operador. Fabricada con acero altamente resistente, la MT-370 responde a las demandas de mezcla continua en cada obra.",
+        "SERIES_TITLE": "Serie MT-370",
+        "DUTY_LABEL": "Uso Medio",
+        "DETAILED_DESCRIPTION": "Perfecta para tareas de construcción de mediana escala, esta mezcladora ofrece un tambor de 370L con rotación de 360° para carga flexible y posiciones de descarga versátiles. Su chasis tubular reforzado en T y paletas de tambor optimizadas garantizan una mezcla eficiente y durabilidad extendida. La transmisión por correa en V minimiza la vibración, mientras que el posicionamiento controlado por pedal y las piezas dentadas de hierro fundido simplifican el uso por un solo operador. Fabricada con acero altamente resistente, la MT-370 responde a las demandas de mezcla continua en cada obra."
+      },
+      "MT480": {
+        "TITLE": "Serie MT-480",
+        "BADGE": "Uso Pesado",
+        "DESCRIPTION": "Construida para necesidades de construcción a gran escala, esta mezcladora cuenta con un tambor de 420L con rotación de 360° para carga mejorada y múltiples posiciones de descarga. Su chasis tubular reforzado en T y paletas de tambor optimizadas proporcionan un rendimiento fiable de alto volumen. La transmisión por correa en V reduce las vibraciones para una operación más suave, mientras que el posicionamiento controlado por pedal y las piezas dentadas de hierro fundido permiten un manejo sencillo por un solo operador. La MT-480 prospera bajo demandas de mezcla continua en obras exigentes.",
+        "SERIES_TITLE": "Serie MT-480",
+        "DUTY_LABEL": "Uso Pesado",
+        "DETAILED_DESCRIPTION": "Construida para necesidades de construcción a gran escala, esta mezcladora cuenta con un tambor de 420L con rotación de 360° para carga mejorada y múltiples posiciones de descarga. Su chasis tubular reforzado en T y paletas de tambor optimizadas proporcionan un rendimiento fiable de alto volumen. La transmisión por correa en V reduce las vibraciones para una operación más suave, mientras que el posicionamiento controlado por pedal y las piezas dentadas de hierro fundido permiten un manejo sencillo por un solo operador. La MT-480 prospera bajo demandas de mezcla continua en obras exigentes."
+      },
+      "MT-370": {
+        "TITLE": "Serie",
+        "BADGE": "Más Vendida",
+        "DESCRIPTION": "Nuestra mezcladora compacta de 370 litros, diseñada para brindar máxima movilidad y eficiencia en proyectos residenciales y comerciales pequeños.",
+        "SERIES_TITLE": "Serie MT-370",
+        "DUTY_LABEL": "Uso Medio",
+        "DETAILED_DESCRIPTION": "Perfecta para tareas de construcción de mediana escala, esta mezcladora ofrece un tambor de 370L con rotación de 360° para carga flexible y posiciones de descarga versátiles. Su chasis tubular reforzado en T y paletas de tambor optimizadas garantizan una mezcla eficiente y durabilidad extendida. La transmisión por correa en V minimiza la vibración, mientras que el posicionamiento controlado por pedal y las piezas dentadas de hierro fundido simplifican el uso por un solo operador. Fabricada con acero altamente resistente, la MT-370 responde a las demandas de mezcla continua en cada obra."
+      },
+      "MT-480": {
+        "TITLE": "Serie",
+        "BADGE": "Profesional",
+        "DESCRIPTION": "Nuestra potente mezcladora de 480 litros, diseñada para una producción eficiente de concreto en proyectos comerciales e industriales de mayor escala.",
+        "SERIES_TITLE": "Serie MT-480",
+        "DUTY_LABEL": "Uso Pesado",
+        "DETAILED_DESCRIPTION": "Construida para necesidades de construcción a gran escala, esta mezcladora cuenta con un tambor de 420L con rotación de 360° para carga mejorada y múltiples posiciones de descarga. Su chasis tubular reforzado en T y paletas de tambor optimizadas proporcionan un rendimiento fiable de alto volumen. La transmisión por correa en V reduce las vibraciones para una operación más suave, mientras que el posicionamiento controlado por pedal y las piezas dentadas de hierro fundido permiten un manejo sencillo por un solo operador. La MT-480 prospera bajo demandas de mezcla continua en obras exigentes."
+      },
+      "TABS": {
+        "KEY_SPECS": "Especificaciones Clave",
+        "FEATURES": "Características",
+        "DIMENSIONS": "Dimensiones"
+      },
+      "SPECS": {
+        "CAPACITY": "Capacidad",
+        "DRUM_OPENING": "Apertura del Tambor",
+        "DRUM_DEPTH": "Profundidad del Tambor",
+        "LENGTH": "Longitud",
+        "WIDTH": "Ancho",
+        "HEIGHT": "Altura",
+        "WEIGHT": "Peso"
+      },
+      "ACTIONS": {
+        "REQUEST_QUOTE": "Solicitar Cotización",
+        "DOWNLOAD_MANUAL": "Descargar Manual"
+      }
+    },
+    "COMPARISON_SECTION": {
+      "TITLE": "Comparación de Modelos",
+      "SUBTITLE": "Encuentra la mezcladora perfecta para tu proyecto comparando las especificaciones detalladas",
+      "TABS": {
+        "SPECIFICATIONS": "Especificaciones",
+        "ENGINE_OPTIONS": "Opciones de Motor"
+      },
+      "TABLES": {
+        "SPECIFICATION": "Especificación",
+        "DRUM_SPECIFICATIONS": "Especificaciones del Tambor",
+        "UNIT_SPECIFICATIONS": "Especificaciones de la Unidad",
+        "DIMENSIONS": "Dimensiones",
+        "ENGINE_TYPE": "Tipo de Motor",
+        "POWER_RATING": "Clasificación de Potencia",
+        "MANAGEMENT_SYSTEM": "Sistema de Gestión",
+        "DISCHARGE_HEIGHT": "Altura de Descarga",
+        "WHEEL_SIZE": "Tamaño de Ruedas"
+      }
+    },
+    "ENGINE_SECTION": {
+      "TITLE": "Opciones de Motor",
+      "DESCRIPTION": "Nuestras mezcladoras son compatibles con una variedad de motores para adaptarse a sus necesidades específicas",
+      "RECOMMENDED_MT370": "Honda GX270 (9HP) o 4Power Gasolina (7HP)",
+      "RECOMMENDED_MT480": "Honda GX390 (13HP) o 4Power Diésel (9HP)",
+      "FILTERS": {
+        "ALL_ENGINES": "Todos los Motores",
+        "GASOLINE": "Gasolina",
+        "DIESEL": "Diésel",
+        "ELECTRIC": "Eléctrico"
+      },
+      "CATEGORIES": {
+        "GASOLINE_ENGINES": "Motores a Gasolina",
+        "DIESEL_ENGINES": "Motores Diésel",
+        "ELECTRIC_MOTORS": "Motores Eléctricos"
+      },
+      "BADGES": {
+        "PREMIUM_PERFORMANCE": "Rendimiento Premium",
+        "FUEL_EFFICIENT": "Eficiente en Combustible",
+        "ZERO_EMISSIONS": "Cero Emisiones"
+      },
+      "ENGINE_CARD": {
+        "GASOLINE_ENGINE": "Motor a Gasolina",
+        "DIESEL_ENGINE": "Motor Diésel",
+        "ELECTRIC_MOTOR": "Motor Eléctrico",
+        "DISPLACEMENT": "Cilindrada",
+        "WEIGHT": "Peso",
+        "TORQUE": "Torque",
+        "COMPATIBLE_WITH": "Compatible con",
+        "VIEW_SPECS": "Ver Especificaciones",
+        "SPEED": "Velocidad",
+        "POWER_TYPE": "Tipo de Alimentación",
+        "SINGLE_PHASE": "Monofásico",
+        "THREE_PHASE": "Trifásico"
+      },
+      "NO_RESULTS": {
+        "TITLE": "No se encontraron motores",
+        "DESCRIPTION": "No hay motores disponibles con los filtros seleccionados",
+        "SHOW_ALL": "Mostrar Todos"
+      }
+    },
+    "ENGINE_DIALOG": {
+      "MAX_POWER": "Potencia Máxima",
+      "MAX_TORQUE": "Torque Máximo",
+      "ENGINE_DIMENSIONS": "Dimensiones del Motor",
+      "BORE_STROKE": "Diámetro x Carrera",
+      "DISPLACEMENT": "Cilindrada",
+      "COMPRESSION_RATIO": "Relación de Compresión",
+      "DIMENSIONS": "Dimensiones",
+      "DRY_WEIGHT": "Peso en Seco",
+      "OPERATIONAL_SPECS": "Especificaciones Operativas",
+      "START_MODEL": "Sistema de Arranque",
+      "IGNITION_SYSTEM": "Sistema de Ignición",
+      "FUEL_CONSUMPTION": "Consumo de Combustible",
+      "OIL_CAPACITY": "Capacidad de Aceite",
+      "FUEL_TANK": "Tanque de Combustible",
+      "KEY_FEATURES": "Características Clave",
+      "COMPATIBLE_WITH": "Compatible con",
+      "CLOSE": "Cerrar",
+      "HONDA_ENGINE_MODEL": "Motor GX {{power}} HP",
+      "GAS_ENGINE_MODEL": "Motor a Gasolina {{power}} HP",
+      "DIESEL_ENGINE_MODEL": "Motor Diésel {{power}} HP",
+      "ELECTRIC_ENGINE_MODEL": "Motor Eléctrico {{power}} HP"
+    },
+    "MANUAL_DIALOG": {
+      "TITLE": "Descargar Manual de",
+      "SELECT_LANGUAGE": "Seleccione el idioma del manual:",
+      "ENGLISH": "Inglés",
+      "SPANISH": "Español",
+      "CANCEL": "Cancelar"
+    }
+  },
+  "PRODUCTS_PAGE.MT-370.SERIES_TITLE": "Serie MT-370",
+  "PRODUCTS_PAGE.MT-480.SERIES_TITLE": "Serie MT-480",
+  "PRODUCTS_PAGE.MT-370.DUTY_LABEL": "Uso Medio",
+  "PRODUCTS_PAGE.MT-480.DUTY_LABEL": "Uso Pesado",
+  "PRODUCTS_PAGE.MT-370.DETAILED_DESCRIPTION": "Perfecta para tareas de construcción de mediana escala, esta mezcladora ofrece un tambor de 370L con rotación de 360° para carga flexible y posiciones de descarga versátiles. Su chasis tubular reforzado en T y paletas de tambor optimizadas garantizan una mezcla eficiente y durabilidad extendida. La transmisión por correa en V minimiza la vibración, mientras que el posicionamiento controlado por pedal y las piezas dentadas de hierro fundido simplifican el uso por un solo operador. Fabricada con acero altamente resistente, la MT-370 responde a las demandas de mezcla continua en cada obra.",
+  "PRODUCTS_PAGE.MT-480.DETAILED_DESCRIPTION": "Construida para necesidades de construcción a gran escala, esta mezcladora cuenta con un tambor de 420L con rotación de 360° para carga mejorada y múltiples posiciones de descarga. Su chasis tubular reforzado en T y paletas de tambor optimizadas proporcionan un rendimiento fiable de alto volumen. La transmisión por correa en V reduce las vibraciones para una operación más suave, mientras que el posicionamiento controlado por pedal y las piezas dentadas de hierro fundido permiten un manejo sencillo por un solo operador. La MT-480 prospera bajo demandas de mezcla continua en obras exigentes."
 }

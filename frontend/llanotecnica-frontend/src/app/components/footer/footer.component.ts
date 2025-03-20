@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { LanguageSelectorComponent } from '../../services/language-selector/language-selector.component';
+import { LanguageSelectorComponent } from '../../core/i18n/language-selector.component';
 
 interface LinkItem {
   text: string;

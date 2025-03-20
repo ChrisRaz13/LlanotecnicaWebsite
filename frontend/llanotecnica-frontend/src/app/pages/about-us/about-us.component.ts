@@ -10,21 +10,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RecaptchaModule } from 'ng-recaptcha';
-
-interface Value {
-  icon: string;
-  title: string;
-  description: string;
-}
-
-interface ProductionStage {
-  image: string;
-  title: string;
-  description: string;
-  visible: boolean;
-}
 
 @Component({
   selector: 'app-about-us',
@@ -60,22 +47,7 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
   contactForm: FormGroup;
   finalCtaVisible = false;
   heroContentVisible = false;
-
-  values: Value[] = [
-    { icon: 'fas fa-lightbulb', title: 'Innovation', description: 'Pushing boundaries in mixing technology with cutting-edge solutions' },
-    { icon: 'fas fa-shield-alt', title: 'Quality', description: 'Unwavering commitment to excellence in every machine we produce' },
-    { icon: 'fas fa-leaf', title: 'Sustainability', description: 'Environmental responsibility through efficient, eco-friendly designs' },
-    { icon: 'fas fa-handshake', title: 'Partnership', description: 'Building lasting relationships through trust and mutual success' }
-  ];
-
-  productionStages: ProductionStage[] = [
-    { image: 'assets/photos/worker1.jpg', title: 'Precision Welding', description: 'Ensuring durability & strength in every frame.', visible: false },
-    { image: 'assets/photos/worker2.jpg', title: 'Expert Assembly', description: 'Every part meticulously placed for peak performance.', visible: false },
-    { image: 'assets/photos/worker3.jpg', title: 'Quality Assurance', description: 'Rigorous testing to meet industry standards.', visible: false },
-    { image: 'assets/photos/worker4.jpg', title: 'Final Inspections', description: 'Ensuring perfection before shipping out.', visible: false },
-    { image: 'assets/photos/worker5.jpg', title: 'Premium Finishing', description: 'High-quality coatings for a lasting impact.', visible: false },
-    { image: 'assets/photos/worker6.jpg', title: 'Final Quality Check', description: 'A comprehensive final inspection ensuring every machine meets our rigorous standards.', visible: false }
-  ];
+  stageVisibility: boolean[] = [];
 
   private observers: IntersectionObserver[] = [];
   private finalCtaObserver: IntersectionObserver | null = null;
@@ -84,23 +56,11 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   mapUrl: SafeResourceUrl | undefined;
-
-  inquiryTypes: string[] = [
-    'Product Information',
-    'Price Quote',
-    'Spare Parts',
-    'Technical Support',
-    'Maintenance Service',
-    'Dealer/Distribution',
-    'Warranty Claim',
-    'General Inquiry'
-  ];
-
   companyDetails = {
-    phone: '+507 6566-4942',
-    whatsapp: 'https://wa.me/50765664942',
-    email: 'ventas@llanotecnica.com',
-    address: 'Panama City, Panama',
+    phone: '',
+    whatsapp: '',
+    email: '',
+    address: '',
     mapLocation: {
       lat: 8.9824,
       lng: -79.5199
@@ -108,8 +68,8 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   socialLinks = {
-    facebook: 'https://www.facebook.com/llanotecnica2007/',
-    instagram: 'https://instagram.com/llanotecnica'
+    facebook: '',
+    instagram: ''
   };
 
   constructor(
@@ -119,6 +79,7 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     private http: HttpClient,
     private cd: ChangeDetectorRef,
     private router: Router,
+    private translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     if (isPlatformBrowser(this.platformId)) {
@@ -135,6 +96,13 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
       message: ['', Validators.required],
       recaptcha: ['', Validators.required]
     });
+
+    // Initialize stage visibility
+    this.translate.get('ABOUT_US_PAGE.PRODUCTION_STORY.STAGES').subscribe((stages: any[]) => {
+      if (stages && Array.isArray(stages)) {
+        this.stageVisibility = new Array(stages.length).fill(false);
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -150,7 +118,28 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
           this.loadCountries();
         }
       });
+
+      // Load company details from translations
+      this.translate.get('ABOUT_US_PAGE.COMPANY_DETAILS').subscribe((details: any) => {
+        if (details) {
+          this.companyDetails.phone = details.PHONE || this.companyDetails.phone;
+          this.companyDetails.email = details.EMAIL || this.companyDetails.email;
+          this.companyDetails.address = details.ADDRESS || this.companyDetails.address;
+
+          // Update WhatsApp URL based on phone
+          this.companyDetails.whatsapp = `https://wa.me/${this.companyDetails.phone.replace(/[^0-9]/g, '')}`;
+        }
+      });
+
+      // Load social links from translations (if available)
+      this.translate.get('FOOTER.COMPANY_INFO.SOCIAL_LINKS').subscribe((links: any) => {
+        if (links) {
+          this.socialLinks.facebook = links.FACEBOOK_URL || this.socialLinks.facebook;
+          this.socialLinks.instagram = links.INSTAGRAM_URL || this.socialLinks.instagram;
+        }
+      });
     }
+
     setTimeout(() => {
       this.heroContentVisible = true;
     }, 100);
@@ -207,18 +196,20 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private setupIntersectionObservers(): void {
     if (!isPlatformBrowser(this.platformId)) {
-      this.productionStages.forEach(stage => stage.visible = true);
+      this.stageVisibility = this.stageVisibility.map(() => true);
       return;
     }
+
     this.observers.forEach(observer => observer.disconnect());
     this.observers = [];
+
     this.stageElements.forEach((element, index) => {
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               this.ngZone.run(() => {
-                this.productionStages[index].visible = true;
+                this.stageVisibility[index] = true;
                 this.cd.detectChanges();
               });
               observer.disconnect();
@@ -354,7 +345,6 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // Legacy method kept for backward compatibility
   private setupHeroObserver(): void {
     this.setupHeroAnimation();
   }

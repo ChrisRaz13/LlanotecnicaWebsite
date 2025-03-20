@@ -8,13 +8,13 @@
   <!-- Main Content -->
   <div class="hero-wrapper">
     <div class="hero-content" [class.visible]="heroContentVisible" #heroContent>
-      <div class="hero-tagline">Welcome to Our Story</div>
-      <h1 class="hero-title">Passionate About <br>Engineering Excellence</h1>
+      <div class="hero-tagline">{{ 'ABOUT_US_PAGE.HERO.TAGLINE' | translate }}</div>
+      <h1 class="hero-title">{{ 'ABOUT_US_PAGE.HERO.TITLE' | translate }}</h1>
       <div class="hero-description">
-        <p>Since 2007, we've been committed to delivering innovative solutions that transform how industries operate. With a focus on quality, precision, and sustainability, we're creating the technology that builds tomorrow.</p>
+        <p>{{ 'ABOUT_US_PAGE.HERO.DESCRIPTION' | translate }}</p>
       </div>
       <a routerLink="/contact" class="hero-button">
-        <span>Connect With Us</span>
+        <span>{{ 'ABOUT_US_PAGE.HERO.CTA_BUTTON' | translate }}</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </a>
     </div>
@@ -25,100 +25,90 @@
   <div class="hero-decoration hero-decoration-2"></div>
 </section>
 
-  <!-- Mission Section -->
-  <section class="mission">
-    <div class="mission-wrapper">
-      <div class="mission-content">
-        <img src="assets/photos/logo.png" alt="Company Logo" class="mission-logo" />
-        <h2>Our Mission</h2>
-        <p>
-          At Llanotecnica, we believe the future of construction hinges on
-          <span class="highlighted-text">pioneering mixing solutions</span>
-          that raise the bar for
-          <span class="highlighted-text">efficiency, reliability, and sustainability</span>.
-        </p>
-        <p>
-          We're committed to
-          <span class="highlighted-text">transforming the construction landscape</span>
-          through cutting-edge technology, robust design, and environmentally conscious engineering.
-        </p>
-      </div>
-      <div class="mission-image">
-        <img src="assets/photos/teamphoto.jpg" alt="Team in Factory" />
-      </div>
+<!-- Mission Section -->
+<section class="mission">
+  <div class="mission-wrapper">
+    <div class="mission-content">
+      <img src="assets/photos/logo.png" [alt]="'ABOUT_US_PAGE.MISSION.LOGO_ALT' | translate" class="mission-logo" />
+      <h2>{{ 'ABOUT_US_PAGE.MISSION.TITLE' | translate }}</h2>
+      <p [innerHTML]="'ABOUT_US_PAGE.MISSION.PARAGRAPH_1' | translate"></p>
+      <p [innerHTML]="'ABOUT_US_PAGE.MISSION.PARAGRAPH_2' | translate"></p>
     </div>
-  </section>
+    <div class="mission-image">
+      <img src="assets/photos/teamphoto.jpg" [alt]="'ABOUT_US_PAGE.MISSION.TEAM_IMAGE_ALT' | translate" />
+    </div>
+  </div>
+</section>
 
-  <!-- Values Section -->
-  <section class="values">
-    <h2>Our Values</h2>
-    <div class="values-grid">
-      <div class="value-card" *ngFor="let value of values">
-        <i [class]="value.icon"></i>
-        <h3>{{value.title}}</h3>
-        <p>{{value.description}}</p>
+<!-- Values Section -->
+<section class="values">
+  <h2>{{ 'ABOUT_US_PAGE.VALUES.TITLE' | translate }}</h2>
+  <div class="values-grid">
+    <ng-container *ngFor="let value of ('ABOUT_US_PAGE.VALUES.VALUES_LIST' | translate)">
+      <div class="value-card">
+        <i [class]="value.ICON"></i>
+        <h3>{{ value.TITLE }}</h3>
+        <p>{{ value.DESCRIPTION }}</p>
       </div>
-    </div>
-  </section>
+    </ng-container>
+  </div>
+</section>
 
-  <!-- Production Story Section -->
-  <section class="production-story">
-    <h2 class="story-title">Our Team in Action</h2>
-    <div class="story-subtitle">
-      A look inside our factory where expert craftsmanship meets innovation.
-    </div>
+<!-- Production Story Section -->
+<section class="production-story">
+  <h2 class="story-title">{{ 'ABOUT_US_PAGE.PRODUCTION_STORY.TITLE' | translate }}</h2>
+  <div class="story-subtitle">
+    {{ 'ABOUT_US_PAGE.PRODUCTION_STORY.SUBTITLE' | translate }}
+  </div>
 
-    <div class="story-timeline">
-      <div class="timeline-item"
-           *ngFor="let stage of productionStages; let i = index"
-           #stageElement
-           [class.visible]="stage.visible">
-        <div class="timeline-connector" *ngIf="i < productionStages.length - 1"></div>
+  <div class="story-timeline">
+    <ng-container *ngFor="let stage of ('ABOUT_US_PAGE.PRODUCTION_STORY.STAGES' | translate); let i = index">
+      <div class="timeline-item" #stageElement [class.visible]="stageVisibility[i]">
+        <div class="timeline-connector" *ngIf="i < ('ABOUT_US_PAGE.PRODUCTION_STORY.STAGES' | translate).length - 1"></div>
 
         <div class="timeline-content">
           <div class="parallax-container">
-            <img [src]="stage.image"
-                 [alt]="stage.title"
+            <img [src]="'assets/photos/worker' + (i + 1) + '.jpg'"
+                 [alt]="stage.TITLE"
                  class="parallax-image"
-                 [class.visible]="stage.visible">
+                 [class.visible]="stageVisibility[i]">
           </div>
 
-          <div class="timeline-text" [class.visible]="stage.visible">
-            <div class="stage-number">Stage {{i + 1}}</div>
-            <h3>{{stage.title}}</h3>
-            <p>{{stage.description}}</p>
+          <div class="timeline-text" [class.visible]="stageVisibility[i]">
+            <div class="stage-number">{{ 'ABOUT_US_PAGE.PRODUCTION_STORY.STAGE_LABEL' | translate }} {{i + 1}}</div>
+            <h3>{{ stage.TITLE }}</h3>
+            <p>{{ stage.DESCRIPTION }}</p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </ng-container>
+  </div>
+</section>
 
-  <!-- Final CTA Section -->
-  <section class="final-cta-section">
-    <div class="final-cta-container" #finalCtaElement [class.visible]="finalCtaVisible">
-      <div class="final-cta-content">
-        <h2 class="final-cta-title">Excellence in Every Detail</h2>
-        <p class="final-cta-text">
-          The culmination of our craftsmanship and expertise - creating reliable, efficient concrete
-          mixing solutions that help build a stronger tomorrow.
-        </p>
-        <div class="final-cta-buttons">
-          <a routerLink="/contact" class="cta-button primary-cta">Contact Us</a>
-        </div>
-      </div>
-      <div class="final-video-container">
-        <video
-          #videoElement
-          autoplay
-          loop
-          playsinline
-          class="final-video"
-          aria-hidden="true"
-          [attr.aria-label]="'Background video showing concrete mixer'"
-        >
-          <source src="assets/videos/finishedproduct.mp4" type="video/mp4">
-        </video>
+<!-- Final CTA Section -->
+<section class="final-cta-section">
+  <div class="final-cta-container" #finalCtaElement [class.visible]="finalCtaVisible">
+    <div class="final-cta-content">
+      <h2 class="final-cta-title">{{ 'ABOUT_US_PAGE.FINAL_CTA.TITLE' | translate }}</h2>
+      <p class="final-cta-text">
+        {{ 'ABOUT_US_PAGE.FINAL_CTA.TEXT' | translate }}
+      </p>
+      <div class="final-cta-buttons">
+        <a routerLink="/contact" class="cta-button primary-cta">{{ 'ABOUT_US_PAGE.FINAL_CTA.CTA_BUTTON' | translate }}</a>
       </div>
     </div>
-  </section>
-
+    <div class="final-video-container">
+      <video
+        #videoElement
+        autoplay
+        loop
+        playsinline
+        class="final-video"
+        aria-hidden="true"
+        [attr.aria-label]="'ABOUT_US_PAGE.FINAL_CTA.VIDEO_ARIA_LABEL' | translate"
+      >
+        <source src="assets/videos/finishedproduct.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>

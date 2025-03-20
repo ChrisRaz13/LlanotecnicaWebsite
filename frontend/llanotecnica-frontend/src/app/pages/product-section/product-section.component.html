@@ -3,9 +3,9 @@
   <!-- Hero Section -->
   <section class="hero-section" role="banner">
     <div class="container">
-      <h1>Durable & High-Performance Concrete Mixers</h1>
+      <h1>{{ 'PRODUCTS_PAGE.HERO.TITLE' | translate }}</h1>
       <p class="subtitle">
-        Designed for any job—from mid-sized projects to heavy-duty tasks—built for strength, efficiency, and reliable performance.
+        {{ 'PRODUCTS_PAGE.HERO.DESCRIPTION' | translate }}
       </p>
     </div>
   </section>
@@ -13,7 +13,7 @@
   <!-- Product Cards Section -->
   <section class="products-overview" aria-labelledby="products-heading">
     <div class="container">
-      <h2 id="products-heading" class="section-title">Our Professional Mixer Models</h2>
+      <h2 id="products-heading" class="section-title">{{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.HEADING' | translate }}</h2>
       <div class="product-grid" #imageContainer>
         <article *ngFor="let product of productImages(); trackBy: trackByFn"
                 class="product-card"
@@ -29,20 +29,22 @@
           </div>
           <div class="product-content">
             <header class="product-header">
-              <h3>{{ product.model }} Series</h3>
+              <h3>{{ product.model }} {{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.' + product.model + '.TITLE' | translate }}</h3>
               <span class="product-badge" role="status">
-                {{ product.model === 'MT-370' ? 'Medium Duty' : 'Heavy Duty' }}
+                {{ product.model === 'MT-370' ? ('PRODUCTS_PAGE.PRODUCTS_SECTION.MT370.BADGE' | translate) : ('PRODUCTS_PAGE.PRODUCTS_SECTION.MT480.BADGE' | translate) }}
               </span>
             </header>
 
             <!-- Conditional Description -->
             <ng-container *ngIf="product.model === 'MT-370'; else heavyDescription">
               <p class="product-description">
-                Perfect for mid-scale construction tasks, this mixer offers a 370L drum with 360° rotation for flexible loading and versatile discharge positions. Its tubular T-reinforced chassis and optimized drum vanes ensure efficient mixing and extended durability. A V-belt transmission minimizes vibration, while pedal-controlled positioning and cast iron-toothed parts simplify single-operator use. Built from highly resistant steel, the MT-370 stands up to continuous mixing demands on every worksite. </p>
+                {{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.MT370.DESCRIPTION' | translate }}
+              </p>
             </ng-container>
             <ng-template #heavyDescription>
               <p class="product-description">
-                Built for large-scale construction needs, this mixer features a 420L drum with 360° rotation for enhanced loading and multiple discharge positions. Its tubular T-reinforced chassis and optimized blade vanes provide reliable, high-volume performance. A V-belt transmission reduces vibrations for smoother operation, while pedal-controlled positioning and cast iron-toothed parts enable single-operator handling. The MT-480 thrives under continuous mixing in demanding jobsites.              </p>
+                {{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.MT480.DESCRIPTION' | translate }}
+              </p>
             </ng-template>
 
 <!-- Key Specs -->
@@ -50,36 +52,36 @@
   <button class="specs-tab active"
           [attr.data-tab]="'basic-specs-' + product.model"
           (click)="switchTab($event, 'basic-specs-' + product.model, product.model)">
-    Key Specs
+    {{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.TABS.KEY_SPECS' | translate }}
   </button>
   <button class="specs-tab"
           [attr.data-tab]="'features-' + product.model"
           (click)="switchTab($event, 'features-' + product.model, product.model)">
-    Features
+    {{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.TABS.FEATURES' | translate }}
   </button>
   <button class="specs-tab"
           [attr.data-tab]="'dimensions-' + product.model"
           (click)="switchTab($event, 'dimensions-' + product.model, product.model)">
-    Dimensions
+    {{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.TABS.DIMENSIONS' | translate }}
   </button>
 </div>
 
             <!-- Specs Content -->
             <div class="specs-content active" id="basic-specs-{{product.model}}">
               <div class="spec-item">
-                <span class="spec-label">Capacity</span>
+                <span class="spec-label">{{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.SPECS.CAPACITY' | translate }}</span>
                 <span class="spec-value">
                   {{ productSpecs()[product.model].drumSpecs.capacity }}
                 </span>
               </div>
               <div class="spec-item">
-                <span class="spec-label">Drum Opening</span>
+                <span class="spec-label">{{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.SPECS.DRUM_OPENING' | translate }}</span>
                 <span class="spec-value">
                   {{ productSpecs()[product.model].drumSpecs.openingDiameter }}
                 </span>
               </div>
               <div class="spec-item">
-                <span class="spec-label">Drum Depth</span>
+                <span class="spec-label">{{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.SPECS.DRUM_DEPTH' | translate }}</span>
                 <span class="spec-value">
                   {{ productSpecs()[product.model].drumSpecs.depth }}
                 </span>
@@ -101,25 +103,25 @@
             <!-- Dimensions Content -->
             <div class="specs-content" id="dimensions-{{product.model}}">
               <div class="spec-item">
-                <span class="spec-label">Length</span>
+                <span class="spec-label">{{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.SPECS.LENGTH' | translate }}</span>
                 <span class="spec-value">
                   {{ productSpecs()[product.model].dimensions.length }}
                 </span>
               </div>
               <div class="spec-item">
-                <span class="spec-label">Width</span>
+                <span class="spec-label">{{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.SPECS.WIDTH' | translate }}</span>
                 <span class="spec-value">
                   {{ productSpecs()[product.model].dimensions.width }}
                 </span>
               </div>
               <div class="spec-item">
-                <span class="spec-label">Height</span>
+                <span class="spec-label">{{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.SPECS.HEIGHT' | translate }}</span>
                 <span class="spec-value">
                   {{ productSpecs()[product.model].dimensions.height }}
                 </span>
               </div>
               <div class="spec-item">
-                <span class="spec-label">Weight</span>
+                <span class="spec-label">{{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.SPECS.WEIGHT' | translate }}</span>
                 <span class="spec-value">
                   {{ productSpecs()[product.model].dimensions.weight }}
                 </span>
@@ -139,7 +141,7 @@
                   <path d="M8 12h8"></path>
                   <path d="M12 8v8"></path>
                 </svg>
-                Request Quote
+                {{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.ACTIONS.REQUEST_QUOTE' | translate }}
               </button>
               <button class="btn-download"
                       (click)="openManualDialog(product.model)"
@@ -148,7 +150,7 @@
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
                 </svg>
-                Download Manual
+                {{ 'PRODUCTS_PAGE.PRODUCTS_SECTION.ACTIONS.DOWNLOAD_MANUAL' | translate }}
               </button>
             </div>
           </div>
@@ -161,9 +163,9 @@
   <section class="comparison-section" id="comparison" aria-labelledby="comparison-heading">
     <div class="container">
       <div class="comparison-header">
-        <h2 id="comparison-heading" class="section-title">Compare Models</h2>
+        <h2 id="comparison-heading" class="section-title">{{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TITLE' | translate }}</h2>
         <p class="comparison-subtitle">
-          Explore the key differences between our professional mixer series.
+          {{ 'PRODUCTS_PAGE.COMPARISON_SECTION.SUBTITLE' | translate }}
         </p>
         <!-- Tabs -->
         <div class="comparison-tabs" role="tablist">
@@ -176,7 +178,7 @@
             <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M4 4h16v16H4z M4 12h16 M12 4v16"/>
             </svg>
-            Specifications
+            {{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TABS.SPECIFICATIONS' | translate }}
           </button>
           <button type="button"
                   role="tab"
@@ -187,7 +189,7 @@
             <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M12 2L2 7l10 5 10-5-10-5z"/>
             </svg>
-            Engine Options
+            {{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TABS.ENGINE_OPTIONS' | translate }}
           </button>
         </div>
       </div>
@@ -200,13 +202,13 @@
            [attr.aria-label]="'Specifications comparison'">
         <div class="comparison-table" role="table">
           <div class="table-header" role="row">
-            <div class="header-cell spec-name" role="columnheader">Specification</div>
+            <div class="header-cell spec-name" role="columnheader">{{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.SPECIFICATION' | translate }}</div>
             <div class="header-cell model-370" role="columnheader">MT-370</div>
             <div class="header-cell model-480" role="columnheader">MT-480</div>
           </div>
           <!-- Drum Specifications -->
           <div class="spec-group">
-            <div class="group-header" role="rowheader">Drum Specifications</div>
+            <div class="group-header" role="rowheader">{{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.DRUM_SPECIFICATIONS' | translate }}</div>
             <div *ngFor="let spec of drumSpecs()" class="spec-row" role="row">
               <div class="spec-name" role="cell">{{ spec.label }}</div>
               <div class="spec-value"
@@ -223,7 +225,7 @@
           </div>
           <!-- Unit Specifications -->
           <div class="spec-group">
-            <div class="group-header" role="rowheader">Unit Specifications</div>
+            <div class="group-header" role="rowheader">{{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.UNIT_SPECIFICATIONS' | translate }}</div>
             <div *ngFor="let spec of unitSpecs()" class="spec-row" role="row">
               <div class="spec-name" role="cell">{{ spec.label }}</div>
               <div class="spec-value"
@@ -240,7 +242,7 @@
           </div>
           <!-- Dimensions -->
           <div class="spec-group">
-            <div class="group-header" role="rowheader">Dimensions</div>
+            <div class="group-header" role="rowheader">{{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.DIMENSIONS' | translate }}</div>
             <div *ngFor="let spec of getDimensionSpecs()" class="spec-row" role="row">
               <div class="spec-name" role="cell">{{ spec.label }}</div>
               <div class="spec-value"
@@ -267,8 +269,8 @@
         <div class="engine-compatibility">
           <div class="engine-table" role="table">
             <div class="table-header" role="row">
-              <div class="header-cell" role="columnheader">Engine Type</div>
-              <div class="header-cell" role="columnheader">Power Rating</div>
+              <div class="header-cell" role="columnheader">{{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.ENGINE_TYPE' | translate }}</div>
+              <div class="header-cell" role="columnheader">{{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.POWER_RATING' | translate }}</div>
               <div class="header-cell" role="columnheader">MT-370</div>
               <div class="header-cell" role="columnheader">MT-480</div>
             </div>
@@ -311,8 +313,8 @@
 <section class="engine-showcase" aria-labelledby="engine-showcase-title">
   <div class="container">
     <header class="engine-showcase-header">
-      <h2 id="engine-showcase-title" class="section-title">Available Engine Options</h2>
-      <p class="engine-showcase-description">Our concrete mixers are powered by reliable, high-performance engines tailored for demanding construction environments.</p>
+      <h2 id="engine-showcase-title" class="section-title">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.TITLE' | translate }}</h2>
+      <p class="engine-showcase-description">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.DESCRIPTION' | translate }}</p>
 
       <!-- Engine Type Filters -->
       <div class="engine-filter-tabs" role="tablist">
@@ -325,7 +327,7 @@
           [attr.aria-selected]="activeEngineFilter() === 'all'"
           aria-controls="engine-panel-all">
           <span class="filter-icon all"></span>
-          All Engines
+          {{ 'PRODUCTS_PAGE.ENGINE_SECTION.FILTERS.ALL_ENGINES' | translate }}
         </button>
         <button
           type="button"
@@ -336,7 +338,7 @@
           [attr.aria-selected]="activeEngineFilter() === 'gas'"
           aria-controls="engine-panel-gas">
           <span class="filter-icon gas"></span>
-          Gasoline
+          {{ 'PRODUCTS_PAGE.ENGINE_SECTION.FILTERS.GASOLINE' | translate }}
         </button>
         <button
           type="button"
@@ -347,7 +349,7 @@
           [attr.aria-selected]="activeEngineFilter() === 'diesel'"
           aria-controls="engine-panel-diesel">
           <span class="filter-icon diesel"></span>
-          Diesel
+          {{ 'PRODUCTS_PAGE.ENGINE_SECTION.FILTERS.DIESEL' | translate }}
         </button>
         <button
           type="button"
@@ -358,7 +360,7 @@
           [attr.aria-selected]="activeEngineFilter() === 'electric'"
           aria-controls="engine-panel-electric">
           <span class="filter-icon electric"></span>
-          Electric
+          {{ 'PRODUCTS_PAGE.ENGINE_SECTION.FILTERS.ELECTRIC' | translate }}
         </button>
       </div>
     </header>
@@ -372,8 +374,8 @@
       [attr.aria-labelledby]="'engine-filter-gas'">
       <div class="category-header">
         <div class="category-icon gas"></div>
-        <h3>Gasoline Engines</h3>
-        <span class="category-badge">Premium Performance</span>
+        <h3>{{ 'PRODUCTS_PAGE.ENGINE_SECTION.CATEGORIES.GASOLINE_ENGINES' | translate }}</h3>
+        <span class="category-badge">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.BADGES.PREMIUM_PERFORMANCE' | translate }}</span>
       </div>
 
       <div class="engine-showcase-grid">
@@ -384,7 +386,7 @@
               <div class="engine-icon gas"></div>
               <div class="engine-model-info">
                 <h4>Honda GX160H2</h4>
-                <span class="engine-model-number">Gasoline Engine</span>
+                <span class="engine-model-number">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.GASOLINE_ENGINE' | translate }}</span>
               </div>
             </div>
             <span class="power-badge">5.5 HP</span>
@@ -395,11 +397,11 @@
               <!-- Left column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Displacement</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.DISPLACEMENT' | translate }}</span>
                   <span class="spec-value">163 cm³</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.WEIGHT' | translate }}</span>
                   <span class="spec-value">15.1 kg</span>
                 </div>
               </div>
@@ -407,11 +409,11 @@
               <!-- Right column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Torque</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.TORQUE' | translate }}</span>
                   <span class="spec-value">10.3 Nm &#64; 2500 rpm</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.COMPATIBLE_WITH' | translate }}</span>
                   <span class="spec-value">MT-370</span>
                 </div>
               </div>
@@ -419,7 +421,7 @@
           </div>
 
           <div class="engine-card-footer">
-            <a class="view-specs-btn">View Full Specifications</a>
+            <a class="view-specs-btn">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.VIEW_SPECS' | translate }}</a>
           </div>
         </div>
 
@@ -430,7 +432,7 @@
               <div class="engine-icon gas"></div>
               <div class="engine-model-info">
                 <h4>Honda GX270H2</h4>
-                <span class="engine-model-number">Gasoline Engine</span>
+                <span class="engine-model-number">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.GASOLINE_ENGINE' | translate }}</span>
               </div>
             </div>
             <span class="power-badge">9.0 HP</span>
@@ -441,11 +443,11 @@
               <!-- Left column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Displacement</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.DISPLACEMENT' | translate }}</span>
                   <span class="spec-value">270 cm³</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.WEIGHT' | translate }}</span>
                   <span class="spec-value">25.8 kg</span>
                 </div>
               </div>
@@ -453,11 +455,11 @@
               <!-- Right column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Torque</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.TORQUE' | translate }}</span>
                   <span class="spec-value">19.1 Nm &#64; 2500 rpm</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.COMPATIBLE_WITH' | translate }}</span>
                   <span class="spec-value">MT-370</span>
                 </div>
               </div>
@@ -465,7 +467,7 @@
           </div>
 
           <div class="engine-card-footer">
-            <a class="view-specs-btn">View Full Specifications</a>
+            <a class="view-specs-btn">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.VIEW_SPECS' | translate }}</a>
           </div>
         </div>
 
@@ -476,7 +478,7 @@
               <div class="engine-icon gas"></div>
               <div class="engine-model-info">
                 <h4>Honda GX390H2</h4>
-                <span class="engine-model-number">Gasoline Engine</span>
+                <span class="engine-model-number">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.GASOLINE_ENGINE' | translate }}</span>
               </div>
             </div>
             <span class="power-badge">13.0 HP</span>
@@ -487,11 +489,11 @@
               <!-- Left column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Displacement</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.DISPLACEMENT' | translate }}</span>
                   <span class="spec-value">389 cm³</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.WEIGHT' | translate }}</span>
                   <span class="spec-value">31.7 kg</span>
                 </div>
               </div>
@@ -499,11 +501,11 @@
               <!-- Right column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Torque</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.TORQUE' | translate }}</span>
                   <span class="spec-value">26.5 Nm &#64; 2500 rpm</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.COMPATIBLE_WITH' | translate }}</span>
                   <span class="spec-value">MT-480</span>
                 </div>
               </div>
@@ -511,7 +513,7 @@
           </div>
 
           <div class="engine-card-footer">
-            <a class="view-specs-btn">View Full Specifications</a>
+            <a class="view-specs-btn">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.VIEW_SPECS' | translate }}</a>
           </div>
         </div>
 
@@ -522,7 +524,7 @@
               <div class="engine-icon gas"></div>
               <div class="engine-model-info">
                 <h4>4Power 170F</h4>
-                <span class="engine-model-number">Gasoline Engine</span>
+                <span class="engine-model-number">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.GASOLINE_ENGINE' | translate }}</span>
               </div>
             </div>
             <span class="power-badge">7.0 HP</span>
@@ -533,11 +535,11 @@
               <!-- Left column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Displacement</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.DISPLACEMENT' | translate }}</span>
                   <span class="spec-value">212 cc</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.WEIGHT' | translate }}</span>
                   <span class="spec-value">17 kg</span>
                 </div>
               </div>
@@ -545,11 +547,11 @@
               <!-- Right column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Torque</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.TORQUE' | translate }}</span>
                   <span class="spec-value">13.5 Nm &#64; 2500 rpm</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.COMPATIBLE_WITH' | translate }}</span>
                   <span class="spec-value">MT-370</span>
                 </div>
               </div>
@@ -557,7 +559,7 @@
           </div>
 
           <div class="engine-card-footer">
-            <a class="view-specs-btn">View Full Specifications</a>
+            <a class="view-specs-btn">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.VIEW_SPECS' | translate }}</a>
           </div>
         </div>
 
@@ -568,7 +570,7 @@
               <div class="engine-icon gas"></div>
               <div class="engine-model-info">
                 <h4>4Power 177F</h4>
-                <span class="engine-model-number">Gasoline Engine</span>
+                <span class="engine-model-number">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.GASOLINE_ENGINE' | translate }}</span>
               </div>
             </div>
             <span class="power-badge">9.0 HP</span>
@@ -579,11 +581,11 @@
               <!-- Left column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Displacement</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.DISPLACEMENT' | translate }}</span>
                   <span class="spec-value">270 cc</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.WEIGHT' | translate }}</span>
                   <span class="spec-value">26 kg</span>
                 </div>
               </div>
@@ -591,11 +593,11 @@
               <!-- Right column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Torque</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.TORQUE' | translate }}</span>
                   <span class="spec-value">15.5 Nm &#64; 2500 rpm</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.COMPATIBLE_WITH' | translate }}</span>
                   <span class="spec-value">MT-370</span>
                 </div>
               </div>
@@ -603,7 +605,7 @@
           </div>
 
           <div class="engine-card-footer">
-            <a class="view-specs-btn">View Full Specifications</a>
+            <a class="view-specs-btn">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.VIEW_SPECS' | translate }}</a>
           </div>
         </div>
 
@@ -614,7 +616,7 @@
               <div class="engine-icon gas"></div>
               <div class="engine-model-info">
                 <h4>4Power 188F</h4>
-                <span class="engine-model-number">Gasoline Engine</span>
+                <span class="engine-model-number">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.GASOLINE_ENGINE' | translate }}</span>
               </div>
             </div>
             <span class="power-badge">13.0 HP</span>
@@ -625,11 +627,11 @@
               <!-- Left column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Displacement</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.DISPLACEMENT' | translate }}</span>
                   <span class="spec-value">389 cc</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.WEIGHT' | translate }}</span>
                   <span class="spec-value">31 kg</span>
                 </div>
               </div>
@@ -637,11 +639,11 @@
               <!-- Right column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Torque</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.TORQUE' | translate }}</span>
                   <span class="spec-value">23.0 Nm &#64; 2500 rpm</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.COMPATIBLE_WITH' | translate }}</span>
                   <span class="spec-value">MT-480</span>
                 </div>
               </div>
@@ -649,7 +651,7 @@
           </div>
 
           <div class="engine-card-footer">
-            <a class="view-specs-btn">View Full Specifications</a>
+            <a class="view-specs-btn">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.VIEW_SPECS' | translate }}</a>
           </div>
         </div>
       </div>
@@ -664,8 +666,8 @@
       [attr.aria-labelledby]="'engine-filter-diesel'">
       <div class="category-header">
         <div class="category-icon diesel"></div>
-        <h3>Diesel Engines</h3>
-        <span class="category-badge">Fuel Efficient</span>
+        <h3>{{ 'PRODUCTS_PAGE.ENGINE_SECTION.CATEGORIES.DIESEL_ENGINES' | translate }}</h3>
+        <span class="category-badge">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.BADGES.FUEL_EFFICIENT' | translate }}</span>
       </div>
 
       <div class="engine-showcase-grid">
@@ -676,7 +678,7 @@
               <div class="engine-icon diesel"></div>
               <div class="engine-model-info">
                 <h4>4Power C178F</h4>
-                <span class="engine-model-number">Diesel Engine</span>
+                <span class="engine-model-number">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.DIESEL_ENGINE' | translate }}</span>
               </div>
             </div>
             <span class="power-badge">7.0 HP</span>
@@ -687,11 +689,11 @@
               <!-- Left column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Displacement</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.DISPLACEMENT' | translate }}</span>
                   <span class="spec-value">296 cc</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.WEIGHT' | translate }}</span>
                   <span class="spec-value">33 kg</span>
                 </div>
               </div>
@@ -699,11 +701,11 @@
               <!-- Right column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Torque</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.TORQUE' | translate }}</span>
                   <span class="spec-value">11.6 Nm &#64; 2880 rpm</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.COMPATIBLE_WITH' | translate }}</span>
                   <span class="spec-value">MT-370</span>
                 </div>
               </div>
@@ -711,7 +713,7 @@
           </div>
 
           <div class="engine-card-footer">
-            <a class="view-specs-btn">View Full Specifications</a>
+            <a class="view-specs-btn">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.VIEW_SPECS' | translate }}</a>
           </div>
         </div>
 
@@ -722,7 +724,7 @@
               <div class="engine-icon diesel"></div>
               <div class="engine-model-info">
                 <h4>4Power C186F</h4>
-                <span class="engine-model-number">Diesel Engine</span>
+                <span class="engine-model-number">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.DIESEL_ENGINE' | translate }}</span>
               </div>
             </div>
             <span class="power-badge">9.0 HP</span>
@@ -733,11 +735,11 @@
               <!-- Left column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Displacement</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.DISPLACEMENT' | translate }}</span>
                   <span class="spec-value">418 cc</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.WEIGHT' | translate }}</span>
                   <span class="spec-value">44 kg</span>
                 </div>
               </div>
@@ -745,11 +747,11 @@
               <!-- Right column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Torque</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.TORQUE' | translate }}</span>
                   <span class="spec-value">18.7 Nm &#64; 2880 rpm</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.COMPATIBLE_WITH' | translate }}</span>
                   <span class="spec-value">MT-480</span>
                 </div>
               </div>
@@ -757,7 +759,7 @@
           </div>
 
           <div class="engine-card-footer">
-            <a class="view-specs-btn">View Full Specifications</a>
+            <a class="view-specs-btn">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.VIEW_SPECS' | translate }}</a>
           </div>
         </div>
       </div>
@@ -772,8 +774,8 @@
       [attr.aria-labelledby]="'engine-filter-electric'">
       <div class="category-header">
         <div class="category-icon electric"></div>
-        <h3>Electric Motors</h3>
-        <span class="category-badge">Zero Emissions</span>
+        <h3>{{ 'PRODUCTS_PAGE.ENGINE_SECTION.CATEGORIES.ELECTRIC_MOTORS' | translate }}</h3>
+        <span class="category-badge">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.BADGES.ZERO_EMISSIONS' | translate }}</span>
       </div>
 
       <div class="engine-showcase-grid">
@@ -784,7 +786,7 @@
               <div class="engine-icon electric"></div>
               <div class="engine-model-info">
                 <h4>4Power Electric</h4>
-                <span class="engine-model-number">Electric Motor</span>
+                <span class="engine-model-number">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.ELECTRIC_MOTOR' | translate }}</span>
               </div>
             </div>
             <span class="power-badge">2 HP</span>
@@ -795,11 +797,11 @@
               <!-- Left column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Speed</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.SPEED' | translate }}</span>
                   <span class="spec-value">1725 RPM</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.WEIGHT' | translate }}</span>
                   <span class="spec-value">15 kg</span>
                 </div>
               </div>
@@ -807,11 +809,11 @@
               <!-- Right column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Power Type</span>
-                  <span class="spec-value">Single Phase</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.POWER_TYPE' | translate }}</span>
+                  <span class="spec-value">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.SINGLE_PHASE' | translate }}</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.COMPATIBLE_WITH' | translate }}</span>
                   <span class="spec-value">MT-370</span>
                 </div>
               </div>
@@ -819,7 +821,7 @@
           </div>
 
           <div class="engine-card-footer">
-            <a class="view-specs-btn">View Full Specifications</a>
+            <a class="view-specs-btn">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.VIEW_SPECS' | translate }}</a>
           </div>
         </div>
 
@@ -830,7 +832,7 @@
               <div class="engine-icon electric"></div>
               <div class="engine-model-info">
                 <h4>4Power Electric Plus</h4>
-                <span class="engine-model-number">Electric Motor</span>
+                <span class="engine-model-number">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.ELECTRIC_MOTOR' | translate }}</span>
               </div>
             </div>
             <span class="power-badge">5 HP</span>
@@ -841,11 +843,11 @@
               <!-- Left column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Speed</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.SPEED' | translate }}</span>
                   <span class="spec-value">1725 RPM</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.WEIGHT' | translate }}</span>
                   <span class="spec-value">28 kg</span>
                 </div>
               </div>
@@ -853,11 +855,11 @@
               <!-- Right column -->
               <div class="specs-column">
                 <div class="spec-field">
-                  <span class="spec-label">Power Type</span>
-                  <span class="spec-value">Three Phase</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.POWER_TYPE' | translate }}</span>
+                  <span class="spec-value">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.THREE_PHASE' | translate }}</span>
                 </div>
                 <div class="spec-field">
-                  <span class="spec-label">Compatible With</span>
+                  <span class="spec-label">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.COMPATIBLE_WITH' | translate }}</span>
                   <span class="spec-value">MT-480</span>
                 </div>
               </div>
@@ -865,7 +867,7 @@
           </div>
 
           <div class="engine-card-footer">
-            <a class="view-specs-btn">View Full Specifications</a>
+            <a class="view-specs-btn">{{ 'PRODUCTS_PAGE.ENGINE_SECTION.ENGINE_CARD.VIEW_SPECS' | translate }}</a>
           </div>
         </div>
       </div>
@@ -874,13 +876,13 @@
     <!-- No Results Message -->
     <div *ngIf="filteredEngineCount() === 0" class="engine-no-results">
       <div class="no-results-icon"></div>
-      <h3>No engines match your selection</h3>
-      <p>Please try selecting a different filter option.</p>
+      <h3>{{ 'PRODUCTS_PAGE.ENGINE_SECTION.NO_RESULTS.TITLE' | translate }}</h3>
+      <p>{{ 'PRODUCTS_PAGE.ENGINE_SECTION.NO_RESULTS.DESCRIPTION' | translate }}</p>
       <button
         type="button"
         class="reset-filter-btn"
         (click)="setEngineFilter('all')">
-        Show All Engines
+        {{ 'PRODUCTS_PAGE.ENGINE_SECTION.NO_RESULTS.SHOW_ALL' | translate }}
       </button>
     </div>
   </div>
@@ -907,11 +909,11 @@
     <div class="engine-dialog-content">
       <div class="dialog-overview">
         <div class="dialog-power">
-          <span class="dialog-spec-label">Max Power</span>
+          <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.MAX_POWER' | translate }}</span>
           <span class="dialog-spec-value highlight">{{ engine.specs.max_power }}</span>
         </div>
         <div class="dialog-torque">
-          <span class="dialog-spec-label">Max Torque</span>
+          <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.MAX_TORQUE' | translate }}</span>
           <span class="dialog-spec-value highlight">{{ engine.specs.max_torque }}</span>
         </div>
       </div>
@@ -919,26 +921,26 @@
       <div class="engine-dialog-sections">
         <!-- Engine Dimensions Section -->
         <div class="dialog-section">
-          <h3 class="dialog-section-title">Engine Dimensions</h3>
+          <h3 class="dialog-section-title">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.ENGINE_DIMENSIONS' | translate }}</h3>
           <div class="dialog-section-content">
             <div class="dialog-spec-row">
-              <span class="dialog-spec-label">Bore x Stroke</span>
+              <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.BORE_STROKE' | translate }}</span>
               <span class="dialog-spec-value">{{ engine.specs.bore_stroke }}</span>
             </div>
             <div class="dialog-spec-row">
-              <span class="dialog-spec-label">Displacement</span>
+              <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.DISPLACEMENT' | translate }}</span>
               <span class="dialog-spec-value">{{ engine.specs.displacement }}</span>
             </div>
             <div class="dialog-spec-row">
-              <span class="dialog-spec-label">Compression Ratio</span>
+              <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.COMPRESSION_RATIO' | translate }}</span>
               <span class="dialog-spec-value">{{ engine.specs.compression_ratio }}</span>
             </div>
             <div class="dialog-spec-row">
-              <span class="dialog-spec-label">Dimensions</span>
+              <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.DIMENSIONS' | translate }}</span>
               <span class="dialog-spec-value">{{ engine.specs.dimensions }}</span>
             </div>
             <div class="dialog-spec-row">
-              <span class="dialog-spec-label">Dry Weight</span>
+              <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.DRY_WEIGHT' | translate }}</span>
               <span class="dialog-spec-value">{{ engine.specs.dry_weight }}</span>
             </div>
           </div>
@@ -946,26 +948,26 @@
 
         <!-- Operational Specs Section -->
         <div class="dialog-section">
-          <h3 class="dialog-section-title">Operational Specifications</h3>
+          <h3 class="dialog-section-title">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.OPERATIONAL_SPECS' | translate }}</h3>
           <div class="dialog-section-content">
             <div class="dialog-spec-row">
-              <span class="dialog-spec-label">Start Model</span>
+              <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.START_MODEL' | translate }}</span>
               <span class="dialog-spec-value">{{ engine.specs.start_model }}</span>
             </div>
             <div class="dialog-spec-row">
-              <span class="dialog-spec-label">Ignition System</span>
+              <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.IGNITION_SYSTEM' | translate }}</span>
               <span class="dialog-spec-value">{{ engine.specs.ignition_system }}</span>
             </div>
             <div class="dialog-spec-row">
-              <span class="dialog-spec-label">Fuel Consumption</span>
+              <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.FUEL_CONSUMPTION' | translate }}</span>
               <span class="dialog-spec-value">{{ engine.specs.fuel_consumption || 'N/A' }}</span>
             </div>
             <div class="dialog-spec-row">
-              <span class="dialog-spec-label">Oil Capacity</span>
+              <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.OIL_CAPACITY' | translate }}</span>
               <span class="dialog-spec-value">{{ engine.specs.oil_capacity }}</span>
             </div>
             <div class="dialog-spec-row">
-              <span class="dialog-spec-label">Fuel Tank Capacity</span>
+              <span class="dialog-spec-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.FUEL_TANK' | translate }}</span>
               <span class="dialog-spec-value">{{ engine.specs.fuel_tank || 'N/A' }}</span>
             </div>
           </div>
@@ -973,7 +975,7 @@
 
         <!-- Key Features Section -->
         <div class="dialog-section" *ngIf="engine.specs.additional_features && engine.specs.additional_features.length">
-          <h3 class="dialog-section-title">Key Features</h3>
+          <h3 class="dialog-section-title">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.KEY_FEATURES' | translate }}</h3>
           <div class="dialog-section-content">
             <ul class="dialog-features-list" role="list">
               <li *ngFor="let feature of engine.specs.additional_features" role="listitem">
@@ -987,7 +989,7 @@
 
     <footer class="engine-dialog-footer">
       <div class="dialog-compatibility">
-        <span class="dialog-compatibility-label">Compatible with:</span>
+        <span class="dialog-compatibility-label">{{ 'PRODUCTS_PAGE.ENGINE_DIALOG.COMPATIBLE_WITH' | translate }}</span>
         <span class="dialog-compatibility-model" *ngIf="isCompatibleWithMT370(engine)">
           MT-370
         </span>
@@ -998,7 +1000,7 @@
       <button class="dialog-close-button"
               (click)="closeEngineSpecs()"
               aria-label="Close dialog">
-        Close
+        {{ 'PRODUCTS_PAGE.ENGINE_DIALOG.CLOSE' | translate }}
       </button>
     </footer>
   </div>
@@ -1007,10 +1009,10 @@
 <!-- Manual Download Dialog Template -->
 <ng-template #manualDialog>
   <div class="manual-dialog-header">
-    <h2>Download {{ currentProductModel }} Manual</h2>
+    <h2>{{ 'PRODUCTS_PAGE.MANUAL_DIALOG.TITLE' | translate }} {{ currentProductModel }}</h2>
   </div>
   <div class="manual-dialog-content">
-    <p>Select your preferred language:</p>
+    <p>{{ 'PRODUCTS_PAGE.MANUAL_DIALOG.SELECT_LANGUAGE' | translate }}</p>
     <div class="manual-options">
       <button class="manual-option" (click)="downloadManual(currentProductModel, 'en')">
         <span class="manual-icon">
@@ -1019,7 +1021,7 @@
             <path d="M9 9h1M9 13h6M9 17h6"/>
           </svg>
         </span>
-        <span class="manual-language">English</span>
+        <span class="manual-language">{{ 'PRODUCTS_PAGE.MANUAL_DIALOG.ENGLISH' | translate }}</span>
       </button>
       <button class="manual-option" (click)="downloadManual(currentProductModel, 'es')">
         <span class="manual-icon">
@@ -1028,13 +1030,13 @@
             <path d="M9 9h1M9 13h6M9 17h6"/>
           </svg>
         </span>
-        <span class="manual-language">Spanish</span>
+        <span class="manual-language">{{ 'PRODUCTS_PAGE.MANUAL_DIALOG.SPANISH' | translate }}</span>
       </button>
     </div>
   </div>
   <div class="manual-dialog-footer">
     <button class="dialog-cancel-button" (click)="dialog.closeAll()">
-      Cancel
+      {{ 'PRODUCTS_PAGE.MANUAL_DIALOG.CANCEL' | translate }}
     </button>
   </div>
 </ng-template>

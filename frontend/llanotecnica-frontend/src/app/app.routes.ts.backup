@@ -1,11 +1,19 @@
+// app.routes.ts
 import { Routes, ResolveFn, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { HomeComponent } from './pages/home/home.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { ProductSectionComponent } from './pages/product-section/product-section.component';
+import { ContactComponent } from './pages/contact/contact.component';
 import { LanguageRedirectComponent } from './language-redirect.component';
 import { PLATFORM_ID, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { isPlatformBrowser } from '@angular/common';
 
-
-
+/**
+ * Functional language resolver that returns a language string.
+ * It checks if the URL starts with a language prefix (en/es) and,
+ * if not, it falls back to stored preference or defaults to English.
+ */
 export const languageResolver: ResolveFn<string> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
@@ -40,90 +48,92 @@ export const languageResolver: ResolveFn<string> = (
     }
   }
 
+  // Default to English if no language is found
   translate.use('en');
   return 'en';
 };
 
 export const routes: Routes = [
+  // Root: use the LanguageRedirectComponent to redirect based on detected language
   {
     path: '',
     component: LanguageRedirectComponent,
     pathMatch: 'full'
   },
 
-  // English routes with lazy loading
+  // English routes
   {
     path: 'en',
-    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
+    component: HomeComponent,
     data: { language: 'en' }
   },
   {
     path: 'en/about-us',
-    loadChildren: () => import('./pages/about-us/about-us.module').then(m => m.AboutUsModule),
+    component: AboutUsComponent,
     data: { language: 'en' }
   },
   {
     path: 'en/products',
-    loadChildren: () => import('./pages/product-section/product-section.module').then(m => m.ProductSectionModule),
+    component: ProductSectionComponent,
     data: { language: 'en' }
   },
   {
     path: 'en/contact',
-    loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule),
+    component: ContactComponent,
     data: { language: 'en' }
   },
 
-  // Spanish routes with lazy loading
+  // Spanish routes
   {
     path: 'es',
-    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
+    component: HomeComponent,
     data: { language: 'es' }
   },
   {
     path: 'es/sobre-nosotros',
-    loadChildren: () => import('./pages/about-us/about-us.module').then(m => m.AboutUsModule),
+    component: AboutUsComponent,
     data: { language: 'es' }
   },
   {
     path: 'es/productos',
-    loadChildren: () => import('./pages/product-section/product-section.module').then(m => m.ProductSectionModule),
+    component: ProductSectionComponent,
     data: { language: 'es' }
   },
   {
     path: 'es/contacto',
-    loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule),
+    component: ContactComponent,
     data: { language: 'es' }
   },
 
-  // Direct route access with language resolver and lazy loading
+  // Direct route access – resolve language and then display component
   {
     path: 'about-us',
-    loadChildren: () => import('./pages/about-us/about-us.module').then(m => m.AboutUsModule),
+    component: AboutUsComponent,
     resolve: { language: languageResolver }
   },
   {
     path: 'products',
-    loadChildren: () => import('./pages/product-section/product-section.module').then(m => m.ProductSectionModule),
+    component: ProductSectionComponent,
     resolve: { language: languageResolver }
   },
   {
     path: 'contact',
-    loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule),
+    component: ContactComponent,
     resolve: { language: languageResolver }
   },
   {
     path: 'sobre-nosotros',
-    loadChildren: () => import('./pages/about-us/about-us.module').then(m => m.AboutUsModule),
+    component: AboutUsComponent,
     resolve: { language: languageResolver }
   },
   {
     path: 'productos',
-    loadChildren: () => import('./pages/product-section/product-section.module').then(m => m.ProductSectionModule),
+    component: ProductSectionComponent,
     resolve: { language: languageResolver }
   },
   {
     path: 'contacto',
-    loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule),
+    component: ContactComponent,
     resolve: { language: languageResolver }
   },
 
@@ -134,7 +144,10 @@ export const routes: Routes = [
   }
 ];
 
-
+/**
+ * Helper function to initialize language settings.
+ * This function can be used in an APP_INITIALIZER.
+ */
 export function initializeLanguage(translateService: TranslateService, platformId: Object) {
   return () => {
     translateService.addLangs(['en', 'es']);
