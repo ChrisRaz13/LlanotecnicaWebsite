@@ -15,6 +15,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@google-cloud/recaptcha-enterprise": "^5.13.0",
     "@types/cors": "^2.8.17",
     "cors": "^2.8.5",
     "firebase-admin": "^13.1.0",
