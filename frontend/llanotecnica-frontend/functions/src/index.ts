@@ -5,6 +5,7 @@ import * as admin from "firebase-admin";
 import * as corsLib from "cors";
 import {promisify} from "util";
 import {RecaptchaEnterpriseServiceClient} from "@google-cloud/recaptcha-enterprise";
+import * as functions from "firebase-functions";
 
 // Initialize admin SDK only if it hasn't been initialized yet
 if (!admin.apps.length) {
@@ -12,8 +13,30 @@ if (!admin.apps.length) {
 }
 
 const corsHandler = promisify(corsLib({origin: true}));
-const recaptchaClient = new RecaptchaEnterpriseServiceClient();
 
+// Initialize reCAPTCHA client with credentials from Firebase config
+let recaptchaClient: RecaptchaEnterpriseServiceClient;
+try {
+  // For deployed functions, load credentials from Firebase config
+  if (functions.config().recaptcha && functions.config().recaptcha.credentials) {
+    console.log("Loading reCAPTCHA credentials from Firebase config");
+    // Check if credentials is a string that needs parsing, or already an object
+    const credentials = typeof functions.config().recaptcha.credentials === "string" ?
+      JSON.parse(functions.config().recaptcha.credentials) :
+      functions.config().recaptcha.credentials;
+    recaptchaClient = new RecaptchaEnterpriseServiceClient({credentials});
+    console.log("✅ Successfully initialized RecaptchaEnterpriseServiceClient with Firebase config credentials");
+  } else {
+    // Fallback to default credentials for local development
+    console.log("No Firebase config credentials found, using default credentials");
+    recaptchaClient = new RecaptchaEnterpriseServiceClient();
+  }
+} catch (error) {
+  console.error("❌ Error initializing RecaptchaEnterpriseServiceClient:", error);
+  // Fallback to default credentials
+  console.log("Falling back to default credentials");
+  recaptchaClient = new RecaptchaEnterpriseServiceClient();
+}
 
 interface ContactFormData {
   name: string;
@@ -63,9 +86,24 @@ async function verifyRecaptchaToken(token: string, action: string): Promise<{
   error?: string;
 }> {
   try {
+    console.log(`Starting reCAPTCHA verification for action: ${action}`);
+    console.log(`Token length: ${token ? token.length : "token is undefined or null"}`);
+
     // Get the project ID from the environment
     const projectId = process.env.GOOGLE_CLOUD_PROJECT || "llanotecnica-59a31";
     const siteKey = process.env.RECAPTCHA_SITE_KEY || "6LdRYeYqAAAAANM-PRPuJGsG8gOzCLPsa2e2naiO";
+
+    console.log(`Using project ID: ${projectId}`);
+    console.log(`Using site key: ${siteKey}`);
+
+    if (!token) {
+      console.error("❌ Token is undefined or null");
+      return {
+        success: false,
+        score: 0,
+        error: "Missing token",
+      };
+    }
 
     const projectName = `projects/${projectId}`;
 
@@ -81,8 +119,14 @@ async function verifyRecaptchaToken(token: string, action: string): Promise<{
       },
     };
 
+    console.log("Sending assessment request to reCAPTCHA Enterprise API");
+
     // Call the reCAPTCHA Enterprise API
     const [assessment] = await recaptchaClient.createAssessment(request);
+
+    console.log("Received assessment response from reCAPTCHA Enterprise API");
+    console.log("Token valid:", assessment.tokenProperties?.valid);
+    console.log("Risk score:", assessment.riskAnalysis?.score);
 
     // Check if the token is valid
     if (!assessment.tokenProperties?.valid) {
@@ -90,6 +134,8 @@ async function verifyRecaptchaToken(token: string, action: string): Promise<{
       const reason = assessment.tokenProperties?.invalidReason ?
         String(assessment.tokenProperties.invalidReason) :
         "Invalid token";
+
+      console.error(`❌ Invalid token: ${reason}`);
 
       return {
         success: false,
@@ -100,6 +146,9 @@ async function verifyRecaptchaToken(token: string, action: string): Promise<{
 
     // Handle potential null values and convert types
     const actionValue = assessment.tokenProperties?.action || undefined;
+    const score = assessment.riskAnalysis?.score || 0;
+
+    console.log(`✅ Valid token with score: ${score}, action: ${actionValue}`);
 
     // Convert the timestamp to a string if it exists
     let timestampValue: string | undefined = undefined;
@@ -119,12 +168,18 @@ async function verifyRecaptchaToken(token: string, action: string): Promise<{
     // Return the assessment results
     return {
       success: true,
-      score: assessment.riskAnalysis?.score || 0,
+      score: score,
       action: actionValue,
       timestamp: timestampValue,
     };
   } catch (error) {
     console.error("Error verifying reCAPTCHA token:", error);
+    // Log more detailed error information
+    if (error instanceof Error) {
+      console.error("Error name:", error.name);
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+    }
     return {
       success: false,
       score: 0,
@@ -174,6 +229,7 @@ export const submitContactForm = onRequest({
       email: email ? "provided" : "missing",
       country: country ? "provided" : "missing",
       inquiryType: inquiryType ? "provided" : "missing",
+      recaptchaToken: recaptchaToken ? `provided (length: ${recaptchaToken.length})` : "missing",
     });
 
     // Validate required fields
@@ -218,6 +274,7 @@ export const submitContactForm = onRequest({
     }
 
     console.log("Form validation complete, verifying reCAPTCHA");
+    console.log("Token first 20 chars:", recaptchaToken.substring(0, 20) + "...");
 
     // Verify reCAPTCHA Enterprise token
     const recaptchaResult = await verifyRecaptchaToken(recaptchaToken, "contact_form_submit");
