@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import fs from 'fs';
 import bootstrap from './src/main.server';
+import compression from 'compression';
 
 // Determine folder paths
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -39,6 +40,10 @@ const engineFunction = (
 
 export function app(): express.Express {
   const server = express();
+
+  // Add compression middleware
+  server.use(compression());
+
   server.engine('html', engineFunction);
   server.set('view engine', 'html');
   server.set('views', serverDistFolder);

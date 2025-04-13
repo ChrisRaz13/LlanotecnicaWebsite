@@ -11,7 +11,19 @@ import { environment } from '../../../environments/environment';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { RecaptchaModule } from 'ng-recaptcha';
+// Removed RecaptchaModule import as it's not needed for Enterprise
+
+// Interface for reCAPTCHA Enterprise window object
+declare global {
+  interface Window {
+    grecaptcha: {
+      enterprise: {
+        ready: (callback: () => void) => void;
+        execute: (siteKey: string, options: { action: string }) => Promise<string>;
+      };
+    };
+  }
+}
 
 @Component({
   selector: 'app-about-us',
@@ -20,8 +32,8 @@ import { RecaptchaModule } from 'ng-recaptcha';
     CommonModule,
     ReactiveFormsModule,
     RouterLink,
-    TranslateModule,
-    RecaptchaModule
+    TranslateModule
+    // Removed RecaptchaModule from imports
   ],
   templateUrl: './about-us.component.html',
   styleUrls: ['./about-us.component.css'],
@@ -48,12 +60,18 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
   finalCtaVisible = false;
   heroContentVisible = false;
   stageVisibility: boolean[] = [];
+  recaptchaReady = false;
+  isSubmitting = false;
+  submitSuccess = false;
+  submitError = false;
+  errorMessage = '';
 
   private observers: IntersectionObserver[] = [];
   private finalCtaObserver: IntersectionObserver | null = null;
   private heroObserver: IntersectionObserver | null = null;
   private statsObserver: IntersectionObserver | null = null;
   private destroy$ = new Subject<void>();
+  private recaptchaScript?: HTMLScriptElement;
 
   mapUrl: SafeResourceUrl | undefined;
   companyDetails = {
@@ -94,7 +112,7 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
       country: ['', Validators.required],
       inquiryType: ['', Validators.required],
       message: ['', Validators.required],
-      recaptcha: ['', Validators.required]
+      // Removed explicit recaptcha form control as Enterprise handles it differently
     });
 
     // Initialize stage visibility
@@ -152,18 +170,83 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private loadRecaptcha(): void {
-    if (!document.getElementById('recaptcha-script') && environment.recaptcha?.siteKey) {
-      const script = document.createElement('script');
-      script.id = 'recaptcha-script';
-      script.src = `https://www.google.com/recaptcha/api.js?render=${environment.recaptcha.siteKey}`;
-      document.body.appendChild(script);
+    if (!environment.recaptcha || !environment.recaptcha.siteKey || !isPlatformBrowser(this.platformId)) {
+      console.error('❌ reCAPTCHA not configured or not in browser');
+      return;
+    }
+
+    console.log('🔄 Loading reCAPTCHA Enterprise with site key:', environment.recaptcha.siteKey);
+
+    // Remove any existing reCAPTCHA scripts to avoid conflicts
+    const existingScripts = document.querySelectorAll('script[src*="recaptcha"]');
+    existingScripts.forEach(script => script.remove());
+
+    // Create and load the reCAPTCHA Enterprise script
+    this.recaptchaScript = document.createElement('script');
+    this.recaptchaScript.src = `https://www.google.com/recaptcha/enterprise.js?render=${environment.recaptcha.siteKey}`;
+    this.recaptchaScript.async = true;
+    this.recaptchaScript.defer = true;
+
+    this.recaptchaScript.onerror = () => {
+      console.error('❌ Failed to load reCAPTCHA Enterprise script');
+    };
+
+    this.recaptchaScript.onload = () => {
+      this.ngZone.run(() => {
+        console.log('✅ reCAPTCHA script loaded successfully');
+
+        // Debug grecaptcha object
+        console.log('grecaptcha object:', typeof window.grecaptcha !== 'undefined' ? 'Exists' : 'Undefined');
+        console.log('grecaptcha.enterprise:', typeof window.grecaptcha?.enterprise !== 'undefined' ? 'Exists' : 'Undefined');
+
+        if (typeof window.grecaptcha === 'undefined' ||
+            typeof window.grecaptcha.enterprise === 'undefined') {
+          console.error('❌ grecaptcha.enterprise is undefined after script load');
+          return;
+        }
+
+        window.grecaptcha.enterprise.ready(() => {
+          console.log('✅ reCAPTCHA Enterprise is ready');
+          this.recaptchaReady = true;
+          this.cd.detectChanges();
+
+          // Test token generation to verify domain is authorized
+          this.testRecaptchaToken();
+        });
+      });
+    };
+
+    document.head.appendChild(this.recaptchaScript);
+  }
+
+  private testRecaptchaToken(): void {
+    try {
+      window.grecaptcha.enterprise.execute(environment.recaptcha.siteKey, { action: 'test' })
+        .then(token => {
+          console.log('✅ Test token generated successfully:', token.substring(0, 15) + '...');
+        })
+        .catch(error => {
+          console.error('❌ Error generating test token:', error);
+        });
+    } catch (error) {
+      console.error('❌ Error executing reCAPTCHA test:', error);
     }
   }
 
   private async loadCountries(): Promise<void> {
     try {
-      const response = await this.http.get<any[]>('assets/data/countries.json').toPromise();
-      return Promise.resolve();
+      // First try local file
+      try {
+        const response = await this.http.get<any[]>('assets/data/countries.json').toPromise();
+        return Promise.resolve();
+      } catch (localError) {
+        // If local file fails, try REST Countries API
+        console.log('Local countries file not found, falling back to API...');
+        const apiResponse = await this.http
+          .get<any[]>('https://restcountries.com/v3.1/all?fields=name,cca2,flags,region')
+          .toPromise();
+        return Promise.resolve();
+      }
     } catch (error) {
       console.error('Error loading countries:', error);
       return Promise.reject(error);
@@ -349,9 +432,65 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.setupHeroAnimation();
   }
 
-  onSubmit(): void {
-    if (this.contactForm.valid) {
-      console.log(this.contactForm.value);
+  async onSubmit(): Promise<void> {
+    if (!this.contactForm.valid || !isPlatformBrowser(this.platformId) || this.isSubmitting) {
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.submitSuccess = false;
+    this.submitError = false;
+    this.errorMessage = '';
+
+    try {
+      // Check if reCAPTCHA Enterprise is loaded and ready
+      if (!this.recaptchaReady ||
+          typeof window.grecaptcha === 'undefined' ||
+          typeof window.grecaptcha.enterprise === 'undefined') {
+        throw new Error('reCAPTCHA Enterprise is not ready');
+      }
+
+      // Generate a reCAPTCHA token
+      const token = await window.grecaptcha.enterprise.execute(
+        environment.recaptcha.siteKey,
+        { action: 'about_us_form_submit' }
+      );
+
+      // Create form data with the token
+      const formData = {
+        ...this.contactForm.value,
+        recaptchaToken: token,
+      };
+
+      // Submit the form
+      const response = await this.http.post<any>(environment.contactFormEndpoint, formData).toPromise();
+
+      this.ngZone.run(() => {
+        this.isSubmitting = false;
+        this.submitSuccess = true;
+        this.contactForm.reset();
+        this.cd.detectChanges();
+      });
+    } catch (error) {
+      this.ngZone.run(() => {
+        console.error('Form submission error:', error);
+        this.isSubmitting = false;
+        this.submitError = true;
+
+        if (error instanceof HttpErrorResponse) {
+          switch (error.status) {
+            case 403:
+              this.errorMessage = this.translate.instant('ABOUT_US_PAGE.FORM.ERRORS.RECAPTCHA');
+              break;
+            default:
+              this.errorMessage = this.translate.instant('ABOUT_US_PAGE.FORM.ERRORS.GENERAL');
+          }
+        } else {
+          this.errorMessage = this.translate.instant('ABOUT_US_PAGE.FORM.ERRORS.GENERAL');
+        }
+
+        this.cd.detectChanges();
+      });
     }
   }
 
@@ -362,5 +501,10 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.statsObserver?.disconnect();
     this.destroy$.next();
     this.destroy$.complete();
+
+    // Remove reCAPTCHA script if it exists
+    if (isPlatformBrowser(this.platformId) && this.recaptchaScript) {
+      this.recaptchaScript.remove();
+    }
   }
 }

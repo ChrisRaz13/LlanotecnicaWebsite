@@ -77,6 +77,11 @@ interface CustomerReview {
   avatar: string;
 }
 
+interface VideoHighlight {
+  icon: string;
+  text: string;
+}
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -196,6 +201,22 @@ interface CustomerReview {
           ])
         ], { optional: true })
       ])
+    ]),
+    trigger('videoInfoFadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateX(30px)' }),
+        animate('0.6s ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
+      ])
+    ]),
+    trigger('highlightFadeIn', [
+      transition(':enter', [
+        query('.highlight-item', [
+          style({ opacity: 0, transform: 'translateX(20px)' }),
+          stagger(100, [
+            animate('0.4s ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
+          ])
+        ], { optional: true })
+      ])
     ])
   ]
 })
@@ -203,6 +224,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly Math = Math;
   @ViewChild('demoVideo') demoVideo?: ElementRef<HTMLVideoElement>;
   @ViewChild('heroVideo') heroVideo?: ElementRef<HTMLVideoElement>;
+  @ViewChild('mainVideo') mainVideo?: ElementRef<HTMLVideoElement>;
   @ViewChildren('productCard') productCards!: QueryList<ElementRef>;
 
   activeSection = 'hero';
@@ -211,6 +233,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   showScrollIndicator = true;
   currentHeroBackground = 0;
   private scrollInterval: any;
+
+  // Video section variables
+  isPortraitVideo = true;
+  currentVideoSrc = '';
+  currentVideoPoster = '';
+  videoHighlights: VideoHighlight[] = [];
+  videoInfoTitle = '';
+  videoInfoDescription = '';
+  videoCTAText = '';
 
   // Product section variables
   selectedProductIndex = 0;
@@ -266,8 +297,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     },
     {
       type: 'video',
-      src: '/assets/videos/homepage3.mp4',
-      poster: '/assets/photos/hero-video-poster.jpg'
+      src: '/assets/videos/newherosection.mp4',
     }
   ];
 
@@ -315,16 +345,37 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       // Load translation data for dynamic content
       this.loadTranslations();
 
+      // Set up language-specific video paths
+      this.updateVideoSources();
+
       // Subscribe to language changes to update content
       this.translate.onLangChange.subscribe(() => {
         this.loadTranslations();
         this.setupSEO(); // Update SEO meta tags
+
+        // Update video sources when language changes
+        this.updateVideoSources();
       });
     }
   }
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
+      // Ensure hero video is muted programmatically
+      if (this.heroVideo && this.heroVideo.nativeElement) {
+        const video = this.heroVideo.nativeElement;
+        video.muted = true;
+        video.defaultMuted = true;
+
+        // Add event listener to ensure video stays muted even after user interaction
+        video.addEventListener('volumechange', () => {
+          // Store reference to avoid "possibly undefined" error
+          if (this.heroVideo && this.heroVideo.nativeElement) {
+            this.heroVideo.nativeElement.muted = true;
+          }
+        });
+      }
+
       // Check for fragment after view initialization
       this.route.fragment.subscribe(fragment => {
         if (fragment === 'comparison') {
@@ -337,6 +388,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           }, 800);
         }
       });
+
+      // Listen for metadata loaded to determine video orientation
+      if (this.mainVideo && this.mainVideo.nativeElement) {
+        this.mainVideo.nativeElement.addEventListener('loadedmetadata', () => {
+          if (this.mainVideo && this.mainVideo.nativeElement) {
+            const video = this.mainVideo.nativeElement;
+            // Check if video is portrait (height > width)
+            this.isPortraitVideo = video.videoHeight > video.videoWidth;
+          }
+        });
+      }
     }
   }
 
@@ -359,6 +421,65 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Load company stats translations
     this.loadCompanyStatsTranslations();
+
+    // Load video section translations
+    this.loadVideoSectionTranslations();
+  }
+
+  // New method to handle video source updates based on language
+  private updateVideoSources(): void {
+    const currentLang = this.translate.currentLang || 'en';
+
+    // Set the poster image to the coverphoto for both languages
+    this.currentVideoPoster = '/assets/photos/coverphoto.jpg';
+
+    if (currentLang === 'es') {
+      this.currentVideoSrc = '/assets/videos/IntroductionSpanish.mp4';
+    } else {
+      this.currentVideoSrc = '/assets/videos/IntroductionEnglish.mp4';
+    }
+
+    // If video element exists, load the new source
+    if (this.mainVideo && this.mainVideo.nativeElement) {
+      this.mainVideo.nativeElement.load();
+    }
+  }
+
+  // New method to load video section translations
+  private loadVideoSectionTranslations(): void {
+    this.translate.get([
+      'HOME_PAGE.VIDEO_SECTION.TITLE',
+      'HOME_PAGE.VIDEO_SECTION.SUBTITLE',
+      'HOME_PAGE.VIDEO_SECTION.INFO_TITLE',
+      'HOME_PAGE.VIDEO_SECTION.INFO_DESC',
+      'HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_1',
+      'HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_2',
+      'HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_3',
+      'HOME_PAGE.VIDEO_SECTION.CTA_TEXT',
+      'HOME_PAGE.VIDEO_SECTION.SATISFACTION_GUARANTEE',
+      'HOME_PAGE.VIDEO_SECTION.GUARANTEE_TEXT'
+    ]).subscribe(translations => {
+      // Set video section content
+      this.videoInfoTitle = translations['HOME_PAGE.VIDEO_SECTION.INFO_TITLE'] || 'Professional Grade Concrete Mixers';
+      this.videoInfoDescription = translations['HOME_PAGE.VIDEO_SECTION.INFO_DESC'] || 'Our mixers are engineered for durability and performance in the most demanding construction environments.';
+      this.videoCTAText = translations['HOME_PAGE.VIDEO_SECTION.CTA_TEXT'] || 'Request a Consultation';
+
+      // Set highlights
+      this.videoHighlights = [
+        {
+          icon: 'shield',
+          text: translations['HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_1'] || 'Enhanced safety features with automatic shutdown'
+        },
+        {
+          icon: 'rotate',
+          text: translations['HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_2'] || 'Superior mixing efficiency with dual-direction drum'
+        },
+        {
+          icon: 'toolbox',
+          text: translations['HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_3'] || 'Easy maintenance with accessible components'
+        }
+      ];
+    });
   }
 
   private loadFeaturesTranslations(): void {
@@ -529,6 +650,50 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       ];
     });
+  }
+
+  /**
+   * Handles video playback when clicked on mobile devices
+   * @param event Click event from video or overlay
+   */
+  playVideoOnMobile(event: MouseEvent): void {
+    if (isPlatformBrowser(this.platformId)) {
+      // Check if the video element exists
+      if (this.mainVideo && this.mainVideo.nativeElement) {
+        const video = this.mainVideo.nativeElement;
+
+        // If the video is already playing, do nothing
+        if (!video.paused) return;
+
+        // Try to play the video
+        const playPromise = video.play();
+
+        // Handle the play promise to catch any autoplay restrictions
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              // Hide the play overlay when video starts playing
+              const overlay = document.querySelector('.video-play-overlay') as HTMLElement;
+              if (overlay) {
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                  overlay.style.pointerEvents = 'none';
+                }, 300);
+              }
+            })
+            .catch((error) => {
+              // Video playback was prevented due to autoplay policies
+              console.error('Playback prevented:', error);
+
+              // Show a message to the user if needed
+              // or handle it gracefully
+            });
+        }
+
+        // Stop event propagation
+        event.stopPropagation();
+      }
+    }
   }
 
   // Method for scrolling to comparison section

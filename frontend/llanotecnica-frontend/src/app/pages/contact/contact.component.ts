@@ -1,3 +1,4 @@
+import { RecaptchaService } from './../../services/language-selector/recaptcha.service';
 // Type declaration for Google reCAPTCHA Enterprise
 declare global {
   interface Window {
@@ -136,8 +137,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private cd: ChangeDetectorRef,
     private router: Router,
+    private recaptchaService: RecaptchaService, // Added RecaptchaService
     @Inject(PLATFORM_ID) private platformId: Object,
-    // Added TranslateService to constructor for localized error messages
     private translate: TranslateService
   ) {
     this.initializeForm();
@@ -148,7 +149,8 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this.loadRecaptcha();
+      // We'll keep the loadRecaptcha call for backward compatibility
+      // but the service will handle the actual loading
       this.loadCountries().then(() => {
         this.setupCountrySearch();
       });
@@ -333,26 +335,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     };
   }
 
+  // This method is kept for backward compatibility but is no longer needed
+  // as the RecaptchaService handles this now
   private loadRecaptcha() {
-    if (!environment.recaptcha || !environment.recaptcha.siteKey || !isPlatformBrowser(this.platformId)) {
-      return;
-    }
-    // Create and load the reCAPTCHA Enterprise script
-    this.recaptchaScript = document.createElement('script');
-    this.recaptchaScript.src = `https://www.google.com/recaptcha/enterprise.js?render=${environment.recaptcha.siteKey}`;
-    this.recaptchaScript.async = true;
-    this.recaptchaScript.defer = true;
-    this.recaptchaScript.onload = () => {
-      this.ngZone.run(() => {
-        if (typeof window.grecaptcha !== 'undefined') {
-          // Use the enterprise API
-          window.grecaptcha.enterprise.ready(() => {
-            console.log('✅ reCAPTCHA Enterprise is ready');
-          });
-        }
-      });
-    };
-    document.head.appendChild(this.recaptchaScript);
+    // Function kept for compatibility - no longer used actively
+    console.log('ℹ️ Using centralized RecaptchaService instead of local implementation');
   }
 
   async onSubmit() {
@@ -363,22 +350,20 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.submitError = false;
       this.errorMessage = '';
       try {
-        // Ensure reCAPTCHA Enterprise is loaded
-        if (typeof window.grecaptcha === 'undefined' || typeof window.grecaptcha.enterprise === 'undefined') {
-          throw new Error('reCAPTCHA Enterprise is not loaded.');
-        }
-        // Request a token with your site key and action name
-        const token = await window.grecaptcha.enterprise.execute(environment.recaptcha.siteKey, {
-          action: 'contact_form_submit'
-        });
+        // Use RecaptchaService to get the token
+        console.log('Generating reCAPTCHA token using RecaptchaService...');
+        const token = await this.recaptchaService.executeRecaptcha('contact_form_submit').toPromise();
+
         const formData: ContactForm = {
           ...this.contactForm.value,
           recaptchaToken: token
         };
+
         console.log('DEBUG (Angular): Sending formData:', formData);
         const response = await this.http
           .post<SubmitResponse>(environment.contactFormEndpoint, formData)
           .toPromise();
+
         this.ngZone.run(() => {
           this.submitSuccess = true;
           this.contactForm.reset();

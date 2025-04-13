@@ -2,24 +2,19 @@
   <!-- Hero Section -->
   <section id="hero" class="hero-section" aria-label="Welcome to our concrete mixer solutions">
     <div class="hero-background">
-      <ng-container *ngIf="heroBackgrounds[currentHeroBackground].type === 'image'">
-        <img
-          [src]="heroBackgrounds[currentHeroBackground].src"
-          [alt]="heroBackgrounds[currentHeroBackground].alt"
-          class="hero-bg-image">
-      </ng-container>
-      <ng-container *ngIf="heroBackgrounds[currentHeroBackground].type === 'video'">
-        <video
-          #heroVideo
-          class="hero-bg-video"
-          [poster]="heroBackgrounds[currentHeroBackground].poster"
-          loop
-          muted
-          playsinline
-          autoplay>
-          <source [src]="heroBackgrounds[currentHeroBackground].src" type="video/mp4">
-        </video>
-      </ng-container>
+      <!-- Video background with muted attribute -->
+      <video
+        #heroVideo
+        class="hero-bg-video"
+        width="1920"
+        height="1080"
+        preload="auto"
+        loop
+        muted
+        playsinline
+        autoplay>
+        <source src="/assets/videos/newherosection.mp4" type="video/mp4">
+      </video>
       <div class="hero-overlay"></div>
     </div>
 
@@ -53,29 +48,17 @@
             <i class="fas fa-paper-plane" aria-hidden="true"></i>
           </button>
         </div>
-
-        <div
-          class="scroll-indicator"
-          [class.hide]="!showScrollIndicator"
-          @scrollIndicator
-          aria-hidden="true">
-          <span>{{ 'HOME_PAGE.HERO.SCROLL_INDICATOR' | translate }}</span>
-          <i class="fas fa-chevron-down"></i>
-        </div>
       </div>
-
-      <div class="hero-highlights"></div>
     </div>
 
-    <button
-      class="hero-background-toggle"
-      (click)="toggleHeroBackground()"
-      aria-label="Toggle background view">
-      <i class="fas"
-         [class.fa-image]="heroBackgrounds[currentHeroBackground].type === 'video'"
-         [class.fa-video]="heroBackgrounds[currentHeroBackground].type === 'image'"
-         aria-hidden="true"></i>
-    </button>
+    <div
+      class="scroll-indicator"
+      [class.hide]="!showScrollIndicator"
+      @scrollIndicator
+      aria-hidden="true">
+      <span>{{ 'HOME_PAGE.HERO.SCROLL_INDICATOR' | translate }}</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
   </section>
 
   <!-- Flag Carousel Section -->
@@ -89,7 +72,10 @@
           <div class="flag-wrapper">
             <img [src]="'https://flagcdn.com/' + flag.code.toLowerCase() + '.svg'"
                  [alt]="flag.country + ' flag'"
-                 loading="lazy">
+                 width="48"
+                 height="36"
+                 loading="lazy"
+                 decoding="async">
           </div>
           <span class="country-name">{{flag.country}}</span>
         </div>
@@ -97,18 +83,48 @@
     </div>
   </section>
 
-  <!-- Video Section -->
+  <!-- Video Section - Updated for portrait video with info sidebar -->
   <section id="video" class="video-section">
     <div class="section-container">
-      <div class="video-wrapper">
-        <video
-          controls
-          poster="/assets/photos/mixer-video-poster.jpg"
-          preload="metadata"
-          class="product-video">
-          <source src="/assets/videos/homepage.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
+      <header class="section-header" @fadeIn>
+        <div class="header-accent"></div>
+        <h2>{{ 'HOME_PAGE.VIDEO_SECTION.TITLE' | translate }}</h2>
+        <p>{{ 'HOME_PAGE.VIDEO_SECTION.SUBTITLE' | translate }}</p>
+      </header>
+
+      <div class="portrait-video-wrapper">
+        <div class="video-container">
+          <video
+            #mainVideo
+            controls
+            preload="metadata"
+            [poster]="currentVideoPoster"
+            class="portrait-video">
+            <source [src]="currentVideoSrc" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <div class="video-info-sidebar" @videoInfoFadeIn>
+          <div class="video-info-content">
+            <h3>{{ videoInfoTitle }}</h3>
+            <p>{{ videoInfoDescription }}</p>
+
+            <div class="video-highlights" @highlightFadeIn>
+              <div class="highlight-item" *ngFor="let highlight of videoHighlights">
+                <i class="fas" [ngClass]="'fa-' + highlight.icon"></i>
+                <span>{{ highlight.text }}</span>
+              </div>
+            </div>
+
+            <div class="video-cta">
+              <button class="btn-primary" (click)="requestConsultation()">
+                {{ videoCTAText }}
+                <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -132,7 +148,12 @@
         <!-- First Mixer -->
         <div class="product-card" *ngIf="mixers[0]">
           <div class="product-image-container">
-            <img [src]="mixers[0].image" [alt]="mixers[0].name" class="product-image">
+            <img [src]="mixers[0].image"
+                 [alt]="mixers[0].name"
+                 width="600"
+                 height="400"
+                 loading="lazy"
+                 class="product-image">
           </div>
           <div class="product-content">
             <h3>{{ mixers[0].name }}</h3>
@@ -192,7 +213,12 @@
         <!-- Second Mixer -->
         <div class="product-card" *ngIf="mixers.length > 1">
           <div class="product-image-container">
-            <img [src]="mixers[1].image" [alt]="mixers[1].name" class="product-image">
+            <img [src]="mixers[1].image"
+                 [alt]="mixers[1].name"
+                 width="600"
+                 height="400"
+                 loading="lazy"
+                 class="product-image">
           </div>
           <div class="product-content">
             <h3>{{ mixers[1].name }}</h3>
@@ -345,7 +371,12 @@
             (click)="closeCatalogModal()"
             class="language-option"
           >
-            <img src="https://flagcdn.com/w80/us.png" alt="English" class="language-flag" />
+            <img src="https://flagcdn.com/w80/us.png"
+                 alt="English"
+                 width="80"
+                 height="60"
+                 loading="lazy"
+                 class="language-flag" />
             <span class="language-label">{{ 'HOME_PAGE.MODAL.ENGLISH' | translate }}</span>
           </a>
 
@@ -355,7 +386,12 @@
             (click)="closeCatalogModal()"
             class="language-option"
           >
-            <img src="https://flagcdn.com/w80/es.png" alt="Español" class="language-flag" />
+            <img src="https://flagcdn.com/w80/es.png"
+                 alt="Español"
+                 width="80"
+                 height="60"
+                 loading="lazy"
+                 class="language-flag" />
             <span class="language-label">{{ 'HOME_PAGE.MODAL.SPANISH' | translate }}</span>
           </a>
         </div>
@@ -443,7 +479,11 @@
             <p>{{ 'HOME_PAGE.FAQ_SECTION.FAQ_' + (i+1) + '_ANSWER' | translate }}</p>
             <div class="faq-video" *ngIf="faq.videoUrl">
               <div class="faq-video-container">
-                <video #demoVideo controls poster="{{faq.posterImage}}">
+                <video #demoVideo
+                       controls
+                       width="640"
+                       height="360"
+                       preload="metadata">
                   <source [src]="faq.videoUrl" type="video/mp4">
                   Your browser does not support the video tag.
                 </video>

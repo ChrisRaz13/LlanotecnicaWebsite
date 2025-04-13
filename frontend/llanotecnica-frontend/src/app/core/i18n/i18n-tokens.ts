@@ -1,5 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
+
 // Token for translation file path configuration
 export const TRANSLATION_FILE_PATH = new InjectionToken<string>('TRANSLATION_FILE_PATH', {
   factory: () => 'assets/i18n'

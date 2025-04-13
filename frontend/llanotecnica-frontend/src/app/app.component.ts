@@ -8,6 +8,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { filter } from 'rxjs/operators';
 import { SeoLanguageService } from './services/language-selector/seo-language.service';
+import { RecaptchaService } from './services/language-selector/recaptcha.service';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +35,7 @@ export class AppComponent implements OnInit {
     private titleService: Title,
     private router: Router,
     private seoService: SeoLanguageService,
+    private recaptchaService: RecaptchaService,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(DOCUMENT) private document: Document
   ) {

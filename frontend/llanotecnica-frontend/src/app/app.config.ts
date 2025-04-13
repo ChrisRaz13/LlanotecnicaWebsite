@@ -6,18 +6,15 @@ import { isPlatformBrowser } from '@angular/common';
 import { of } from 'rxjs';
 import { TranslateModule, TranslateLoader, TranslateStore, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { RECAPTCHA_SETTINGS, RecaptchaSettings, RecaptchaModule } from 'ng-recaptcha';
 import { IMAGE_CONFIG } from '@angular/common';
 
 import { routes } from './app.routes';
 import { environment } from '../environments/environment.prod';
 import { TRANSLATION_PROVIDERS } from './translation-initializer';
 
-// For server-side rendering
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-// Function to load translations
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
 }
@@ -31,12 +28,11 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
         anchorScrolling: 'enabled',
       }),
-      withPreloading(PreloadAllModules) // Add preloading strategy for lazy loaded modules
+      withPreloading(PreloadAllModules)
     ),
     provideAnimations(),
     provideHttpClient(),
 
-    // ✅ Ensuring TranslateStore and TranslateService are available globally
     TranslateStore,
     TranslateService,
 
@@ -58,13 +54,8 @@ export const appConfig: ApplicationConfig = {
         defaultLanguage: 'en',
         useDefaultLang: true,
         isolate: false,
-      }),
-      RecaptchaModule
+      })
     ),
-    {
-      provide: RECAPTCHA_SETTINGS,
-      useValue: { siteKey: environment.recaptcha.siteKey } as RecaptchaSettings,
-    },
     ...TRANSLATION_PROVIDERS,
   ],
 };
