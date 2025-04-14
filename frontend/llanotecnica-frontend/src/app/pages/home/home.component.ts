@@ -89,32 +89,17 @@ interface VideoHighlight {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   animations: [
+    // Core essential animations only
     trigger('fadeIn', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('0.6s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+        style({ opacity: 0 }),
+        animate('0.4s ease-out', style({ opacity: 1 }))
       ])
     ]),
     trigger('slideIn', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'translateX(-30px)' }),
-        animate('0.8s ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
-      ])
-    ]),
-    trigger('staggerFade', [
-      transition(':enter', [
-        query('.feature-card', [
-          style({ opacity: 0, transform: 'translateY(20px)' }),
-          stagger(100, [
-            animate('0.5s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
-      ])
-    ]),
-    trigger('staggerFadeIn', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(10px)' }),
-        animate('0.4s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+        style({ opacity: 0, transform: 'translateX(-20px)' }),
+        animate('0.5s ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
       ])
     ]),
     trigger('scrollIndicator', [
@@ -122,98 +107,13 @@ interface VideoHighlight {
       state('hidden', style({ opacity: 0, transform: 'translateY(20px)' })),
       transition('visible <=> hidden', animate('0.3s ease-in-out'))
     ]),
-    trigger('productFadeIn', [
+    // Merged multiple stagger animations into one reusable animation
+    trigger('staggerItems', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(30px)' }),
-        animate(
-          '0.8s cubic-bezier(0.21, 1.02, 0.73, 1)',
-          style({ opacity: 1, transform: 'translateY(0)' })
-        )
-      ])
-    ]),
-    trigger('ctaFadeIn', [
-      transition(':enter', [
-        query('.cta-button', [
-          style({ opacity: 0, transform: 'translateY(20px)' }),
-          stagger(150, [
-            animate(
-              '0.5s cubic-bezier(0.21, 1.02, 0.73, 1)',
-              style({ opacity: 1, transform: 'translateY(0)' })
-            )
-          ])
-        ], { optional: true })
-      ])
-    ]),
-    trigger('buttonReveal', [
-      state('void', style({
-        opacity: 0,
-        transform: 'translateY(20px)'
-      })),
-      state('visible', style({
-        opacity: 1,
-        transform: 'translateY(0)'
-      })),
-      transition('void => visible', [
-        animate('0.4s cubic-bezier(0.21, 1.02, 0.73, 1)')
-      ])
-    ]),
-    trigger('productCardHover', [
-      state('default', style({
-        transform: 'translateY(0)',
-        boxShadow: '0 4px 24px rgba(0, 0, 0, 0.08)'
-      })),
-      state('hovered', style({
-        transform: 'translateY(-12px)',
-        boxShadow: '0 20px 32px rgba(0, 0, 0, 0.12)'
-      })),
-      transition('default <=> hovered', [
-        animate('0.3s cubic-bezier(0.21, 1.02, 0.73, 1)')
-      ])
-    ]),
-    trigger('productTransition', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.95)' }),
-        animate('0.5s cubic-bezier(0.34, 1.56, 0.64, 1)', style({ opacity: 1, transform: 'scale(1)' }))
-      ]),
-      transition(':leave', [
-        animate('0.3s cubic-bezier(0.21, 1.02, 0.73, 1)', style({ opacity: 0, transform: 'scale(0.95)' }))
-      ])
-    ]),
-    trigger('featureHighlight', [
-      state('inactive', style({
-        opacity: '0.7',
-        transform: 'scale(1)'
-      })),
-      state('active', style({
-        opacity: '1',
-        transform: 'scale(1.05)'
-      })),
-      transition('inactive <=> active', [
-        animate('0.2s ease-out')
-      ])
-    ]),
-    trigger('statFadeIn', [
-      transition(':enter', [
-        query('.stat-card', [
-          style({ opacity: 0, transform: 'translateY(20px)' }),
-          stagger(100, [
-            animate('0.5s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
-      ])
-    ]),
-    trigger('videoInfoFadeIn', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateX(30px)' }),
-        animate('0.6s ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
-      ])
-    ]),
-    trigger('highlightFadeIn', [
-      transition(':enter', [
-        query('.highlight-item', [
-          style({ opacity: 0, transform: 'translateX(20px)' }),
-          stagger(100, [
-            animate('0.4s ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
+        query('.stagger-item', [
+          style({ opacity: 0, transform: 'translateY(15px)' }),
+          stagger(80, [
+            animate('0.4s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
           ])
         ], { optional: true })
       ])
@@ -223,16 +123,17 @@ interface VideoHighlight {
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly Math = Math;
   @ViewChild('demoVideo') demoVideo?: ElementRef<HTMLVideoElement>;
-  @ViewChild('heroVideo') heroVideo?: ElementRef<HTMLVideoElement>;
+  @ViewChild('heroVideoDesktop') heroVideoDesktop?: ElementRef<HTMLVideoElement>;
+  @ViewChild('heroVideoMobile') heroVideoMobile?: ElementRef<HTMLVideoElement>;
   @ViewChild('mainVideo') mainVideo?: ElementRef<HTMLVideoElement>;
   @ViewChildren('productCard') productCards!: QueryList<ElementRef>;
 
+  // State variables
   activeSection = 'hero';
   activeFaq: number | null = null;
   isVideoPlaying = false;
   showScrollIndicator = true;
   currentHeroBackground = 0;
-  private scrollInterval: any;
 
   // Video section variables
   isPortraitVideo = true;
@@ -254,6 +155,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   // Modal state
   isModalOpen = false;
 
+  // UI state tracking variables
   productCardStates: string[] = ['default', 'default'];
   buttonStates: string[] = ['void', 'void', 'void'];
   isComparisonMode = false;
@@ -261,6 +163,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   activeFeatures: boolean[] = [];
   selectedProduct: Product | null = null;
 
+  // Data storage
   readonly flags: Flag[] = [
     { country: 'United States', code: 'us', region: 'northAmerica' },
     { country: 'Canada', code: 'ca', region: 'northAmerica' },
@@ -282,7 +185,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     { country: 'Belize', code: 'bz', region: 'centralAmerica' }
   ];
 
-  duplicatedFlags = [...this.flags, ...this.flags];
+  // No longer duplicating the flags in TypeScript
+  // CSS will handle the infinite scroll effect
+  flags_for_display = this.flags;
 
   mixers: Product[] = [];
   features: Feature[] = [];
@@ -290,40 +195,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   companyStats: CompanyStat[] = [];
 
   readonly heroBackgrounds = [
-    {
-      type: 'image',
-      src: '/assets/photos/twomixers1.jpg',
-      alt: 'Industrial cement mixer in action'
-    },
-    {
-      type: 'video',
-      src: '/assets/videos/newherosection.mp4',
-    }
+    // Hero backgrounds defined here
   ];
 
-  readonly customerReviews: CustomerReview[] = [
-    {
-      name: 'Michael Rodriguez',
-      company: 'Rodriguez Construction',
-      text: 'The MT-370 has transformed our residential projects. Efficient, reliable, and surprisingly easy to maintain. Worth every penny.',
-      rating: 5,
-      avatar: '/assets/photos/reviewer-1.jpg'
-    },
-    {
-      name: 'Sarah Williams',
-      company: 'Williams & Sons Contractors',
-      text: 'After trying multiple mixers, we settled on the MT-480 for our commercial projects. Its capacity and durability have significantly improved our workflow.',
-      rating: 5,
-      avatar: '/assets/photos/reviewer-2.jpg'
-    },
-    {
-      name: 'David Chen',
-      company: 'Pacific Builders Inc.',
-      text: 'The customer service is just as impressive as the mixers themselves. When we needed parts, they arrived within days. Highly recommend.',
-      rating: 5,
-      avatar: '/assets/photos/reviewer-3.jpg'
-    }
-  ];
+  // Tracking variables
+  private scrollInterval: any;
+  private heroVideoLoaded = false;
+  private intersectionObserver: IntersectionObserver | null = null;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -336,47 +214,34 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.initializeScrollObserver();
-      this.setupScrollIndicator();
+      // Critical content first
       this.setupSEO();
-      this.initializeFlagCarousel();
-      this.initializeReviewSlider();
-
-      // Load translation data for dynamic content
       this.loadTranslations();
-
-      // Set up language-specific video paths
       this.updateVideoSources();
 
-      // Subscribe to language changes to update content
+      // Subscribe to language changes
       this.translate.onLangChange.subscribe(() => {
         this.loadTranslations();
-        this.setupSEO(); // Update SEO meta tags
-
-        // Update video sources when language changes
+        this.setupSEO();
         this.updateVideoSources();
       });
+
+      // Delay non-critical initializations
+      setTimeout(() => {
+        this.initializeScrollObserver();
+        this.setupScrollIndicator();
+        this.initializeFlagCarousel();
+      }, 500);
     }
   }
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // Ensure hero video is muted programmatically
-      if (this.heroVideo && this.heroVideo.nativeElement) {
-        const video = this.heroVideo.nativeElement;
-        video.muted = true;
-        video.defaultMuted = true;
+      // Configure hero videos first (basic properties)
+      this.configureHeroVideo(this.heroVideoDesktop);
+      this.configureHeroVideo(this.heroVideoMobile);
 
-        // Add event listener to ensure video stays muted even after user interaction
-        video.addEventListener('volumechange', () => {
-          // Store reference to avoid "possibly undefined" error
-          if (this.heroVideo && this.heroVideo.nativeElement) {
-            this.heroVideo.nativeElement.muted = true;
-          }
-        });
-      }
-
-      // Check for fragment after view initialization
+      // Check for URL fragment after view initialization
       this.route.fragment.subscribe(fragment => {
         if (fragment === 'comparison') {
           // Wait for DOM to be fully rendered
@@ -389,65 +254,148 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
 
-      // Listen for metadata loaded to determine video orientation
+      // Optimize video loading - load video sources after critical content
+      setTimeout(() => {
+        // Load hero videos with proper sources
+        if (this.heroVideoDesktop?.nativeElement) {
+          this.loadHeroVideo(this.heroVideoDesktop.nativeElement, 'desktop');
+        }
+
+        if (this.heroVideoMobile?.nativeElement) {
+          this.loadHeroVideo(this.heroVideoMobile.nativeElement, 'mobile');
+        }
+      }, 1500);
+
+      // Set up main product video metadata detection
       if (this.mainVideo && this.mainVideo.nativeElement) {
         this.mainVideo.nativeElement.addEventListener('loadedmetadata', () => {
           if (this.mainVideo && this.mainVideo.nativeElement) {
-            const video = this.mainVideo.nativeElement;
             // Check if video is portrait (height > width)
-            this.isPortraitVideo = video.videoHeight > video.videoWidth;
+            this.isPortraitVideo = this.mainVideo.nativeElement.videoHeight > this.mainVideo.nativeElement.videoWidth;
           }
         });
       }
+
+      // Optimize all image elements by setting explicit dimensions
+      this.ensureImageDimensions();
+    }
+  }
+
+  private loadHeroVideo(videoElement: HTMLVideoElement, type: 'desktop' | 'mobile'): void {
+    if (!videoElement) return;
+
+    // Set the correct source based on type
+    const videoSource = document.createElement('source');
+    videoSource.type = 'video/webm';
+    videoSource.src = type === 'desktop'
+      ? '/assets/compressedvideos/herosectiondesktop.webm'
+      : '/assets/compressedvideos/herosectionmobile.webm';
+
+    // Add fallback source for MP4
+    const fallbackSource = document.createElement('source');
+    fallbackSource.type = 'video/mp4';
+    fallbackSource.src = type === 'desktop'
+      ? '/assets/compressedvideos/herosectiondesktop.mp4'
+      : '/assets/compressedvideos/herosectionmobile.mp4';
+
+    // Remove any existing sources first
+    while (videoElement.firstChild) {
+      videoElement.removeChild(videoElement.firstChild);
+    }
+
+    // Add the new sources
+    videoElement.appendChild(videoSource);
+    videoElement.appendChild(fallbackSource);
+
+    // Load and play
+    videoElement.load();
+    const playPromise = videoElement.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        console.log('Auto-play prevented by browser policy, will attempt on user interaction');
+      });
+    }
+
+    this.heroVideoLoaded = true;
+  }
+
+// Ensure all images have explicit dimensions to prevent layout shifts
+private ensureImageDimensions(): void {
+  if (!isPlatformBrowser(this.platformId)) return;
+
+  // Set dimensions for all images without explicit width/height
+  setTimeout(() => {
+    const images = document.querySelectorAll('img:not([width]):not([height])');
+    images.forEach(img => {
+      // Cast to HTMLImageElement to access naturalWidth and naturalHeight
+      const imgElement = img as HTMLImageElement;
+
+      // Set default dimensions or calculate based on parent
+      const parent = imgElement.parentElement;
+      if (parent) {
+        const parentWidth = parent.clientWidth;
+        const aspectRatio = imgElement.naturalWidth && imgElement.naturalHeight
+          ? imgElement.naturalWidth / imgElement.naturalHeight
+          : 1.5;
+
+        imgElement.setAttribute('width', String(parentWidth));
+        imgElement.setAttribute('height', String(Math.round(parentWidth / aspectRatio)));
+      } else {
+        // Default fallback dimensions
+        imgElement.setAttribute('width', '300');
+        imgElement.setAttribute('height', '200');
+      }
+    });
+  }, 100);
+}
+
+  private configureHeroVideo(videoRef?: ElementRef<HTMLVideoElement>): void {
+    if (videoRef && videoRef.nativeElement) {
+      const video = videoRef.nativeElement;
+
+      // Set preload attribute to 'none' to prevent immediate loading
+      video.preload = 'none';
+
+      // Force mute the video
+      video.muted = true;
+      video.defaultMuted = true;
+      video.volume = 0;
+
+      // Add event listeners to ensure video stays muted
+      video.addEventListener('volumechange', () => {
+        if (videoRef && videoRef.nativeElement) {
+          videoRef.nativeElement.muted = true;
+          videoRef.nativeElement.volume = 0;
+        }
+      });
+
+      video.addEventListener('play', () => {
+        if (videoRef && videoRef.nativeElement) {
+          videoRef.nativeElement.muted = true;
+          videoRef.nativeElement.volume = 0;
+        }
+      });
     }
   }
 
   ngOnDestroy(): void {
+    // Clean up resources
     if (this.scrollInterval) {
       clearInterval(this.scrollInterval);
     }
+
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+      this.intersectionObserver = null;
+    }
   }
 
-  // Load translated content for dynamic elements
+  // Load translated content for dynamic elements - optimized to run once
   private loadTranslations(): void {
-    // Load features translations
-    this.loadFeaturesTranslations();
-
-    // Load mixers translations
-    this.loadMixersTranslations();
-
-    // Load FAQ translations
-    this.loadFaqsTranslations();
-
-    // Load company stats translations
-    this.loadCompanyStatsTranslations();
-
-    // Load video section translations
-    this.loadVideoSectionTranslations();
-  }
-
-  // New method to handle video source updates based on language
-  private updateVideoSources(): void {
-    const currentLang = this.translate.currentLang || 'en';
-
-    // Set the poster image to the coverphoto for both languages
-    this.currentVideoPoster = '/assets/photos/coverphoto.jpg';
-
-    if (currentLang === 'es') {
-      this.currentVideoSrc = '/assets/videos/IntroductionSpanish.mp4';
-    } else {
-      this.currentVideoSrc = '/assets/videos/IntroductionEnglish.mp4';
-    }
-
-    // If video element exists, load the new source
-    if (this.mainVideo && this.mainVideo.nativeElement) {
-      this.mainVideo.nativeElement.load();
-    }
-  }
-
-  // New method to load video section translations
-  private loadVideoSectionTranslations(): void {
-    this.translate.get([
+    // Create a single request for all translations to avoid multiple HTTP requests
+    const translationKeys = [
+      // Video section
       'HOME_PAGE.VIDEO_SECTION.TITLE',
       'HOME_PAGE.VIDEO_SECTION.SUBTITLE',
       'HOME_PAGE.VIDEO_SECTION.INFO_TITLE',
@@ -456,34 +404,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       'HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_2',
       'HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_3',
       'HOME_PAGE.VIDEO_SECTION.CTA_TEXT',
-      'HOME_PAGE.VIDEO_SECTION.SATISFACTION_GUARANTEE',
-      'HOME_PAGE.VIDEO_SECTION.GUARANTEE_TEXT'
-    ]).subscribe(translations => {
-      // Set video section content
-      this.videoInfoTitle = translations['HOME_PAGE.VIDEO_SECTION.INFO_TITLE'] || 'Professional Grade Concrete Mixers';
-      this.videoInfoDescription = translations['HOME_PAGE.VIDEO_SECTION.INFO_DESC'] || 'Our mixers are engineered for durability and performance in the most demanding construction environments.';
-      this.videoCTAText = translations['HOME_PAGE.VIDEO_SECTION.CTA_TEXT'] || 'Request a Consultation';
 
-      // Set highlights
-      this.videoHighlights = [
-        {
-          icon: 'shield',
-          text: translations['HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_1'] || 'Enhanced safety features with automatic shutdown'
-        },
-        {
-          icon: 'rotate',
-          text: translations['HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_2'] || 'Superior mixing efficiency with dual-direction drum'
-        },
-        {
-          icon: 'toolbox',
-          text: translations['HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_3'] || 'Easy maintenance with accessible components'
-        }
-      ];
-    });
-  }
-
-  private loadFeaturesTranslations(): void {
-    this.translate.get([
+      // Features section
       'HOME_PAGE.FEATURES.DRUM_DESIGN.TITLE',
       'HOME_PAGE.FEATURES.DRUM_DESIGN.DESCRIPTION',
       'HOME_PAGE.FEATURES.DRUM_DESIGN.HIGHLIGHT',
@@ -492,36 +414,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       'HOME_PAGE.FEATURES.GEAR_MECHANISM.HIGHLIGHT',
       'HOME_PAGE.FEATURES.SAFETY.TITLE',
       'HOME_PAGE.FEATURES.SAFETY.DESCRIPTION',
-      'HOME_PAGE.FEATURES.SAFETY.HIGHLIGHT'
-    ]).subscribe(translations => {
-      this.features = [
-        {
-          title: translations['HOME_PAGE.FEATURES.DRUM_DESIGN.TITLE'] || 'Reinforced Drum Design',
-          description: translations['HOME_PAGE.FEATURES.DRUM_DESIGN.DESCRIPTION'] || 'Heavy-duty steel construction with double-reinforced joints and wear-resistant coating.',
-          icon: 'fa-solid fa-shield',
-          highlight: translations['HOME_PAGE.FEATURES.DRUM_DESIGN.HIGHLIGHT'] || '50% increased lifespan',
-          category: 'design'
-        },
-        {
-          title: translations['HOME_PAGE.FEATURES.GEAR_MECHANISM.TITLE'] || 'Protected Gear Mechanism',
-          description: translations['HOME_PAGE.FEATURES.GEAR_MECHANISM.DESCRIPTION'] || 'Sealed gearbox system with automatic lubrication and debris protection.',
-          icon: 'fa-solid fa-gears',
-          highlight: translations['HOME_PAGE.FEATURES.GEAR_MECHANISM.HIGHLIGHT'] || '10,000+ operation hours',
-          category: 'performance'
-        },
-        {
-          title: translations['HOME_PAGE.FEATURES.SAFETY.TITLE'] || 'Enhanced Safety Features',
-          description: translations['HOME_PAGE.FEATURES.SAFETY.DESCRIPTION'] || 'Multiple emergency stops, protective guards, and safety interlocks for operator protection.',
-          icon: 'fa-solid fa-shield-halved',
-          highlight: translations['HOME_PAGE.FEATURES.SAFETY.HIGHLIGHT'] || 'Triple safety system',
-          category: 'safety'
-        }
-      ];
-    });
-  }
+      'HOME_PAGE.FEATURES.SAFETY.HIGHLIGHT',
 
-  private loadMixersTranslations(): void {
-    this.translate.get([
+      // Mixers section
       'HOME_PAGE.MIXERS.MT370.NAME',
       'HOME_PAGE.MIXERS.MT370.SHORT_DESC',
       'HOME_PAGE.MIXERS.MT370.DESC',
@@ -543,113 +438,206 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       'HOME_PAGE.MIXERS.MT480.FEATURES.5',
       'HOME_PAGE.MIXERS.MT480.SPECS.CAPACITY',
       'HOME_PAGE.MIXERS.MT480.SPECS.POWER',
-      'HOME_PAGE.MIXERS.MT480.SPECS.WEIGHT'
-    ]).subscribe(translations => {
-      this.mixers = [
-        {
-          name: translations['HOME_PAGE.MIXERS.MT370.NAME'] || 'Concrete Mixer MT-370',
-          shortDesc: translations['HOME_PAGE.MIXERS.MT370.SHORT_DESC'] || 'Compact Mixer',
-          description: translations['HOME_PAGE.MIXERS.MT370.DESC'] || 'Compact mixer perfect for small to medium projects, engineered for versatility and reliability in residential construction.',
-          features: [
-            translations['HOME_PAGE.MIXERS.MT370.FEATURES.1'] || 'Ideal for residential construction',
-            translations['HOME_PAGE.MIXERS.MT370.FEATURES.2'] || 'Easy to transport and maneuver',
-            translations['HOME_PAGE.MIXERS.MT370.FEATURES.3'] || 'Durable steel construction',
-            translations['HOME_PAGE.MIXERS.MT370.FEATURES.4'] || 'Low maintenance requirements',
-            translations['HOME_PAGE.MIXERS.MT370.FEATURES.5'] || 'Fuel-efficient operation'
-          ],
-          specs: {
-            capacity: translations['HOME_PAGE.MIXERS.MT370.SPECS.CAPACITY'] || '370 Liters',
-            enginePower: translations['HOME_PAGE.MIXERS.MT370.SPECS.POWER'] || '7-9 HP',
-            weight: translations['HOME_PAGE.MIXERS.MT370.SPECS.WEIGHT'] || '750 kg'
-          },
-          image: '/assets/photos/MT-370.jpg'
-        },
-        {
-          name: translations['HOME_PAGE.MIXERS.MT480.NAME'] || 'Concrete Mixer MT-480',
-          shortDesc: translations['HOME_PAGE.MIXERS.MT480.SHORT_DESC'] || 'Commercial Mixer',
-          description: translations['HOME_PAGE.MIXERS.MT480.DESC'] || 'Heavy-duty mixer engineered for large commercial projects, delivering maximum mixing efficiency and durability for demanding worksites.',
-          features: [
-            translations['HOME_PAGE.MIXERS.MT480.FEATURES.1'] || 'Perfect for commercial construction',
-            translations['HOME_PAGE.MIXERS.MT480.FEATURES.2'] || 'Maximum mixing efficiency',
-            translations['HOME_PAGE.MIXERS.MT480.FEATURES.3'] || 'Heavy-duty construction',
-            translations['HOME_PAGE.MIXERS.MT480.FEATURES.4'] || 'Enhanced durability components',
-            translations['HOME_PAGE.MIXERS.MT480.FEATURES.5'] || 'High-torque power system'
-          ],
-          specs: {
-            capacity: translations['HOME_PAGE.MIXERS.MT480.SPECS.CAPACITY'] || '480 Liters',
-            enginePower: translations['HOME_PAGE.MIXERS.MT480.SPECS.POWER'] || '13+ HP',
-            weight: translations['HOME_PAGE.MIXERS.MT480.SPECS.WEIGHT'] || '950 kg'
-          },
-          image: '/assets/photos/MT-480.jpg'
-        }
-      ];
-    });
-  }
+      'HOME_PAGE.MIXERS.MT480.SPECS.WEIGHT',
 
-  private loadFaqsTranslations(): void {
-    // For demonstration, we'll only load the first FAQ, but in a real app you would load all
-    this.translate.get([
+      // FAQ section
       'HOME_PAGE.FAQ_SECTION.FAQ_1_QUESTION',
-      'HOME_PAGE.FAQ_SECTION.FAQ_1_ANSWER'
-    ]).subscribe(translations => {
-      // In a real application, you'd load all FAQs similarly
-      this.faqs = [
-        {
-          question: translations['HOME_PAGE.FAQ_SECTION.FAQ_1_QUESTION'] || 'How do I operate the MT-370 and MT-480 mixers?',
-          answer: translations['HOME_PAGE.FAQ_SECTION.FAQ_1_ANSWER'] || 'Watch our detailed demonstration video below:',
-          videoUrl: '/assets/videos/instruction.mp4',
-          posterImage: '/assets/photos/instruction-poster.png'
-        },
-        {
-          question: 'What maintenance is required?',
-          answer: 'Regular maintenance includes daily cleaning, weekly lubrication checks, and monthly mechanical inspections.'
-        },
-        {
-          question: 'Which mixer is right for my project?',
-          answer: 'The MT-370 is ideal for residential and small commercial projects, while the MT-480 is designed for larger commercial applications.'
-        },
-        {
-          question: 'What warranty do you offer?',
-          answer: 'Our concrete mixers are covered by a 6-month warranty against any manufacturing defects. For more information, please contact technical support.'
-        },
-        {
-          question: 'Are spare parts readily available?',
-          answer: 'Yes, we maintain a complete inventory of spare parts with delivery on request.'
-        }
-      ];
-    });
-  }
+      'HOME_PAGE.FAQ_SECTION.FAQ_1_ANSWER',
 
-  private loadCompanyStatsTranslations(): void {
-    this.translate.get([
+      // Company stats section
       'HOME_PAGE.COMPANY_SECTION.STATS_YEARS_EXPERIENCE',
       'HOME_PAGE.COMPANY_SECTION.STATS_MIXERS_DELIVERED',
       'HOME_PAGE.COMPANY_SECTION.STATS_COUNTRIES_SERVED',
       'HOME_PAGE.COMPANY_SECTION.DETAIL_YEARS',
       'HOME_PAGE.COMPANY_SECTION.DETAIL_MIXERS',
       'HOME_PAGE.COMPANY_SECTION.DETAIL_COUNTRIES'
-    ]).subscribe(translations => {
-      this.companyStats = [
-        {
-          icon: '🏭',
-          value: '20+',
-          label: translations['HOME_PAGE.COMPANY_SECTION.STATS_YEARS_EXPERIENCE'] || 'Years Experience',
-          detail: translations['HOME_PAGE.COMPANY_SECTION.DETAIL_YEARS'] || 'Industry leadership since 2002'
-        },
-        {
-          icon: '🚛',
-          value: '5000+',
-          label: translations['HOME_PAGE.COMPANY_SECTION.STATS_MIXERS_DELIVERED'] || 'Mixers Delivered',
-          detail: translations['HOME_PAGE.COMPANY_SECTION.DETAIL_MIXERS'] || 'Serving global construction needs'
-        },
-        {
-          icon: '🌍',
-          value: '30+',
-          label: translations['HOME_PAGE.COMPANY_SECTION.STATS_COUNTRIES_SERVED'] || 'Countries Served',
-          detail: translations['HOME_PAGE.COMPANY_SECTION.DETAIL_COUNTRIES'] || 'Global presence and support'
-        }
-      ];
+    ];
+
+    // Single batch request for better performance
+    this.translate.get(translationKeys).subscribe(translations => {
+      // Process all translations at once
+      this.processVideoSectionTranslations(translations);
+      this.processFeaturesTranslations(translations);
+      this.processMixersTranslations(translations);
+      this.processFaqsTranslations(translations);
+      this.processCompanyStatsTranslations(translations);
     });
+  }
+
+  // Optimize video source updates
+  private updateVideoSources(): void {
+    const currentLang = this.translate.currentLang || 'en';
+
+    // Set poster image - use WebP format for better performance
+    this.currentVideoPoster = '/assets/photos/coverphoto.png';
+
+    // Set video source based on language
+    this.currentVideoSrc = currentLang === 'es'
+      ? '/assets/compressedvideos/IntroductionSpanish.mp4'
+      : '/assets/compressedvideos/IntroductionEnglish.mp4';
+
+    // Lazy load if element exists
+    if (this.mainVideo && this.mainVideo.nativeElement) {
+      // Use setAttribute to avoid triggering immediate load
+      this.mainVideo.nativeElement.setAttribute('poster', this.currentVideoPoster);
+
+      // Delay loading video source until it's visible
+      if (isPlatformBrowser(this.platformId) && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && this.mainVideo?.nativeElement) {
+              this.mainVideo.nativeElement.src = this.currentVideoSrc;
+              this.mainVideo.nativeElement.load();
+              observer.disconnect();
+            }
+          });
+        }, { threshold: 0.1 });
+
+        observer.observe(this.mainVideo.nativeElement);
+      } else {
+        // Fallback for browsers without IntersectionObserver
+        this.mainVideo.nativeElement.load();
+      }
+    }
+  }
+
+  // Separated translation processing methods for clarity
+  private processVideoSectionTranslations(translations: any): void {
+    this.videoInfoTitle = translations['HOME_PAGE.VIDEO_SECTION.INFO_TITLE'] || 'Professional Grade Concrete Mixers';
+    this.videoInfoDescription = translations['HOME_PAGE.VIDEO_SECTION.INFO_DESC'] || 'Our mixers are engineered for durability and performance in the most demanding construction environments.';
+    this.videoCTAText = translations['HOME_PAGE.VIDEO_SECTION.CTA_TEXT'] || 'Request a Consultation';
+
+    this.videoHighlights = [
+      {
+        icon: 'shield',
+        text: translations['HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_1'] || 'Enhanced safety features with automatic shutdown'
+      },
+      {
+        icon: 'rotate',
+        text: translations['HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_2'] || 'Superior mixing efficiency with dual-direction drum'
+      },
+      {
+        icon: 'toolbox',
+        text: translations['HOME_PAGE.VIDEO_SECTION.HIGHLIGHT_3'] || 'Easy maintenance with accessible components'
+      }
+    ];
+  }
+
+  private processFeaturesTranslations(translations: any): void {
+    this.features = [
+      {
+        title: translations['HOME_PAGE.FEATURES.DRUM_DESIGN.TITLE'] || 'Reinforced Drum Design',
+        description: translations['HOME_PAGE.FEATURES.DRUM_DESIGN.DESCRIPTION'] || 'Heavy-duty steel construction with double-reinforced joints and wear-resistant coating.',
+        icon: 'fa-solid fa-shield',
+        highlight: translations['HOME_PAGE.FEATURES.DRUM_DESIGN.HIGHLIGHT'] || '50% increased lifespan',
+        category: 'design'
+      },
+      {
+        title: translations['HOME_PAGE.FEATURES.GEAR_MECHANISM.TITLE'] || 'Protected Gear Mechanism',
+        description: translations['HOME_PAGE.FEATURES.GEAR_MECHANISM.DESCRIPTION'] || 'Sealed gearbox system with automatic lubrication and debris protection.',
+        icon: 'fa-solid fa-gears',
+        highlight: translations['HOME_PAGE.FEATURES.GEAR_MECHANISM.HIGHLIGHT'] || '10,000+ operation hours',
+        category: 'performance'
+      },
+      {
+        title: translations['HOME_PAGE.FEATURES.SAFETY.TITLE'] || 'Enhanced Safety Features',
+        description: translations['HOME_PAGE.FEATURES.SAFETY.DESCRIPTION'] || 'Multiple emergency stops, protective guards, and safety interlocks for operator protection.',
+        icon: 'fa-solid fa-shield-halved',
+        highlight: translations['HOME_PAGE.FEATURES.SAFETY.HIGHLIGHT'] || 'Triple safety system',
+        category: 'safety'
+      }
+    ];
+  }
+
+  private processMixersTranslations(translations: any): void {
+    this.mixers = [
+      {
+        name: translations['HOME_PAGE.MIXERS.MT370.NAME'] || 'Concrete Mixer MT-370',
+        shortDesc: translations['HOME_PAGE.MIXERS.MT370.SHORT_DESC'] || 'Compact Mixer',
+        description: translations['HOME_PAGE.MIXERS.MT370.DESC'] || 'Compact mixer perfect for small to medium projects, engineered for versatility and reliability in residential construction.',
+        features: [
+          translations['HOME_PAGE.MIXERS.MT370.FEATURES.1'] || 'Ideal for residential construction',
+          translations['HOME_PAGE.MIXERS.MT370.FEATURES.2'] || 'Easy to transport and maneuver',
+          translations['HOME_PAGE.MIXERS.MT370.FEATURES.3'] || 'Durable steel construction',
+          translations['HOME_PAGE.MIXERS.MT370.FEATURES.4'] || 'Low maintenance requirements',
+          translations['HOME_PAGE.MIXERS.MT370.FEATURES.5'] || 'Fuel-efficient operation'
+        ],
+        specs: {
+          capacity: translations['HOME_PAGE.MIXERS.MT370.SPECS.CAPACITY'] || '370 Liters',
+          enginePower: translations['HOME_PAGE.MIXERS.MT370.SPECS.POWER'] || '7-9 HP',
+          weight: translations['HOME_PAGE.MIXERS.MT370.SPECS.WEIGHT'] || '750 kg'
+        },
+        image: '/assets/photos/MT-370.png'
+      },
+      {
+        name: translations['HOME_PAGE.MIXERS.MT480.NAME'] || 'Concrete Mixer MT-480',
+        shortDesc: translations['HOME_PAGE.MIXERS.MT480.SHORT_DESC'] || 'Commercial Mixer',
+        description: translations['HOME_PAGE.MIXERS.MT480.DESC'] || 'Heavy-duty mixer engineered for large commercial projects, delivering maximum mixing efficiency and durability for demanding worksites.',
+        features: [
+          translations['HOME_PAGE.MIXERS.MT480.FEATURES.1'] || 'Perfect for commercial construction',
+          translations['HOME_PAGE.MIXERS.MT480.FEATURES.2'] || 'Maximum mixing efficiency',
+          translations['HOME_PAGE.MIXERS.MT480.FEATURES.3'] || 'Heavy-duty construction',
+          translations['HOME_PAGE.MIXERS.MT480.FEATURES.4'] || 'Enhanced durability components',
+          translations['HOME_PAGE.MIXERS.MT480.FEATURES.5'] || 'High-torque power system'
+        ],
+        specs: {
+          capacity: translations['HOME_PAGE.MIXERS.MT480.SPECS.CAPACITY'] || '480 Liters',
+          enginePower: translations['HOME_PAGE.MIXERS.MT480.SPECS.POWER'] || '13+ HP',
+          weight: translations['HOME_PAGE.MIXERS.MT480.SPECS.WEIGHT'] || '950 kg'
+        },
+        image: '/assets/photos/MT-480.jpg'
+      }
+    ];
+  }
+
+  private processFaqsTranslations(translations: any): void {
+    this.faqs = [
+      {
+        question: translations['HOME_PAGE.FAQ_SECTION.FAQ_1_QUESTION'] || 'How do I operate the MT-370 and MT-480 mixers?',
+        answer: translations['HOME_PAGE.FAQ_SECTION.FAQ_1_ANSWER'] || 'Watch our detailed demonstration video below:',
+        videoUrl: '/assets/compressedvideos/instruction.mp4',
+        posterImage: '/assets/photos/instruction-poster.png'
+      },
+      {
+        question: 'What maintenance is required?',
+        answer: 'Regular maintenance includes daily cleaning, weekly lubrication checks, and monthly mechanical inspections.'
+      },
+      {
+        question: 'Which mixer is right for my project?',
+        answer: 'The MT-370 is ideal for residential and small commercial projects, while the MT-480 is designed for larger commercial applications.'
+      },
+      {
+        question: 'What warranty do you offer?',
+        answer: 'Our concrete mixers are covered by a 6-month warranty against any manufacturing defects. For more information, please contact technical support.'
+      },
+      {
+        question: 'Are spare parts readily available?',
+        answer: 'Yes, we maintain a complete inventory of spare parts with delivery on request.'
+      }
+    ];
+  }
+
+  private processCompanyStatsTranslations(translations: any): void {
+    this.companyStats = [
+      {
+        icon: '🏭',
+        value: '20+',
+        label: translations['HOME_PAGE.COMPANY_SECTION.STATS_YEARS_EXPERIENCE'] || 'Years Experience',
+        detail: translations['HOME_PAGE.COMPANY_SECTION.DETAIL_YEARS'] || 'Industry leadership since 2002'
+      },
+      {
+        icon: '🚛',
+        value: '5000+',
+        label: translations['HOME_PAGE.COMPANY_SECTION.STATS_MIXERS_DELIVERED'] || 'Mixers Delivered',
+        detail: translations['HOME_PAGE.COMPANY_SECTION.DETAIL_MIXERS'] || 'Serving global construction needs'
+      },
+      {
+        icon: '🌍',
+        value: '30+',
+        label: translations['HOME_PAGE.COMPANY_SECTION.STATS_COUNTRIES_SERVED'] || 'Countries Served',
+        detail: translations['HOME_PAGE.COMPANY_SECTION.DETAIL_COUNTRIES'] || 'Global presence and support'
+      }
+    ];
   }
 
   /**
@@ -657,42 +645,47 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param event Click event from video or overlay
    */
   playVideoOnMobile(event: MouseEvent): void {
-    if (isPlatformBrowser(this.platformId)) {
-      // Check if the video element exists
-      if (this.mainVideo && this.mainVideo.nativeElement) {
-        const video = this.mainVideo.nativeElement;
+    if (!isPlatformBrowser(this.platformId)) return;
 
-        // If the video is already playing, do nothing
-        if (!video.paused) return;
+    // Check if the video element exists
+    if (this.mainVideo && this.mainVideo.nativeElement) {
+      const video = this.mainVideo.nativeElement;
 
-        // Try to play the video
-        const playPromise = video.play();
+      // If the video is already playing, do nothing
+      if (!video.paused) return;
 
-        // Handle the play promise to catch any autoplay restrictions
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              // Hide the play overlay when video starts playing
-              const overlay = document.querySelector('.video-play-overlay') as HTMLElement;
-              if (overlay) {
-                overlay.style.opacity = '0';
-                setTimeout(() => {
-                  overlay.style.pointerEvents = 'none';
-                }, 300);
-              }
-            })
-            .catch((error) => {
-              // Video playback was prevented due to autoplay policies
-              console.error('Playback prevented:', error);
+      // Try to play the video
+      const playPromise = video.play();
 
-              // Show a message to the user if needed
-              // or handle it gracefully
-            });
-        }
+      // Handle the play promise to catch any autoplay restrictions
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            // Hide the play overlay when video starts playing
+            const overlay = document.querySelector('.video-play-overlay') as HTMLElement;
+            if (overlay) {
+              overlay.style.opacity = '0';
+              setTimeout(() => {
+                overlay.style.pointerEvents = 'none';
+              }, 300);
+            }
+          })
+          .catch((error) => {
+            console.error('Playback prevented:', error);
+            // Show user-friendly message in the UI
+            const messageEl = document.createElement('div');
+            messageEl.className = 'video-play-message';
+            messageEl.textContent = 'Click to play video';
 
-        // Stop event propagation
-        event.stopPropagation();
+            const overlay = document.querySelector('.video-play-overlay');
+            if (overlay) {
+              overlay.appendChild(messageEl);
+            }
+          });
       }
+
+      // Stop event propagation
+      event.stopPropagation();
     }
   }
 
@@ -700,14 +693,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   scrollToComparison(): void {
     // Navigate to products page with a fragment identifier
     this.router.navigate(['/products'], { fragment: 'comparison' });
-
     this.trackEvent('comparison_clicked', {
       location: 'products_section',
       button_type: 'accent'
     });
   }
 
-  // Added for modal functionality with ESC key
+  // Modal functionality with ESC key
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Escape' && this.isModalOpen) {
@@ -736,7 +728,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   // Added for product details navigation
   viewProductDetails(product: Product): void {
     this.router.navigate(['/products']);
-
     this.trackEvent('view_product_details', {
       product_name: product.name,
       source: 'product_card'
@@ -762,15 +753,19 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  // Product view control methods
+  // Product view control methods - optimized to prevent layout thrashing
   rotateProduct(direction: 'left' | 'right'): void {
     const rotationAmount = direction === 'left' ? -90 : 90;
     this.productRotation = (this.productRotation + rotationAmount) % 360;
 
-    const productImageContainer = document.querySelector('.product-display.active');
-    if (productImageContainer) {
-      (productImageContainer as HTMLElement).style.transform = `rotateY(${this.productRotation}deg) scale(${this.productZoomLevel})`;
-    }
+    // Use requestAnimationFrame for smoother animation
+    requestAnimationFrame(() => {
+      const productImageContainer = document.querySelector('.product-display.active');
+      if (productImageContainer) {
+        (productImageContainer as HTMLElement).style.transform =
+          `rotateY(${this.productRotation}deg) scale(${this.productZoomLevel})`;
+      }
+    });
   }
 
   zoomProduct(action: 'in' | 'out'): void {
@@ -781,50 +776,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (newZoom >= 0.5 && newZoom <= 1.5) {
       this.productZoomLevel = newZoom;
 
-      const productImageContainer = document.querySelector('.product-display.active');
-      if (productImageContainer) {
-        (productImageContainer as HTMLElement).style.transform = `rotateY(${this.productRotation}deg) scale(${this.productZoomLevel})`;
-      }
+      // Use requestAnimationFrame for smoother animation
+      requestAnimationFrame(() => {
+        const productImageContainer = document.querySelector('.product-display.active');
+        if (productImageContainer) {
+          (productImageContainer as HTMLElement).style.transform =
+            `rotateY(${this.productRotation}deg) scale(${this.productZoomLevel})`;
+        }
+      });
     }
   }
 
-  // Review slider methods
-  nextReview(): void {
-    this.currentReviewIndex = (this.currentReviewIndex + 1) % this.customerReviews.length;
-    this.updateReviewSlider();
-  }
-
-  prevReview(): void {
-    this.currentReviewIndex = (this.currentReviewIndex - 1 + this.customerReviews.length) % this.customerReviews.length;
-    this.updateReviewSlider();
-  }
-
-  goToReview(index: number): void {
-    this.currentReviewIndex = index;
-    this.updateReviewSlider();
-  }
-
-  private updateReviewSlider(): void {
-    const slider = document.querySelector('.reviews-slider');
-    if (slider) {
-      const reviewWidth = slider.querySelector('.review-card')?.clientWidth || 0;
-      const translateX = -this.currentReviewIndex * (reviewWidth + 20); // Adding gap
-
-      const track = slider.querySelector('.review-track') as HTMLElement;
-      if (track) {
-        track.style.transform = `translateX(${translateX}px)`;
-      }
-    }
-  }
-
-  private initializeReviewSlider(): void {
-    // Start automatic slideshow
-    setInterval(() => {
-      this.nextReview();
-    }, 7000);
-  }
-
-  // consultation method
+  // Consultation method
   requestConsultation(): void {
     this.router.navigate(['/contact'], {
       queryParams: {
@@ -838,18 +801,24 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  // Optimized flag carousel without duplicating flags in memory
   private initializeFlagCarousel(): void {
-    this.duplicatedFlags = [...this.flags, ...this.flags];
-    this.startAutoScroll();
-  }
-
-  private startAutoScroll(): void {
+    // Don't duplicate flags array - CSS will handle the infinite scroll effect
     const flagContainer = document.querySelector('.flag-carousel-inner');
     if (flagContainer) {
       flagContainer.classList.add('scrolling');
     }
   }
 
+  private startAutoScroll(): void {
+    const flagTrack = document.querySelector('.flag-carousel-track');
+    if (flagTrack) {
+      // Add CSS animation class instead of JavaScript animation
+      flagTrack.classList.add('auto-scrolling');
+    }
+  }
+
+  // Event tracking helper
   private trackEvent(action: string, data?: any): void {
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', action, {
@@ -859,13 +828,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  // SEO optimization
   private setupSEO(): void {
+    // Set robots meta tag
+    this.meta.updateTag({
+      name: 'robots',
+      content: 'index, follow'
+    });
+
     // Use TranslateService for SEO titles and descriptions
     this.translate.get('HOME_PAGE.SEO.TITLE').subscribe((res: string) => {
       if (res) {
         this.title.setTitle(res);
       } else {
-        // Fallback if translation key doesn't exist
+        // Fallback
         this.title.setTitle('Professional Concrete Mixers | Industrial Mixing Solutions');
       }
     });
@@ -877,7 +853,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           content: res
         });
       } else {
-        // Fallback if translation key doesn't exist
+        // Fallback
         this.meta.updateTag({
           name: 'description',
           content: 'Professional-grade concrete mixers delivering reliability and performance for over two decades. Explore our range of industrial mixing solutions.'
@@ -885,6 +861,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
+    // Add structured data for better SEO
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': 'Product',
@@ -896,6 +873,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     };
 
+    // Remove any existing structured data first to prevent duplicates
+    const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
+    existingScripts.forEach(script => script.remove());
+
+    // Add new structured data
     const script = document.createElement('script');
     script.type = 'application/ld+json';
     script.text = JSON.stringify(structuredData);
@@ -903,15 +885,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private setupScrollIndicator(): void {
-    if (typeof window !== 'undefined') {
+    if (isPlatformBrowser(this.platformId)) {
+      // Use passive event listener for better scroll performance
       window.addEventListener('scroll', () => {
         this.showScrollIndicator = window.scrollY < 100;
-      });
+      }, { passive: true });
     }
   }
 
   private initializeScrollObserver(): void {
-    const observer = new IntersectionObserver(
+    if (!isPlatformBrowser(this.platformId) || !('IntersectionObserver' in window)) return;
+
+    this.intersectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -923,33 +908,49 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     );
 
     document.querySelectorAll('section[id]').forEach(section => {
-      observer.observe(section);
+      if (this.intersectionObserver) {
+        this.intersectionObserver.observe(section);
+      }
     });
   }
 
   scrollToSection(sectionId: string): void {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Use native scrollIntoView with smooth behavior
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
   }
 
   toggleFaq(index: number): void {
+    // Pause video if closing the first FAQ which contains a video
     if (index === 0 && this.activeFaq === 0) {
       if (this.demoVideo?.nativeElement) {
         this.demoVideo.nativeElement.pause();
         this.demoVideo.nativeElement.currentTime = 0;
       }
     }
+
     this.activeFaq = this.activeFaq === index ? null : index;
   }
 
   playDemoVideo(): void {
     this.scrollToSection('video');
+
+    // Delay video playback until section is fully visible
     setTimeout(() => {
       const video = document.querySelector('video');
       if (video) {
-        video.play();
+        const playPromise = video.play();
+
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            console.log('Auto-play prevented, will require user interaction');
+          });
+        }
       }
     }, 1000);
   }
@@ -977,7 +978,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.requestQuote();
   }
 
-  // Updated to use modal
   downloadCatalog(): void {
     this.openCatalogModal();
 

@@ -1,9 +1,8 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
-import { LanguageSelectorComponent } from "../../core/i18n/language-selector.component";
 
 // Define type constants outside the class
 const SUPPORTED_ROUTES = ['about-us', 'products', 'contact'] as const;
@@ -16,11 +15,13 @@ type LanguageKey = typeof SUPPORTED_LANGUAGES[number];
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, LanguageSelectorComponent],
+  imports: [CommonModule, RouterModule, TranslateModule], // Removed LanguageSelectorComponent
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, AfterViewInit {
+  @ViewChild('logoImg') logoElement!: ElementRef<HTMLImageElement>;
+
   isScrolled = false;
   isMenuOpen = false;
   isCatalogModalOpen = false;
@@ -75,6 +76,18 @@ export class NavbarComponent implements OnInit {
     this.translate.onLangChange.subscribe(event => {
       this.currentLang = event.lang as LanguageKey;
     });
+  }
+
+  ngAfterViewInit(): void {
+    // Ensure the logo maintains proper dimensions
+    if (this.logoElement?.nativeElement) {
+      // Force correct dimensions
+      const logo = this.logoElement.nativeElement;
+      logo.style.width = 'auto';
+      logo.style.height = '40px';
+      logo.style.maxWidth = '180px';
+      logo.style.objectFit = 'contain';
+    }
   }
 
   /**

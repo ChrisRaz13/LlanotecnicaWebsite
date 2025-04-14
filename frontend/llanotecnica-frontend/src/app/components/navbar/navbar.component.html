@@ -2,7 +2,13 @@
   <div class="nav-content">
     <!-- Logo Container -->
     <div class="logo-container" [class.show]="isScrolled">
-      <img src="assets/photos/logo.png" alt="{{ 'NAV.LOGO_ALT' | translate }}" class="logo" />
+      <img #logoImg
+           src="assets/photos/logo.png"
+           alt="{{ 'NAV.LOGO_ALT' | translate }}"
+           class="logo"
+           width="180"
+           height="40"
+           loading="eager" />
       <span class="company-name">{{ 'NAV.COMPANY_NAME' | translate }}</span>
     </div>
 
@@ -13,8 +19,20 @@
       <span></span>
     </button>
 
-    <!-- Language Selector for Mobile (Always visible) -->
-    <app-language-selector class="mobile-language-selector"></app-language-selector>
+    <!-- Inline Language Selector for Mobile -->
+    <div class="mobile-language-selector">
+      <div class="lang-toggle">
+        <div class="flag-option" [class.active]="currentLang === 'en'" (click)="switchLanguage('en')">
+          <img src="assets/flags/gb.svg" alt="English" class="flag-icon" />
+          <span>EN</span>
+        </div>
+        <span class="divider">|</span>
+        <div class="flag-option" [class.active]="currentLang === 'es'" (click)="switchLanguage('es')">
+          <img src="assets/flags/es.svg" alt="Español" class="flag-icon" />
+          <span>ES</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Nav Links -->
     <ul class="nav-links" [class.show-mobile]="isMenuOpen" [class.scrolled-nav]="isScrolled">
@@ -55,15 +73,25 @@
       <!-- Mobile-Only: Download Catalog Link (opens language selector modal) -->
       <li class="mobile-only">
         <a (click)="openCatalogModal(); closeMenu()">
-          <img src="assets/photos/pdf.png" alt="PDF Icon" class="download-icon" />
+          <img src="assets/photos/pdf.png" alt="PDF Icon" class="download-icon" width="30" height="30" />
           {{ 'NAV.DOWNLOAD_CATALOG' | translate }}
         </a>
       </li>
     </ul>
 
-    <!-- Desktop Language Selector -->
+    <!-- Inline Desktop Language Selector -->
     <div class="desktop-language-selector">
-      <app-language-selector></app-language-selector>
+      <div class="lang-toggle">
+        <div class="flag-option" [class.active]="currentLang === 'en'" (click)="switchLanguage('en')">
+          <img src="assets/flags/gb.svg" alt="English" class="flag-icon" />
+          <span>EN</span>
+        </div>
+        <span class="divider">|</span>
+        <div class="flag-option" [class.active]="currentLang === 'es'" (click)="switchLanguage('es')">
+          <img src="assets/flags/es.svg" alt="Español" class="flag-icon" />
+          <span>ES</span>
+        </div>
+      </div>
     </div>
   </div>
 </nav>
@@ -78,11 +106,11 @@
     <p>{{ 'NAV.CATALOG_MODAL.SUBTITLE' | translate }}</p>
     <div class="language-options">
       <button (click)="downloadCatalog('en')">
-        <img src="assets/flags/gb.svg" alt="English" />
+        <img src="assets/flags/gb.svg" alt="English" width="28" height="21" />
         {{ 'NAV.CATALOG_MODAL.ENGLISH' | translate }}
       </button>
       <button (click)="downloadCatalog('es')">
-        <img src="assets/flags/es.svg" alt="Español" />
+        <img src="assets/flags/es.svg" alt="Español" width="28" height="21" />
         {{ 'NAV.CATALOG_MODAL.SPANISH' | translate }}
       </button>
     </div>

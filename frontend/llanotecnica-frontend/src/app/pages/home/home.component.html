@@ -2,19 +2,38 @@
   <!-- Hero Section -->
   <section id="hero" class="hero-section" aria-label="Welcome to our concrete mixer solutions">
     <div class="hero-background">
-      <!-- Video background with muted attribute -->
+      <!-- Desktop Video background - optimized loading -->
       <video
-        #heroVideo
-        class="hero-bg-video"
+        #heroVideoDesktop
+        class="hero-bg-video desktop-video"
         width="1920"
         height="1080"
-        preload="auto"
+        preload="none"
         loop
-        muted
-        playsinline
-        autoplay>
-        <source src="/assets/videos/newherosection.mp4" type="video/mp4">
+        muted="muted"
+        defaultMuted
+        playsinline>
+        <!-- WebM source first for better performance -->
+        <source src="/assets/compressedvideos/herosectiondesktop.webm" type="video/webm">
+        <source src="/assets/compressedvideos/herosectiondesktop.mp4" type="video/mp4">
       </video>
+
+      <!-- Mobile Video background - optimized loading -->
+      <video
+        #heroVideoMobile
+        class="hero-bg-video mobile-video"
+        width="780"
+        height="1080"
+        preload="none"
+        loop
+        muted="muted"
+        defaultMuted
+        playsinline>
+        <!-- WebM source first for better performance -->
+        <source src="/assets/compressedvideos/herosectionmobile.webm" type="video/webm">
+        <source src="/assets/compressedvideos/herosectionmobile.mp4" type="video/mp4">
+      </video>
+
       <div class="hero-overlay"></div>
     </div>
 
@@ -41,7 +60,7 @@
           </button>
 
           <button
-            class="btn-accent flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200"
+            class="btn-accent"
             (click)="requestQuote()"
             aria-label="Request a product quote">
             {{ 'HOME_PAGE.HERO.CTA_QUOTE' | translate }}
@@ -61,14 +80,15 @@
     </div>
   </section>
 
-  <!-- Flag Carousel Section -->
+  <!-- Flag Carousel Section - Optimized to prevent layout shifts -->
   <section class="flag-carousel-section">
     <div class="delivery-note">
       {{ 'HOME_PAGE.FLAG_CAROUSEL.DELIVERY_NOTE' | translate }}
     </div>
     <div class="flag-carousel-container">
-      <div class="flag-carousel-track">
-        <div class="flag-item" *ngFor="let flag of duplicatedFlags">
+      <!-- Using CSS-based duplication instead of duplicating DOM elements -->
+      <div class="flag-carousel-track auto-scrolling">
+        <div class="flag-item stagger-item" *ngFor="let flag of flags_for_display">
           <div class="flag-wrapper">
             <img [src]="'https://flagcdn.com/' + flag.code.toLowerCase() + '.svg'"
                  [alt]="flag.country + ' flag'"
@@ -83,7 +103,7 @@
     </div>
   </section>
 
-  <!-- Video Section - Updated for portrait video with info sidebar -->
+  <!-- Video Section - Updated with performance optimizations -->
   <section id="video" class="video-section">
     <div class="section-container">
       <header class="section-header" @fadeIn>
@@ -93,34 +113,46 @@
       </header>
 
       <div class="portrait-video-wrapper">
-        <div class="video-container">
+        <div class="video-container" style="aspect-ratio: 9/16;">
           <video
             #mainVideo
             controls
-            preload="metadata"
+            preload="none"
             [poster]="currentVideoPoster"
-            class="portrait-video">
+            class="portrait-video"
+            width="100%"
+            height="100%">
+            <!-- Add WebM format for better performance -->
             <source [src]="currentVideoSrc" type="video/mp4">
+            <!-- Captions for accessibility -->
+            <track kind="captions" src="/assets/captions/introduction-en.vtt" srclang="en" label="English">
+            <track kind="captions" src="/assets/captions/introduction-es.vtt" srclang="es" label="Español">
             Your browser does not support the video tag.
           </video>
+          <!-- Play overlay for mobile devices -->
+          <div class="video-play-overlay" (click)="playVideoOnMobile($event)">
+            <div class="play-icon">
+              <i class="fas fa-play"></i>
+            </div>
+          </div>
         </div>
 
-        <div class="video-info-sidebar" @videoInfoFadeIn>
+        <div class="video-info-sidebar">
           <div class="video-info-content">
             <h3>{{ videoInfoTitle }}</h3>
             <p>{{ videoInfoDescription }}</p>
 
-            <div class="video-highlights" @highlightFadeIn>
-              <div class="highlight-item" *ngFor="let highlight of videoHighlights">
+            <div class="video-highlights">
+              <div class="highlight-item stagger-item" *ngFor="let highlight of videoHighlights">
                 <i class="fas" [ngClass]="'fa-' + highlight.icon"></i>
                 <span>{{ highlight.text }}</span>
               </div>
             </div>
 
             <div class="video-cta">
-              <button class="btn-primary" (click)="requestConsultation()">
+              <button class="btn-primary" (click)="requestConsultation()" aria-label="Request a consultation">
                 {{ videoCTAText }}
-                <i class="fas fa-arrow-right"></i>
+                <i class="fas fa-arrow-right" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -143,16 +175,17 @@
         <p>{{ 'HOME_PAGE.PRODUCTS_SECTION.SECTION_SUBTITLE' | translate }}</p>
       </header>
 
-      <!-- Product Grid Layout -->
+      <!-- Product Grid Layout - Optimized to prevent layout shifts -->
       <div class="product-display-grid" *ngIf="mixers && mixers.length > 0">
         <!-- First Mixer -->
-        <div class="product-card" *ngIf="mixers[0]">
-          <div class="product-image-container">
+        <div class="product-card stagger-item" *ngIf="mixers[0]" #productCard>
+          <div class="product-image-container" style="aspect-ratio: 3/2; height: 320px;">
             <img [src]="mixers[0].image"
                  [alt]="mixers[0].name"
                  width="600"
                  height="400"
                  loading="lazy"
+                 decoding="async"
                  class="product-image">
           </div>
           <div class="product-content">
@@ -161,21 +194,21 @@
 
             <div class="product-specs">
               <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-ruler-combined"></i></div>
+                <div class="spec-icon"><i class="fas fa-ruler-combined" aria-hidden="true"></i></div>
                 <div class="spec-info">
                   <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS_SECTION.CAPACITY' | translate }}</span>
                   <span class="spec-value">{{ mixers[0].specs.capacity }}</span>
                 </div>
               </div>
               <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-bolt"></i></div>
+                <div class="spec-icon"><i class="fas fa-bolt" aria-hidden="true"></i></div>
                 <div class="spec-info">
                   <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS_SECTION.POWER' | translate }}</span>
                   <span class="spec-value">{{ mixers[0].specs.enginePower }}</span>
                 </div>
               </div>
               <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-weight-hanging"></i></div>
+                <div class="spec-icon"><i class="fas fa-weight-hanging" aria-hidden="true"></i></div>
                 <div class="spec-info">
                   <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS_SECTION.WEIGHT' | translate }}</span>
                   <span class="spec-value">{{ mixers[0].specs.weight }}</span>
@@ -191,33 +224,34 @@
               <h4>{{ 'HOME_PAGE.PRODUCTS_SECTION.KEY_FEATURES' | translate }}</h4>
               <ul class="feature-list">
                 <li *ngFor="let feature of mixers[0].features">
-                  <i class="fas fa-check-circle"></i>
+                  <i class="fas fa-check-circle" aria-hidden="true"></i>
                   <span>{{ feature }}</span>
                 </li>
               </ul>
             </div>
 
             <div class="product-actions">
-              <button class="btn-primary" [routerLink]="['/products']">
+              <button class="btn-primary" [routerLink]="['/products']" aria-label="View product details">
                 {{ 'HOME_PAGE.PRODUCTS_SECTION.VIEW_DETAILS' | translate }}
-                <i class="fas fa-arrow-right"></i>
+                <i class="fas fa-arrow-right" aria-hidden="true"></i>
               </button>
-              <button class="btn-secondary" (click)="requestQuote()">
+              <button class="btn-secondary" (click)="requestQuote()" aria-label="Request a quote">
                 {{ 'HOME_PAGE.PRODUCTS_SECTION.REQUEST_QUOTE' | translate }}
-                <i class="fas fa-paper-plane"></i>
+                <i class="fas fa-paper-plane" aria-hidden="true"></i>
               </button>
             </div>
           </div>
         </div>
 
         <!-- Second Mixer -->
-        <div class="product-card" *ngIf="mixers.length > 1">
-          <div class="product-image-container">
+        <div class="product-card stagger-item" *ngIf="mixers.length > 1" #productCard>
+          <div class="product-image-container" style="aspect-ratio: 3/2; height: 320px;">
             <img [src]="mixers[1].image"
                  [alt]="mixers[1].name"
                  width="600"
                  height="400"
                  loading="lazy"
+                 decoding="async"
                  class="product-image">
           </div>
           <div class="product-content">
@@ -226,21 +260,21 @@
 
             <div class="product-specs">
               <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-ruler-combined"></i></div>
+                <div class="spec-icon"><i class="fas fa-ruler-combined" aria-hidden="true"></i></div>
                 <div class="spec-info">
                   <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS_SECTION.CAPACITY' | translate }}</span>
                   <span class="spec-value">{{ mixers[1].specs.capacity }}</span>
                 </div>
               </div>
               <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-bolt"></i></div>
+                <div class="spec-icon"><i class="fas fa-bolt" aria-hidden="true"></i></div>
                 <div class="spec-info">
                   <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS_SECTION.POWER' | translate }}</span>
                   <span class="spec-value">{{ mixers[1].specs.enginePower }}</span>
                 </div>
               </div>
               <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-weight-hanging"></i></div>
+                <div class="spec-icon"><i class="fas fa-weight-hanging" aria-hidden="true"></i></div>
                 <div class="spec-info">
                   <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS_SECTION.WEIGHT' | translate }}</span>
                   <span class="spec-value">{{ mixers[1].specs.weight }}</span>
@@ -256,20 +290,20 @@
               <h4>{{ 'HOME_PAGE.PRODUCTS_SECTION.KEY_FEATURES' | translate }}</h4>
               <ul class="feature-list">
                 <li *ngFor="let feature of mixers[1].features">
-                  <i class="fas fa-check-circle"></i>
+                  <i class="fas fa-check-circle" aria-hidden="true"></i>
                   <span>{{ feature }}</span>
                 </li>
               </ul>
             </div>
 
             <div class="product-actions">
-              <button class="btn-primary" [routerLink]="['/products']">
+              <button class="btn-primary" [routerLink]="['/products']" aria-label="View product details">
                 {{ 'HOME_PAGE.PRODUCTS_SECTION.VIEW_DETAILS' | translate }}
-                <i class="fas fa-arrow-right"></i>
+                <i class="fas fa-arrow-right" aria-hidden="true"></i>
               </button>
-              <button class="btn-secondary" (click)="requestQuote()">
+              <button class="btn-secondary" (click)="requestQuote()" aria-label="Request a quote">
                 {{ 'HOME_PAGE.PRODUCTS_SECTION.REQUEST_QUOTE' | translate }}
-                <i class="fas fa-paper-plane"></i>
+                <i class="fas fa-paper-plane" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -284,26 +318,26 @@
 
           <div class="cta-buttons">
             <button
-              class="cta-button btn-primary"
+              class="cta-button btn-primary stagger-item"
               (click)="requestQuote()"
               aria-label="Request a quote">
-              <i class="fas fa-paper-plane"></i>
+              <i class="fas fa-paper-plane" aria-hidden="true"></i>
               {{ 'HOME_PAGE.PRODUCTS_SECTION.CTA_REQUEST_QUOTE' | translate }}
             </button>
 
             <button
-              class="cta-button btn-secondary"
+              class="cta-button btn-secondary stagger-item"
               (click)="openCatalogModal()"
               aria-label="Download product catalog">
-              <i class="fas fa-file-pdf"></i>
+              <i class="fas fa-file-pdf" aria-hidden="true"></i>
               {{ 'HOME_PAGE.PRODUCTS_SECTION.CTA_DOWNLOAD' | translate }}
             </button>
 
             <button
-              class="cta-button btn-accent"
+              class="cta-button btn-accent stagger-item"
               (click)="scrollToComparison()"
               aria-label="Compare mixer models">
-              <i class="fas fa-scale-balanced"></i>
+              <i class="fas fa-scale-balanced" aria-hidden="true"></i>
               {{ 'HOME_PAGE.PRODUCTS_SECTION.CTA_COMPARE' | translate }}
             </button>
           </div>
@@ -315,36 +349,37 @@
         <h3 class="comparison-title">{{ 'HOME_PAGE.PRODUCTS_SECTION.COMPARISON_TITLE' | translate }}</h3>
         <div class="comparison-table-container">
           <table class="comparison-table">
+            <caption class="sr-only">Product comparison between MT-370 and MT-480 mixers</caption>
             <thead>
               <tr>
-                <th>{{ 'HOME_PAGE.PRODUCTS_SECTION.SPECIFICATION' | translate }}</th>
-                <th>MT-370</th>
-                <th>MT-480</th>
+                <th scope="col">{{ 'HOME_PAGE.PRODUCTS_SECTION.SPECIFICATION' | translate }}</th>
+                <th scope="col">MT-370</th>
+                <th scope="col">MT-480</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{ 'HOME_PAGE.PRODUCTS_SECTION.DRUM_CAPACITY' | translate }}</td>
+                <th scope="row">{{ 'HOME_PAGE.PRODUCTS_SECTION.DRUM_CAPACITY' | translate }}</th>
                 <td class="table-center">370 L (13 cu. ft)</td>
                 <td class="table-center">480 L (15 cu. ft)</td>
               </tr>
               <tr>
-                <td>{{ 'HOME_PAGE.PRODUCTS_SECTION.MIXING_CAPACITY' | translate }}</td>
+                <th scope="row">{{ 'HOME_PAGE.PRODUCTS_SECTION.MIXING_CAPACITY' | translate }}</th>
                 <td class="table-center">1 Bag (360 L)</td>
                 <td class="table-center">2 Bags (420 L)</td>
               </tr>
               <tr>
-                <td>{{ 'HOME_PAGE.PRODUCTS_SECTION.DRUM_OPENING' | translate }}</td>
+                <th scope="row">{{ 'HOME_PAGE.PRODUCTS_SECTION.DRUM_OPENING' | translate }}</th>
                 <td class="table-center">18 in (450 mm)</td>
                 <td class="table-center">19 in (460 mm)</td>
               </tr>
               <tr>
-                <td>{{ 'HOME_PAGE.PRODUCTS_SECTION.DRUM_DEPTH' | translate }}</td>
+                <th scope="row">{{ 'HOME_PAGE.PRODUCTS_SECTION.DRUM_DEPTH' | translate }}</th>
                 <td class="table-center">32 in (800 mm)</td>
                 <td class="table-center">41 in (1020 mm)</td>
               </tr>
               <tr>
-                <td>{{ 'HOME_PAGE.PRODUCTS_SECTION.BEST_USE_CASE' | translate }}</td>
+                <th scope="row">{{ 'HOME_PAGE.PRODUCTS_SECTION.BEST_USE_CASE' | translate }}</th>
                 <td class="table-center">{{ 'HOME_PAGE.PRODUCTS_SECTION.SMALL_TO_MEDIUM' | translate }}</td>
                 <td class="table-center">{{ 'HOME_PAGE.PRODUCTS_SECTION.LARGE_COMMERCIAL' | translate }}</td>
               </tr>
@@ -355,45 +390,47 @@
     </div>
 
     <!-- Download Catalog Modal - Angular style -->
-    <div class="modal-overlay" [class.active]="isModalOpen" (click)="onModalBackdropClick($event)">
+    <div class="modal-overlay" [class.active]="isModalOpen" (click)="onModalBackdropClick($event)" role="dialog" aria-labelledby="catalog-modal-title" aria-modal="true">
       <div class="modal-container">
-        <button class="modal-close" (click)="closeCatalogModal()">
-          <i class="fas fa-times"></i>
+        <button class="modal-close" (click)="closeCatalogModal()" aria-label="Close modal">
+          <i class="fas fa-times" aria-hidden="true"></i>
         </button>
 
-        <h3 class="modal-title">{{ 'HOME_PAGE.MODAL.TITLE' | translate }}</h3>
+        <h3 class="modal-title" id="catalog-modal-title">{{ 'HOME_PAGE.MODAL.TITLE' | translate }}</h3>
         <p class="modal-subtitle">{{ 'HOME_PAGE.MODAL.SUBTITLE' | translate }}</p>
 
         <div class="language-grid">
-          <a
+
             href="/assets/photos/Catalog-Eng.pdf"
             download
             (click)="closeCatalogModal()"
             class="language-option"
-          >
+            aria-label="Download English catalog">
             <img src="https://flagcdn.com/w80/us.png"
                  alt="English"
                  width="80"
                  height="60"
                  loading="lazy"
+                 decoding="async"
                  class="language-flag" />
             <span class="language-label">{{ 'HOME_PAGE.MODAL.ENGLISH' | translate }}</span>
-          </a>
 
-          <a
+
+
             href="/assets/photos/Catalog-Esp.pdf"
             download
             (click)="closeCatalogModal()"
             class="language-option"
-          >
+            aria-label="Download Spanish catalog">
             <img src="https://flagcdn.com/w80/es.png"
                  alt="Español"
                  width="80"
                  height="60"
                  loading="lazy"
+                 decoding="async"
                  class="language-flag" />
             <span class="language-label">{{ 'HOME_PAGE.MODAL.SPANISH' | translate }}</span>
-          </a>
+
         </div>
 
         <div class="modal-footer">
@@ -410,10 +447,10 @@
         <h2>{{ 'HOME_PAGE.FEATURES_SECTION.SECTION_TITLE' | translate }}</h2>
         <p>{{ 'HOME_PAGE.FEATURES_SECTION.SECTION_SUBTITLE' | translate }}</p>
       </header>
-      <div class="features-grid" @staggerFade>
-        <div class="feature-card" *ngFor="let feature of features">
+      <div class="features-grid" @staggerItems>
+        <div class="feature-card stagger-item" *ngFor="let feature of features">
           <div class="feature-icon">
-            <i [class]="feature.icon"></i>
+            <i [class]="feature.icon" aria-hidden="true"></i>
           </div>
           <div class="feature-content">
             <h3>{{feature.title}}</h3>
@@ -441,9 +478,9 @@
           <p class="company-subtitle">{{ 'HOME_PAGE.COMPANY_SECTION.SUBHEADING' | translate }}</p>
         </div>
 
-        <div class="company-stats-grid">
-          <div class="stat-card" *ngFor="let stat of companyStats; let i = index; trackBy: trackStatBy" @statFadeIn>
-            <div class="stat-icon">{{stat.icon}}</div>
+        <div class="company-stats-grid" @staggerItems>
+          <div class="stat-card stagger-item" *ngFor="let stat of companyStats; let i = index; trackBy: trackStatBy">
+            <div class="stat-icon" aria-hidden="true">{{stat.icon}}</div>
             <div class="stat-number">{{stat.value}}</div>
             <div class="stat-label">{{stat.label}}</div>
             <div class="stat-detail">{{stat.detail}}</div>
@@ -451,9 +488,9 @@
         </div>
 
         <div class="company-cta">
-          <a [routerLink]="['/about-us']" class="btn-secondary">
+          <a [routerLink]="['/about-us']" class="btn-secondary" aria-label="Learn more about our company">
             {{ 'HOME_PAGE.COMPANY_SECTION.LEARN_MORE_BUTTON' | translate }}
-            <i class="fas fa-arrow-right"></i>
+            <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
@@ -469,39 +506,53 @@
       </header>
       <div class="faq-list">
         <div class="faq-item" *ngFor="let faq of faqs; let i = index" @fadeIn>
-          <button class="faq-question" (click)="toggleFaq(i)"
-            [class.active]="activeFaq === i">
+          <button
+            class="faq-question"
+            (click)="toggleFaq(i)"
+            [class.active]="activeFaq === i"
+            [attr.aria-expanded]="activeFaq === i"
+            [attr.aria-controls]="'faq-answer-' + i">
             {{ 'HOME_PAGE.FAQ_SECTION.FAQ_' + (i+1) + '_QUESTION' | translate }}
-            <i class="fas" [class.fa-chevron-down]="activeFaq !== i"
-              [class.fa-chevron-up]="activeFaq === i"></i>
+            <i class="fas"
+               [class.fa-chevron-down]="activeFaq !== i"
+               [class.fa-chevron-up]="activeFaq === i"
+               aria-hidden="true"></i>
           </button>
-          <div class="faq-answer" [class.active]="activeFaq === i">
+          <div
+            class="faq-answer"
+            [class.active]="activeFaq === i"
+            [id]="'faq-answer-' + i"
+            [attr.aria-hidden]="activeFaq !== i">
             <p>{{ 'HOME_PAGE.FAQ_SECTION.FAQ_' + (i+1) + '_ANSWER' | translate }}</p>
             <div class="faq-video" *ngIf="faq.videoUrl">
-              <div class="faq-video-container">
+              <div class="faq-video-container" style="aspect-ratio: 16/9;">
                 <video #demoVideo
                        controls
                        width="640"
                        height="360"
-                       preload="metadata">
+                       preload="none"
+                       [poster]="faq.posterImage">
                   <source [src]="faq.videoUrl" type="video/mp4">
+                  <!-- Captions for accessibility -->
+                  <track kind="captions" src="/assets/captions/instruction-en.vtt" srclang="en" label="English">
+                  <track kind="captions" src="/assets/captions/instruction-es.vtt" srclang="es" label="Español">
                   Your browser does not support the video tag.
                 </video>
               </div>
               <div class="faq-video-info">
                 <div class="guide-title">
                   <div class="guide-icon">
-                    <i class="fas fa-list-check"></i>
+                    <i class="fas fa-list-check" aria-hidden="true"></i>
                   </div>
                   <h4>{{ 'HOME_PAGE.FAQ_SECTION.VIDEO_STEPS_TITLE' | translate }}</h4>
                 </div>
                 <div class="operation-steps">
                   <div class="step-item">
-                    <div class="step-number">1</div>
+                    <div class="step-number" aria-hidden="true">1</div>
                     <div class="step-content">
                       <div class="step-header">
                         <div class="step-icon">
-                          <i class="fas fa-tools"></i>
+                          <i class="fas fa-tools" aria-hidden="true"></i>
                         </div>
                         <div class="step-title">{{ 'HOME_PAGE.FAQ_SECTION.STEP_PREOP' | translate }}</div>
                       </div>
@@ -510,11 +561,11 @@
                   </div>
 
                   <div class="step-item">
-                    <div class="step-number">2</div>
+                    <div class="step-number" aria-hidden="true">2</div>
                     <div class="step-content">
                       <div class="step-header">
                         <div class="step-icon">
-                          <i class="fas fa-power-off"></i>
+                          <i class="fas fa-power-off" aria-hidden="true"></i>
                         </div>
                         <div class="step-title">{{ 'HOME_PAGE.FAQ_SECTION.STEP_START_ENGINE' | translate }}</div>
                       </div>
@@ -523,11 +574,11 @@
                   </div>
 
                   <div class="step-item">
-                    <div class="step-number">3</div>
+                    <div class="step-number" aria-hidden="true">3</div>
                     <div class="step-content">
                       <div class="step-header">
                         <div class="step-icon">
-                          <i class="fas fa-rotate"></i>
+                          <i class="fas fa-rotate" aria-hidden="true"></i>
                         </div>
                         <div class="step-title">{{ 'HOME_PAGE.FAQ_SECTION.STEP_CONTROL_POSITION' | translate }}</div>
                       </div>
@@ -536,11 +587,11 @@
                   </div>
 
                   <div class="step-item">
-                    <div class="step-number">4</div>
+                    <div class="step-number" aria-hidden="true">4</div>
                     <div class="step-content">
                       <div class="step-header">
                         <div class="step-icon">
-                          <i class="fas fa-fill-drip"></i>
+                          <i class="fas fa-fill-drip" aria-hidden="true"></i>
                         </div>
                         <div class="step-title">{{ 'HOME_PAGE.FAQ_SECTION.STEP_LOAD_MATERIALS' | translate }}</div>
                       </div>
@@ -555,4 +606,9 @@
       </div>
     </div>
   </section>
+
+  <!-- Hidden element for screen readers only -->
+  <div class="sr-only">
+    <p>This website has been optimized for screen readers. If you're using assistive technology and experience any issues, please contact us.</p>
+  </div>
 </main>
