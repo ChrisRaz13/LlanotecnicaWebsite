@@ -1,27 +1,50 @@
-# Llanotecnica
+# 🏗️ Llano Técnica - Website
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.1.
+<div align="center">
+  <img src="https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular">
+  <img src="https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white" alt="Firebase">
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Google_Analytics-E37400?style=for-the-badge&logo=google-analytics&logoColor=white" alt="Google Analytics">
+</div>
 
-## Development server
+<div align="center">
+  <h3>Modern business website with intelligent contact form and analytics</h3>
+</div>
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## 🚀 What is this?
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+A professional business website for Llano Técnica featuring:
+- **Smart Contact Form** with reCAPTCHA Enterprise protection
+- **Real-time Analytics** tracking visitor behavior 
+- **Responsive Design** that looks great on all devices
+- **Cloud Infrastructure** powered by Firebase
 
-## Build
+## 💡 Key Features
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+✨ **Secure Contact System** - Advanced spam protection with reCAPTCHA Enterprise integration  
+📊 **Analytics Dashboard** - Track website performance and user engagement  
+🌐 **International Ready** - Built for multi-language support  
+⚡ **Lightning Fast** - Optimized for speed with Firebase Hosting  
+🛡️ **Enterprise Security** - Protected by Google Cloud infrastructure  
 
-## Running unit tests
+## 🛠 Tech Stack
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- **Frontend**: Angular 17 + TypeScript
+- **Backend**: Firebase Functions (Serverless)
+- **Database**: Firebase Firestore
+- **Hosting**: Firebase Hosting
+- **Analytics**: Google Analytics 4
+- **Security**: reCAPTCHA Enterprise
 
-## Running end-to-end tests
+## 📈 Results
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+The website successfully handles secure contact form submissions with enterprise-grade spam protection while providing detailed analytics insights for business growth.
 
-## Further help
+---
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+<div align="center">
+  <p><strong>Built for Llano Técnica</strong></p>
+  <p>© 2024 • Developed by Chris Raz</p>
+</div>

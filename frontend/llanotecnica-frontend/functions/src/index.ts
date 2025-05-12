@@ -203,6 +203,12 @@ export const submitContactForm = onRequest({
     await corsHandler(req, res);
     console.log("CORS handled");
 
+    if (req.method === "OPTIONS") {
+      console.log("Handling OPTIONS preflight request");
+      res.status(204).send("");
+      return;
+    }
+
     // Validate HTTP method
     if (req.method !== "POST") {
       console.log(`Invalid method: ${req.method}`);

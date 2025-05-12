@@ -295,8 +295,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     const fallbackSource = document.createElement('source');
     fallbackSource.type = 'video/mp4';
     fallbackSource.src = type === 'desktop'
-      ? '/assets/compressedvideos/herosectiondesktop.mp4'
-      : '/assets/compressedvideos/herosectionmobile.mp4';
+      ? '/assets/compressedvideos/FinishedHeroSection.mp4'
+      : '/assets/compressedvideos/FinishedHeroSection.mp4';
 
     // Remove any existing sources first
     while (videoElement.firstChild) {
