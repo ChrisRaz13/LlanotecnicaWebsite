@@ -29,13 +29,13 @@
 <section class="mission">
   <div class="mission-wrapper">
     <div class="mission-content">
-      <img src="assets/photos/logo.png" [alt]="'ABOUT_US_PAGE.MISSION.LOGO_ALT' | translate" class="mission-logo" />
+      <img src="assets/photos/logo.png" [alt]="'ABOUT_US_PAGE.MISSION.LOGO_ALT' | translate" class="mission-logo" width="120" height="60" loading="lazy" decoding="async" />
       <h2>{{ 'ABOUT_US_PAGE.MISSION.TITLE' | translate }}</h2>
       <p [innerHTML]="'ABOUT_US_PAGE.MISSION.PARAGRAPH_1' | translate"></p>
       <p [innerHTML]="'ABOUT_US_PAGE.MISSION.PARAGRAPH_2' | translate"></p>
     </div>
     <div class="mission-image">
-      <img src="assets/photos/teamphoto.jpg" [alt]="'ABOUT_US_PAGE.MISSION.TEAM_IMAGE_ALT' | translate" />
+      <img src="assets/photos/teamphoto.jpg" [alt]="'ABOUT_US_PAGE.MISSION.TEAM_IMAGE_ALT' | translate" width="600" height="400" loading="lazy" decoding="async" />
     </div>
   </div>
 </section>
@@ -71,7 +71,11 @@
             <img [src]="'assets/photos/worker' + (i + 1) + '.jpg'"
                  [alt]="stage.TITLE"
                  class="parallax-image"
-                 [class.visible]="stageVisibility[i]">
+                 [class.visible]="stageVisibility[i]"
+                 width="400"
+                 height="300"
+                 loading="lazy"
+                 decoding="async">
           </div>
 
           <div class="timeline-text" [class.visible]="stageVisibility[i]">
@@ -102,6 +106,10 @@
         src="assets/photos/MT-480.2.png"
         [alt]="'ABOUT_US_PAGE.FINAL_CTA.IMAGE_ALT' | translate"
         class="final-image"
+        width="500"
+        height="400"
+        loading="lazy"
+        decoding="async"
       />
     </div>
   </div>
