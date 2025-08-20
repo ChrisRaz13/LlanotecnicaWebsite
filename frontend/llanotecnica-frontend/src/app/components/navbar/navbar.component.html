@@ -13,7 +13,11 @@
     </div>
 
     <!-- Hamburger Menu Button -->
-    <button class="hamburger" (click)="toggleMenu()" [class.active]="isMenuOpen">
+    <button class="hamburger"
+            (click)="toggleMenu()"
+            [class.active]="isMenuOpen"
+            [attr.aria-label]="isMenuOpen ? ('NAV.CLOSE_MENU' | translate) : ('NAV.OPEN_MENU' | translate)"
+            [attr.aria-expanded]="isMenuOpen">
       <span></span>
       <span></span>
       <span></span>
@@ -73,7 +77,7 @@
       <!-- Mobile-Only: Download Catalog Link (opens language selector modal) -->
       <li class="mobile-only">
         <a href="/assets/photos/Catalog-Eng.pdf" (click)="openCatalogModal(); closeMenu()">
-          <img src="assets/photos/pdf.png" alt="PDF Icon" class="download-icon" width="30" height="30" />
+          <img src="assets/photos/pdf.webp" alt="PDF Icon" class="download-icon" width="30" height="30" loading="lazy" decoding="async" />
           {{ 'NAV.DOWNLOAD_CATALOG' | translate }}
         </a>
       </li>

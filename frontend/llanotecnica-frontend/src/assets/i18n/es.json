@@ -9,13 +9,15 @@
   "Designed for any job—from mid-sized projects to heavy-duty tasks—built for strength, efficiency, and reliable performance.": "Diseñadas para cualquier trabajo—desde proyectos de tamaño medio hasta tareas pesadas—construidas para fuerza, eficiencia y rendimiento confiable.",
   "Our Professional Mixer Models": "Nuestros Modelos de Mezcladoras Profesionales",
   "NAV": {
-    "LOGO_ALT": "Logotipo de Llanotecnica",
+    "LOGO_ALT": "Logo de Llanotecnica",
     "COMPANY_NAME": "Llanotecnica",
     "HOME": "Inicio",
-    "ABOUT_US": "Sobre Nosotros",
+    "ABOUT_US": "Nosotros",
     "PRODUCTS": "Productos",
     "CONTACT": "Contacto",
     "DOWNLOAD_CATALOG": "Descargar Catálogo",
+    "OPEN_MENU": "Abrir menú de navegación",
+    "CLOSE_MENU": "Cerrar menú de navegación",
     "CATALOG_MODAL": {
       "TITLE": "Descargar Catálogo de Productos",
       "SUBTITLE": "Por favor seleccione su idioma preferido:",

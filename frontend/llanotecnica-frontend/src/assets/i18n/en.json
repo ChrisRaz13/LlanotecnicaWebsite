@@ -16,6 +16,8 @@
     "PRODUCTS": "Products",
     "CONTACT": "Contact",
     "DOWNLOAD_CATALOG": "Download Catalog",
+    "OPEN_MENU": "Open navigation menu",
+    "CLOSE_MENU": "Close navigation menu",
     "CATALOG_MODAL": {
       "TITLE": "Download Product Catalog",
       "SUBTITLE": "Please select your preferred language:",
