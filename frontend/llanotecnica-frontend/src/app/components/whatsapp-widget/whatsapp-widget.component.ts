@@ -34,11 +34,18 @@ export class WhatsappWidgetComponent implements OnInit, OnDestroy {
     this.translate.get('WHATSAPP.MESSAGE').subscribe((message: string) => {
       const encodedMessage = encodeURIComponent(message);
 
-      // Always try to open WhatsApp app directly first
-      const whatsappAppUrl = `whatsapp://send?phone=${this.phoneNumber}&text=${encodedMessage}`;
+      // Detect if we're on mobile or desktop
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-      // Use window.location.href to avoid popups and go directly to app
-      window.location.href = whatsappAppUrl;
+      if (isMobile) {
+        // For mobile devices, try to open the WhatsApp app directly
+        const whatsappAppUrl = `whatsapp://send?phone=${this.phoneNumber}&text=${encodedMessage}`;
+        window.location.href = whatsappAppUrl;
+      } else {
+        // For desktop, use web WhatsApp which works in all browsers
+        const whatsappWebUrl = `https://wa.me/${this.phoneNumber}?text=${encodedMessage}`;
+        window.open(whatsappWebUrl, '_blank');
+      }
     });
   }
 }
