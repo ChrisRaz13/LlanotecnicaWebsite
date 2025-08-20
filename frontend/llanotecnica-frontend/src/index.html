@@ -65,16 +65,22 @@
       if (cssLoaded) return;
       cssLoaded = true;
 
-      // Load Angular Material theme
+      // Load Angular Material theme with error handling
       const materialCSS = document.createElement('link');
       materialCSS.rel = 'stylesheet';
-      materialCSS.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
+      materialCSS.href = 'https://fonts.googleapis.com/icon?family=Material+Icons&display=swap';
+      materialCSS.onerror = function() {
+        console.warn('Material Icons failed to load, using fallback');
+      };
       document.head.appendChild(materialCSS);
 
-      // Load Roboto font
+      // Load Roboto font with error handling
       const robotoCSS = document.createElement('link');
       robotoCSS.rel = 'stylesheet';
       robotoCSS.href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap';
+      robotoCSS.onerror = function() {
+        console.warn('Roboto font failed to load, using fallback');
+      };
       document.head.appendChild(robotoCSS);
 
       console.log('🎨 Non-critical CSS loaded on user interaction');
@@ -117,7 +123,7 @@
     "@type": "Organization",
     "name": "Llanotecnica",
     "url": "https://llanotecnica.com",
-    "logo": "https://llanotecnica.com/assets/photos/logo.png",
+    "logo": "https://llanotecnica.com/assets/photos/logo.webp",
     "description": "Professional concrete mixers MT-370 and MT-480. High-quality construction equipment for contractors in Panama and Central America.",
     "address": {
       "@type": "PostalAddress",
