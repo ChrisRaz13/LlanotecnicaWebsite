@@ -1001,6 +1001,58 @@ private ensureImageDimensions(): void {
     }, 1000);
   }
 
+  /**
+   * Play mobile hero video on user interaction - optimized for mobile performance
+   */
+  playMobileHeroVideo(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const mobileVideo = this.heroVideoMobile?.nativeElement;
+    const mobileImage = document.querySelector('.hero-bg-image.mobile-image') as HTMLElement;
+    const playButton = document.querySelector('.mobile-video-play-btn') as HTMLElement;
+
+    if (mobileVideo && mobileImage && playButton) {
+      // Hide the static image and play button
+      mobileImage.style.opacity = '0';
+      playButton.style.opacity = '0';
+
+      // Show and play the video
+      mobileVideo.classList.remove('hidden');
+      mobileVideo.style.opacity = '1';
+
+      // Load video sources if not already loaded
+      if (mobileVideo.readyState === 0) {
+        mobileVideo.load();
+      }
+
+      const playPromise = mobileVideo.play();
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            // Video started playing successfully
+            setTimeout(() => {
+              mobileImage.style.display = 'none';
+              playButton.style.display = 'none';
+            }, 300);
+          })
+          .catch((error) => {
+            console.error('Mobile video playback failed:', error);
+            // Revert to static image if video fails
+            mobileImage.style.opacity = '1';
+            playButton.style.opacity = '1';
+            mobileVideo.classList.add('hidden');
+          });
+      }
+
+      // Track the interaction
+      this.trackEvent('mobile_hero_video_played', {
+        source: 'hero_section',
+        device: 'mobile'
+      });
+    }
+  }
+
   toggleHeroBackground(): void {
     this.currentHeroBackground =
       (this.currentHeroBackground + 1) % this.heroBackgrounds.length;

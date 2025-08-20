@@ -76,7 +76,7 @@
 
       <!-- Mobile-Only: Download Catalog Link (opens language selector modal) -->
       <li class="mobile-only">
-        <a href="/assets/photos/Catalog-Eng.pdf" (click)="openCatalogModal(); closeMenu()">
+        <a href="javascript:void(0)" (click)="openCatalogModal(); closeMenu(); $event.preventDefault()">
           <img src="assets/photos/pdf.webp" alt="PDF Icon" class="download-icon" width="30" height="30" loading="lazy" decoding="async" />
           {{ 'NAV.DOWNLOAD_CATALOG' | translate }}
         </a>
