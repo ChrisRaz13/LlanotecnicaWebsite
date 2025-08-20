@@ -49,9 +49,9 @@
 /* ===== NEW 3-COLUMN GRID LAYOUT ===== */
 .footer-content {
   display: grid;
-  grid-template-columns: minmax(320px, 2fr) minmax(240px, 1fr) minmax(280px, 1.2fr);
+  grid-template-columns: minmax(300px, 1.5fr) minmax(200px, 1fr) minmax(200px, 1fr);
   grid-template-rows: auto;
-  gap: 32px;
+  gap: 40px;
 
   /* Remove fixed height to eliminate empty space */
   min-height: auto;
@@ -124,8 +124,8 @@
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.6;
   margin: 0;
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 20px;
+  font-weight: 200px;
 
   /* Better text formatting */
   max-width: 280px;
