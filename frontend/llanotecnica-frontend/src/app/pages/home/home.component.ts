@@ -284,14 +284,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private loadHeroVideo(videoElement: HTMLVideoElement, type: 'desktop' | 'mobile'): void {
     if (!videoElement) return;
 
-    // Ensure mobile-specific attributes are set
-    videoElement.setAttribute('playsinline', 'true');
-    videoElement.setAttribute('webkit-playsinline', 'true');
-    videoElement.muted = true;
-    videoElement.defaultMuted = true;
-    videoElement.autoplay = true;
-    videoElement.loop = true;
-
     // Set the correct source based on type
     const videoSource = document.createElement('source');
     videoSource.type = 'video/webm';
@@ -303,8 +295,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     const fallbackSource = document.createElement('source');
     fallbackSource.type = 'video/mp4';
     fallbackSource.src = type === 'desktop'
-      ? '/assets/compressedvideos/herosectiondesktop.mp4'
-      : '/assets/compressedvideos/herosectionmobile.mp4';
+      ? '/assets/compressedvideos/FinishedHeroSection.mp4'
+      : '/assets/compressedvideos/FinishedHeroSection.mp4';
 
     // Remove any existing sources first
     while (videoElement.firstChild) {
@@ -317,16 +309,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Load and play
     videoElement.load();
+    const playPromise = videoElement.play();
 
-    // Add event listener for when video can play
-    videoElement.addEventListener('canplay', () => {
-      const playPromise = videoElement.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          console.log('Auto-play prevented by browser policy, will attempt on user interaction');
-        });
-      }
-    }, { once: true });
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        console.log('Auto-play prevented by browser policy, will attempt on user interaction');
+      });
+    }
 
     this.heroVideoLoaded = true;
   }
