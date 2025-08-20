@@ -469,7 +469,7 @@ private ensureImageDimensions(): void {
     const currentLang = this.translate.currentLang || 'en';
 
     // Set poster image - use WebP format for better performance
-    this.currentVideoPoster = '/assets/photos/coverphoto.png';
+    this.currentVideoPoster = '/assets/photos/coverphoto.webp';
 
     // Set video source based on language
     this.currentVideoSrc = currentLang === 'es'
