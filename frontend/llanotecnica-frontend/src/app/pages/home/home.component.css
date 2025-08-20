@@ -278,7 +278,8 @@ section {
   align-items: center;
   overflow: hidden;
   /* Prevent layout shifts by setting explicit dimensions */
-  contain: layout style;
+  contain: layout style paint;
+  will-change: auto;
 }
 
 .hero-background {
@@ -289,7 +290,8 @@ section {
   height: 100%;
   z-index: 1;
   /* Prevent background shifts */
-  contain: layout;
+  contain: layout style;
+  will-change: auto;
 }
 
 /* Hero Video Responsive Styles - Enhanced for layout stability */

@@ -8,11 +8,12 @@
         class="hero-bg-video desktop-video"
         width="1920"
         height="1080"
-        preload="none"
+        preload="metadata"
         loop
         muted="muted"
         defaultMuted
-        playsinline>
+        playsinline
+        style="aspect-ratio: 16/9; object-fit: cover;">
         <!-- WebM source first for better performance -->
         <source src="/assets/compressedvideos/herosectiondesktop.webm" type="video/webm">
         <source src="/assets/compressedvideos/herosectiondesktop.mp4" type="video/mp4">
@@ -24,13 +25,14 @@
         class="hero-bg-video mobile-video"
         width="780"
         height="1080"
-        preload="none"
+        preload="metadata"
         loop
         muted="muted"
         defaultMuted
         autoplay
         playsinline
-        webkit-playsinline>
+        webkit-playsinline
+        style="aspect-ratio: 9/16; object-fit: cover;">
         <!-- WebM source first for better performance -->
         <source src="/assets/compressedvideos/herosectionmobile.webm" type="video/webm">
         <source src="/assets/compressedvideos/herosectionmobile.mp4" type="video/mp4">

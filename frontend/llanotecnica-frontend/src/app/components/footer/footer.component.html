@@ -6,7 +6,7 @@
         <div class="footer-section company-info">
           <div class="footer-brand">
             <div class="footer-logo-container">
-              <img src="assets/photos/logo.png" [alt]="'NAV.LOGO_ALT' | translate" class="footer-logo">
+              <img src="assets/photos/logo.png" [alt]="'NAV.LOGO_ALT' | translate" class="footer-logo" width="120" height="60" loading="lazy" decoding="async">
             </div>
             <h2 class="footer-company-name">{{ 'NAV.COMPANY_NAME' | translate }}</h2>
           </div>
@@ -67,11 +67,11 @@
       <!-- Social Links -->
       <div class="footer-social">
         <div class="social-links">
-          <a [href]="companyInfo.socialLinks.facebook" target="_blank" rel="noopener noreferrer" class="social-icon">
-            <i class="facebook-icon"></i>
+          <a [href]="companyInfo.socialLinks.facebook" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Visit our Facebook page">
+            <i class="facebook-icon" aria-hidden="true"></i>
           </a>
-          <a [href]="companyInfo.socialLinks.instagram" target="_blank" rel="noopener noreferrer" class="social-icon">
-            <i class="instagram-icon"></i>
+          <a [href]="companyInfo.socialLinks.instagram" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Visit our Instagram page">
+            <i class="instagram-icon" aria-hidden="true"></i>
           </a>
         </div>
       </div>
@@ -97,22 +97,22 @@
   <div class="decorative-element left"></div>
 
   <!-- Manual Modal -->
-  <div class="manual-modal" *ngIf="showManualModal">
+  <div class="manual-modal" *ngIf="showManualModal" role="dialog" aria-labelledby="manual-modal-title" aria-modal="true">
     <div class="modal-content">
-      <h2>{{ 'FOOTER.SELECT_MANUAL_LANGUAGE' | translate }}</h2>
-      <button (click)="downloadManual('en')">{{ 'FOOTER.LANGUAGE_ENGLISH' | translate }}</button>
-      <button (click)="downloadManual('es')">{{ 'FOOTER.LANGUAGE_SPANISH' | translate }}</button>
-      <button (click)="toggleManualModal()">{{ 'FOOTER.CANCEL' | translate }}</button>
+      <h2 id="manual-modal-title">{{ 'FOOTER.SELECT_MANUAL_LANGUAGE' | translate }}</h2>
+      <button (click)="downloadManual('en')" aria-label="Download English manual">{{ 'FOOTER.LANGUAGE_ENGLISH' | translate }}</button>
+      <button (click)="downloadManual('es')" aria-label="Download Spanish manual">{{ 'FOOTER.LANGUAGE_SPANISH' | translate }}</button>
+      <button (click)="toggleManualModal()" aria-label="Cancel and close modal">{{ 'FOOTER.CANCEL' | translate }}</button>
     </div>
   </div>
 
   <!-- Catalog Modal -->
-  <div class="manual-modal" *ngIf="showCatalogModal">
+  <div class="manual-modal" *ngIf="showCatalogModal" role="dialog" aria-labelledby="catalog-modal-title" aria-modal="true">
     <div class="modal-content">
-      <h2>{{ 'FOOTER.SELECT_CATALOG' | translate }}</h2>
-      <button (click)="downloadCatalog('en')">{{ 'FOOTER.LANGUAGE_ENGLISH' | translate }}</button>
-      <button (click)="downloadCatalog('es')">{{ 'FOOTER.LANGUAGE_SPANISH' | translate }}</button>
-      <button (click)="toggleCatalogModal()">{{ 'FOOTER.CANCEL' | translate }}</button>
+      <h2 id="catalog-modal-title">{{ 'FOOTER.SELECT_CATALOG' | translate }}</h2>
+      <button (click)="downloadCatalog('en')" aria-label="Download English catalog">{{ 'FOOTER.LANGUAGE_ENGLISH' | translate }}</button>
+      <button (click)="downloadCatalog('es')" aria-label="Download Spanish catalog">{{ 'FOOTER.LANGUAGE_SPANISH' | translate }}</button>
+      <button (click)="toggleCatalogModal()" aria-label="Cancel and close modal">{{ 'FOOTER.CANCEL' | translate }}</button>
     </div>
   </div>
 </footer>
