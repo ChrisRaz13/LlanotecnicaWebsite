@@ -4,6 +4,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { BannerComponent } from './components/banner/banner.component';
 import { FooterComponent } from "./components/footer/footer.component";
+import { WhatsappWidgetComponent } from './components/whatsapp-widget/whatsapp-widget.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { filter } from 'rxjs/operators';
@@ -18,6 +19,7 @@ import { RecaptchaService } from './services/language-selector/recaptcha.service
     NavbarComponent,
     BannerComponent,
     FooterComponent,
+    WhatsappWidgetComponent,
     TranslateModule
   ],
   template: `
@@ -25,6 +27,7 @@ import { RecaptchaService } from './services/language-selector/recaptcha.service
     <app-navbar></app-navbar>
     <router-outlet></router-outlet>
     <app-footer></app-footer>
+    <app-whatsapp-widget></app-whatsapp-widget>
   `
 })
 export class AppComponent implements OnInit {
