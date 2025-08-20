@@ -132,31 +132,41 @@
         }
       }
     },
-    "PRODUCTS_SECTION": {
-      "SECTION_TITLE": "Our Mixer Range",
-      "SECTION_SUBTITLE": "Choose the perfect mixer for your construction needs",
-      "FIRST_MIXER_TAGLINE": "The compact powerhouse for versatile projects",
-      "SECOND_MIXER_TAGLINE": "Maximum power for demanding projects",
-      "CAPACITY": "Capacity",
-      "POWER": "Power",
-      "WEIGHT": "Weight",
+    "PRODUCTS": {
+      "TITLE": "Our Mixer Range",
+      "SUBTITLE": "Choose the perfect mixer for your construction needs",
+      "MT370": {
+        "TAGLINE": "The compact powerhouse for versatile projects"
+      },
+      "MT480": {
+        "TAGLINE": "Maximum power for demanding projects"
+      },
+      "SPECS": {
+        "CAPACITY": "Capacity",
+        "POWER": "Power",
+        "WEIGHT": "Weight"
+      },
       "KEY_FEATURES": "Key Features",
       "VIEW_DETAILS": "View Details",
       "REQUEST_QUOTE": "Request Quote",
-      "PRODUCTS_CTA_TITLE": "Find Your Perfect Mixer",
-      "PRODUCTS_CTA_SUBTITLE": "Take the next step in choosing your ideal concrete mixer",
-      "CTA_REQUEST_QUOTE": "Request a Quote",
-      "CTA_DOWNLOAD": "Download Catalog",
-      "CTA_COMPARE": "Compare Models",
-      "COMPARISON_TITLE": "Quick Comparison",
-      "SPECIFICATION": "Specification",
-      "DRUM_CAPACITY": "Drum Capacity",
-      "MIXING_CAPACITY": "Mixing Capacity",
-      "DRUM_OPENING": "Drum Opening",
-      "DRUM_DEPTH": "Drum Depth",
-      "BEST_USE_CASE": "Best Use Case",
-      "SMALL_TO_MEDIUM": "Small to Medium Projects",
-      "LARGE_COMMERCIAL": "Large Commercial Projects"
+      "CTA": {
+        "TITLE": "Find Your Perfect Mixer",
+        "SUBTITLE": "Take the next step in choosing your ideal concrete mixer",
+        "REQUEST_QUOTE": "Request a Quote",
+        "DOWNLOAD_CATALOG": "Download Catalog",
+        "COMPARE_MODELS": "Compare Models"
+      },
+      "COMPARISON": {
+        "TITLE": "Quick Comparison",
+        "SPECIFICATION": "Specification",
+        "DRUM_CAPACITY": "Drum Capacity",
+        "MIXING_CAPACITY": "Mixing Capacity",
+        "DRUM_OPENING": "Drum Opening",
+        "DRUM_DEPTH": "Drum Depth",
+        "BEST_USE_CASE": "Best Use Case",
+        "SMALL_MEDIUM_PROJECTS": "Small to Medium Projects",
+        "LARGE_COMMERCIAL_PROJECTS": "Large Commercial Projects"
+      }
     },
     "MODAL": {
       "TITLE": "Download Product Catalog",
@@ -166,7 +176,9 @@
       "FILE_INFO": "Catalogs are available in PDF format (7.2 MB)"
     },
     "FEATURES": {
-      "DRUM_DESIGN": {
+      "TITLE": "Advanced Features",
+      "SUBTITLE": "Engineering excellence in every detail",
+      "REINFORCED_DRUM": {
         "TITLE": "Reinforced Drum Design",
         "DESCRIPTION": "Heavy-duty steel construction with double-reinforced joints and wear-resistant coating.",
         "HIGHLIGHT": "50% increased lifespan"
@@ -182,43 +194,61 @@
         "HIGHLIGHT": "Triple safety system"
       }
     },
-    "FEATURES_SECTION": {
-      "SECTION_TITLE": "Advanced Features",
-      "SECTION_SUBTITLE": "Engineering excellence in every detail"
+    "COMPANY": {
+      "TITLE": "Two Decades of Excellence",
+      "SUBTITLE": "Building quality construction equipment since 2002",
+      "STATS": {
+        "YEARS_EXPERIENCE": "Years Experience",
+        "MIXERS_DELIVERED": "Mixers Delivered",
+        "COUNTRIES_SERVED": "Countries Served",
+        "YEARS_DETAIL": "Industry leadership since 2002",
+        "MIXERS_DETAIL": "Serving global construction needs",
+        "COUNTRIES_DETAIL": "Global presence and support"
+      },
+      "CTA": "Learn More About Us"
     },
-    "COMPANY_SECTION": {
-      "HEADING": "Two Decades of Excellence",
-      "SUBHEADING": "Building quality construction equipment since 2002",
-      "STATS_YEARS_EXPERIENCE": "Years Experience",
-      "STATS_MIXERS_DELIVERED": "Mixers Delivered",
-      "STATS_COUNTRIES_SERVED": "Countries Served",
-      "LEARN_MORE_BUTTON": "Learn More About Us",
-      "DETAIL_YEARS": "Industry leadership since 2002",
-      "DETAIL_MIXERS": "Serving global construction needs",
-      "DETAIL_COUNTRIES": "Global presence and support"
-    },
-    "FAQ_SECTION": {
-      "SECTION_TITLE": "Frequently Asked Questions",
-      "SECTION_SUBTITLE": "Get answers to common questions about our mixers",
-      "FAQ_1_QUESTION": "How do I operate the MT-370 and MT-480 mixers?",
-      "FAQ_1_ANSWER": "Watch our detailed demonstration video below:",
-      "FAQ_2_QUESTION": "What maintenance is required?",
-      "FAQ_2_ANSWER": "Regular maintenance includes daily cleaning, weekly lubrication checks, and monthly mechanical inspections.",
-      "FAQ_3_QUESTION": "Which mixer is right for my project?",
-      "FAQ_3_ANSWER": "The MT-370 is ideal for residential and small commercial projects, while the MT-480 is designed for larger commercial applications.",
-      "FAQ_4_QUESTION": "What warranty do you offer?",
-      "FAQ_4_ANSWER": "We provide a comprehensive 2-year warranty on all components, with extended warranty options available.",
-      "FAQ_5_QUESTION": "Are spare parts readily available?",
-      "FAQ_5_ANSWER": "Yes, we maintain a complete inventory of spare parts with next-day delivery for most components.",
-      "VIDEO_STEPS_TITLE": "Operating Your Mixer: Step-by-Step Guide",
-      "STEP_PREOP": "Pre-Operation Check",
-      "STEP_PREOP_DESC": "Check engine oil level and mechanical parts",
-      "STEP_START_ENGINE": "Start Engine",
-      "STEP_START_ENGINE_DESC": "Pull starter yo-yo until engine runs smoothly",
-      "STEP_CONTROL_POSITION": "Control Position",
-      "STEP_CONTROL_POSITION_DESC": "Use foot pedal to adjust drum angle",
-      "STEP_LOAD_MATERIALS": "Load Materials",
-      "STEP_LOAD_MATERIALS_DESC": "Fill to max capacity (MT-370: 370L, MT-480: 480L)"
+    "FAQ": {
+      "TITLE": "Frequently Asked Questions",
+      "SUBTITLE": "Get answers to common questions about our mixers",
+      "QUESTIONS": {
+        "OPERATION": {
+          "QUESTION": "How do I operate the MT-370 and MT-480 mixers?",
+          "ANSWER_INTRO": "Watch our detailed demonstration video below:",
+          "STEPS_TITLE": "Operation Steps",
+          "STEP1": {
+            "TITLE": "Pre-Operation Check",
+            "DESC": "Inspect all components and ensure proper setup"
+          },
+          "STEP2": {
+            "TITLE": "Start Engine",
+            "DESC": "Follow proper engine startup procedures"
+          },
+          "STEP3": {
+            "TITLE": "Control Position",
+            "DESC": "Set drum to proper mixing position"
+          },
+          "STEP4": {
+            "TITLE": "Load Materials",
+            "DESC": "Add cement, aggregate, and water as needed"
+          }
+        },
+        "MAINTENANCE": {
+          "QUESTION": "What maintenance is required?",
+          "ANSWER": "Regular maintenance includes daily cleaning, weekly lubrication checks, and monthly mechanical inspections."
+        },
+        "WHICH_MIXER": {
+          "QUESTION": "Which mixer is right for my project?",
+          "ANSWER": "The MT-370 is ideal for residential and small commercial projects, while the MT-480 is designed for larger commercial applications."
+        },
+        "WARRANTY": {
+          "QUESTION": "What warranty do you offer?",
+          "ANSWER": "Our concrete mixers are covered by a 6-month warranty against any manufacturing defects. For more information, please contact technical support."
+        },
+        "SPARE_PARTS": {
+          "QUESTION": "Are spare parts readily available?",
+          "ANSWER": "Yes, we maintain a complete inventory of spare parts with delivery on request."
+        }
+      }
     }
   },
   "ABOUT_US_PAGE": {
@@ -431,9 +461,16 @@
         "DIMENSIONS": "Dimensions",
         "ENGINE_TYPE": "Engine Type",
         "POWER_RATING": "Power Rating",
+        "DRUM_CAPACITY": "Drum Capacity",
+        "OPENING_DIAMETER": "Opening Diameter",
+        "DRUM_DEPTH": "Drum Depth",
         "MANAGEMENT_SYSTEM": "Management System",
         "DISCHARGE_HEIGHT": "Discharge Height",
-        "WHEEL_SIZE": "Wheel Size"
+        "WHEEL_SIZE": "Wheel Size",
+        "LENGTH": "Length",
+        "WIDTH": "Width",
+        "HEIGHT": "Height",
+        "WEIGHT": "Weight"
       }
     },
     "ENGINE_SECTION": {

@@ -2,13 +2,18 @@
   <!-- Hero Section -->
   <section id="hero" class="hero-section" aria-label="Welcome to our concrete mixer solutions">
     <div class="hero-background">
+      <!-- Optimized background image for immediate LCP -->
+      <div class="hero-bg-image"
+           [style.background-image]="heroBackgroundImage"
+           [class.loaded]="heroImageLoaded"></div>
+
       <!-- Desktop Video background - optimized loading -->
       <video
         #heroVideoDesktop
         class="hero-bg-video desktop-video"
         width="1920"
         height="1080"
-        preload="none"
+        preload="metadata"
         loop
         muted="muted"
         defaultMuted
@@ -17,18 +22,20 @@
         <source src="/assets/compressedvideos/herosectiondesktop.mp4" type="video/mp4">
       </video>
 
-      <!-- Mobile Video background - ultra-optimized for performance -->
+      <!-- Mobile Video background - optimized loading -->
       <video
         #heroVideoMobile
         class="hero-bg-video mobile-video"
         width="780"
         height="1080"
-        preload="none"
+        preload="metadata"
         loop
         muted="muted"
         defaultMuted
         playsinline
         webkit-playsinline
+        x-webkit-airplay="allow"
+        controls="false"
         autoplay>
         <source src="/assets/compressedvideos/herosectionmobile.mp4" type="video/mp4">
       </video>
@@ -157,8 +164,8 @@
     <div class="section-container">
       <header class="section-header" @fadeIn>
         <div class="header-accent"></div>
-        <h2>Our Mixer Range</h2>
-        <p>Choose the perfect mixer for your construction needs</p>
+        <h2>{{ 'HOME_PAGE.PRODUCTS.TITLE' | translate }}</h2>
+        <p>{{ 'HOME_PAGE.PRODUCTS.SUBTITLE' | translate }}</p>
       </header>
 
       <!-- Product Grid Layout -->
@@ -175,27 +182,27 @@
           </div>
           <div class="product-content">
             <h3>{{ mixers[0].name }}</h3>
-            <p class="product-tagline">The compact powerhouse for versatile projects</p>
+            <p class="product-tagline">{{ 'HOME_PAGE.PRODUCTS.MT370.TAGLINE' | translate }}</p>
 
             <div class="product-specs">
               <div class="spec-item">
                 <div class="spec-icon"><i class="fas fa-ruler-combined"></i></div>
                 <div class="spec-info">
-                  <span class="spec-label">Capacity</span>
+                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.CAPACITY' | translate }}</span>
                   <span class="spec-value">{{ mixers[0].specs.capacity }}</span>
                 </div>
               </div>
               <div class="spec-item">
                 <div class="spec-icon"><i class="fas fa-bolt"></i></div>
                 <div class="spec-info">
-                  <span class="spec-label">Power</span>
+                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.POWER' | translate }}</span>
                   <span class="spec-value">{{ mixers[0].specs.enginePower }}</span>
                 </div>
               </div>
               <div class="spec-item">
                 <div class="spec-icon"><i class="fas fa-weight-hanging"></i></div>
                 <div class="spec-info">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.WEIGHT' | translate }}</span>
                   <span class="spec-value">{{ mixers[0].specs.weight }}</span>
                 </div>
               </div>
@@ -206,7 +213,7 @@
             </div>
 
             <div class="product-features">
-              <h4>Key Features</h4>
+              <h4>{{ 'HOME_PAGE.PRODUCTS.KEY_FEATURES' | translate }}</h4>
               <ul class="feature-list">
                 <li *ngFor="let feature of mixers[0].features">
                   <i class="fas fa-check-circle"></i>
@@ -217,11 +224,11 @@
 
             <div class="product-actions">
               <button class="btn-primary" [routerLink]="['/products']">
-                View Details
+                {{ 'HOME_PAGE.PRODUCTS.VIEW_DETAILS' | translate }}
                 <i class="fas fa-arrow-right"></i>
               </button>
               <button class="btn-secondary" (click)="requestQuote()">
-                Request Quote
+                {{ 'HOME_PAGE.PRODUCTS.REQUEST_QUOTE' | translate }}
                 <i class="fas fa-paper-plane"></i>
               </button>
             </div>
@@ -240,27 +247,27 @@
           </div>
           <div class="product-content">
             <h3>{{ mixers[1].name }}</h3>
-            <p class="product-tagline">Maximum power for demanding projects</p>
+            <p class="product-tagline">{{ 'HOME_PAGE.PRODUCTS.MT480.TAGLINE' | translate }}</p>
 
             <div class="product-specs">
               <div class="spec-item">
                 <div class="spec-icon"><i class="fas fa-ruler-combined"></i></div>
                 <div class="spec-info">
-                  <span class="spec-label">Capacity</span>
+                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.CAPACITY' | translate }}</span>
                   <span class="spec-value">{{ mixers[1].specs.capacity }}</span>
                 </div>
               </div>
               <div class="spec-item">
                 <div class="spec-icon"><i class="fas fa-bolt"></i></div>
                 <div class="spec-info">
-                  <span class="spec-label">Power</span>
+                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.POWER' | translate }}</span>
                   <span class="spec-value">{{ mixers[1].specs.enginePower }}</span>
                 </div>
               </div>
               <div class="spec-item">
                 <div class="spec-icon"><i class="fas fa-weight-hanging"></i></div>
                 <div class="spec-info">
-                  <span class="spec-label">Weight</span>
+                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.WEIGHT' | translate }}</span>
                   <span class="spec-value">{{ mixers[1].specs.weight }}</span>
                 </div>
               </div>
@@ -271,7 +278,7 @@
             </div>
 
             <div class="product-features">
-              <h4>Key Features</h4>
+              <h4>{{ 'HOME_PAGE.PRODUCTS.KEY_FEATURES' | translate }}</h4>
               <ul class="feature-list">
                 <li *ngFor="let feature of mixers[1].features">
                   <i class="fas fa-check-circle"></i>
@@ -282,11 +289,11 @@
 
             <div class="product-actions">
               <button class="btn-primary" [routerLink]="['/products']">
-                View Details
+                {{ 'HOME_PAGE.PRODUCTS.VIEW_DETAILS' | translate }}
                 <i class="fas fa-arrow-right"></i>
               </button>
               <button class="btn-secondary" (click)="requestQuote()">
-                Request Quote
+                {{ 'HOME_PAGE.PRODUCTS.REQUEST_QUOTE' | translate }}
                 <i class="fas fa-paper-plane"></i>
               </button>
             </div>
@@ -297,8 +304,8 @@
       <!-- Centered CTA Section -->
       <div class="products-cta">
         <div class="cta-content">
-          <h3>Find Your Perfect Mixer</h3>
-          <p>Take the next step in choosing your ideal concrete mixer</p>
+          <h3>{{ 'HOME_PAGE.PRODUCTS.CTA.TITLE' | translate }}</h3>
+          <p>{{ 'HOME_PAGE.PRODUCTS.CTA.SUBTITLE' | translate }}</p>
 
           <div class="cta-buttons">
             <button
@@ -306,7 +313,7 @@
               (click)="requestQuote()"
               aria-label="Request a quote">
               <i class="fas fa-paper-plane"></i>
-              Request a Quote
+              {{ 'HOME_PAGE.PRODUCTS.CTA.REQUEST_QUOTE' | translate }}
             </button>
 
             <button
@@ -314,7 +321,7 @@
               (click)="openCatalogModal()"
               aria-label="Download product catalog">
               <i class="fas fa-file-pdf"></i>
-              Download Catalog
+              {{ 'HOME_PAGE.PRODUCTS.CTA.DOWNLOAD_CATALOG' | translate }}
             </button>
 
             <button
@@ -322,7 +329,7 @@
               (click)="scrollToComparison()"
               aria-label="Compare mixer models">
               <i class="fas fa-scale-balanced"></i>
-              Compare Models
+              {{ 'HOME_PAGE.PRODUCTS.CTA.COMPARE_MODELS' | translate }}
             </button>
           </div>
         </div>
@@ -330,41 +337,41 @@
 
       <!-- Quick Comparison Table -->
       <div id="comparison" class="comparison-section">
-        <h3 class="comparison-title">Quick Comparison</h3>
+        <h3 class="comparison-title">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.TITLE' | translate }}</h3>
         <div class="comparison-table-container">
           <table class="comparison-table">
             <thead>
               <tr>
-                <th>Specification</th>
+                <th>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.SPECIFICATION' | translate }}</th>
                 <th>MT-370</th>
                 <th>MT-480</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Drum Capacity</td>
+                <td>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.DRUM_CAPACITY' | translate }}</td>
                 <td class="table-center">370 L (13 cu. ft)</td>
                 <td class="table-center">480 L (15 cu. ft)</td>
               </tr>
               <tr>
-                <td>Mixing Capacity</td>
+                <td>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.MIXING_CAPACITY' | translate }}</td>
                 <td class="table-center">1 Bag (360 L)</td>
                 <td class="table-center">2 Bags (420 L)</td>
               </tr>
               <tr>
-                <td>Drum Opening</td>
+                <td>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.DRUM_OPENING' | translate }}</td>
                 <td class="table-center">18 in (450 mm)</td>
                 <td class="table-center">19 in (460 mm)</td>
               </tr>
               <tr>
-                <td>Drum Depth</td>
+                <td>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.DRUM_DEPTH' | translate }}</td>
                 <td class="table-center">32 in (800 mm)</td>
                 <td class="table-center">41 in (1020 mm)</td>
               </tr>
               <tr>
-                <td>Best Use Case</td>
-                <td class="table-center">Small to Medium Projects</td>
-                <td class="table-center">Large Commercial Projects</td>
+                <td>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.BEST_USE_CASE' | translate }}</td>
+                <td class="table-center">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.SMALL_MEDIUM_PROJECTS' | translate }}</td>
+                <td class="table-center">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.LARGE_COMMERCIAL_PROJECTS' | translate }}</td>
               </tr>
             </tbody>
           </table>
@@ -425,8 +432,8 @@
   <section id="features" class="features-section">
     <div class="section-container">
       <header class="section-header" @fadeIn>
-        <h2>Advanced Features</h2>
-        <p>Engineering excellence in every detail</p>
+        <h2>{{ 'HOME_PAGE.FEATURES.TITLE' | translate }}</h2>
+        <p>{{ 'HOME_PAGE.FEATURES.SUBTITLE' | translate }}</p>
       </header>
       <div class="features-grid" @staggerFade>
         <div class="feature-card">
@@ -434,10 +441,10 @@
             <i class="fa-solid fa-shield"></i>
           </div>
           <div class="feature-content">
-            <h3>Reinforced Drum Design</h3>
-            <p>Heavy-duty steel construction with double-reinforced joints and wear-resistant coating.</p>
+            <h3>{{ 'HOME_PAGE.FEATURES.REINFORCED_DRUM.TITLE' | translate }}</h3>
+            <p>{{ 'HOME_PAGE.FEATURES.REINFORCED_DRUM.DESCRIPTION' | translate }}</p>
             <div class="feature-highlight">
-              <span>50% increased lifespan</span>
+              <span>{{ 'HOME_PAGE.FEATURES.REINFORCED_DRUM.HIGHLIGHT' | translate }}</span>
             </div>
           </div>
         </div>
@@ -446,10 +453,10 @@
             <i class="fa-solid fa-gears"></i>
           </div>
           <div class="feature-content">
-            <h3>Protected Gear Mechanism</h3>
-            <p>Sealed gearbox system with automatic lubrication and debris protection.</p>
+            <h3>{{ 'HOME_PAGE.FEATURES.GEAR_MECHANISM.TITLE' | translate }}</h3>
+            <p>{{ 'HOME_PAGE.FEATURES.GEAR_MECHANISM.DESCRIPTION' | translate }}</p>
             <div class="feature-highlight">
-              <span>10,000+ operation hours</span>
+              <span>{{ 'HOME_PAGE.FEATURES.GEAR_MECHANISM.HIGHLIGHT' | translate }}</span>
             </div>
           </div>
         </div>
@@ -458,10 +465,10 @@
             <i class="fa-solid fa-shield-halved"></i>
           </div>
           <div class="feature-content">
-            <h3>Enhanced Safety Features</h3>
-            <p>Multiple emergency stops, protective guards, and safety interlocks for operator protection.</p>
+            <h3>{{ 'HOME_PAGE.FEATURES.SAFETY.TITLE' | translate }}</h3>
+            <p>{{ 'HOME_PAGE.FEATURES.SAFETY.DESCRIPTION' | translate }}</p>
             <div class="feature-highlight">
-              <span>Triple safety system</span>
+              <span>{{ 'HOME_PAGE.FEATURES.SAFETY.HIGHLIGHT' | translate }}</span>
             </div>
           </div>
         </div>
@@ -479,34 +486,34 @@
     <div class="section-container">
       <div class="company-content" @fadeIn>
         <div class="text-center mb-12">
-          <h2 class="company-title">Two Decades of Excellence</h2>
-          <p class="company-subtitle">Building quality construction equipment since 2002</p>
+          <h2 class="company-title">{{ 'HOME_PAGE.COMPANY.TITLE' | translate }}</h2>
+          <p class="company-subtitle">{{ 'HOME_PAGE.COMPANY.SUBTITLE' | translate }}</p>
         </div>
 
         <div class="company-stats-grid">
           <div class="stat-card" @statFadeIn>
             <div class="stat-icon">🏭</div>
             <div class="stat-number">20+</div>
-            <div class="stat-label">Years Experience</div>
-            <div class="stat-detail">Industry leadership since 2002</div>
+            <div class="stat-label">{{ 'HOME_PAGE.COMPANY.STATS.YEARS_EXPERIENCE' | translate }}</div>
+            <div class="stat-detail">{{ 'HOME_PAGE.COMPANY.STATS.YEARS_DETAIL' | translate }}</div>
           </div>
           <div class="stat-card" @statFadeIn>
             <div class="stat-icon">🚛</div>
             <div class="stat-number">5000+</div>
-            <div class="stat-label">Mixers Delivered</div>
-            <div class="stat-detail">Serving global construction needs</div>
+            <div class="stat-label">{{ 'HOME_PAGE.COMPANY.STATS.MIXERS_DELIVERED' | translate }}</div>
+            <div class="stat-detail">{{ 'HOME_PAGE.COMPANY.STATS.MIXERS_DETAIL' | translate }}</div>
           </div>
           <div class="stat-card" @statFadeIn>
             <div class="stat-icon">🌍</div>
             <div class="stat-number">30+</div>
-            <div class="stat-label">Countries Served</div>
-            <div class="stat-detail">Global presence and support</div>
+            <div class="stat-label">{{ 'HOME_PAGE.COMPANY.STATS.COUNTRIES_SERVED' | translate }}</div>
+            <div class="stat-detail">{{ 'HOME_PAGE.COMPANY.STATS.COUNTRIES_DETAIL' | translate }}</div>
           </div>
         </div>
 
         <div class="company-cta">
           <a [routerLink]="['/about-us']" class="btn-secondary">
-            Learn More About Us
+            {{ 'HOME_PAGE.COMPANY.CTA' | translate }}
             <i class="fas fa-arrow-right"></i>
           </a>
         </div>
@@ -518,19 +525,19 @@
   <section id="faq" class="faq-section">
     <div class="section-container">
       <header class="section-header" @fadeIn>
-        <h2>Frequently Asked Questions</h2>
-        <p>Get answers to common questions about our mixers</p>
+        <h2>{{ 'HOME_PAGE.FAQ.TITLE' | translate }}</h2>
+        <p>{{ 'HOME_PAGE.FAQ.SUBTITLE' | translate }}</p>
       </header>
       <div class="faq-list">
         <div class="faq-item" @fadeIn>
           <button class="faq-question" (click)="toggleFaq(0)"
             [class.active]="activeFaq === 0">
-            How do I operate the MT-370 and MT-480 mixers?
+            {{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.QUESTION' | translate }}
             <i class="fas" [class.fa-chevron-down]="activeFaq !== 0"
               [class.fa-chevron-up]="activeFaq === 0"></i>
           </button>
           <div class="faq-answer" [class.active]="activeFaq === 0">
-            <p>Watch our detailed demonstration video below:</p>
+            <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.ANSWER_INTRO' | translate }}</p>
             <div class="faq-video">
               <div class="faq-video-container">
                 <video #demoVideo
@@ -547,7 +554,7 @@
                   <div class="guide-icon">
                     <i class="fas fa-list-check"></i>
                   </div>
-                  <h4>Operation Steps</h4>
+                  <h4>{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEPS_TITLE' | translate }}</h4>
                 </div>
                 <div class="operation-steps">
                   <div class="step-item">
@@ -557,9 +564,9 @@
                         <div class="step-icon">
                           <i class="fas fa-tools"></i>
                         </div>
-                        <div class="step-title">Pre-Operation Check</div>
+                        <div class="step-title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP1.TITLE' | translate }}</div>
                       </div>
-                      <div class="step-desc">Inspect all components and ensure proper setup</div>
+                      <div class="step-desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP1.DESC' | translate }}</div>
                     </div>
                   </div>
 
@@ -570,9 +577,9 @@
                         <div class="step-icon">
                           <i class="fas fa-power-off"></i>
                         </div>
-                        <div class="step-title">Start Engine</div>
+                        <div class="step-title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP2.TITLE' | translate }}</div>
                       </div>
-                      <div class="step-desc">Follow proper engine startup procedures</div>
+                      <div class="step-desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP2.DESC' | translate }}</div>
                     </div>
                   </div>
 
@@ -583,9 +590,9 @@
                         <div class="step-icon">
                           <i class="fas fa-rotate"></i>
                         </div>
-                        <div class="step-title">Control Position</div>
+                        <div class="step-title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP3.TITLE' | translate }}</div>
                       </div>
-                      <div class="step-desc">Set drum to proper mixing position</div>
+                      <div class="step-desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP3.DESC' | translate }}</div>
                     </div>
                   </div>
 
@@ -596,9 +603,9 @@
                         <div class="step-icon">
                           <i class="fas fa-fill-drip"></i>
                         </div>
-                        <div class="step-title">Load Materials</div>
+                        <div class="step-title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP4.TITLE' | translate }}</div>
                       </div>
-                      <div class="step-desc">Add cement, aggregate, and water as needed</div>
+                      <div class="step-desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP4.DESC' | translate }}</div>
                     </div>
                   </div>
                 </div>
@@ -609,45 +616,45 @@
         <div class="faq-item" @fadeIn>
           <button class="faq-question" (click)="toggleFaq(1)"
             [class.active]="activeFaq === 1">
-            What maintenance is required?
+            {{ 'HOME_PAGE.FAQ.QUESTIONS.MAINTENANCE.QUESTION' | translate }}
             <i class="fas" [class.fa-chevron-down]="activeFaq !== 1"
               [class.fa-chevron-up]="activeFaq === 1"></i>
           </button>
           <div class="faq-answer" [class.active]="activeFaq === 1">
-            <p>Regular maintenance includes daily cleaning, weekly lubrication checks, and monthly mechanical inspections.</p>
+            <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.MAINTENANCE.ANSWER' | translate }}</p>
           </div>
         </div>
         <div class="faq-item" @fadeIn>
           <button class="faq-question" (click)="toggleFaq(2)"
             [class.active]="activeFaq === 2">
-            Which mixer is right for my project?
+            {{ 'HOME_PAGE.FAQ.QUESTIONS.WHICH_MIXER.QUESTION' | translate }}
             <i class="fas" [class.fa-chevron-down]="activeFaq !== 2"
               [class.fa-chevron-up]="activeFaq === 2"></i>
           </button>
           <div class="faq-answer" [class.active]="activeFaq === 2">
-            <p>The MT-370 is ideal for residential and small commercial projects, while the MT-480 is designed for larger commercial applications.</p>
+            <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.WHICH_MIXER.ANSWER' | translate }}</p>
           </div>
         </div>
         <div class="faq-item" @fadeIn>
           <button class="faq-question" (click)="toggleFaq(3)"
             [class.active]="activeFaq === 3">
-            What warranty do you offer?
+            {{ 'HOME_PAGE.FAQ.QUESTIONS.WARRANTY.QUESTION' | translate }}
             <i class="fas" [class.fa-chevron-down]="activeFaq !== 3"
               [class.fa-chevron-up]="activeFaq === 3"></i>
           </button>
           <div class="faq-answer" [class.active]="activeFaq === 3">
-            <p>Our concrete mixers are covered by a 6-month warranty against any manufacturing defects. For more information, please contact technical support.</p>
+            <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.WARRANTY.ANSWER' | translate }}</p>
           </div>
         </div>
         <div class="faq-item" @fadeIn>
           <button class="faq-question" (click)="toggleFaq(4)"
             [class.active]="activeFaq === 4">
-            Are spare parts readily available?
+            {{ 'HOME_PAGE.FAQ.QUESTIONS.SPARE_PARTS.QUESTION' | translate }}
             <i class="fas" [class.fa-chevron-down]="activeFaq !== 4"
               [class.fa-chevron-up]="activeFaq === 4"></i>
           </button>
           <div class="faq-answer" [class.active]="activeFaq === 4">
-            <p>Yes, we maintain a complete inventory of spare parts with delivery on request.</p>
+            <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.SPARE_PARTS.ANSWER' | translate }}</p>
           </div>
         </div>
       </div>

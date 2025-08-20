@@ -132,31 +132,41 @@
         }
       }
     },
-    "PRODUCTS_SECTION": {
-      "SECTION_TITLE": "Nuestra Gama de Mezcladoras",
-      "SECTION_SUBTITLE": "Elige la mezcladora perfecta para tus necesidades de construcción",
-      "FIRST_MIXER_TAGLINE": "El equipo compacto y potente para proyectos versátiles",
-      "SECOND_MIXER_TAGLINE": "Máxima potencia para proyectos exigentes",
-      "CAPACITY": "Capacidad",
-      "POWER": "Potencia",
-      "WEIGHT": "Peso",
+    "PRODUCTS": {
+      "TITLE": "Nuestra Gama de Mezcladoras",
+      "SUBTITLE": "Elige la mezcladora perfecta para tus necesidades de construcción",
+      "MT370": {
+        "TAGLINE": "El equipo compacto y potente para proyectos versátiles"
+      },
+      "MT480": {
+        "TAGLINE": "Máxima potencia para proyectos exigentes"
+      },
+      "SPECS": {
+        "CAPACITY": "Capacidad",
+        "POWER": "Potencia",
+        "WEIGHT": "Peso"
+      },
       "KEY_FEATURES": "Características Principales",
       "VIEW_DETAILS": "Ver Detalles",
       "REQUEST_QUOTE": "Solicitar Cotización",
-      "PRODUCTS_CTA_TITLE": "Encuentra tu Mezcladora Ideal",
-      "PRODUCTS_CTA_SUBTITLE": "Da el siguiente paso para elegir tu mezcladora de concreto ideal",
-      "CTA_REQUEST_QUOTE": "Solicitar Cotización",
-      "CTA_DOWNLOAD": "Descargar Catálogo",
-      "CTA_COMPARE": "Comparar Modelos",
-      "COMPARISON_TITLE": "Comparación Rápida",
-      "SPECIFICATION": "Especificación",
-      "DRUM_CAPACITY": "Capacidad del Tambor",
-      "MIXING_CAPACITY": "Capacidad de Mezcla",
-      "DRUM_OPENING": "Abertura del Tambor",
-      "DRUM_DEPTH": "Profundidad del Tambor",
-      "BEST_USE_CASE": "Mejor Uso",
-      "SMALL_TO_MEDIUM": "Proyectos Pequeños a Medianos",
-      "LARGE_COMMERCIAL": "Proyectos Comerciales Grandes"
+      "CTA": {
+        "TITLE": "Encuentra tu Mezcladora Ideal",
+        "SUBTITLE": "Da el siguiente paso para elegir tu mezcladora de concreto ideal",
+        "REQUEST_QUOTE": "Solicitar Cotización",
+        "DOWNLOAD_CATALOG": "Descargar Catálogo",
+        "COMPARE_MODELS": "Comparar Modelos"
+      },
+      "COMPARISON": {
+        "TITLE": "Comparación Rápida",
+        "SPECIFICATION": "Especificación",
+        "DRUM_CAPACITY": "Capacidad del Tambor",
+        "MIXING_CAPACITY": "Capacidad de Mezcla",
+        "DRUM_OPENING": "Abertura del Tambor",
+        "DRUM_DEPTH": "Profundidad del Tambor",
+        "BEST_USE_CASE": "Mejor Uso",
+        "SMALL_MEDIUM_PROJECTS": "Proyectos Pequeños a Medianos",
+        "LARGE_COMMERCIAL_PROJECTS": "Proyectos Comerciales Grandes"
+      }
     },
     "MODAL": {
       "TITLE": "Descargar Catálogo de Productos",
@@ -166,7 +176,9 @@
       "FILE_INFO": "Los catálogos están disponibles en formato PDF (7.2 MB)"
     },
     "FEATURES": {
-      "DRUM_DESIGN": {
+      "TITLE": "Funciones Avanzadas",
+      "SUBTITLE": "Excelencia de ingeniería en cada detalle",
+      "REINFORCED_DRUM": {
         "TITLE": "Diseño de Tambor Reforzado",
         "DESCRIPTION": "Construcción de acero resistente con juntas doblemente reforzadas y revestimiento resistente al desgaste.",
         "HIGHLIGHT": "50% más de vida útil"
@@ -182,43 +194,61 @@
         "HIGHLIGHT": "Sistema de triple seguridad"
       }
     },
-    "FEATURES_SECTION": {
-      "SECTION_TITLE": "Funciones Avanzadas",
-      "SECTION_SUBTITLE": "Excelencia de ingeniería en cada detalle"
+    "COMPANY": {
+      "TITLE": "Dos Décadas de Excelencia",
+      "SUBTITLE": "Fabricando equipos de construcción de calidad desde 2002",
+      "STATS": {
+        "YEARS_EXPERIENCE": "Años de Experiencia",
+        "MIXERS_DELIVERED": "Mezcladoras Entregadas",
+        "COUNTRIES_SERVED": "Países Atendidos",
+        "YEARS_DETAIL": "Liderazgo en la industria desde 2002",
+        "MIXERS_DETAIL": "Sirviendo necesidades de construcción global",
+        "COUNTRIES_DETAIL": "Presencia y soporte global"
+      },
+      "CTA": "Conoce Más Sobre Nosotros"
     },
-    "COMPANY_SECTION": {
-      "HEADING": "Dos Décadas de Excelencia",
-      "SUBHEADING": "Fabricando equipos de construcción de calidad desde 2002",
-      "STATS_YEARS_EXPERIENCE": "Años de Experiencia",
-      "STATS_MIXERS_DELIVERED": "Mezcladoras Entregadas",
-      "STATS_COUNTRIES_SERVED": "Países Atendidos",
-      "LEARN_MORE_BUTTON": "Conoce Más Sobre Nosotros",
-      "DETAIL_YEARS": "Liderazgo en la industria desde 2002",
-      "DETAIL_MIXERS": "Sirviendo necesidades de construcción global",
-      "DETAIL_COUNTRIES": "Presencia y soporte global"
-    },
-    "FAQ_SECTION": {
-      "SECTION_TITLE": "Preguntas Frecuentes",
-      "SECTION_SUBTITLE": "Respuestas a las preguntas comunes sobre nuestras mezcladoras",
-      "FAQ_1_QUESTION": "¿Cómo opero las mezcladoras MT-370 y MT-480?",
-      "FAQ_1_ANSWER": "Mira nuestro video de demostración detallado a continuación:",
-      "FAQ_2_QUESTION": "¿Qué mantenimiento se requiere?",
-      "FAQ_2_ANSWER": "El mantenimiento regular incluye limpieza diaria, revisiones semanales de lubricación e inspecciones mecánicas mensuales.",
-      "FAQ_3_QUESTION": "¿Cuál mezcladora es la adecuada para mi proyecto?",
-      "FAQ_3_ANSWER": "La MT-370 es ideal para proyectos residenciales y comerciales pequeños, mientras que la MT-480 está diseñada para aplicaciones comerciales de gran tamaño.",
-      "FAQ_4_QUESTION": "¿Qué garantía ofrecen?",
-      "FAQ_4_ANSWER": "Ofrecemos una garantía completa de 2 años en todos los componentes, con opciones de garantía extendida disponibles.",
-      "FAQ_5_QUESTION": "¿Están disponibles los repuestos?",
-      "FAQ_5_ANSWER": "Sí, mantenemos un inventario completo de repuestos con entrega al día siguiente para la mayoría de componentes.",
-      "VIDEO_STEPS_TITLE": "Operando Tu Mezcladora: Guía Paso a Paso",
-      "STEP_PREOP": "Chequeo Pre-Operativo",
-      "STEP_PREOP_DESC": "Revisa el nivel de aceite del motor y las partes mecánicas",
-      "STEP_START_ENGINE": "Encender el Motor",
-      "STEP_START_ENGINE_DESC": "Tira del arrancador hasta que el motor funcione suavemente",
-      "STEP_CONTROL_POSITION": "Control de Posición",
-      "STEP_CONTROL_POSITION_DESC": "Usa el pedal para ajustar el ángulo del tambor",
-      "STEP_LOAD_MATERIALS": "Cargar Materiales",
-      "STEP_LOAD_MATERIALS_DESC": "Llena a capacidad máxima (MT-370: 370L, MT-480: 480L)"
+    "FAQ": {
+      "TITLE": "Preguntas Frecuentes",
+      "SUBTITLE": "Respuestas a las preguntas comunes sobre nuestras mezcladoras",
+      "QUESTIONS": {
+        "OPERATION": {
+          "QUESTION": "¿Cómo opero las mezcladoras MT-370 y MT-480?",
+          "ANSWER_INTRO": "Mira nuestro video de demostración detallado a continuación:",
+          "STEPS_TITLE": "Pasos de Operación",
+          "STEP1": {
+            "TITLE": "Chequeo Pre-Operativo",
+            "DESC": "Inspecciona todos los componentes y asegura la configuración adecuada"
+          },
+          "STEP2": {
+            "TITLE": "Encender el Motor",
+            "DESC": "Sigue los procedimientos adecuados de arranque del motor"
+          },
+          "STEP3": {
+            "TITLE": "Posición de Control",
+            "DESC": "Ajusta el tambor a la posición de mezcla adecuada"
+          },
+          "STEP4": {
+            "TITLE": "Cargar Materiales",
+            "DESC": "Agrega cemento, agregados y agua según sea necesario"
+          }
+        },
+        "MAINTENANCE": {
+          "QUESTION": "¿Qué mantenimiento se requiere?",
+          "ANSWER": "El mantenimiento regular incluye limpieza diaria, revisiones semanales de lubricación e inspecciones mecánicas mensuales."
+        },
+        "WHICH_MIXER": {
+          "QUESTION": "¿Cuál mezcladora es la adecuada para mi proyecto?",
+          "ANSWER": "La MT-370 es ideal para proyectos residenciales y comerciales pequeños, mientras que la MT-480 está diseñada para aplicaciones comerciales de gran tamaño."
+        },
+        "WARRANTY": {
+          "QUESTION": "¿Qué garantía ofrecen?",
+          "ANSWER": "Nuestras mezcladoras de concreto están cubiertas por una garantía de 6 meses contra cualquier defecto de fabricación. Para más información, por favor contacta al soporte técnico."
+        },
+        "SPARE_PARTS": {
+          "QUESTION": "¿Están disponibles los repuestos?",
+          "ANSWER": "Sí, mantenemos un inventario completo de repuestos con entrega bajo pedido."
+        }
+      }
     }
   },
   "ABOUT_US_PAGE": {
@@ -433,7 +463,14 @@
         "POWER_RATING": "Clasificación de Potencia",
         "MANAGEMENT_SYSTEM": "Sistema de Gestión",
         "DISCHARGE_HEIGHT": "Altura de Descarga",
-        "WHEEL_SIZE": "Tamaño de Ruedas"
+        "WHEEL_SIZE": "Tamaño de Ruedas",
+        "DRUM_CAPACITY": "Capacidad del Tambor",
+        "OPENING_DIAMETER": "Diámetro de Apertura",
+        "DRUM_DEPTH": "Profundidad del Tambor",
+        "LENGTH": "Longitud",
+        "WIDTH": "Ancho",
+        "HEIGHT": "Altura",
+        "WEIGHT": "Peso"
       }
     },
     "ENGINE_SECTION": {

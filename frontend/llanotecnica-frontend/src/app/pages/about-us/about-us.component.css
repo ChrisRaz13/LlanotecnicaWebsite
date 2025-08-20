@@ -58,6 +58,7 @@
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  text-align: left;
 }
 
 .hero-content.visible {
@@ -212,6 +213,18 @@
   }
 }
 
+/* Desktop - Keep text left-aligned */
+@media (min-width: 993px) {
+  .hero-content {
+    text-align: left;
+  }
+
+  .hero-title::after {
+    left: 0;
+    transform: none;
+  }
+}
+
 /* Responsive Adjustments for Hero */
 @media (max-width: 992px) {
   .hero {
@@ -361,12 +374,16 @@
 
 .mission-content {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .mission-logo {
-  width: clamp(60px, 8vw, 80px);
+  width: clamp(80px, 10vw, 120px);
   height: auto;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  display: block;
 }
 
 .mission-content h2 {

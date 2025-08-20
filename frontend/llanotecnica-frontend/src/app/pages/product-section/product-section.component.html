@@ -205,7 +205,7 @@
           <div class="spec-group">
             <div class="group-header" role="rowheader">{{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.DRUM_SPECIFICATIONS' | translate }}</div>
             <div *ngFor="let spec of drumSpecs()" class="spec-row" role="row">
-              <div class="spec-name" role="cell">{{ spec.label }}</div>
+              <div class="spec-name" role="cell">{{ spec.label | translate }}</div>
               <div class="spec-value"
                    role="cell"
                    [class.highlight]="spec.highlight === 'MT-370'">
@@ -222,7 +222,7 @@
           <div class="spec-group">
             <div class="group-header" role="rowheader">{{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.UNIT_SPECIFICATIONS' | translate }}</div>
             <div *ngFor="let spec of unitSpecs()" class="spec-row" role="row">
-              <div class="spec-name" role="cell">{{ spec.label }}</div>
+              <div class="spec-name" role="cell">{{ spec.label | translate }}</div>
               <div class="spec-value"
                    role="cell"
                    [class.highlight]="spec.highlight === 'MT-370'">
@@ -239,7 +239,7 @@
           <div class="spec-group">
             <div class="group-header" role="rowheader">{{ 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.DIMENSIONS' | translate }}</div>
             <div *ngFor="let spec of getDimensionSpecs()" class="spec-row" role="row">
-              <div class="spec-name" role="cell">{{ spec.label }}</div>
+              <div class="spec-name" role="cell">{{ spec.label | translate }}</div>
               <div class="spec-value"
                    role="cell"
                    [class.highlight]="spec.highlight === 'MT-370'">

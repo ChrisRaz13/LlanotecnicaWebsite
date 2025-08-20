@@ -1,5 +1,4 @@
 import { Routes, ResolveFn, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { LanguageRedirectComponent } from './language-redirect.component';
 import { PLATFORM_ID, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { isPlatformBrowser } from '@angular/common';
@@ -45,9 +44,11 @@ export const languageResolver: ResolveFn<string> = (
 };
 
 export const routes: Routes = [
+  // Default route - load home page directly in English
   {
     path: '',
-    component: LanguageRedirectComponent,
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
+    data: { language: 'en' },
     pathMatch: 'full'
   },
 
@@ -127,10 +128,10 @@ export const routes: Routes = [
     resolve: { language: languageResolver }
   },
 
-  // Catch-all route: redirect to language redirect component
+  // Catch-all route: redirect to home page
   {
     path: '**',
-    component: LanguageRedirectComponent
+    redirectTo: ''
   }
 ];
 

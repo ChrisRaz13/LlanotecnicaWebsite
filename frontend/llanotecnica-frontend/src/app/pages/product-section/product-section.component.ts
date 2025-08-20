@@ -511,11 +511,11 @@ export class ProductSectionComponent implements AfterViewInit {
   readonly productImages = signal<ProductImage[]>([
     {
       model: 'MT-370',
-      src: 'assets/photos/MT-370.3.png'
+      src: 'assets/photos/MT-370-optimized.jpg'
     },
     {
       model: 'MT-480',
-      src: 'assets/photos/MT-480.1.png'
+      src: 'assets/photos/MT-480-optimized.jpg'
     }
   ]);
 
@@ -647,21 +647,21 @@ export class ProductSectionComponent implements AfterViewInit {
     const specs = this.productSpecs();
     return [
       {
-        label: 'Drum Capacity',
+        label: 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.DRUM_CAPACITY',
         key: 'capacity',
         mt370Value: specs['MT-370'].drumSpecs.capacity,
         mt480Value: specs['MT-480'].drumSpecs.capacity,
         highlight: 'MT-480'
       },
       {
-        label: 'Opening Diameter',
+        label: 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.OPENING_DIAMETER',
         key: 'openingDiameter',
         mt370Value: specs['MT-370'].drumSpecs.openingDiameter,
         mt480Value: specs['MT-480'].drumSpecs.openingDiameter,
         highlight: 'MT-480'
       },
       {
-        label: 'Drum Depth',
+        label: 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.DRUM_DEPTH',
         key: 'depth',
         mt370Value: specs['MT-370'].drumSpecs.depth,
         mt480Value: specs['MT-480'].drumSpecs.depth,
@@ -674,20 +674,20 @@ export class ProductSectionComponent implements AfterViewInit {
     const specs = this.productSpecs();
     return [
       {
-        label: 'Management System',
+        label: 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.MANAGEMENT_SYSTEM',
         key: 'managementSystem',
         mt370Value: specs['MT-370'].unitSpecs.managementSystem,
         mt480Value: specs['MT-480'].unitSpecs.managementSystem
       },
       {
-        label: 'Discharge Height',
+        label: 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.DISCHARGE_HEIGHT',
         key: 'dischargeHeight',
         mt370Value: specs['MT-370'].unitSpecs.dischargeHeight,
         mt480Value: specs['MT-480'].unitSpecs.dischargeHeight,
         highlight: 'MT-480'
       },
       {
-        label: 'Wheel Size',
+        label: 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.WHEEL_SIZE',
         key: 'wheelSize',
         mt370Value: specs['MT-370'].unitSpecs.wheelSize,
         mt480Value: specs['MT-480'].unitSpecs.wheelSize
@@ -699,26 +699,26 @@ export class ProductSectionComponent implements AfterViewInit {
     const specs = this.productSpecs();
     return [
       {
-        label: 'Length',
+        label: 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.LENGTH',
         key: 'length',
         mt370Value: specs['MT-370'].dimensions.length,
         mt480Value: specs['MT-480'].dimensions.length
       },
       {
-        label: 'Width',
+        label: 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.WIDTH',
         key: 'width',
         mt370Value: specs['MT-370'].dimensions.width,
         mt480Value: specs['MT-480'].dimensions.width
       },
       {
-        label: 'Height',
+        label: 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.HEIGHT',
         key: 'height',
         mt370Value: specs['MT-370'].dimensions.height,
         mt480Value: specs['MT-480'].dimensions.height,
         highlight: 'MT-480'
       },
       {
-        label: 'Weight',
+        label: 'PRODUCTS_PAGE.COMPARISON_SECTION.TABLES.WEIGHT',
         key: 'weight',
         mt370Value: specs['MT-370'].dimensions.weight,
         mt480Value: specs['MT-480'].dimensions.weight,

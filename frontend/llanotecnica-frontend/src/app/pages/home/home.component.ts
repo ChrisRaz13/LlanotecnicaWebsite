@@ -135,6 +135,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   showScrollIndicator = true;
   currentHeroBackground = 0;
 
+  // Performance optimization variables
+  heroBackgroundImage = '';
+  heroImageLoaded = false;
+  heroVideoLoaded = false;
+
   // Video section variables
   isPortraitVideo = true;
   currentVideoSrc = '';
@@ -200,7 +205,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Tracking variables
   private scrollInterval: any;
-  private heroVideoLoaded = false;
   private intersectionObserver: IntersectionObserver | null = null;
 
   constructor(
@@ -214,6 +218,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
+      // Initialize hero background image for immediate LCP
+      this.initializeHeroBackground();
+
       // Critical content first
       this.setupSEO();
       this.loadTranslations();
@@ -297,6 +304,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     videoElement.defaultMuted = true;
     videoElement.volume = 0;
 
+    // Mobile-specific video attributes for better playback
+    if (type === 'mobile') {
+      videoElement.setAttribute('webkit-playsinline', 'true');
+      videoElement.setAttribute('playsinline', 'true');
+      videoElement.setAttribute('x-webkit-airplay', 'allow');
+      videoElement.setAttribute('controls', 'false');
+
+      // Force mobile video to load metadata for better playback
+      videoElement.preload = 'metadata';
+    }
+
     // Add multiple event listeners to ensure video NEVER plays sound
     const enforceHeroVideoMuting = () => {
       if (videoElement.muted !== true) {
@@ -315,6 +333,37 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     videoElement.addEventListener('canplaythrough', enforceHeroVideoMuting);
     videoElement.addEventListener('loadeddata', enforceHeroVideoMuting);
     videoElement.addEventListener('loadedmetadata', enforceHeroVideoMuting);
+
+    // Mobile-specific playback handling
+    if (type === 'mobile') {
+      // Add touch event listener to trigger playback on mobile
+      const handleMobilePlay = () => {
+        if (videoElement.paused) {
+          const playPromise = videoElement.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              console.log('Mobile video autoplay prevented, will retry on next user interaction');
+            });
+          }
+        }
+      };
+
+      // Try to play on various mobile events
+      document.addEventListener('touchstart', handleMobilePlay, { once: true, passive: true });
+      document.addEventListener('click', handleMobilePlay, { once: true, passive: true });
+
+      // Also try when video becomes visible
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && videoElement.paused) {
+            handleMobilePlay();
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.1 });
+
+      observer.observe(videoElement);
+    }
 
     // Set up a periodic check to ensure muting is maintained
     const mutingInterval = setInterval(() => {
@@ -1019,5 +1068,55 @@ private ensureImageDimensions(): void {
 
   trackStatBy(index: number, stat: CompanyStat): string {
     return stat.label;
+  }
+
+  // Performance optimization methods
+  private initializeHeroBackground(): void {
+    // Set responsive background image for immediate LCP
+    const isMobile = window.innerWidth <= 768;
+    const backgroundImage = isMobile
+      ? 'url("/assets/photos/background-mobile-780x1080.webp")'
+      : 'url("/assets/photos/background-desktop-1920x1080.webp")';
+
+    this.heroBackgroundImage = backgroundImage;
+
+    // Mark image as loaded after a short delay to allow for smooth transition
+    setTimeout(() => {
+      this.heroImageLoaded = true;
+    }, 100);
+  }
+
+  // Video event handlers for performance optimization
+  onHeroVideoLoaded(): void {
+    this.heroVideoLoaded = true;
+  }
+
+  onHeroVideoCanPlay(): void {
+    // Dynamically load video sources after LCP
+    if (!this.heroVideoLoaded) {
+      setTimeout(() => {
+        this.loadVideoSources();
+      }, 100);
+    }
+  }
+
+  private loadVideoSources(): void {
+    // Load desktop video source
+    if (this.heroVideoDesktop?.nativeElement) {
+      const desktopVideo = this.heroVideoDesktop.nativeElement;
+      if (!desktopVideo.src) {
+        desktopVideo.src = '/assets/compressedvideos/herosectiondesktop.mp4';
+        desktopVideo.load();
+      }
+    }
+
+    // Load mobile video source
+    if (this.heroVideoMobile?.nativeElement) {
+      const mobileVideo = this.heroVideoMobile.nativeElement;
+      if (!mobileVideo.src) {
+        mobileVideo.src = '/assets/compressedvideos/herosectionmobile.mp4';
+        mobileVideo.load();
+      }
+    }
   }
 }
