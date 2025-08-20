@@ -30,7 +30,7 @@
       "PHONE": "+507 6566-4942",
       "WHATSAPP_URL": "https://wa.me/50765664942",
       "EMAIL": "ventas@llanotecnica.com",
-      "ADDRESS": "Panama City, Panama",
+      "ADDRESS": "Rio Chico, Calle Principal, Corregimiento de Pacora, Provincia de Panamá, Panamá",
       "SOCIAL_LINKS": {
         "FACEBOOK_URL": "https://www.facebook.com/llanotecnica2007/",
         "INSTAGRAM_URL": "https://instagram.com/llanotecnica"
@@ -49,6 +49,7 @@
       { "TEXT": "MT-480 Mixer", "ROUTE": "/products/mt-480" },
       { "TEXT": "Engines", "ROUTE": "/products/accessories" }
     ],
+    "FOLLOW_US_TITLE": "Follow Us",
     "SUPPORT_TITLE": "Support",
     "SUPPORT": [
       { "TEXT": "Technical Support", "ROUTE": "/support" },
@@ -303,7 +304,7 @@
     "COMPANY_DETAILS": {
       "PHONE": "+507 6566-4942",
       "EMAIL": "ventas@llanotecnica.com",
-      "ADDRESS": "Panama City, Panama"
+      "ADDRESS": "Rio Chico, Calle Principal, Corregimiento de Pacora, Provincia de Panamá, Panamá"
     }
   },
   "CONTACT_PAGE": {
