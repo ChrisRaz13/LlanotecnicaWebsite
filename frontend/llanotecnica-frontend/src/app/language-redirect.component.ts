@@ -58,13 +58,13 @@ export class LanguageRedirectComponent implements OnInit {
   ngOnInit(): void {
     this.detectLanguageAndRedirect();
 
-    // Safety fallback - redirect after 200ms regardless of API response
+    // Safety fallback - redirect after 1000ms regardless of API response
     this.redirectTimeoutId = window.setTimeout(() => {
       if (this.isRedirecting) {
         console.warn('Fallback timeout reached, redirecting to default language (en)');
         this.setLanguageAndRedirect('en');
       }
-    }, 200);
+    }, 1000);
   }
 
   private detectLanguageAndRedirect(): void {
@@ -192,7 +192,9 @@ export class LanguageRedirectComponent implements OnInit {
 
     this.isRedirecting = false;
 
-    // Navigate immediately to the appropriate language route
-    this.router.navigate([`/${lang}`]);
+    // Add a small delay to ensure Angular router is ready
+    setTimeout(() => {
+      this.router.navigate([`/${lang}`]);
+    }, 100);
   }
 }
