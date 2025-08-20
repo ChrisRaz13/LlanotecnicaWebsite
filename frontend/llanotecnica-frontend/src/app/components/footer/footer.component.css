@@ -5,6 +5,10 @@
   position: relative;
   overflow: hidden;
   font-family: 'Montserrat', sans-serif;
+  /* Prevent layout shifts by setting minimum height */
+  min-height: 400px;
+  /* Use contain layout to prevent shifts */
+  contain: layout style;
 }
 
 /* Main footer section */
@@ -12,6 +16,8 @@
   padding: 64px 0;
   position: relative;
   z-index: 1;
+  /* Set explicit minimum height to prevent shifts */
+  min-height: 320px;
 }
 
 /* Footer inner container */
@@ -19,6 +25,8 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  /* Prevent layout shifts during content loading */
+  min-height: 240px;
 }
 
 /* Grid layout for footer content */
@@ -26,6 +34,10 @@
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 40px;
+  /* Set explicit minimum height for grid stability */
+  min-height: 200px;
+  /* Prevent grid items from shifting */
+  align-items: start;
 }
 
 /* --------------- Company Info --------------- */
@@ -52,6 +64,8 @@
   width: 40px;
   height: 40px;
   object-fit: contain;
+  /* Prevent image loading shifts */
+  display: block;
 }
 
 .footer-company-name {
@@ -158,6 +172,10 @@
   padding: 20px 0;
   position: relative;
   z-index: 1;
+  /* Set explicit height to prevent shifts */
+  min-height: 60px;
+  /* Prevent layout shifts */
+  contain: layout;
 }
 
 .footer-bottom-content {
@@ -282,9 +300,16 @@
 
 /* --------------- Responsive Breakpoints --------------- */
 @media (max-width: 1024px) {
+  .site-footer {
+    min-height: 450px;
+  }
+  .footer-main {
+    min-height: 350px;
+  }
   .footer-content {
     grid-template-columns: 1.5fr 1fr 1fr;
     gap: 30px;
+    min-height: 250px;
   }
   .footer-section.support {
     grid-column: span 3;
@@ -292,6 +317,12 @@
 }
 
 @media (max-width: 768px) {
+  .site-footer {
+    min-height: 500px;
+  }
+  .footer-main {
+    min-height: 400px;
+  }
   .decorative-element {
     display: none;
   }
@@ -309,6 +340,7 @@
   .footer-content {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
+    min-height: 300px;
   }
   .footer-section.company-info {
     grid-column: span 2;
@@ -333,8 +365,15 @@
 }
 
 @media (max-width: 480px) {
+  .site-footer {
+    min-height: 600px;
+  }
+  .footer-main {
+    min-height: 500px;
+  }
   .footer-content {
     grid-template-columns: 1fr;
+    min-height: 400px;
   }
   .footer-section.company-info {
     grid-column: auto;

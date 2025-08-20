@@ -33,11 +33,8 @@
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
   <link rel="preconnect" href="https://flagcdn.com" crossorigin>
 
-  <!-- Preload critical CSS -->
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style">
-
   <!-- Preload primary font to avoid layout shifts -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" as="style">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" as="style">
 
   <!-- Additional preconnects for performance -->
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
@@ -50,17 +47,18 @@
   <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
   <link rel="manifest" href="assets/favicon/site.webmanifest">
 
-  <!-- Primary CSS (now loading after preload declarations) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Primary font loaded immediately -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Non-critical CSS loaded with lower priority -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" media="print" onload="this.media='all'">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" media="print" onload="this.media='all'">
 
   <!-- Fallback for browsers that don't support onload -->
   <noscript>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -72,38 +70,198 @@
   <!-- Add cache hints for browsers -->
   <meta http-equiv="Cache-Control" content="max-age=86400">
 
-  <!-- Google tag (gtag.js) - deferred to not block rendering -->
-  <script defer src="https://www.googletagmanager.com/gtag/js?id=G-VQPNJ37TSN"></script>
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://llanotecnica.com/">
+
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Llanotecnica",
+    "url": "https://llanotecnica.com",
+    "logo": "https://llanotecnica.com/assets/photos/logo.png",
+    "description": "Professional concrete mixers MT-370 and MT-480. High-quality construction equipment for contractors in Panama and Central America.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "PA",
+      "addressRegion": "Panama"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "sales",
+      "availableLanguage": ["English", "Spanish"]
+    },
+    "sameAs": [
+      "https://www.facebook.com/llanotecnica",
+      "https://www.instagram.com/llanotecnica"
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Concrete Mixers",
+      "itemListElement": [
+        {
+          "@type": "Product",
+          "name": "MT-370 Concrete Mixer",
+          "description": "370L capacity concrete mixer for small to medium projects",
+          "category": "Construction Equipment",
+          "brand": {
+            "@type": "Brand",
+            "name": "Llanotecnica"
+          }
+        },
+        {
+          "@type": "Product",
+          "name": "MT-480 Concrete Mixer",
+          "description": "480L capacity concrete mixer for large commercial projects",
+          "category": "Construction Equipment",
+          "brand": {
+            "@type": "Brand",
+            "name": "Llanotecnica"
+          }
+        }
+      ]
+    }
+  }
+  </script>
+
+  <!-- Google tag (gtag.js) - loaded after critical content -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-VQPNJ37TSN', { 'send_page_view': false }); // Delay page_view until after critical content loads
+    // Defer Google Analytics until after page load
     window.addEventListener('load', function() {
-      gtag('event', 'page_view');
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-VQPNJ37TSN';
+      document.head.appendChild(script);
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-VQPNJ37TSN');
     });
   </script>
 
-  <!-- RECAPTCHA ENTERPRISE: loaded with defer to not block rendering -->
-  <script defer src="https://www.google.com/recaptcha/enterprise.js?render=6LdRYeYqAAAAANM-PRPuJGsG8gOzCLPsa2e2naiO"></script>
+  <!-- RECAPTCHA ENTERPRISE: loaded on demand -->
+  <script>
+    // Load reCAPTCHA only when needed
+    window.loadRecaptcha = function() {
+      if (!window.grecaptcha) {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.google.com/recaptcha/enterprise.js?render=6LdRYeYqAAAAANM-PRPuJGsG8gOzCLPsa2e2naiO';
+        document.head.appendChild(script);
+      }
+    };
+  </script>
 
   <!-- Inline critical CSS to prevent layout shifts -->
   <style>
     /* Prevent layout shifts while loading */
     body {
       font-family: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      color: #333;
     }
+
+    * {
+      box-sizing: border-box;
+    }
+
     img {
       max-width: 100%;
       height: auto;
+      display: block;
     }
+
+    /* Critical hero section styles */
     .hero-section {
-      min-height: 500px;
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      contain: layout style;
     }
+
     .hero-bg-image, .hero-bg-video {
-      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
+      object-fit: cover;
+      background-color: #000;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      min-height: 400px;
+      contain: layout;
+    }
+
+    /* Critical footer styles */
+    .site-footer {
+      min-height: 400px;
+      contain: layout style;
+    }
+
+    /* Critical button styles */
+    .btn-primary, .btn-secondary, .btn-accent {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #008751, #00a562);
+      color: #ffffff;
+    }
+
+    /* Critical layout containers */
+    .section-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    /* Loading state to prevent flash */
+    app-root {
+      display: block;
+      min-height: 100vh;
+    }
+
+    /* Critical responsive styles */
+    @media (max-width: 768px) {
+      .hero-section {
+        min-height: 80vh;
+      }
+
+      .hero-content {
+        min-height: 300px;
+      }
+
+      .site-footer {
+        min-height: 500px;
+      }
     }
   </style>
 </head>

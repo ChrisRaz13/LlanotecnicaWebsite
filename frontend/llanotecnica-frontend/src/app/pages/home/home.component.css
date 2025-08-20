@@ -277,6 +277,8 @@ section {
   display: flex;
   align-items: center;
   overflow: hidden;
+  /* Prevent layout shifts by setting explicit dimensions */
+  contain: layout style;
 }
 
 .hero-background {
@@ -286,6 +288,8 @@ section {
   width: 100%;
   height: 100%;
   z-index: 1;
+  /* Prevent background shifts */
+  contain: layout;
 }
 
 /* Hero Video Responsive Styles - Enhanced for layout stability */
@@ -299,6 +303,9 @@ section {
   /* Prevent layout shifts by reserving space */
   min-height: 400px;
   background-color: #000;
+  /* Prevent video loading shifts */
+  display: block;
+  will-change: auto;
 }
 
 /* Desktop video shows by default */
@@ -338,6 +345,9 @@ section {
   display: flex;
   justify-content: flex-start; /* Changed to push content to the left */
   align-items: center;
+  /* Prevent content shifts during loading */
+  min-height: 400px;
+  contain: layout;
 }
 
 /* Updated hero text styling */
@@ -353,6 +363,12 @@ section {
   border-left: 4px solid #008751;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   animation: fadeInLeft 1s ease-out forwards; /* Changed to fadeInLeft animation */
+  /* Prevent text content shifts */
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  contain: layout;
 }
 
 .hero-text h1 {
@@ -362,6 +378,10 @@ section {
   margin-bottom: 20px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   position: relative;
+  /* Prevent title shifts */
+  min-height: 80px;
+  display: flex;
+  align-items: center;
 }
 
 .hero-text h1::after {
@@ -381,6 +401,10 @@ section {
   margin-bottom: 30px;
   opacity: 0.95;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  /* Prevent paragraph shifts */
+  min-height: 60px;
+  display: flex;
+  align-items: center;
 }
 
 /* New animation for left side entry */
@@ -399,6 +423,9 @@ section {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+  /* Prevent button container shifts */
+  min-height: 60px;
+  align-items: center;
 }
 
 .hero-cta button {

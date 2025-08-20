@@ -2,10 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
 /* Enhanced font loading strategy to prevent layout shifts */
-@font-face {
-  font-family: 'Montserrat';
-  font-display: swap; /* Ensures text is visible during font load */
-}
 
 
 
