@@ -51,7 +51,10 @@
               ],
               "optimization": {
                 "scripts": true,
-                "styles": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                },
                 "fonts": true
               },
               "outputHashing": "all",

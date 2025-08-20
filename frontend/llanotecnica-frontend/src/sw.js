@@ -1,9 +1,9 @@
 // Service Worker for Llanotecnica - Advanced Caching Strategy
-// Version 2.2 - Flag Carousel Network-First Fix
+// Version 2.3 - Flag Carousel Complete Bypass Fix
 
-const CACHE_NAME = 'llanotecnica-v2.2';
-const STATIC_CACHE = 'llanotecnica-static-v2.2';
-const DYNAMIC_CACHE = 'llanotecnica-dynamic-v2.2';
+const CACHE_NAME = 'llanotecnica-v2.3';
+const STATIC_CACHE = 'llanotecnica-static-v2.3';
+const DYNAMIC_CACHE = 'llanotecnica-dynamic-v2.3';
 
 // Assets to cache immediately
 const STATIC_ASSETS = [
@@ -24,8 +24,7 @@ const NETWORK_FIRST = [
   '/api/',
   'https://restcountries.com/',
   'https://www.google.com/recaptcha/',
-  'https://www.googletagmanager.com/',
-  'https://flagcdn.com/'
+  'https://www.googletagmanager.com/'
 ];
 
 // Cache-first resources (serve from cache, update in background)
@@ -87,6 +86,12 @@ self.addEventListener('fetch', event => {
 
   // Skip non-GET requests
   if (request.method !== 'GET') {
+    return;
+  }
+
+  // COMPLETELY BYPASS service worker for flagcdn.com to fix flag carousel
+  if (request.url.includes('flagcdn.com')) {
+    // Let the browser handle flagcdn.com requests directly
     return;
   }
 

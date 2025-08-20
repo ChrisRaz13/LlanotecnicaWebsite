@@ -163,7 +163,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   activeFeatures: boolean[] = [];
   selectedProduct: Product | null = null;
 
-  // Data storage
+  // Data storage - Fixed flag codes to match flagcdn.com API format
   readonly flags: Flag[] = [
     { country: 'United States', code: 'us', region: 'northAmerica' },
     { country: 'Canada', code: 'ca', region: 'northAmerica' },
