@@ -1,9 +1,9 @@
 // Service Worker for Llanotecnica - Advanced Caching Strategy
-// Version 2.1 - Flag Carousel Fix
+// Version 2.2 - Flag Carousel Network-First Fix
 
-const CACHE_NAME = 'llanotecnica-v2.1';
-const STATIC_CACHE = 'llanotecnica-static-v2.1';
-const DYNAMIC_CACHE = 'llanotecnica-dynamic-v2.1';
+const CACHE_NAME = 'llanotecnica-v2.2';
+const STATIC_CACHE = 'llanotecnica-static-v2.2';
+const DYNAMIC_CACHE = 'llanotecnica-dynamic-v2.2';
 
 // Assets to cache immediately
 const STATIC_ASSETS = [
@@ -24,7 +24,8 @@ const NETWORK_FIRST = [
   '/api/',
   'https://restcountries.com/',
   'https://www.google.com/recaptcha/',
-  'https://www.googletagmanager.com/'
+  'https://www.googletagmanager.com/',
+  'https://flagcdn.com/'
 ];
 
 // Cache-first resources (serve from cache, update in background)
@@ -35,8 +36,7 @@ const CACHE_FIRST = [
   'https://fonts.googleapis.com/',
   'https://fonts.gstatic.com/',
   'https://cdnjs.cloudflare.com/',
-  'https://cdn.jsdelivr.net/',
-  'https://flagcdn.com/'
+  'https://cdn.jsdelivr.net/'
 ];
 
 // Install event - cache static assets
