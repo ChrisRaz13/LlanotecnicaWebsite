@@ -139,6 +139,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   isPortraitVideo = true;
   currentVideoSrc = '';
   currentVideoPoster = '';
+  mobilePosterImage = '/assets/photos/hero-homepage.jpg';
   videoHighlights: VideoHighlight[] = [];
   videoInfoTitle = '';
   videoInfoDescription = '';
@@ -296,7 +297,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     fallbackSource.type = 'video/mp4';
     fallbackSource.src = type === 'desktop'
       ? '/assets/compressedvideos/FinishedHeroSection.mp4'
-      : '/assets/compressedvideos/FinishedHeroSection.mp4';
+      : '/assets/compressedvideos/herosectionmobile.mp4';
 
     // Remove any existing sources first
     while (videoElement.firstChild) {
@@ -307,17 +308,62 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     videoElement.appendChild(videoSource);
     videoElement.appendChild(fallbackSource);
 
-    // Load and play
-    videoElement.load();
-    const playPromise = videoElement.play();
-
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        console.log('Auto-play prevented by browser policy, will attempt on user interaction');
-      });
+    // Optimized loading strategy for mobile vs desktop
+    if (type === 'mobile') {
+      // Mobile: Smart delayed loading for better performance
+      this.loadMobileVideoOptimized(videoElement);
+    } else {
+      // Desktop: Standard loading
+      videoElement.load();
+      const playPromise = videoElement.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          console.log('Auto-play prevented by browser policy');
+        });
+      }
     }
 
     this.heroVideoLoaded = true;
+  }
+
+  /**
+   * Optimized mobile video loading - loads after critical content is ready
+   */
+  private loadMobileVideoOptimized(videoElement: HTMLVideoElement): void {
+    // Wait for critical content to load first
+    setTimeout(() => {
+      // Check if user is still on the page and video is visible
+      if (document.visibilityState === 'visible') {
+        // Load video metadata first
+        videoElement.preload = 'metadata';
+        videoElement.load();
+
+        // Once metadata is loaded, start playback
+        videoElement.addEventListener('loadedmetadata', () => {
+          // Small delay to ensure smooth experience
+          setTimeout(() => {
+            const playPromise = videoElement.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(() => {
+                console.log('Mobile video autoplay prevented - will show poster');
+              });
+            }
+          }, 200);
+        }, { once: true });
+
+        // Fallback: if metadata doesn't load quickly, try playing anyway
+        setTimeout(() => {
+          if (videoElement.readyState < 1) {
+            const playPromise = videoElement.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(() => {
+                console.log('Mobile video fallback play prevented');
+              });
+            }
+          }
+        }, 2000);
+      }
+    }, 1000); // Wait 1 second after page load
   }
 
 // Ensure all images have explicit dimensions to prevent layout shifts

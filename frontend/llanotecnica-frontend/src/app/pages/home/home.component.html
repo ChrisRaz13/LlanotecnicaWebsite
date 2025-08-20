@@ -19,20 +19,20 @@
         <source src="/assets/compressedvideos/herosectiondesktop.mp4" type="video/mp4">
       </video>
 
-      <!-- Mobile Video background - optimized loading -->
+      <!-- Mobile Video background - ultra-optimized for performance -->
       <video
         #heroVideoMobile
         class="hero-bg-video mobile-video"
         width="780"
         height="1080"
-        preload="metadata"
+        preload="none"
         loop
         muted="muted"
         defaultMuted
-        autoplay
         playsinline
         webkit-playsinline
-        style="aspect-ratio: 9/16; object-fit: cover;">
+        [poster]="mobilePosterImage"
+        style="aspect-ratio: 9/16; object-fit: cover; object-position: center;">
         <!-- WebM source first for better performance -->
         <source src="/assets/compressedvideos/herosectionmobile.webm" type="video/webm">
         <source src="/assets/compressedvideos/herosectionmobile.mp4" type="video/mp4">

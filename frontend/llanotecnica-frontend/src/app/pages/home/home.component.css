@@ -2048,35 +2048,65 @@ section {
   }
 }
 
-/* Media query for mobile devices */
+/* Mobile Video Optimization - Enhanced for performance and perfect fitting */
 @media (max-width: 780px) {
   /* Hide desktop video */
   .hero-bg-video.desktop-video {
     display: none;
   }
 
-  /* Show mobile video */
+  /* Show mobile video with optimized settings */
   .hero-bg-video.mobile-video {
     display: block;
+    /* Perfect mobile video fitting */
+    object-position: center center;
+    object-fit: cover;
+    /* Performance optimizations */
+    will-change: auto;
+    transform: translateZ(0); /* Hardware acceleration */
+    /* Ensure video covers full mobile viewport */
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    /* Prevent video loading shifts */
+    background-color: #1a1a1a;
+    /* Smooth loading transition */
+    transition: opacity 0.5s ease-in-out;
   }
 
-  /* Adjust mobile video position to ensure content is centered/visible */
-  .hero-bg-video.mobile-video {
-    object-position: center;
+  /* Optimized mobile video loading states */
+  .hero-bg-video.mobile-video[poster] {
+    background-image: var(--poster-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   /* Ensure hero section maintains proper height on mobile */
   .hero-section {
     min-height: 100vh;
     align-items: center;
+    /* Prevent layout shifts during video loading */
+    contain: layout style;
   }
 
-  /* Adjust hero text for better mobile readability */
+  /* Enhanced mobile hero text readability */
   .hero-text {
     max-width: 85%;
     margin: 0 auto;
-    background: rgba(0, 0, 0, 0.5); /* Slightly darker background for better readability */
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.6); /* Better contrast for mobile */
+    backdrop-filter: blur(6px);
+    /* Ensure text stays readable during video loading */
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Mobile video performance optimizations */
+  .hero-background {
+    /* Prevent background repaints */
+    contain: layout style paint;
+    /* Optimize for mobile rendering */
+    transform: translateZ(0);
   }
 }
 
