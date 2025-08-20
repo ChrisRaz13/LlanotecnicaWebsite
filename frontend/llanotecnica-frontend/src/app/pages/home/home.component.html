@@ -19,17 +19,27 @@
         <source src="/assets/compressedvideos/herosectiondesktop.mp4" type="video/mp4">
       </video>
 
-      <!-- Mobile Video background - optimized loading -->
-      <video
-        #heroVideoMobile
-        class="hero-bg-video mobile-video"
+      <!-- Mobile Static Image background - optimized for performance -->
+      <img
+        class="hero-bg-image mobile-image"
+        src="/assets/photos/hero-homepage.jpg"
+        alt="Professional concrete mixer in action"
         width="780"
         height="1080"
-        preload="metadata"
+        loading="eager"
+        decoding="sync"
+        style="aspect-ratio: 9/16; object-fit: cover;">
+
+      <!-- Mobile Video background - lazy loaded on user interaction -->
+      <video
+        #heroVideoMobile
+        class="hero-bg-video mobile-video hidden"
+        width="780"
+        height="1080"
+        preload="none"
         loop
         muted="muted"
         defaultMuted
-        autoplay
         playsinline
         webkit-playsinline
         style="aspect-ratio: 9/16; object-fit: cover;">
@@ -37,6 +47,11 @@
         <source src="/assets/compressedvideos/herosectionmobile.webm" type="video/webm">
         <source src="/assets/compressedvideos/herosectionmobile.mp4" type="video/mp4">
       </video>
+
+      <!-- Play button overlay for mobile video -->
+      <button class="mobile-video-play-btn" (click)="playMobileHeroVideo()" aria-label="Play background video">
+        <i class="fas fa-play" aria-hidden="true"></i>
+      </button>
 
       <div class="hero-overlay"></div>
     </div>
