@@ -139,7 +139,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   isPortraitVideo = true;
   currentVideoSrc = '';
   currentVideoPoster = '';
-  mobilePosterImage = '/assets/photos/hero-homepage.jpg';
   videoHighlights: VideoHighlight[] = [];
   videoInfoTitle = '';
   videoInfoDescription = '';
@@ -285,85 +284,61 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private loadHeroVideo(videoElement: HTMLVideoElement, type: 'desktop' | 'mobile'): void {
     if (!videoElement) return;
 
-    // Set the correct source based on type
-    const videoSource = document.createElement('source');
-    videoSource.type = 'video/webm';
-    videoSource.src = type === 'desktop'
-      ? '/assets/compressedvideos/herosectiondesktop.webm'
-      : '/assets/compressedvideos/herosectionmobile.webm';
+    // Set optimized WebP poster image based on device type
+    const posterImage = type === 'desktop'
+      ? '/assets/photos/background-desktop-1920x1080.webp'
+      : '/assets/photos/background-mobile-780x1080.webp';
 
-    // Add fallback source for MP4
-    const fallbackSource = document.createElement('source');
-    fallbackSource.type = 'video/mp4';
-    fallbackSource.src = type === 'desktop'
-      ? '/assets/compressedvideos/FinishedHeroSection.mp4'
-      : '/assets/compressedvideos/herosectionmobile.mp4';
+    videoElement.setAttribute('poster', posterImage);
 
-    // Remove any existing sources first
-    while (videoElement.firstChild) {
-      videoElement.removeChild(videoElement.firstChild);
-    }
+    // The video sources are already set in the HTML, so we just need to ensure proper muting
+    // Force mute the video to ensure it stays muted - HERO VIDEOS MUST NEVER HAVE SOUND
+    videoElement.muted = true;
+    videoElement.defaultMuted = true;
+    videoElement.volume = 0;
 
-    // Add the new sources
-    videoElement.appendChild(videoSource);
-    videoElement.appendChild(fallbackSource);
-
-    // Optimized loading strategy for mobile vs desktop
-    if (type === 'mobile') {
-      // Mobile: Smart delayed loading for better performance
-      this.loadMobileVideoOptimized(videoElement);
-    } else {
-      // Desktop: Standard loading
-      videoElement.load();
-      const playPromise = videoElement.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          console.log('Auto-play prevented by browser policy');
-        });
+    // Add multiple event listeners to ensure video NEVER plays sound
+    const enforceHeroVideoMuting = () => {
+      if (videoElement.muted !== true) {
+        videoElement.muted = true;
       }
+      if (videoElement.volume !== 0) {
+        videoElement.volume = 0;
+      }
+    };
+
+    // Enforce muting on all possible events
+    videoElement.addEventListener('volumechange', enforceHeroVideoMuting);
+    videoElement.addEventListener('play', enforceHeroVideoMuting);
+    videoElement.addEventListener('playing', enforceHeroVideoMuting);
+    videoElement.addEventListener('canplay', enforceHeroVideoMuting);
+    videoElement.addEventListener('canplaythrough', enforceHeroVideoMuting);
+    videoElement.addEventListener('loadeddata', enforceHeroVideoMuting);
+    videoElement.addEventListener('loadedmetadata', enforceHeroVideoMuting);
+
+    // Set up a periodic check to ensure muting is maintained
+    const mutingInterval = setInterval(() => {
+      if (videoElement && !videoElement.paused) {
+        enforceHeroVideoMuting();
+      }
+    }, 100);
+
+    // Clean up interval when video is removed from DOM
+    videoElement.addEventListener('remove', () => {
+      clearInterval(mutingInterval);
+    });
+
+    // Load and attempt to play
+    videoElement.load();
+    const playPromise = videoElement.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        console.log('Auto-play prevented by browser policy, will attempt on user interaction');
+      });
     }
 
     this.heroVideoLoaded = true;
-  }
-
-  /**
-   * Optimized mobile video loading - loads after critical content is ready
-   */
-  private loadMobileVideoOptimized(videoElement: HTMLVideoElement): void {
-    // Wait for critical content to load first
-    setTimeout(() => {
-      // Check if user is still on the page and video is visible
-      if (document.visibilityState === 'visible') {
-        // Load video metadata first
-        videoElement.preload = 'metadata';
-        videoElement.load();
-
-        // Once metadata is loaded, start playback
-        videoElement.addEventListener('loadedmetadata', () => {
-          // Small delay to ensure smooth experience
-          setTimeout(() => {
-            const playPromise = videoElement.play();
-            if (playPromise !== undefined) {
-              playPromise.catch(() => {
-                console.log('Mobile video autoplay prevented - will show poster');
-              });
-            }
-          }, 200);
-        }, { once: true });
-
-        // Fallback: if metadata doesn't load quickly, try playing anyway
-        setTimeout(() => {
-          if (videoElement.readyState < 1) {
-            const playPromise = videoElement.play();
-            if (playPromise !== undefined) {
-              playPromise.catch(() => {
-                console.log('Mobile video fallback play prevented');
-              });
-            }
-          }
-        }, 2000);
-      }
-    }, 1000); // Wait 1 second after page load
   }
 
 // Ensure all images have explicit dimensions to prevent layout shifts
@@ -514,7 +489,7 @@ private ensureImageDimensions(): void {
   private updateVideoSources(): void {
     const currentLang = this.translate.currentLang || 'en';
 
-    // Set poster image - use WebP format for better performance
+    // Set poster image - use WebP format for better performance with fallback
     this.currentVideoPoster = '/assets/photos/coverphoto.webp';
 
     // Set video source based on language
@@ -999,58 +974,6 @@ private ensureImageDimensions(): void {
         }
       }
     }, 1000);
-  }
-
-  /**
-   * Play mobile hero video on user interaction - optimized for mobile performance
-   */
-  playMobileHeroVideo(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    const mobileVideo = this.heroVideoMobile?.nativeElement;
-    const mobileImage = document.querySelector('.hero-bg-image.mobile-image') as HTMLElement;
-    const playButton = document.querySelector('.mobile-video-play-btn') as HTMLElement;
-
-    if (mobileVideo && mobileImage && playButton) {
-      // Hide the static image and play button
-      mobileImage.style.opacity = '0';
-      playButton.style.opacity = '0';
-
-      // Show and play the video
-      mobileVideo.classList.remove('hidden');
-      mobileVideo.style.opacity = '1';
-
-      // Load video sources if not already loaded
-      if (mobileVideo.readyState === 0) {
-        mobileVideo.load();
-      }
-
-      const playPromise = mobileVideo.play();
-
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            // Video started playing successfully
-            setTimeout(() => {
-              mobileImage.style.display = 'none';
-              playButton.style.display = 'none';
-            }, 300);
-          })
-          .catch((error) => {
-            console.error('Mobile video playback failed:', error);
-            // Revert to static image if video fails
-            mobileImage.style.opacity = '1';
-            playButton.style.opacity = '1';
-            mobileVideo.classList.add('hidden');
-          });
-      }
-
-      // Track the interaction
-      this.trackEvent('mobile_hero_video_played', {
-        source: 'hero_section',
-        device: 'mobile'
-      });
-    }
   }
 
   toggleHeroBackground(): void {

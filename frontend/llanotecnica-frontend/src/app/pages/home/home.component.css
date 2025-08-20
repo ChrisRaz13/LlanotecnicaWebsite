@@ -292,6 +292,8 @@ section {
   /* Prevent background shifts */
   contain: layout style;
   will-change: auto;
+  /* Default background color while video loads */
+  background-color: #1a1a1a;
 }
 
 /* Hero Video Responsive Styles - Enhanced for layout stability */
@@ -308,6 +310,8 @@ section {
   /* Prevent video loading shifts */
   display: block;
   will-change: auto;
+  /* Smooth transition from poster to video */
+  transition: opacity 0.5s ease-in-out;
 }
 
 /* Desktop video shows by default */
@@ -318,6 +322,22 @@ section {
 /* Mobile video is hidden by default */
 .hero-bg-video.mobile-video {
   display: none;
+}
+
+/* Ensure poster images display seamlessly */
+.hero-bg-video[poster] {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Smooth loading state for videos */
+.hero-bg-video:not([data-loaded]) {
+  opacity: 0.9;
+}
+
+.hero-bg-video[data-loaded] {
+  opacity: 1;
 }
 
 /* Updated overlay with a more balanced gradient */

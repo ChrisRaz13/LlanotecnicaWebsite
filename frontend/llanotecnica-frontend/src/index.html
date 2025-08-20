@@ -36,6 +36,11 @@
   <!-- Preload primary font to avoid layout shifts -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" as="style">
 
+  <!-- Preload critical images for LCP optimization -->
+  <link rel="preload" href="/assets/photos/background-mobile-780x1080.webp" as="image" type="image/webp" media="(max-width: 768px)">
+  <link rel="preload" href="/assets/photos/background-desktop-1920x1080.webp" as="image" type="image/webp" media="(min-width: 769px)">
+  <link rel="preload" href="/assets/photos/coverphoto.webp" as="image" type="image/webp">
+
   <!-- Additional preconnects for performance -->
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
