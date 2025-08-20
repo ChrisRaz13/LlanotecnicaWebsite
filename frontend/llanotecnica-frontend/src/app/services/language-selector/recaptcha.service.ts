@@ -26,10 +26,8 @@ export class RecaptchaService {
   private scriptLoading = false;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    // Load reCAPTCHA script on service initialization
-    if (isPlatformBrowser(this.platformId)) {
-      this.loadRecaptchaScript();
-    }
+    // Script will be loaded only when executeRecaptcha is called
+    // This ensures true lazy loading - no script loading on service initialization
   }
 
   /**

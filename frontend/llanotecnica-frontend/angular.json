@@ -21,6 +21,7 @@
             "assets": [
               "src/assets",
               "src/robots.txt",
+              "src/sw.js",
               {
                 "glob": "**/*",
                 "input": "src/assets/i18n",
@@ -48,24 +49,32 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractLicenses": true,
+              "namedChunks": false,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1.5mb",
-                  "maximumError": "1.6mb"
+                  "maximumWarning": "1.2mb",
+                  "maximumError": "1.4mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "50kb",
-                  "maximumError": "75kb"
+                  "maximumWarning": "40kb",
+                  "maximumError": "60kb"
                 },
                 {
                   "type": "any",
-                  "maximumWarning": "1.8mb",
-                  "maximumError": "2mb"
+                  "maximumWarning": "1.5mb",
+                  "maximumError": "1.8mb"
                 }
-              ],
-              "outputHashing": "all"
+              ]
             },
             "development": {
               "optimization": false,
