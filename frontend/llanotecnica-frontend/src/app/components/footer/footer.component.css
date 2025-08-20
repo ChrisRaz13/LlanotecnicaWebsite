@@ -4,11 +4,14 @@
   color: white;
   position: relative;
   overflow: hidden;
-  font-family: 'Montserrat', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   /* Prevent layout shifts by setting minimum height */
   min-height: 400px;
   /* Use contain layout to prevent shifts */
-  contain: layout style;
+  contain: layout style paint;
+  /* Force hardware acceleration to prevent shifts */
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 /* Main footer section */
