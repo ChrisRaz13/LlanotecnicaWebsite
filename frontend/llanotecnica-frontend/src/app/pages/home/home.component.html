@@ -54,9 +54,9 @@
         <track kind="captions" src="/assets/captions/hero-video-es.vtt" srclang="es" label="Español">
       </video>
 
-      <!-- Mobile Video background - Only loads on mobile devices -->
+      <!-- Mobile Video background - Delayed loading to prevent LCP blocking -->
       <video
-        *ngIf="isMobileDevice"
+        *ngIf="isMobileDevice && heroImageLoaded"
         #heroVideoMobile
         class="hero-bg-video mobile-video"
         [class.visible]="heroVideoPlaying"
