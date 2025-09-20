@@ -1148,7 +1148,7 @@ private ensureImageDimensions(): void {
 
   // Performance optimization methods
   private initializeHeroBackground(): void {
-    // Set responsive background image for immediate LCP - SIMPLIFIED
+    // Set responsive background image for immediate LCP - OPTIMIZED
     const isMobile = window.innerWidth <= 768;
     const backgroundImage = isMobile
       ? 'url("/assets/photos/background-mobile-780x1080.webp")'
@@ -1156,9 +1156,14 @@ private ensureImageDimensions(): void {
 
     this.heroBackgroundImage = backgroundImage;
 
-    // Mark image as loaded immediately for faster LCP
+    // Immediately mark as loaded and trigger display
     this.heroImageLoaded = true;
     this.heroPosterLoaded = true;
+
+    // Force immediate rendering by triggering change detection
+    setTimeout(() => {
+      this.heroVideoPlaying = false; // Ensure poster is visible
+    }, 0);
   }
 
   // Video event handlers for performance optimization

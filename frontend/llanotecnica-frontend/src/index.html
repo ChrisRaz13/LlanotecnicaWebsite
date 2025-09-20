@@ -32,12 +32,15 @@
   <link rel="preload" href="/assets/fonts/roboto-v30-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/roboto-v30-latin-500.woff2" as="font" type="font/woff2" crossorigin>
 
-  <!-- Preload critical images for LCP optimization -->
-  <link rel="preload" href="/assets/photos/background-desktop-1920x1080.webp" as="image" type="image/webp" fetchpriority="high" media="(min-width: 769px)">
-  <link rel="preload" href="/assets/photos/background-mobile-780x1080.webp" as="image" type="image/webp" fetchpriority="high" media="(max-width: 768px)">
-  <link rel="preload" href="/assets/photos/coverphoto.webp" as="image" type="image/webp">
+  <!-- CRITICAL: Preload LCP hero image with highest priority -->
+  <link rel="preload" href="/assets/photos/background-desktop-1920x1080.webp" as="image" type="image/webp" fetchpriority="high" media="(min-width: 769px)" crossorigin>
+  <link rel="preload" href="/assets/photos/background-mobile-780x1080.webp" as="image" type="image/webp" fetchpriority="high" media="(max-width: 768px)" crossorigin>
 
-  <!-- Preload optimized images for better performance -->
+  <!-- Preload critical CSS and JS resources -->
+  <link rel="modulepreload" href="/main.js" crossorigin>
+
+  <!-- Secondary image preloads -->
+  <link rel="preload" href="/assets/photos/coverphoto.webp" as="image" type="image/webp">
   <link rel="prefetch" href="/assets/photos/MT-480.2-optimized.webp" as="image" type="image/webp">
 
 
