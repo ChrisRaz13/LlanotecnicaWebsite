@@ -7,18 +7,30 @@
            [style.background-image]="heroBackgroundImage"
            [class.loaded]="heroImageLoaded"></div>
 
-      <!-- Hero Poster Image - Lazy loaded to improve LCP -->
+      <!-- Hero Poster Image - EAGER loading for LCP optimization with responsive images -->
       <div class="hero-poster-container"
            [class.hidden]="heroVideoPlaying">
-        <img
-          loading="lazy"
-          src="/assets/photos/herosectionposter-optimized.jpg"
-          alt="Professional concrete mixers - Industrial mixing solutions"
-          width="1920"
-          height="1080"
-          class="hero-poster-image"
-          decoding="async"
-          (load)="onHeroPosterLoaded()">
+        <picture>
+          <!-- Mobile WebP -->
+          <source media="(max-width: 768px)"
+                  srcset="/assets/photos/background-mobile-780x1080.webp"
+                  type="image/webp">
+          <!-- Desktop WebP -->
+          <source media="(min-width: 769px)"
+                  srcset="/assets/photos/background-desktop-1920x1080.webp"
+                  type="image/webp">
+          <!-- Fallback for browsers that don't support WebP -->
+          <img
+            loading="eager"
+            src="/assets/photos/background-desktop-1920x1080.jpg"
+            alt="Professional concrete mixers - Industrial mixing solutions"
+            width="1920"
+            height="1080"
+            class="hero-poster-image"
+            decoding="sync"
+            fetchpriority="high"
+            (load)="onHeroPosterLoaded()">
+        </picture>
       </div>
 
       <!-- Desktop Video background - Only loads on desktop devices -->
@@ -126,7 +138,8 @@
                  width="48"
                  height="36"
                  loading="lazy"
-                 decoding="async">
+                 decoding="async"
+                 importance="low">
           </div>
           <span class="country-name">{{flag.country}}</span>
         </div>
@@ -148,9 +161,10 @@
           <video
             #mainVideo
             controls
-            preload="metadata"
+            preload="none"
             [poster]="currentVideoPoster"
-            class="portrait-video">
+            class="portrait-video"
+            loading="lazy">
             <source [src]="currentVideoSrc" type="video/mp4">
             Your browser does not support the video tag.
           </video>
@@ -199,12 +213,18 @@
         <!-- First Mixer - MT-370 -->
         <div class="product-card" *ngIf="mixers[0]">
           <div class="product-image-container">
-            <img [src]="mixers[0].image"
-                 [alt]="('HOME_PAGE.PRODUCTS.MT370_IMAGE_ALT' | translate)"
-                 width="600"
-                 height="400"
-                 loading="lazy"
-                 class="product-image">
+            <picture>
+              <!-- WebP format for better compression -->
+              <source [srcset]="mixers[0].image.replace('.png', '.webp').replace('.jpg', '.webp')" type="image/webp">
+              <!-- Fallback to original format -->
+              <img [src]="mixers[0].image"
+                   [alt]="('HOME_PAGE.PRODUCTS.MT370_IMAGE_ALT' | translate)"
+                   width="600"
+                   height="400"
+                   loading="lazy"
+                   decoding="async"
+                   class="product-image">
+            </picture>
           </div>
           <div class="product-content">
             <h3>{{ mixers[0].name }}</h3>
@@ -264,12 +284,18 @@
         <!-- Second Mixer - MT-480 -->
         <div class="product-card" *ngIf="mixers.length > 1">
           <div class="product-image-container">
-            <img [src]="mixers[1].image"
-                 [alt]="('HOME_PAGE.PRODUCTS.MT480_IMAGE_ALT' | translate)"
-                 width="600"
-                 height="400"
-                 loading="lazy"
-                 class="product-image">
+            <picture>
+              <!-- WebP format for better compression -->
+              <source [srcset]="mixers[1].image.replace('.png', '.webp').replace('.jpg', '.webp')" type="image/webp">
+              <!-- Fallback to original format -->
+              <img [src]="mixers[1].image"
+                   [alt]="('HOME_PAGE.PRODUCTS.MT480_IMAGE_ALT' | translate)"
+                   width="600"
+                   height="400"
+                   loading="lazy"
+                   decoding="async"
+                   class="product-image">
+            </picture>
           </div>
           <div class="product-content">
             <h3>{{ mixers[1].name }}</h3>
@@ -427,6 +453,8 @@
                  width="80"
                  height="60"
                  loading="lazy"
+                 decoding="async"
+                 importance="low"
                  class="language-flag" />
             <span class="language-label">{{ 'HOME_PAGE.MODAL.ENGLISH' | translate }}</span>
           </a>
@@ -442,6 +470,8 @@
                  width="80"
                  height="60"
                  loading="lazy"
+                 decoding="async"
+                 importance="low"
                  class="language-flag" />
             <span class="language-label">{{ 'HOME_PAGE.MODAL.SPANISH' | translate }}</span>
           </a>
@@ -564,17 +594,19 @@
           </button>
           <div class="faq-answer" [class.active]="activeFaq === 0">
             <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.ANSWER_INTRO' | translate }}</p>
-            <div class="faq-video">
-              <div class="faq-video-container">
-                <video #demoVideo
-                       controls
-                       width="640"
-                       height="360"
-                       preload="metadata">
-                  <source src="/assets/compressedvideos/instruction.mp4" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-              </div>
+              <div class="faq-video">
+                <div class="faq-video-container">
+                  <video #demoVideo
+                         controls
+                         width="640"
+                         height="360"
+                         preload="none"
+                         loading="lazy"
+                         poster="/assets/photos/instruction-poster.webp">
+                    <source src="/assets/compressedvideos/instruction.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
               <div class="faq-video-info">
                 <div class="guide-title">
                   <div class="guide-icon">

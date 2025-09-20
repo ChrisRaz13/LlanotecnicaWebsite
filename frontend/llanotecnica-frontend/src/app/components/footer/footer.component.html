@@ -1,15 +1,14 @@
+<!-- FOOTER TEMPORARILY COMMENTED OUT FOR CLS TESTING -->
+<!--
 <footer class="site-footer">
   <div class="footer-main">
     <div class="footer-container">
-      <!-- New 3-Column Layout with Fixed Dimensions -->
       <div class="footer-content">
-
-        <!-- Column 1: Company Info & Branding -->
         <div class="footer-section company-section">
           <div class="footer-brand">
             <div class="footer-logo-container">
               <img src="assets/photos/logo.webp"
-                   [alt]="'NAV.LOGO_ALT' | translate"
+                   alt="Llanotecnica Logo"
                    class="footer-logo"
                    width="48"
                    height="48"
@@ -17,143 +16,83 @@
                    decoding="async">
             </div>
             <div class="brand-text">
-              <h2 class="footer-company-name">
-                {{ 'NAV.COMPANY_NAME' | translate }}
-              </h2>
-              <p class="company-tagline">
-                {{ 'FOOTER.COMPANY_DESCRIPTION' | translate }}
-              </p>
+              <h2 class="footer-company-name">Llanotecnica</h2>
+              <p class="company-tagline">Company description here</p>
             </div>
           </div>
-
-          <!-- Social Links Integrated -->
           <div class="footer-social">
-            <h4 class="social-title">{{ 'FOOTER.FOLLOW_US_TITLE' | translate }}</h4>
+            <h4 class="social-title">Follow Us</h4>
             <div class="social-links">
-              <a [href]="companyInfo.socialLinks.facebook"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 class="social-icon facebook"
-                 aria-label="Visit our Facebook page">
-                <i class="fab fa-facebook-f" aria-hidden="true"></i>
+              <a href="#" class="social-icon facebook">
+                <i class="fab fa-facebook-f"></i>
               </a>
-              <a [href]="companyInfo.socialLinks.instagram"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 class="social-icon instagram"
-                 aria-label="Visit our Instagram page">
-                <i class="fab fa-instagram" aria-hidden="true"></i>
+              <a href="#" class="social-icon instagram">
+                <i class="fab fa-instagram"></i>
               </a>
             </div>
           </div>
         </div>
-
-        <!-- Column 2: Navigation & Products -->
         <div class="footer-section navigation-section">
           <div class="nav-group">
-            <h3 class="section-title">{{ 'FOOTER.QUICK_LINKS_TITLE' | translate }}</h3>
+            <h3 class="section-title">Quick Links</h3>
             <ul class="footer-nav-list">
-              <li *ngFor="let link of quickLinks">
-                <a [routerLink]="link.route" class="footer-nav-link">
-                  {{ link.text }}
-                </a>
-              </li>
+              <li><a href="#" class="footer-nav-link">About Us</a></li>
+              <li><a href="#" class="footer-nav-link">Products</a></li>
+              <li><a href="#" class="footer-nav-link">Contact</a></li>
             </ul>
           </div>
-
           <div class="products-group">
-            <h3 class="section-title">{{ 'FOOTER.PRODUCTS_TITLE' | translate }}</h3>
+            <h3 class="section-title">Products</h3>
             <ul class="footer-nav-list">
-              <li *ngFor="let product of products">
-                <a [routerLink]="product.route"
-                   (click)="handleLinkClick(product)"
-                   class="footer-nav-link">
-                  {{ product.text }}
-                </a>
-              </li>
+              <li><a href="#" class="footer-nav-link">MT-370</a></li>
+              <li><a href="#" class="footer-nav-link">MT-480</a></li>
             </ul>
           </div>
         </div>
-
-        <!-- Column 3: Contact & Support -->
         <div class="footer-section contact-section">
-          <h3 class="section-title">{{ 'CONTACT_PAGE.CONTACT_INFORMATION' | translate }}</h3>
-
+          <h3 class="section-title">Contact Information</h3>
           <div class="contact-info">
             <div class="contact-item">
-              <i class="contact-icon fas fa-phone" aria-hidden="true"></i>
+              <i class="contact-icon fas fa-phone"></i>
               <div class="contact-details">
-                <span class="contact-label">{{ 'CONTACT_PAGE.PHONE' | translate }}</span>
-                <a [href]="companyInfo.whatsapp" class="contact-link">
-                  {{ companyInfo.phone }}
-                </a>
+                <span class="contact-label">Phone</span>
+                <a href="#" class="contact-link">+507-6566-4942</a>
               </div>
             </div>
-
             <div class="contact-item">
-              <i class="contact-icon fas fa-envelope" aria-hidden="true"></i>
+              <i class="contact-icon fas fa-envelope"></i>
               <div class="contact-details">
-                <span class="contact-label">{{ 'CONTACT_PAGE.EMAIL' | translate }}</span>
-                <a [href]="'mailto:' + companyInfo.email" class="contact-link">
-                  {{ companyInfo.email }}
-                </a>
+                <span class="contact-label">Email</span>
+                <a href="#" class="contact-link">ventas@llanotecnica.com</a>
               </div>
             </div>
           </div>
-
-          <!-- Support Links -->
           <div class="support-group">
-            <h4 class="support-title">{{ 'FOOTER.SUPPORT_TITLE' | translate }}</h4>
+            <h4 class="support-title">Support</h4>
             <ul class="support-list">
-              <li *ngFor="let item of support">
-                <a href="#support"
-                   (click)="handleSupportAction(item); $event.preventDefault()"
-                   class="support-link">
-                  {{ item.text }}
-                </a>
-              </li>
+              <li><a href="#" class="support-link">User Manual</a></li>
+              <li><a href="#" class="support-link">FAQ</a></li>
+              <li><a href="#" class="support-link">Product Catalog</a></li>
             </ul>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Footer Bottom -->
   <div class="footer-bottom">
     <div class="footer-container">
       <div class="footer-bottom-content">
-        <p>{{ 'FOOTER.COPYRIGHT' | translate:{currentYear: currentYear} }} {{ 'FOOTER.ALL_RIGHTS_RESERVED' | translate }}</p>
+        <p>© 2025 Llanotecnica All rights reserved</p>
         <div class="footer-bottom-links">
-          <!-- Changed these links to non-clickable text -->
-          <span class="footer-bottom-text">{{ 'FOOTER.PRIVACY_POLICY' | translate }}</span>
+          <span class="footer-bottom-text">Privacy Policy</span>
           <span class="separator">|</span>
-          <span class="footer-bottom-text">{{ 'FOOTER.TERMS_OF_SERVICE' | translate }}</span>
+          <span class="footer-bottom-text">Terms of Service</span>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="decorative-element right"></div>
-  <div class="decorative-element left"></div>
-
-  <!-- Manual Modal -->
-  <div class="manual-modal" *ngIf="showManualModal" role="dialog" aria-labelledby="manual-modal-title" aria-modal="true">
-    <div class="modal-content">
-      <h2 id="manual-modal-title">{{ 'FOOTER.SELECT_MANUAL_LANGUAGE' | translate }}</h2>
-      <button (click)="downloadManual('en')" aria-label="Download English manual">{{ 'FOOTER.LANGUAGE_ENGLISH' | translate }}</button>
-      <button (click)="downloadManual('es')" aria-label="Download Spanish manual">{{ 'FOOTER.LANGUAGE_SPANISH' | translate }}</button>
-      <button (click)="toggleManualModal()" aria-label="Cancel and close modal">{{ 'FOOTER.CANCEL' | translate }}</button>
-    </div>
-  </div>
-
-  <!-- Catalog Modal -->
-  <div class="manual-modal" *ngIf="showCatalogModal" role="dialog" aria-labelledby="catalog-modal-title" aria-modal="true">
-    <div class="modal-content">
-      <h2 id="catalog-modal-title">{{ 'FOOTER.SELECT_CATALOG' | translate }}</h2>
-      <button (click)="downloadCatalog('en')" aria-label="Download English catalog">{{ 'FOOTER.LANGUAGE_ENGLISH' | translate }}</button>
-      <button (click)="downloadCatalog('es')" aria-label="Download Spanish catalog">{{ 'FOOTER.LANGUAGE_SPANISH' | translate }}</button>
-      <button (click)="toggleCatalogModal()" aria-label="Cancel and close modal">{{ 'FOOTER.CANCEL' | translate }}</button>
-    </div>
-  </div>
 </footer>
+-->
+
+<!-- Empty div to prevent any layout issues -->
+<div></div>

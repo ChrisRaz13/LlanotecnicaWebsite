@@ -305,14 +305,24 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private loadHeroVideo(videoElement: HTMLVideoElement, type: 'desktop' | 'mobile'): void {
     if (!videoElement) return;
 
-    // Set optimized WebP poster image based on device type
+    // Set poster image based on device type (using existing files)
     const posterImage = type === 'desktop'
-      ? '/assets/photos/background-desktop-1920x1080.webp'
-      : '/assets/photos/background-mobile-780x1080.webp';
+      ? '/assets/photos/herosectionposter-optimized.jpg'
+      : '/assets/photos/herosectionposter-optimized.jpg';
 
     videoElement.setAttribute('poster', posterImage);
 
-    // The video sources are already set in the HTML, so we just need to ensure proper muting
+    // Use existing video sources (fallback until optimized versions are created)
+    const videoSrc = type === 'desktop'
+      ? '/assets/compressedvideos/herosectiondesktop-ultra-optimized.mp4'
+      : '/assets/compressedvideos/herosectionmobile-ultra-optimized.mp4';
+
+    // Create and add video source
+    const source = document.createElement('source');
+    source.src = videoSrc;
+    source.type = 'video/mp4';
+    videoElement.appendChild(source);
+
     // Force mute the video to ensure it stays muted - HERO VIDEOS MUST NEVER HAVE SOUND
     videoElement.muted = true;
     videoElement.defaultMuted = true;
@@ -607,7 +617,7 @@ private ensureImageDimensions(): void {
     // Set poster image - use WebP format for better performance with fallback
     this.currentVideoPoster = '/assets/photos/coverphoto.webp';
 
-    // Set video source based on language
+    // Set video source based on language (using existing files)
     this.currentVideoSrc = currentLang === 'es'
       ? '/assets/compressedvideos/IntroductionSpanish.mp4'
       : '/assets/compressedvideos/IntroductionEnglish.mp4';
@@ -1138,7 +1148,7 @@ private ensureImageDimensions(): void {
 
   // Performance optimization methods
   private initializeHeroBackground(): void {
-    // Set responsive background image for immediate LCP
+    // Set responsive background image for immediate LCP - SIMPLIFIED
     const isMobile = window.innerWidth <= 768;
     const backgroundImage = isMobile
       ? 'url("/assets/photos/background-mobile-780x1080.webp")'
@@ -1146,10 +1156,9 @@ private ensureImageDimensions(): void {
 
     this.heroBackgroundImage = backgroundImage;
 
-    // Mark image as loaded after a short delay to allow for smooth transition
-    setTimeout(() => {
-      this.heroImageLoaded = true;
-    }, 100);
+    // Mark image as loaded immediately for faster LCP
+    this.heroImageLoaded = true;
+    this.heroPosterLoaded = true;
   }
 
   // Video event handlers for performance optimization
