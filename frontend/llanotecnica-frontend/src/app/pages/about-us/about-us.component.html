@@ -102,15 +102,20 @@
       </div>
     </div>
     <div class="final-image-container">
-      <img
-        src="assets/photos/MT-480.2.png"
-        [alt]="'ABOUT_US_PAGE.FINAL_CTA.IMAGE_ALT' | translate"
-        class="final-image"
-        width="500"
-        height="400"
-        loading="lazy"
-        decoding="async"
-      />
+      <picture>
+        <!-- WebP format for modern browsers -->
+        <source srcset="assets/photos/MT-480.2-optimized.webp" type="image/webp">
+        <!-- Fallback to original PNG for older browsers -->
+        <img
+          src="assets/photos/MT-480.2.png"
+          [alt]="'ABOUT_US_PAGE.FINAL_CTA.IMAGE_ALT' | translate"
+          class="final-image"
+          width="500"
+          height="400"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
     </div>
   </div>
 </section>
