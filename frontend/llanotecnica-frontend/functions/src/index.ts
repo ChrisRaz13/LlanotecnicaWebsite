@@ -5,7 +5,7 @@ import * as admin from "firebase-admin";
 import * as corsLib from "cors";
 import {promisify} from "util";
 import {RecaptchaEnterpriseServiceClient} from "@google-cloud/recaptcha-enterprise";
-import * as functions from "firebase-functions";
+import * as nodemailer from "nodemailer";
 
 // Initialize admin SDK only if it hasn't been initialized yet
 if (!admin.apps.length) {
@@ -14,23 +14,62 @@ if (!admin.apps.length) {
 
 const corsHandler = promisify(corsLib({origin: true}));
 
-// Initialize reCAPTCHA client with credentials from Firebase config
+// Initialize Gmail transporter for sending emails
+let emailTransporter: nodemailer.Transporter | null = null;
+
+/**
+ * Initialize email transporter with Gmail SMTP configuration
+ */
+function initializeEmailTransporter() {
+  try {
+    // Use environment variables directly (Firebase Functions v2 approach)
+    const gmailUser = process.env.GMAIL_USER || "chrisraz228@gmail.com";
+    const gmailPassword = process.env.GMAIL_PASSWORD;
+
+    console.log("🔧 Checking email configuration...");
+    console.log("Gmail user:", gmailUser);
+    console.log("Gmail user exists:", !!gmailUser);
+    console.log("Gmail password exists:", !!gmailPassword);
+
+    if (gmailUser && gmailPassword) {
+      console.log("🚀 Initializing Gmail transporter with credentials");
+      emailTransporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: gmailUser,
+          pass: gmailPassword,
+        },
+        // Add additional configuration for better reliability
+        pool: true,
+        maxConnections: 1,
+        rateDelta: 20000,
+        rateLimit: 5,
+        debug: true, // Enable debug logging
+        logger: true, // Enable logger
+      });
+
+      console.log("✅ Gmail transporter initialized successfully");
+    } else {
+      console.error("❌ Gmail configuration missing");
+      console.error("Gmail user:", gmailUser);
+      console.error("Gmail password exists:", !!gmailPassword);
+      emailTransporter = null;
+    }
+  } catch (error) {
+    console.error("❌ Error initializing Gmail transporter:", error);
+    emailTransporter = null;
+  }
+}
+
+// Initialize email transporter
+initializeEmailTransporter();
+
+// Initialize reCAPTCHA client with default credentials (Firebase Functions v2)
 let recaptchaClient: RecaptchaEnterpriseServiceClient;
 try {
-  // For deployed functions, load credentials from Firebase config
-  if (functions.config().recaptcha && functions.config().recaptcha.credentials) {
-    console.log("Loading reCAPTCHA credentials from Firebase config");
-    // Check if credentials is a string that needs parsing, or already an object
-    const credentials = typeof functions.config().recaptcha.credentials === "string" ?
-      JSON.parse(functions.config().recaptcha.credentials) :
-      functions.config().recaptcha.credentials;
-    recaptchaClient = new RecaptchaEnterpriseServiceClient({credentials});
-    console.log("✅ Successfully initialized RecaptchaEnterpriseServiceClient with Firebase config credentials");
-  } else {
-    // Fallback to default credentials for local development
-    console.log("No Firebase config credentials found, using default credentials");
-    recaptchaClient = new RecaptchaEnterpriseServiceClient();
-  }
+  console.log("Initializing RecaptchaEnterpriseServiceClient with default credentials");
+  recaptchaClient = new RecaptchaEnterpriseServiceClient();
+  console.log("✅ Successfully initialized RecaptchaEnterpriseServiceClient");
 } catch (error) {
   console.error("❌ Error initializing RecaptchaEnterpriseServiceClient:", error);
   // Fallback to default credentials
@@ -188,13 +227,14 @@ async function verifyRecaptchaToken(token: string, action: string): Promise<{
   }
 }
 
+// Export sitemap function
+export {serveSitemap} from "./sitemap";
+
 export const submitContactForm = onRequest({
   memory: "256MiB",
   region: "us-central1",
   maxInstances: 10,
-  // Only use secrets if they are properly configured
-  // Comment this out for initial deployment test
-  // secrets: ["RECAPTCHA_SECRET"],
+  secrets: ["GMAIL_USER", "GMAIL_PASSWORD"],
 }, async (req, res) => {
   try {
     console.log("Function triggered: submitContactForm");
@@ -219,6 +259,8 @@ export const submitContactForm = onRequest({
     console.log("Method validated: POST");
 
     // Extract and validate request body
+    console.log("📥 Extracting request body...");
+
     const {
       name,
       email,
@@ -229,6 +271,8 @@ export const submitContactForm = onRequest({
       message,
       recaptchaToken,
     } = req.body as ContactFormData;
+
+    console.log("📋 Request body extracted successfully");
 
     console.log("Form data received", {
       name: name ? "provided" : "missing",
@@ -284,19 +328,31 @@ export const submitContactForm = onRequest({
 
     // Verify reCAPTCHA Enterprise token
     const recaptchaResult = await verifyRecaptchaToken(recaptchaToken, "contact_form_submit");
-    console.log("reCAPTCHA verification result:", recaptchaResult);
+    console.log("reCAPTCHA verification result:", {
+      success: recaptchaResult.success,
+      score: recaptchaResult.score,
+      action: recaptchaResult.action,
+      error: recaptchaResult.error,
+    });
 
     // Validate reCAPTCHA response
     if (!recaptchaResult.success) {
       console.warn("⚠️ Invalid reCAPTCHA attempt:", recaptchaResult.error);
-      res.status(403).json({error: "Invalid reCAPTCHA"});
+      res.status(403).json({
+        error: "reCAPTCHA verification failed",
+        details: recaptchaResult.error || "Unknown reCAPTCHA error",
+      });
       return;
     }
 
-    // Check reCAPTCHA score
-    if (recaptchaResult.score < 0.5) {
-      console.warn("⚠️ Suspicious activity detected:", recaptchaResult);
-      res.status(403).json({error: "Suspicious activity detected"});
+    // Check reCAPTCHA score - use a more lenient threshold for better user experience
+    const scoreThreshold = 0.3; // Lowered from 0.5 to match environment config
+    if (recaptchaResult.score < scoreThreshold) {
+      console.warn(`⚠️ Low reCAPTCHA score: ${recaptchaResult.score} (threshold: ${scoreThreshold}):`, recaptchaResult);
+      res.status(403).json({
+        error: "Security verification failed",
+        details: `Score: ${recaptchaResult.score}, Required: ${scoreThreshold}`,
+      });
       return;
     }
 
@@ -336,6 +392,98 @@ export const submitContactForm = onRequest({
       console.error("❌ Firestore save failed:", firestoreError);
       res.status(500).json({error: "Failed to save message"});
       return;
+    }
+
+    // Send email notification
+    if (emailTransporter) {
+      try {
+        console.log("Sending email notification");
+
+        const emailHtml = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+              <h2 style="color: #333; margin: 0;">New Contact Form Submission</h2>
+              <p style="color: #666; margin: 5px 0 0 0;">Llanotecnica Website</p>
+            </div>
+
+            <div style="background-color: white; padding: 20px; border: 1px solid #e9ecef; border-radius: 8px;">
+              <h3 style="color: #495057; border-bottom: 2px solid #007bff; padding-bottom: 10px;">Contact Details</h3>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold; color: #495057; width: 120px;">Name:</td>
+                  <td style="padding: 8px 0; color: #333;">${name}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold; color: #495057;">Email:</td>
+                  <td style="padding: 8px 0; color: #333;">${email}</td>
+                </tr>
+                ${phone ? `
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold; color: #495057;">Phone:</td>
+                  <td style="padding: 8px 0; color: #333;">${phone}</td>
+                </tr>
+                ` : ""}
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold; color: #495057;">Country:</td>
+                  <td style="padding: 8px 0; color: #333;">${country} (${countryCode})</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold; color: #495057;">Inquiry Type:</td>
+                  <td style="padding: 8px 0; color: #333;">${inquiryType}</td>
+                </tr>
+              </table>
+
+              <h3 style="color: #495057; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-top: 30px;">Message</h3>
+              <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #007bff;">
+                <p style="margin: 0; color: #333; line-height: 1.6;">${message.replace(/\n/g, "<br>")}</p>
+              </div>
+
+              <h3 style="color: #495057; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-top: 30px;">Security & Metadata</h3>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold; color: #495057; width: 150px;">reCAPTCHA Score:</td>
+                  <td style="padding: 8px 0; color: #333;">${recaptchaResult.score.toFixed(2)} (${recaptchaResult.score >= 0.7 ? "High Trust" : recaptchaResult.score >= 0.5 ? "Medium Trust" : "Low Trust"})</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold; color: #495057;">Submitted:</td>
+                  <td style="padding: 8px 0; color: #333;">${new Date().toLocaleString()}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold; color: #495057;">IP Address:</td>
+                  <td style="padding: 8px 0; color: #333;">${req.ip || "Unknown"}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold; color: #495057;">User Agent:</td>
+                  <td style="padding: 8px 0; color: #333; font-size: 12px;">${req.headers["user-agent"] || "Unknown"}</td>
+                </tr>
+              </table>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+              <p style="margin: 0; color: #666; font-size: 14px;">
+                This email was automatically generated from the Llanotecnica website contact form.
+              </p>
+            </div>
+          </div>
+        `;
+
+        const mailOptions = {
+          from: `"Llanotecnica Website" <${process.env.GMAIL_USER || "chrisraz228@gmail.com"}>`,
+          to: ["chrisraz228@gmail.com", "ventas@llanotecnica.com"],
+          subject: `New ${inquiryType} Inquiry from ${name} (${country})`,
+          html: emailHtml,
+          replyTo: email,
+        };
+
+        await emailTransporter.sendMail(mailOptions);
+        console.log("✅ Email sent successfully to chrisraz228@gmail.com and ventas@llanotecnica.com");
+      } catch (emailError) {
+        console.error("❌ Failed to send email:", emailError);
+        // Don't fail the entire request if email fails
+        // The form submission was successful, email is just a notification
+      }
+    } else {
+      console.warn("⚠️ Email transporter not initialized, skipping email notification");
     }
 
     // Send success response

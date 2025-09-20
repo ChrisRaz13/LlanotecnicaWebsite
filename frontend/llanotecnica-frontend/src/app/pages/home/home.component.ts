@@ -139,6 +139,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   heroBackgroundImage = '';
   heroImageLoaded = false;
   heroVideoLoaded = false;
+  heroVideoPlaying = false;
+  heroPosterLoaded = false;
+  isMobileDevice = false;
 
   // Video section variables
   isPortraitVideo = true;
@@ -218,6 +221,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
+      // Detect device type for optimized video loading
+      this.detectDeviceType();
+
+      // IMMEDIATELY mute any existing hero videos on component initialization
+      this.immediatelyMuteHeroVideos();
+
       // Initialize hero background image for immediate LCP
       this.initializeHeroBackground();
 
@@ -228,6 +237,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
       // Subscribe to language changes
       this.translate.onLangChange.subscribe(() => {
+        // IMMEDIATELY mute videos again when language changes
+        setTimeout(() => this.immediatelyMuteHeroVideos(), 0);
         this.loadTranslations();
         this.setupSEO();
         this.updateVideoSources();
@@ -244,6 +255,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
+      // IMMEDIATELY mute hero videos before any other configuration
+      this.immediatelyMuteHeroVideos();
+
       // Configure hero videos first (basic properties)
       this.configureHeroVideo(this.heroVideoDesktop);
       this.configureHeroVideo(this.heroVideoMobile);
@@ -420,6 +434,40 @@ private ensureImageDimensions(): void {
   }, 100);
 }
 
+  // IMMEDIATE muting method to prevent any sound during navigation/language switching
+  private immediatelyMuteHeroVideos(): void {
+    // Mute desktop hero video immediately
+    if (this.heroVideoDesktop?.nativeElement) {
+      const video = this.heroVideoDesktop.nativeElement;
+      video.muted = true;
+      video.defaultMuted = true;
+      video.volume = 0;
+      // Pause immediately to prevent any sound
+      video.pause();
+    }
+
+    // Mute mobile hero video immediately
+    if (this.heroVideoMobile?.nativeElement) {
+      const video = this.heroVideoMobile.nativeElement;
+      video.muted = true;
+      video.defaultMuted = true;
+      video.volume = 0;
+      // Pause immediately to prevent any sound
+      video.pause();
+    }
+
+    // Also find and mute any video elements in the DOM immediately
+    const allVideos = document.querySelectorAll('video');
+    allVideos.forEach(video => {
+      if (video.classList.contains('hero-bg-video')) {
+        video.muted = true;
+        video.defaultMuted = true;
+        video.volume = 0;
+        video.pause();
+      }
+    });
+  }
+
   private configureHeroVideo(videoRef?: ElementRef<HTMLVideoElement>): void {
     if (videoRef && videoRef.nativeElement) {
       const video = videoRef.nativeElement;
@@ -427,24 +475,42 @@ private ensureImageDimensions(): void {
       // Set preload attribute to 'none' to prevent immediate loading
       video.preload = 'none';
 
-      // Force mute the video
+      // Force mute the video AGAIN (redundant but safe)
       video.muted = true;
       video.defaultMuted = true;
       video.volume = 0;
 
-      // Add event listeners to ensure video stays muted
-      video.addEventListener('volumechange', () => {
-        if (videoRef && videoRef.nativeElement) {
-          videoRef.nativeElement.muted = true;
-          videoRef.nativeElement.volume = 0;
+      // Add multiple event listeners to ensure video NEVER plays sound
+      const enforceHeroMuting = () => {
+        if (video.muted !== true) {
+          video.muted = true;
         }
+        if (video.volume !== 0) {
+          video.volume = 0;
+        }
+      };
+
+      // Listen to ALL possible events that could unmute the video
+      const mutingEvents = [
+        'volumechange', 'play', 'playing', 'canplay', 'canplaythrough',
+        'loadeddata', 'loadedmetadata', 'loadstart', 'progress', 'suspend',
+        'abort', 'error', 'emptied', 'stalled', 'loadedmetadata', 'durationchange'
+      ];
+
+      mutingEvents.forEach(eventType => {
+        video.addEventListener(eventType, enforceHeroMuting, { passive: true });
       });
 
-      video.addEventListener('play', () => {
-        if (videoRef && videoRef.nativeElement) {
-          videoRef.nativeElement.muted = true;
-          videoRef.nativeElement.volume = 0;
+      // Set up a continuous monitoring interval for hero videos
+      const mutingInterval = setInterval(() => {
+        if (video && !video.paused) {
+          enforceHeroMuting();
         }
+      }, 50); // Check every 50ms for maximum responsiveness
+
+      // Clean up interval when component is destroyed
+      video.addEventListener('remove', () => {
+        clearInterval(mutingInterval);
       });
     }
   }
@@ -1087,8 +1153,32 @@ private ensureImageDimensions(): void {
   }
 
   // Video event handlers for performance optimization
-  onHeroVideoLoaded(): void {
+  onHeroVideoLoaded(type: string): void {
+    console.log(`Hero video ${type} loaded`);
     this.heroVideoLoaded = true;
+  }
+
+  onHeroVideoReady(type: string): void {
+    console.log(`Hero video ${type} ready to play`);
+    // Start playing the video and hide the poster
+    if (type === 'desktop' && this.heroVideoDesktop?.nativeElement) {
+      this.heroVideoDesktop.nativeElement.play().then(() => {
+        this.heroVideoPlaying = true;
+      }).catch(err => console.log('Desktop video autoplay prevented:', err));
+    } else if (type === 'mobile' && this.heroVideoMobile?.nativeElement) {
+      this.heroVideoMobile.nativeElement.play().then(() => {
+        this.heroVideoPlaying = true;
+      }).catch(err => console.log('Mobile video autoplay prevented:', err));
+    }
+  }
+
+  onHeroPosterLoaded(): void {
+    console.log('Hero poster loaded');
+    this.heroPosterLoaded = true;
+    // Start loading the video sources after poster is visible
+    setTimeout(() => {
+      this.loadVideoSources();
+    }, 500);
   }
 
   onHeroVideoCanPlay(): void {
@@ -1100,22 +1190,51 @@ private ensureImageDimensions(): void {
     }
   }
 
-  private loadVideoSources(): void {
-    // Load desktop video source
-    if (this.heroVideoDesktop?.nativeElement) {
-      const desktopVideo = this.heroVideoDesktop.nativeElement;
-      if (!desktopVideo.src) {
-        desktopVideo.src = '/assets/compressedvideos/herosectiondesktop.mp4';
-        desktopVideo.load();
-      }
-    }
+  private detectDeviceType(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      // Detect mobile device using multiple methods for accuracy
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isMobileUserAgent = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+      const isMobileScreen = window.innerWidth <= 768;
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-    // Load mobile video source
-    if (this.heroVideoMobile?.nativeElement) {
-      const mobileVideo = this.heroVideoMobile.nativeElement;
-      if (!mobileVideo.src) {
-        mobileVideo.src = '/assets/compressedvideos/herosectionmobile.mp4';
-        mobileVideo.load();
+      // Consider it mobile if any of these conditions are true
+      this.isMobileDevice = isMobileUserAgent || (isMobileScreen && isTouchDevice);
+
+      console.log('Device detection:', {
+        isMobileUserAgent,
+        isMobileScreen,
+        isTouchDevice,
+        finalResult: this.isMobileDevice
+      });
+    }
+  }
+
+  private loadVideoSources(): void {
+    // Only load the video source for the current device type
+    if (this.isMobileDevice) {
+      // Load only mobile video source
+      if (this.heroVideoMobile?.nativeElement) {
+        const mobileVideo = this.heroVideoMobile.nativeElement;
+        if (!mobileVideo.querySelector('source')) {
+          const source = document.createElement('source');
+          source.src = '/assets/compressedvideos/herosectionmobile-ultra-optimized.mp4';
+          source.type = 'video/mp4';
+          mobileVideo.appendChild(source);
+          mobileVideo.load();
+        }
+      }
+    } else {
+      // Load only desktop video source
+      if (this.heroVideoDesktop?.nativeElement) {
+        const desktopVideo = this.heroVideoDesktop.nativeElement;
+        if (!desktopVideo.querySelector('source')) {
+          const source = document.createElement('source');
+          source.src = '/assets/compressedvideos/herosectiondesktop-ultra-optimized.mp4';
+          source.type = 'video/mp4';
+          desktopVideo.appendChild(source);
+          desktopVideo.load();
+        }
       }
     }
   }

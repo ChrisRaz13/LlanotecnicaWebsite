@@ -56,12 +56,12 @@ export class SeoLanguageService implements OnDestroy {
       description: 'ABOUT_US_PAGE.SEO.DESCRIPTION'
     },
     'products': {
-      title: 'HOME_PAGE.SEO.TITLE', // Update if you have products page SEO
-      description: 'HOME_PAGE.SEO.DESCRIPTION' // Update if you have products page SEO
+      title: 'PRODUCTS_PAGE.SEO.TITLE',
+      description: 'PRODUCTS_PAGE.SEO.DESCRIPTION'
     },
     'contact': {
-      title: 'HOME_PAGE.SEO.TITLE', // Update if you have contact page SEO
-      description: 'HOME_PAGE.SEO.DESCRIPTION' // Update if you have contact page SEO
+      title: 'CONTACT_PAGE.SEO.TITLE',
+      description: 'CONTACT_PAGE.SEO.DESCRIPTION'
     }
   };
 

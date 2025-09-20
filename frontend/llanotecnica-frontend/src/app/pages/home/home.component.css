@@ -317,6 +317,33 @@ section {
   opacity: 0;
 }
 
+/* Hero poster image styles for instant LCP */
+.hero-poster-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  opacity: 1;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.hero-poster-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-poster-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  /* Ensure immediate display for LCP */
+  will-change: auto;
+}
+
 /* Hero Video Responsive Styles - Enhanced for layout stability */
 .hero-bg-video {
   position: absolute;
@@ -331,8 +358,14 @@ section {
   /* Prevent video loading shifts */
   display: block;
   will-change: auto;
-  /* Smooth transition from poster to video */
-  transition: opacity 0.5s ease-in-out;
+  /* Start hidden, show when video is ready */
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  z-index: 1;
+}
+
+.hero-bg-video.visible {
+  opacity: 1;
 }
 
 /* Desktop video shows by default */

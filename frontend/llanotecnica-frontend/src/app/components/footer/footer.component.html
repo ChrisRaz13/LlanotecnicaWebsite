@@ -106,11 +106,11 @@
             <h4 class="support-title">{{ 'FOOTER.SUPPORT_TITLE' | translate }}</h4>
             <ul class="support-list">
               <li *ngFor="let item of support">
-                <button type="button"
-                        (click)="handleSupportAction(item)"
-                        class="support-link">
+                <a href="#support"
+                   (click)="handleSupportAction(item); $event.preventDefault()"
+                   class="support-link">
                   {{ item.text }}
-                </button>
+                </a>
               </li>
             </ul>
           </div>

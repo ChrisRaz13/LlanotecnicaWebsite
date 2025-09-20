@@ -82,7 +82,8 @@
       "SCROLL_INDICATOR": "Scroll to explore"
     },
     "FLAG_CAROUSEL": {
-      "DELIVERY_NOTE": "Delivered to 30+ countries and counting • We ship worldwide!"
+      "DELIVERY_NOTE": "Delivered to 30+ countries and counting • We ship worldwide!",
+      "FLAG_ALT": "{{country}} flag - We deliver concrete mixers to {{country}}"
     },
     "VIDEO_SECTION": {
       "TITLE": "See Our Mixers in Action",
@@ -146,6 +147,8 @@
         "POWER": "Power",
         "WEIGHT": "Weight"
       },
+      "MT370_IMAGE_ALT": "MT-370 concrete mixer - Professional 370-liter capacity mixer for medium-duty construction projects",
+      "MT480_IMAGE_ALT": "MT-480 concrete mixer - Heavy-duty 480-liter capacity mixer for large commercial construction projects",
       "KEY_FEATURES": "Key Features",
       "VIEW_DETAILS": "View Details",
       "REQUEST_QUOTE": "Request Quote",
@@ -338,6 +341,10 @@
     }
   },
   "CONTACT_PAGE": {
+    "SEO": {
+      "TITLE": "Contact Us | Professional Concrete Mixer Sales | Llanotecnica",
+      "DESCRIPTION": "Get in touch with Llanotecnica for concrete mixer sales, technical support, and spare parts. Serving Panama and 30+ countries worldwide."
+    },
     "GET_IN_TOUCH": "Get in Touch",
     "SUCCESS_MESSAGE": "Thank you for your message! We'll respond shortly.",
     "ERROR_MESSAGE": "There was an error sending your message. Please try again.",
@@ -390,6 +397,10 @@
     }
   },
   "PRODUCTS_PAGE": {
+    "SEO": {
+      "TITLE": "Professional Concrete Mixers MT-370 & MT-480 | Llanotecnica",
+      "DESCRIPTION": "Explore our professional concrete mixer range: MT-370 for medium-duty projects and MT-480 for heavy-duty construction. Built for durability and performance."
+    },
     "HERO": {
       "TITLE": "Durable & High-Performance Concrete Mixers",
       "DESCRIPTION": "Designed for any job-from mid-sized projects to heavy-duty tasks-built for strength, efficiency, and reliable performance."

@@ -7,28 +7,51 @@
            [style.background-image]="heroBackgroundImage"
            [class.loaded]="heroImageLoaded"></div>
 
-      <!-- Desktop Video background - optimized loading -->
+      <!-- Hero Poster Image - Lazy loaded to improve LCP -->
+      <div class="hero-poster-container"
+           [class.hidden]="heroVideoPlaying">
+        <img
+          loading="lazy"
+          src="/assets/photos/herosectionposter-optimized.jpg"
+          alt="Professional concrete mixers - Industrial mixing solutions"
+          width="1920"
+          height="1080"
+          class="hero-poster-image"
+          decoding="async"
+          (load)="onHeroPosterLoaded()">
+      </div>
+
+      <!-- Desktop Video background - Only loads on desktop devices -->
       <video
+        *ngIf="!isMobileDevice"
         #heroVideoDesktop
         class="hero-bg-video desktop-video"
+        [class.visible]="heroVideoPlaying"
         width="1920"
         height="1080"
-        preload="metadata"
+        preload="none"
+        poster="/assets/photos/herosectionposter-optimized.jpg"
         loop
         muted="muted"
         defaultMuted
         playsinline
-        autoplay>
-        <source src="/assets/compressedvideos/herosectiondesktop.mp4" type="video/mp4">
+        (canplaythrough)="onHeroVideoReady('desktop')"
+        (loadeddata)="onHeroVideoLoaded('desktop')">
+        <!-- Video source will be loaded dynamically -->
+        <track kind="captions" src="/assets/captions/hero-video-en.vtt" srclang="en" label="English">
+        <track kind="captions" src="/assets/captions/hero-video-es.vtt" srclang="es" label="Español">
       </video>
 
-      <!-- Mobile Video background - optimized loading -->
+      <!-- Mobile Video background - Only loads on mobile devices -->
       <video
+        *ngIf="isMobileDevice"
         #heroVideoMobile
         class="hero-bg-video mobile-video"
+        [class.visible]="heroVideoPlaying"
         width="780"
         height="1080"
-        preload="metadata"
+        preload="none"
+        poster="/assets/photos/herosectionposter-optimized.jpg"
         loop
         muted="muted"
         defaultMuted
@@ -36,8 +59,11 @@
         webkit-playsinline
         x-webkit-airplay="allow"
         controls="false"
-        autoplay>
-        <source src="/assets/compressedvideos/herosectionmobile.mp4" type="video/mp4">
+        (canplaythrough)="onHeroVideoReady('mobile')"
+        (loadeddata)="onHeroVideoLoaded('mobile')">
+        <!-- Video source will be loaded dynamically -->
+        <track kind="captions" src="/assets/captions/hero-video-en.vtt" srclang="en" label="English">
+        <track kind="captions" src="/assets/captions/hero-video-es.vtt" srclang="es" label="Español">
       </video>
 
       <div class="hero-overlay"></div>
@@ -95,8 +121,8 @@
       <div class="flag-carousel-track">
         <div class="flag-item" *ngFor="let flag of flags_for_display">
           <div class="flag-wrapper">
-            <img [src]="'https://flagcdn.com/' + flag.code.toLowerCase() + '.svg'"
-                 [alt]="flag.country + ' flag'"
+            <img [src]="'/assets/flags/' + flag.code.toLowerCase() + '.svg'"
+                 [alt]="('HOME_PAGE.FLAG_CAROUSEL.FLAG_ALT' | translate: {country: flag.country})"
                  width="48"
                  height="36"
                  loading="lazy"
@@ -174,7 +200,7 @@
         <div class="product-card" *ngIf="mixers[0]">
           <div class="product-image-container">
             <img [src]="mixers[0].image"
-                 [alt]="mixers[0].name"
+                 [alt]="('HOME_PAGE.PRODUCTS.MT370_IMAGE_ALT' | translate)"
                  width="600"
                  height="400"
                  loading="lazy"
@@ -239,7 +265,7 @@
         <div class="product-card" *ngIf="mixers.length > 1">
           <div class="product-image-container">
             <img [src]="mixers[1].image"
-                 [alt]="mixers[1].name"
+                 [alt]="('HOME_PAGE.PRODUCTS.MT480_IMAGE_ALT' | translate)"
                  width="600"
                  height="400"
                  loading="lazy"

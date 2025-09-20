@@ -2,6 +2,53 @@ import { Routes, ResolveFn, ActivatedRouteSnapshot, RouterStateSnapshot } from '
 import { PLATFORM_ID, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { isPlatformBrowser } from '@angular/common';
+import { SitemapService } from './services/sitemap.service';
+import { Component, OnInit, Inject, PLATFORM_ID as PLATFORM_ID_TOKEN } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Response } from 'express';
+
+// Sitemap component for serving XML
+@Component({
+  template: '',
+  standalone: true
+})
+export class SitemapComponent implements OnInit {
+  constructor(
+    private sitemapService: SitemapService,
+    @Inject(PLATFORM_ID_TOKEN) private platformId: Object,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
+
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      // For client-side, redirect to server-rendered sitemap
+      window.location.href = '/sitemap.xml';
+    } else {
+      // Server-side rendering
+      const sitemap = this.sitemapService.generateSitemap();
+
+      // Set proper content type for XML
+      if (typeof window === 'undefined' && typeof global !== 'undefined') {
+        // Server-side: try to access response object
+        try {
+          const response = (global as any).res as Response;
+          if (response) {
+            response.setHeader('Content-Type', 'application/xml; charset=utf-8');
+            response.send(sitemap);
+            return;
+          }
+        } catch (error) {
+          console.log('Could not access response object:', error);
+        }
+      }
+
+      // Fallback: write to document
+      this.document.open();
+      this.document.write(sitemap);
+      this.document.close();
+    }
+  }
+}
 
 
 
@@ -126,6 +173,12 @@ export const routes: Routes = [
     path: 'contacto',
     loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule),
     resolve: { language: languageResolver }
+  },
+
+  // Sitemap route
+  {
+    path: 'sitemap.xml',
+    component: SitemapComponent
   },
 
   // Catch-all route: redirect to home page

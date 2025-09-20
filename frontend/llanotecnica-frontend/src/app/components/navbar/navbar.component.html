@@ -1,6 +1,6 @@
 <nav [class.scrolled]="isScrolled">
   <div class="nav-content">
-    <!-- Logo Container -->
+    <!-- Logo Container - slides in when scrolled -->
     <div class="logo-container" [class.show]="isScrolled">
       <img #logoImg
            src="assets/photos/logo.webp"
@@ -26,15 +26,15 @@
     <!-- Inline Language Selector for Mobile -->
     <div class="mobile-language-selector">
       <div class="lang-toggle">
-        <div class="flag-option" [class.active]="currentLang === 'en'" (click)="switchLanguage('en')">
+        <a href="/en" class="flag-option" [class.active]="currentLang === 'en'" (click)="switchLanguage('en'); $event.preventDefault()">
           <img src="assets/flags/gb.svg" alt="English" class="flag-icon" />
           <span>EN</span>
-        </div>
+        </a>
         <span class="divider">|</span>
-        <div class="flag-option" [class.active]="currentLang === 'es'" (click)="switchLanguage('es')">
+        <a href="/es" class="flag-option" [class.active]="currentLang === 'es'" (click)="switchLanguage('es'); $event.preventDefault()">
           <img src="assets/flags/es.svg" alt="Español" class="flag-icon" />
           <span>ES</span>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -76,8 +76,8 @@
 
       <!-- Mobile-Only: Download Catalog Link (opens language selector modal) -->
       <li class="mobile-only">
-        <a href="javascript:void(0)" (click)="openCatalogModal(); closeMenu(); $event.preventDefault()">
-          <img src="assets/photos/pdf.webp" alt="PDF Icon" class="download-icon" width="30" height="30" loading="lazy" decoding="async" />
+        <a href="#catalog" (click)="openCatalogModal(); closeMenu(); $event.preventDefault()">
+          <img src="assets/photos/pdf.png" alt="PDF Icon" class="download-icon" width="30" height="30" loading="lazy" decoding="async" />
           {{ 'NAV.DOWNLOAD_CATALOG' | translate }}
         </a>
       </li>
@@ -86,15 +86,15 @@
     <!-- Inline Desktop Language Selector -->
     <div class="desktop-language-selector">
       <div class="lang-toggle">
-        <div class="flag-option" [class.active]="currentLang === 'en'" (click)="switchLanguage('en')">
+        <a href="/en" class="flag-option" [class.active]="currentLang === 'en'" (click)="switchLanguage('en'); $event.preventDefault()">
           <img src="assets/flags/gb.svg" alt="English" class="flag-icon" />
           <span>EN</span>
-        </div>
+        </a>
         <span class="divider">|</span>
-        <div class="flag-option" [class.active]="currentLang === 'es'" (click)="switchLanguage('es')">
+        <a href="/es" class="flag-option" [class.active]="currentLang === 'es'" (click)="switchLanguage('es'); $event.preventDefault()">
           <img src="assets/flags/es.svg" alt="Español" class="flag-icon" />
           <span>ES</span>
-        </div>
+        </a>
       </div>
     </div>
   </div>

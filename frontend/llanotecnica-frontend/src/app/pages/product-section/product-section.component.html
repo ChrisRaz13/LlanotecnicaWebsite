@@ -19,13 +19,31 @@
                 class="product-card"
                 [attr.aria-label]="product.model + ' Concrete Mixer'">
           <div class="product-image">
-            <img [src]="product.src"
-                 [alt]="product.model + ' Concrete Mixer'"
+            <img [src]="getCurrentImageSrc(product.model)"
+                 [alt]="product.model + ' Concrete Mixer in ' + getColorDisplayName(selectedColors()[product.model])"
                  class="product-img"
                  loading="lazy"
                  width="400"
                  height="320"
                  decoding="async">
+
+            <!-- Color Selection -->
+            <div class="color-selector">
+              <div class="color-options">
+                <div
+                  class="color-swatch"
+                  [class.green]="color === 'GREEN'"
+                  [class.yellow]="color === 'YELLOW'"
+                  [class.blue]="color === 'BLUE'"
+                  [class.active]="isColorSelected(product.model, color)"
+                  *ngFor="let color of getAvailableColors()"
+                  (click)="selectColor(product.model, color)"
+                  [attr.aria-label]="getColorDisplayName(color)"
+                  role="button"
+                  tabindex="0">
+                </div>
+              </div>
+            </div>
           </div>
           <div class="product-content">
             <header class="product-header">

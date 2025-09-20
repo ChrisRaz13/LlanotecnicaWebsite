@@ -1,9 +1,9 @@
 // Service Worker for Llanotecnica - Advanced Caching Strategy
-// Version 2.3 - Flag Carousel Complete Bypass Fix
+// Version 2.4 - Font Optimization Cache Refresh
 
-const CACHE_NAME = 'llanotecnica-v2.3';
-const STATIC_CACHE = 'llanotecnica-static-v2.3';
-const DYNAMIC_CACHE = 'llanotecnica-dynamic-v2.3';
+const CACHE_NAME = 'llanotecnica-v2.4';
+const STATIC_CACHE = 'llanotecnica-static-v2.4';
+const DYNAMIC_CACHE = 'llanotecnica-dynamic-v2.4';
 
 // Assets to cache immediately
 const STATIC_ASSETS = [

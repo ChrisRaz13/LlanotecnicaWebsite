@@ -41,6 +41,13 @@ interface ProductSpecs {
 interface ProductImage {
   model: string;
   src: string;
+  colors?: ProductColor[];
+}
+
+interface ProductColor {
+  name: string;
+  value: string;
+  imageSrc: string;
 }
 
 interface EngineDetails {
@@ -111,6 +118,12 @@ export class ProductSectionComponent implements AfterViewInit {
   activeEngineFilter = signal<EngineFilterType>('all');
   // Add this property to store the current product model
   currentProductModel: string = '';
+
+  // Color selection signals
+  selectedColors = signal<{ [key: string]: string }>({
+    'MT-370': 'GREEN',
+    'MT-480': 'GREEN'
+  });
 
   readonly productSpecs = signal<{ [key: string]: ProductSpecs }>({
     'MT-370': {
@@ -943,5 +956,36 @@ export class ProductSectionComponent implements AfterViewInit {
       img.src = img.dataset['src'];
       delete img.dataset['src'];
     }
+  }
+
+  // Color selection methods
+  selectColor(model: string, color: string): void {
+    const currentColors = this.selectedColors();
+    this.selectedColors.set({
+      ...currentColors,
+      [model]: color
+    });
+  }
+
+  getCurrentImageSrc(model: string): string {
+    const selectedColor = this.selectedColors()[model] || 'GREEN';
+    return `assets/photos/${model}-${selectedColor}-optimized.jpg`;
+  }
+
+  getAvailableColors(): string[] {
+    return ['GREEN', 'YELLOW', 'BLUE'];
+  }
+
+  getColorDisplayName(color: string): string {
+    switch (color) {
+      case 'GREEN': return 'Green';
+      case 'YELLOW': return 'Yellow';
+      case 'BLUE': return 'Blue';
+      default: return color;
+    }
+  }
+
+  isColorSelected(model: string, color: string): boolean {
+    return this.selectedColors()[model] === color;
   }
 }

@@ -82,7 +82,8 @@
       "SCROLL_INDICATOR": "Desplázate para explorar"
     },
     "FLAG_CAROUSEL": {
-      "DELIVERY_NOTE": "Entregamos a más de 30 países • ¡Enviamos a nivel mundial!"
+      "DELIVERY_NOTE": "Entregamos a más de 30 países • ¡Enviamos a nivel mundial!",
+      "FLAG_ALT": "Bandera de {{country}} - Entregamos mezcladoras de concreto a {{country}}"
     },
     "VIDEO_SECTION": {
       "TITLE": "Vea Nuestras Mezcladoras en Acción",
@@ -146,6 +147,8 @@
         "POWER": "Potencia",
         "WEIGHT": "Peso"
       },
+      "MT370_IMAGE_ALT": "Mezcladora de concreto MT-370 - Mezcladora profesional de 370 litros de capacidad para proyectos de construcción de uso medio",
+      "MT480_IMAGE_ALT": "Mezcladora de concreto MT-480 - Mezcladora de uso pesado de 480 litros de capacidad para grandes proyectos de construcción comercial",
       "KEY_FEATURES": "Características Principales",
       "VIEW_DETAILS": "Ver Detalles",
       "REQUEST_QUOTE": "Solicitar Cotización",
@@ -338,6 +341,10 @@
     }
   },
   "CONTACT_PAGE": {
+    "SEO": {
+      "TITLE": "Contáctanos | Venta de Mezcladoras de Concreto Profesionales | Llanotecnica",
+      "DESCRIPTION": "Ponte en contacto con Llanotecnica para venta de mezcladoras de concreto, soporte técnico y repuestos. Sirviendo a Panamá y más de 30 países en todo el mundo."
+    },
     "GET_IN_TOUCH": "Contáctanos",
     "SUCCESS_MESSAGE": "¡Gracias por tu mensaje! Te responderemos a la brevedad.",
     "ERROR_MESSAGE": "Ocurrió un error al enviar tu mensaje. Por favor, inténtalo de nuevo.",
@@ -390,6 +397,10 @@
     }
   },
   "PRODUCTS_PAGE": {
+    "SEO": {
+      "TITLE": "Mezcladoras de Concreto Profesionales MT-370 y MT-480 | Llanotecnica",
+      "DESCRIPTION": "Explora nuestra gama de mezcladoras de concreto profesionales: MT-370 para proyectos de uso medio y MT-480 para construcción pesada. Construidas para durabilidad y rendimiento."
+    },
     "HERO": {
       "TITLE": "Mezcladoras de Concreto Durables y de Alto Rendimiento",
       "DESCRIPTION": "Diseñadas para cualquier trabajo—desde proyectos de tamaño medio hasta tareas pesadas—construidas para fuerza, eficiencia y rendimiento confiable."

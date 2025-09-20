@@ -24,26 +24,20 @@
   <meta property="twitter:description" content="High-quality concrete mixers MT-370 and MT-480 for construction professionals in Panama and Central America.">
   <meta property="twitter:image" content="https://llanotecnica.com/assets/photos/hero-homepage.jpg">
 
-  <!-- Preconnects for external domains (improves connection speed) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="preconnect" href="https://www.google.com" crossorigin>
-  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
-  <link rel="preconnect" href="https://flagcdn.com" crossorigin>
+  <!-- External preconnects removed - all dependencies now self-hosted -->
 
-  <!-- Preload primary font to avoid layout shifts -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" as="style">
+  <!-- Preload self-hosted fonts for better performance -->
+  <link rel="preload" href="/assets/fonts/montserrat-v31-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/montserrat-v31-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/roboto-v30-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/roboto-v30-latin-500.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Preload critical images for LCP optimization -->
+  <link rel="preload" href="/assets/photos/herosectionposter-optimized.jpg" as="image" type="image/jpeg" fetchpriority="high">
   <link rel="preload" href="/assets/photos/background-mobile-780x1080.webp" as="image" type="image/webp" media="(max-width: 768px)">
   <link rel="preload" href="/assets/photos/background-desktop-1920x1080.webp" as="image" type="image/webp" media="(min-width: 769px)">
   <link rel="preload" href="/assets/photos/coverphoto.webp" as="image" type="image/webp">
 
-  <!-- Additional preconnects for performance -->
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
 
   <!-- Favicon (these are small and loaded as needed) -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -52,59 +46,25 @@
   <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
   <link rel="manifest" href="assets/favicon/site.webmanifest">
 
-  <!-- Primary font loaded immediately with font-display swap to prevent layout shifts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Montserrat font now self-hosted in styles.css with layout shift prevention -->
 
 
-  <!-- Optimized CSS loading: Load Angular Material and Font Awesome on user interaction -->
+  <!-- Self-hosted fonts are now loaded via styles.css - no external requests needed -->
   <script>
-    // Load non-critical CSS on first user interaction for better performance
-    let cssLoaded = false;
-
-    function loadNonCriticalCSS() {
-      if (cssLoaded) return;
-      cssLoaded = true;
-
-      // Load Angular Material theme with error handling
-      const materialCSS = document.createElement('link');
-      materialCSS.rel = 'stylesheet';
-      materialCSS.href = 'https://fonts.googleapis.com/icon?family=Material+Icons&display=swap';
-      materialCSS.onerror = function() {
-        console.warn('Material Icons failed to load, using fallback');
-      };
-      document.head.appendChild(materialCSS);
-
-      // Load Roboto font with error handling
-      const robotoCSS = document.createElement('link');
-      robotoCSS.rel = 'stylesheet';
-      robotoCSS.href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap';
-      robotoCSS.onerror = function() {
-        console.warn('Roboto font failed to load, using fallback');
-      };
-      document.head.appendChild(robotoCSS);
-
-      console.log('🎨 Non-critical CSS loaded on user interaction');
-    }
-
-    // Load CSS on first user interaction
-    ['scroll', 'click', 'touchstart', 'keydown'].forEach(function(event) {
-      window.addEventListener(event, loadNonCriticalCSS, { once: true, passive: true });
-    });
-
-    // Fallback: load after 3 seconds if no user interaction
-    setTimeout(loadNonCriticalCSS, 3000);
+    // All fonts are now self-hosted and loaded immediately via styles.css
+    // This eliminates the 3+ second delay from external Google Font requests
+    console.log('🎨 All fonts self-hosted - no external font requests needed');
   </script>
 
-  <!-- Critical CSS loaded immediately (Bootstrap and Font Awesome remain for compatibility) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+  <!-- Critical CSS loaded immediately - ALL dependencies now self-hosted -->
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="/assets/css/fontawesome.min.css" rel="stylesheet" media="print" onload="this.media='all'">
 
   <!-- Fallback for browsers that don't support onload -->
   <noscript>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/fontawesome.min.css" rel="stylesheet">
+    <!-- All fonts and icons are now self-hosted via styles.css -->
   </noscript>
 
   <!-- DNS prefetch for third-party services -->
@@ -116,55 +76,204 @@
   <!-- Canonical URL -->
   <link rel="canonical" href="https://llanotecnica.com/">
 
-  <!-- Structured Data for SEO -->
+  <!-- Enhanced Structured Data for SEO -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Llanotecnica",
     "url": "https://llanotecnica.com",
-    "logo": "https://llanotecnica.com/assets/photos/logo.webp",
+    "logo": "https://llanotecnica.com/assets/photos/coverphoto.webp",
     "description": "Professional concrete mixers MT-370 and MT-480. High-quality construction equipment for contractors in Panama and Central America.",
+    "foundingDate": "2002",
     "address": {
       "@type": "PostalAddress",
-      "addressCountry": "PA",
-      "addressRegion": "Panama"
+      "streetAddress": "Rio Chico, Calle Principal, Corregimiento de Pacora",
+      "addressLocality": "Panama City",
+      "addressRegion": "Panama",
+      "addressCountry": "PA"
     },
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "contactType": "sales",
-      "availableLanguage": ["English", "Spanish"]
-    },
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "contactType": "sales",
+        "telephone": "+507-6566-4942",
+        "email": "ventas@llanotecnica.com",
+        "availableLanguage": ["English", "Spanish"],
+        "areaServed": "Worldwide"
+      },
+      {
+        "@type": "ContactPoint",
+        "contactType": "technical support",
+        "telephone": "+507-6566-4942",
+        "email": "ventas@llanotecnica.com",
+        "availableLanguage": ["English", "Spanish"]
+      }
+    ],
     "sameAs": [
-      "https://www.facebook.com/llanotecnica",
-      "https://www.instagram.com/llanotecnica"
+      "https://www.facebook.com/llanotecnica2007/",
+      "https://instagram.com/llanotecnica"
     ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Concrete Mixers",
+      "name": "Professional Concrete Mixers",
       "itemListElement": [
         {
           "@type": "Product",
           "name": "MT-370 Concrete Mixer",
-          "description": "370L capacity concrete mixer for small to medium projects",
+          "model": "MT-370",
+          "description": "Professional 370L capacity concrete mixer perfect for medium-duty construction projects. Features 360° drum rotation, reinforced chassis, and single-operator control.",
           "category": "Construction Equipment",
           "brand": {
             "@type": "Brand",
             "name": "Llanotecnica"
+          },
+          "manufacturer": {
+            "@type": "Organization",
+            "name": "Llanotecnica"
+          },
+          "image": "https://llanotecnica.com/assets/photos/MT-370-optimized.jpg",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "Drum Capacity",
+              "value": "370 Liters"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Mixing Capacity",
+              "value": "360 Liters"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Engine Power",
+              "value": "7-9 HP"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Weight",
+              "value": "750 kg"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Duty Classification",
+              "value": "Medium Duty"
+            }
+          ],
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "priceCurrency": "USD",
+            "seller": {
+              "@type": "Organization",
+              "name": "Llanotecnica"
+            }
           }
         },
         {
           "@type": "Product",
           "name": "MT-480 Concrete Mixer",
-          "description": "480L capacity concrete mixer for large commercial projects",
+          "model": "MT-480",
+          "description": "Heavy-duty 480L capacity concrete mixer designed for large commercial construction projects. Built for continuous operation with enhanced durability components.",
           "category": "Construction Equipment",
           "brand": {
             "@type": "Brand",
             "name": "Llanotecnica"
+          },
+          "manufacturer": {
+            "@type": "Organization",
+            "name": "Llanotecnica"
+          },
+          "image": "https://llanotecnica.com/assets/photos/MT-480-optimized.jpg",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "Drum Capacity",
+              "value": "480 Liters"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Mixing Capacity",
+              "value": "420 Liters"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Engine Power",
+              "value": "13+ HP"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Weight",
+              "value": "950 kg"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Duty Classification",
+              "value": "Heavy Duty"
+            }
+          ],
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "priceCurrency": "USD",
+            "seller": {
+              "@type": "Organization",
+              "name": "Llanotecnica"
+            }
           }
         }
       ]
     }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I operate the MT-370 and MT-480 mixers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Operating our concrete mixers involves four main steps: 1) Pre-operation check - inspect all components and ensure proper setup, 2) Start engine following proper startup procedures, 3) Set drum to proper mixing position, 4) Load materials - add cement, aggregate, and water as needed. We provide detailed video instructions and manuals for complete guidance."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What maintenance is required for concrete mixers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Regular maintenance includes daily cleaning after use, weekly lubrication checks of all moving parts, and monthly mechanical inspections. This ensures optimal performance and extends the lifespan of your mixer."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which mixer is right for my project?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The MT-370 (370L capacity) is ideal for residential and small commercial projects, offering excellent mobility and efficiency. The MT-480 (480L capacity) is designed for larger commercial applications requiring higher volume concrete production and continuous operation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What warranty do you offer on concrete mixers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our concrete mixers are covered by a 6-month warranty against any manufacturing defects. This includes parts and technical support. For detailed warranty information, please contact our technical support team."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are spare parts readily available?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, we maintain a complete inventory of spare parts for all our mixer models with worldwide delivery available on request. Common wear parts and components are kept in stock for immediate shipping."
+        }
+      }
+    ]
   }
   </script>
 
@@ -291,9 +400,60 @@
       contain: layout;
     }
 
-    /* Critical footer styles */
+    /* PROPER LAYOUT SHIFT PREVENTION - Non-breaking approach */
+
+    /* Footer - Gentle layout shift prevention */
     .site-footer {
       contain: layout style;
+      background: linear-gradient(135deg, #008751 0%, #00a562 100%);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Mobile language selector - fix positioning */
+    .mobile-language-selector {
+      contain: layout;
+      z-index: 10;
+    }
+
+    /* Font loading fallbacks - prevent font shifts without breaking design */
+    .fas, .fab, .fa, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      text-align: center;
+      vertical-align: middle;
+      font-style: normal;
+      font-variant: normal;
+      text-rendering: auto;
+      line-height: 1;
+    }
+
+    /* Specific icon fallbacks - subtle approach */
+    .fa-chevron-down::before {
+      content: "▼";
+      font-size: 0.8em;
+    }
+
+    .fa-phone::before {
+      content: "📞";
+    }
+
+    .fa-envelope::before {
+      content: "✉";
+    }
+
+    .fa-map-marker-alt::before {
+      content: "📍";
+    }
+
+    .fa-facebook::before {
+      content: "f";
+    }
+
+    .fa-instagram::before {
+      content: "📷";
     }
 
     /* Critical button styles */
@@ -341,10 +501,6 @@
 
       .hero-content {
         min-height: 300px;
-      }
-
-      .site-footer {
-        /* No min-height needed */
       }
     }
   </style>

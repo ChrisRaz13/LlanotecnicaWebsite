@@ -29,25 +29,16 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil, timeout, catchError } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 
 // Import TranslateModule to make the translation pipe available in your template
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-interface Country {
-  name: {
-    common: string;
-    official: string;
-  };
-  cca2: string;
-  flags: {
-    svg: string;
-    png: string;
-  };
-  region?: string;
-}
+// Import our custom directive and fallback data
+import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
+import { Country, FALLBACK_COUNTRIES } from '../../shared/data/countries.data';
 
 interface ContactForm {
   name: string;
@@ -71,8 +62,8 @@ interface SubmitResponse {
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css'],
   standalone: true,
-  // Added TranslateModule to the imports array so that the translate pipe works in your template
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  // Added TranslateModule and ClickOutsideDirective to the imports array
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, ClickOutsideDirective],
   animations: [
     trigger('fadeSlideInOut', [
       transition(':enter', [
@@ -215,17 +206,35 @@ export class ContactComponent implements OnInit, OnDestroy {
   private async loadCountries() {
     try {
       this.isLoadingCountries = true;
+      console.log('🌍 Loading countries from API...');
+
       const response = await this.http
         .get<Country[]>('https://restcountries.com/v3.1/all?fields=name,cca2,flags,region')
-        .pipe(map(countries => countries.sort((a, b) => a.name.common.localeCompare(b.name.common))))
+        .pipe(
+          timeout(5000), // 5 second timeout
+          map(countries => countries.sort((a, b) => a.name.common.localeCompare(b.name.common))),
+          catchError(error => {
+            console.warn('⚠️ API failed, using fallback countries:', error);
+            return of(FALLBACK_COUNTRIES.sort((a, b) => a.name.common.localeCompare(b.name.common)));
+          })
+        )
         .toPromise();
-      if (response) {
+
+      if (response && response.length > 0) {
         this.countries = response;
         this.filteredCountries = [...this.countries];
+        console.log(`✅ Loaded ${this.countries.length} countries successfully`);
         this.cd.detectChanges();
+      } else {
+        throw new Error('Empty response from API');
       }
     } catch (error) {
-      console.error('Error loading countries:', error);
+      console.error('🚨 Error loading countries, using fallback:', error);
+      // Use fallback countries if API fails completely
+      this.countries = [...FALLBACK_COUNTRIES].sort((a, b) => a.name.common.localeCompare(b.name.common));
+      this.filteredCountries = [...this.countries];
+      console.log(`🔄 Using ${this.countries.length} fallback countries`);
+      this.cd.detectChanges();
     } finally {
       this.isLoadingCountries = false;
     }
