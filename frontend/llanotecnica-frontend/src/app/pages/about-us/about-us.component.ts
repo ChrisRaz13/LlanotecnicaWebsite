@@ -11,6 +11,7 @@ import { environment } from '../../../environments/environment';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { SeoService } from '../../services/seo.service';
 // Removed RecaptchaModule import as it's not needed for Enterprise
 
 // Interface for reCAPTCHA Enterprise window object
@@ -98,6 +99,7 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     private cd: ChangeDetectorRef,
     private router: Router,
     private translate: TranslateService,
+    private seoService: SeoService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     if (isPlatformBrowser(this.platformId)) {
@@ -125,6 +127,7 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
+      this.setupSEO();
       this.loadRecaptcha();
       this.loadCountries().then(() => {
         this.setupCountrySearch();
@@ -156,11 +159,48 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
           this.socialLinks.instagram = links.INSTAGRAM_URL || this.socialLinks.instagram;
         }
       });
+
+      // Subscribe to language changes
+      this.translate.onLangChange.subscribe(() => {
+        this.setupSEO();
+      });
     }
 
     setTimeout(() => {
       this.heroContentVisible = true;
     }, 100);
+  }
+
+  private setupSEO(): void {
+    const currentPath = this.router.url.split('?')[0];
+
+    // Determine canonical URL
+    let canonicalPath = '/en/about-us';
+    if (currentPath.includes('/es/') || currentPath.includes('/sobre-nosotros')) {
+      canonicalPath = '/es/sobre-nosotros';
+    }
+
+    this.translate.get(['ABOUT_US_PAGE.SEO.TITLE', 'ABOUT_US_PAGE.SEO.DESCRIPTION', 'ABOUT_US_PAGE.SEO.KEYWORDS']).subscribe((translations: any) => {
+      const title = translations['ABOUT_US_PAGE.SEO.TITLE'] || 'About Us - Llanotecnica | 20+ Years of Excellence';
+      const description = translations['ABOUT_US_PAGE.SEO.DESCRIPTION'] || 'Learn about Llanotecnica\'s 20+ years of experience in manufacturing professional concrete mixers. Discover our commitment to quality and innovation.';
+      const keywords = translations['ABOUT_US_PAGE.SEO.KEYWORDS'] || 'Llanotecnica, about us, concrete mixer manufacturer, Panama, construction equipment';
+
+      this.seoService.updateMetaTags({
+        title: title,
+        description: description,
+        keywords: keywords,
+        image: 'https://www.llanotecnica.com/assets/photos/coverphoto.webp',
+        url: canonicalPath,
+        type: 'website'
+      });
+
+      // Add hreflang tags
+      this.seoService.addHreflangTags([
+        { lang: 'en', url: 'https://www.llanotecnica.com/en/about-us' },
+        { lang: 'es', url: 'https://www.llanotecnica.com/es/sobre-nosotros' },
+        { lang: 'x-default', url: 'https://www.llanotecnica.com/en/about-us' }
+      ]);
+    });
   }
 
   private initializeMap(): void {

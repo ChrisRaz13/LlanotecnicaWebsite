@@ -35,6 +35,7 @@ import { Router, NavigationEnd } from '@angular/router';
 
 // Import TranslateModule to make the translation pipe available in your template
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { SeoService } from '../../services/seo.service';
 
 // Import our custom directive and fallback data
 import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
@@ -128,7 +129,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private cd: ChangeDetectorRef,
     private router: Router,
-    private recaptchaService: RecaptchaService, // Added RecaptchaService
+    private recaptchaService: RecaptchaService,
+    private seoService: SeoService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private translate: TranslateService
   ) {
@@ -140,6 +142,8 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
+      this.setupSEO();
+
       // We'll keep the loadRecaptcha call for backward compatibility
       // but the service will handle the actual loading
       this.loadCountries().then(() => {
@@ -151,7 +155,44 @@ export class ContactComponent implements OnInit, OnDestroy {
           this.loadCountries();
         }
       });
+
+      // Subscribe to language changes
+      this.translate.onLangChange.subscribe(() => {
+        this.setupSEO();
+      });
     }
+  }
+
+  private setupSEO(): void {
+    const currentPath = this.router.url.split('?')[0];
+
+    // Determine canonical URL
+    let canonicalPath = '/en/contact';
+    if (currentPath.includes('/es/') || currentPath.includes('/contacto')) {
+      canonicalPath = '/es/contacto';
+    }
+
+    this.translate.get(['CONTACT_PAGE.SEO.TITLE', 'CONTACT_PAGE.SEO.DESCRIPTION', 'CONTACT_PAGE.SEO.KEYWORDS']).subscribe((translations: any) => {
+      const title = translations['CONTACT_PAGE.SEO.TITLE'] || 'Contact Us - Llanotecnica | Get a Quote';
+      const description = translations['CONTACT_PAGE.SEO.DESCRIPTION'] || 'Contact Llanotecnica for quotes, technical support, and product information. We\'re here to help with all your concrete mixer needs.';
+      const keywords = translations['CONTACT_PAGE.SEO.KEYWORDS'] || 'contact, quote, technical support, Llanotecnica, Panama';
+
+      this.seoService.updateMetaTags({
+        title: title,
+        description: description,
+        keywords: keywords,
+        image: 'https://www.llanotecnica.com/assets/photos/coverphoto.webp',
+        url: canonicalPath,
+        type: 'website'
+      });
+
+      // Add hreflang tags
+      this.seoService.addHreflangTags([
+        { lang: 'en', url: 'https://www.llanotecnica.com/en/contact' },
+        { lang: 'es', url: 'https://www.llanotecnica.com/es/contacto' },
+        { lang: 'x-default', url: 'https://www.llanotecnica.com/en/contact' }
+      ]);
+    });
   }
 
   ngOnDestroy() {

@@ -50,13 +50,7 @@ export class SitemapService {
     const currentDate = new Date().toISOString().split('T')[0];
 
     return [
-      // Home pages
-      {
-        loc: `${this.baseUrl}/`,
-        lastmod: currentDate,
-        changefreq: 'weekly',
-        priority: 1.0
-      },
+      // Home pages - only include language-specific URLs
       {
         loc: `${this.baseUrl}/en`,
         lastmod: currentDate,
@@ -107,44 +101,6 @@ export class SitemapService {
       },
       {
         loc: `${this.baseUrl}/es/contacto`,
-        lastmod: currentDate,
-        changefreq: 'monthly',
-        priority: 0.7
-      },
-
-      // Direct access pages (without language prefix)
-      {
-        loc: `${this.baseUrl}/about-us`,
-        lastmod: currentDate,
-        changefreq: 'monthly',
-        priority: 0.8
-      },
-      {
-        loc: `${this.baseUrl}/sobre-nosotros`,
-        lastmod: currentDate,
-        changefreq: 'monthly',
-        priority: 0.8
-      },
-      {
-        loc: `${this.baseUrl}/products`,
-        lastmod: currentDate,
-        changefreq: 'weekly',
-        priority: 0.9
-      },
-      {
-        loc: `${this.baseUrl}/productos`,
-        lastmod: currentDate,
-        changefreq: 'weekly',
-        priority: 0.9
-      },
-      {
-        loc: `${this.baseUrl}/contact`,
-        lastmod: currentDate,
-        changefreq: 'monthly',
-        priority: 0.7
-      },
-      {
-        loc: `${this.baseUrl}/contacto`,
         lastmod: currentDate,
         changefreq: 'monthly',
         priority: 0.7

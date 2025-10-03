@@ -21,9 +21,9 @@ import {
   trigger,
   state
 } from '@angular/animations';
-import { Meta, Title } from '@angular/platform-browser';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { SeoService } from '../../services/seo.service';
 
 type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
 type CategoryType = FeatureCategory | 'all';
@@ -212,11 +212,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private meta: Meta,
-    private title: Title,
     private router: Router,
     private route: ActivatedRoute,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private seoService: SeoService
   ) {}
 
   ngOnInit(): void {
@@ -976,58 +975,39 @@ private ensureImageDimensions(): void {
 
   // SEO optimization
   private setupSEO(): void {
-    // Set robots meta tag
-    this.meta.updateTag({
-      name: 'robots',
-      content: 'index, follow'
-    });
+    const currentLang = this.translate.currentLang || 'en';
+    const currentPath = this.router.url.split('?')[0];
+
+    // Determine canonical URL based on current path
+    let canonicalPath = '/en';
+    if (currentPath.startsWith('/es')) {
+      canonicalPath = '/es';
+    } else if (currentPath === '/') {
+      canonicalPath = '/en';
+    }
 
     // Use TranslateService for SEO titles and descriptions
-    this.translate.get('HOME_PAGE.SEO.TITLE').subscribe((res: string) => {
-      if (res) {
-        this.title.setTitle(res);
-      } else {
-        // Fallback
-        this.title.setTitle('Professional Concrete Mixers | Industrial Mixing Solutions');
-      }
+    this.translate.get(['HOME_PAGE.SEO.TITLE', 'HOME_PAGE.SEO.DESCRIPTION', 'HOME_PAGE.SEO.KEYWORDS']).subscribe((translations: any) => {
+      const title = translations['HOME_PAGE.SEO.TITLE'] || 'Llanotecnica - Professional Concrete Mixers MT-370 & MT-480';
+      const description = translations['HOME_PAGE.SEO.DESCRIPTION'] || 'Professional concrete mixers MT-370 and MT-480. High-quality construction equipment for contractors in Panama and Central America.';
+      const keywords = translations['HOME_PAGE.SEO.KEYWORDS'] || 'concrete mixer, construction equipment, MT-370, MT-480, Panama, Central America';
+
+      this.seoService.updateMetaTags({
+        title: title,
+        description: description,
+        keywords: keywords,
+        image: 'https://www.llanotecnica.com/assets/photos/MT-370-optimized.jpg',
+        url: canonicalPath,
+        type: 'website'
+      });
+
+      // Add hreflang tags
+      this.seoService.addHreflangTags([
+        { lang: 'en', url: 'https://www.llanotecnica.com/en' },
+        { lang: 'es', url: 'https://www.llanotecnica.com/es' },
+        { lang: 'x-default', url: 'https://www.llanotecnica.com/en' }
+      ]);
     });
-
-    this.translate.get('HOME_PAGE.SEO.DESCRIPTION').subscribe((res: string) => {
-      if (res) {
-        this.meta.updateTag({
-          name: 'description',
-          content: res
-        });
-      } else {
-        // Fallback
-        this.meta.updateTag({
-          name: 'description',
-          content: 'Professional-grade concrete mixers delivering reliability and performance for over two decades. Explore our range of industrial mixing solutions.'
-        });
-      }
-    });
-
-    // Add structured data for better SEO
-    const structuredData = {
-      '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: 'Industrial Concrete Mixers',
-      description: 'Professional-grade concrete mixers for construction projects',
-      manufacturer: {
-        '@type': 'Organization',
-        name: 'Your Company Name'
-      }
-    };
-
-    // Remove any existing structured data first to prevent duplicates
-    const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
-    existingScripts.forEach(script => script.remove());
-
-    // Add new structured data
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
   }
 
   private setupScrollIndicator(): void {

@@ -1,9 +1,10 @@
-import { Component, signal, computed, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, TemplateRef, TrackByFunction } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, computed, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, TemplateRef, TrackByFunction, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog, MatDialogModule, MatDialogConfig } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { SeoService } from '../../services/seo.service';
 
 // Interfaces
 interface EngineCompatibility {
@@ -111,7 +112,7 @@ type EngineFilterType = 'all' | 'gas' | 'diesel' | 'electric';
   styleUrls: ['./product-section.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductSectionComponent implements AfterViewInit {
+export class ProductSectionComponent implements OnInit, AfterViewInit {
   activeTab = signal<'specs' | 'engines'>('specs');
   selectedEngine = signal<EngineSpecification | null>(null);
   showEngineDialog = signal<boolean>(false);
@@ -564,9 +565,161 @@ export class ProductSectionComponent implements AfterViewInit {
 
   constructor(
     private router: Router,
-    // Make dialog public so it can be accessed from the template
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private seoService: SeoService,
+    private translate: TranslateService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.setupSEO();
+
+      // Subscribe to language changes
+      this.translate.onLangChange.subscribe(() => {
+        this.setupSEO();
+      });
+    }
+  }
+
+  private setupSEO(): void {
+    const currentLang = this.translate.currentLang || 'en';
+    const currentPath = this.router.url.split('?')[0];
+
+    // Determine canonical URL
+    let canonicalPath = '/en/products';
+    if (currentPath.includes('/es/') || currentPath.includes('/productos')) {
+      canonicalPath = '/es/productos';
+    }
+
+    this.translate.get(['PRODUCTS_PAGE.SEO.TITLE', 'PRODUCTS_PAGE.SEO.DESCRIPTION', 'PRODUCTS_PAGE.SEO.KEYWORDS']).subscribe((translations: any) => {
+      const title = translations['PRODUCTS_PAGE.SEO.TITLE'] || 'Concrete Mixers MT-370 & MT-480 | Llanotecnica Products';
+      const description = translations['PRODUCTS_PAGE.SEO.DESCRIPTION'] || 'Explore our professional concrete mixers: MT-370 (370L) for residential projects and MT-480 (480L) for commercial construction. Compare specs, features, and engines.';
+      const keywords = translations['PRODUCTS_PAGE.SEO.KEYWORDS'] || 'MT-370, MT-480, concrete mixer, specifications, Honda engines, diesel engines, electric motors';
+
+      this.seoService.updateMetaTags({
+        title: title,
+        description: description,
+        keywords: keywords,
+        image: 'https://www.llanotecnica.com/assets/photos/MT-370-optimized.jpg',
+        url: canonicalPath,
+        type: 'product'
+      });
+
+      // Add hreflang tags
+      this.seoService.addHreflangTags([
+        { lang: 'en', url: 'https://www.llanotecnica.com/en/products' },
+        { lang: 'es', url: 'https://www.llanotecnica.com/es/productos' },
+        { lang: 'x-default', url: 'https://www.llanotecnica.com/en/products' }
+      ]);
+
+      // Add structured data for products
+      this.addProductStructuredData();
+    });
+  }
+
+  private addProductStructuredData(): void {
+    const mt370Data = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      'name': 'MT-370 Concrete Mixer',
+      'model': 'MT-370',
+      'description': 'Professional 370L capacity concrete mixer perfect for medium-duty construction projects. Features 360° drum rotation, reinforced chassis, and single-operator control.',
+      'category': 'Construction Equipment',
+      'brand': {
+        '@type': 'Brand',
+        'name': 'Llanotecnica'
+      },
+      'manufacturer': {
+        '@type': 'Organization',
+        'name': 'Llanotecnica'
+      },
+      'image': 'https://www.llanotecnica.com/assets/photos/MT-370-optimized.jpg',
+      'offers': {
+        '@type': 'Offer',
+        'availability': 'https://schema.org/InStock',
+        'priceCurrency': 'USD',
+        'seller': {
+          '@type': 'Organization',
+          'name': 'Llanotecnica'
+        }
+      },
+      'additionalProperty': [
+        {
+          '@type': 'PropertyValue',
+          'name': 'Drum Capacity',
+          'value': '370 Liters'
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Mixing Capacity',
+          'value': '360 Liters'
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Engine Power',
+          'value': '7-9 HP'
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Weight',
+          'value': '750 kg'
+        }
+      ]
+    };
+
+    const mt480Data = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      'name': 'MT-480 Concrete Mixer',
+      'model': 'MT-480',
+      'description': 'Heavy-duty 480L capacity concrete mixer designed for large commercial construction projects. Built for continuous operation with enhanced durability components.',
+      'category': 'Construction Equipment',
+      'brand': {
+        '@type': 'Brand',
+        'name': 'Llanotecnica'
+      },
+      'manufacturer': {
+        '@type': 'Organization',
+        'name': 'Llanotecnica'
+      },
+      'image': 'https://www.llanotecnica.com/assets/photos/MT-480-optimized.jpg',
+      'offers': {
+        '@type': 'Offer',
+        'availability': 'https://schema.org/InStock',
+        'priceCurrency': 'USD',
+        'seller': {
+          '@type': 'Organization',
+          'name': 'Llanotecnica'
+        }
+      },
+      'additionalProperty': [
+        {
+          '@type': 'PropertyValue',
+          'name': 'Drum Capacity',
+          'value': '480 Liters'
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Mixing Capacity',
+          'value': '420 Liters'
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Engine Power',
+          'value': '13+ HP'
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Weight',
+          'value': '950 kg'
+        }
+      ]
+    };
+
+    this.seoService.addStructuredData(mt370Data);
+    this.seoService.addStructuredData(mt480Data);
+  }
 
   ngAfterViewInit() {
     // Check if window is defined (to avoid errors during SSR)
