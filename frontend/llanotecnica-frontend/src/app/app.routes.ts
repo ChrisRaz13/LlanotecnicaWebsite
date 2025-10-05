@@ -143,38 +143,6 @@ export const routes: Routes = [
     data: { language: 'es' }
   },
 
-  // Direct route access with language resolver and lazy loading
-  {
-    path: 'about-us',
-    loadChildren: () => import('./pages/about-us/about-us.module').then(m => m.AboutUsModule),
-    resolve: { language: languageResolver }
-  },
-  {
-    path: 'products',
-    loadChildren: () => import('./pages/product-section/product-section.module').then(m => m.ProductSectionModule),
-    resolve: { language: languageResolver }
-  },
-  {
-    path: 'contact',
-    loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule),
-    resolve: { language: languageResolver }
-  },
-  {
-    path: 'sobre-nosotros',
-    loadChildren: () => import('./pages/about-us/about-us.module').then(m => m.AboutUsModule),
-    resolve: { language: languageResolver }
-  },
-  {
-    path: 'productos',
-    loadChildren: () => import('./pages/product-section/product-section.module').then(m => m.ProductSectionModule),
-    resolve: { language: languageResolver }
-  },
-  {
-    path: 'contacto',
-    loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule),
-    resolve: { language: languageResolver }
-  },
-
   // Sitemap route
   {
     path: 'sitemap.xml',

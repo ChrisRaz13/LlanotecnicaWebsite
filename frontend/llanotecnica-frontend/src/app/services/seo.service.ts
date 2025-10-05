@@ -79,20 +79,27 @@ export class SeoService {
     // Get current URL and normalize it
     const currentUrl = this.router.url.split('?')[0].split('#')[0];
 
-    // Remove language prefix for canonical URL
-    let cleanUrl = currentUrl;
-    if (currentUrl.startsWith('/en/') || currentUrl.startsWith('/es/')) {
-      cleanUrl = currentUrl.substring(3); // Remove /en or /es
-    } else if (currentUrl === '/en' || currentUrl === '/es') {
-      cleanUrl = '/';
+    // KEEP language prefix for canonical URL (critical for multilingual SEO)
+    // If no language prefix, default to English
+    let canonicalPath = currentUrl;
+
+    // Normalize root path to /en
+    if (canonicalPath === '/' || canonicalPath === '') {
+      canonicalPath = '/en';
+    }
+
+    // If accessing language-agnostic route, prepend /en
+    // e.g., /products -> /en/products, /about-us -> /en/about-us
+    if (!canonicalPath.startsWith('/en') && !canonicalPath.startsWith('/es')) {
+      canonicalPath = '/en' + canonicalPath;
     }
 
     // Ensure URL starts with /
-    if (!cleanUrl.startsWith('/')) {
-      cleanUrl = '/' + cleanUrl;
+    if (!canonicalPath.startsWith('/')) {
+      canonicalPath = '/' + canonicalPath;
     }
 
-    return `${this.baseUrl}${cleanUrl}`;
+    return `${this.baseUrl}${canonicalPath}`;
   }
 
   updateCanonicalUrl(url: string): void {
