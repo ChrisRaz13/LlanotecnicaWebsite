@@ -143,6 +143,39 @@ export const routes: Routes = [
     data: { language: 'es' }
   },
 
+  // 301 Redirects for removed language-agnostic routes
+  // These ensure clean SEO signals and preserve any existing external links
+  {
+    path: 'about-us',
+    redirectTo: '/en/about-us',
+    pathMatch: 'full'
+  },
+  {
+    path: 'products',
+    redirectTo: '/en/products',
+    pathMatch: 'full'
+  },
+  {
+    path: 'contact',
+    redirectTo: '/en/contact',
+    pathMatch: 'full'
+  },
+  {
+    path: 'sobre-nosotros',
+    redirectTo: '/es/sobre-nosotros',
+    pathMatch: 'full'
+  },
+  {
+    path: 'productos',
+    redirectTo: '/es/productos',
+    pathMatch: 'full'
+  },
+  {
+    path: 'contacto',
+    redirectTo: '/es/contacto',
+    pathMatch: 'full'
+  },
+
   // Sitemap route
   {
     path: 'sitemap.xml',
