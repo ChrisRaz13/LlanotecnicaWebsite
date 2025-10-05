@@ -1007,7 +1007,266 @@ private ensureImageDimensions(): void {
         { lang: 'es', url: 'https://www.llanotecnica.com/es' },
         { lang: 'x-default', url: 'https://www.llanotecnica.com/en' }
       ]);
+
+      // Add enhanced structured data schemas
+      this.addBreadcrumbSchema(currentLang);
+      this.addLocalBusinessSchema();
+      this.addVideoObjectSchemas(currentLang);
+      this.addItemListSchema();
+      this.addHowToSchema(currentLang);
     });
+  }
+
+  private addBreadcrumbSchema(lang: string): void {
+    const breadcrumbData = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        {
+          '@type': 'ListItem',
+          'position': 1,
+          'name': lang === 'es' ? 'Inicio' : 'Home',
+          'item': `https://www.llanotecnica.com/${lang}`
+        }
+      ]
+    };
+    this.seoService.addStructuredData(breadcrumbData);
+  }
+
+  private addLocalBusinessSchema(): void {
+    const localBusinessData = {
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      '@id': 'https://www.llanotecnica.com/#business',
+      'name': 'Llanotecnica',
+      'image': 'https://www.llanotecnica.com/assets/photos/coverphoto.webp',
+      'description': 'Professional concrete mixers MT-370 and MT-480. High-quality construction equipment for contractors in Panama and Central America since 2002.',
+      'url': 'https://www.llanotecnica.com',
+      'telephone': '+507-6566-4942',
+      'email': 'ventas@llanotecnica.com',
+      'address': {
+        '@type': 'PostalAddress',
+        'streetAddress': 'Rio Chico, Calle Principal, Corregimiento de Pacora',
+        'addressLocality': 'Panama City',
+        'addressRegion': 'Panama',
+        'addressCountry': 'PA'
+      },
+      'geo': {
+        '@type': 'GeoCoordinates',
+        'latitude': 9.0735,
+        'longitude': -79.3991
+      },
+      'openingHoursSpecification': [
+        {
+          '@type': 'OpeningHoursSpecification',
+          'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+          'opens': '08:00',
+          'closes': '17:00'
+        },
+        {
+          '@type': 'OpeningHoursSpecification',
+          'dayOfWeek': 'Saturday',
+          'opens': '08:00',
+          'closes': '13:00'
+        }
+      ],
+      'priceRange': '$$',
+      'areaServed': [
+        {
+          '@type': 'Country',
+          'name': 'Panama'
+        },
+        {
+          '@type': 'Country',
+          'name': 'Costa Rica'
+        },
+        {
+          '@type': 'Country',
+          'name': 'Guatemala'
+        },
+        {
+          '@type': 'Country',
+          'name': 'Honduras'
+        },
+        {
+          '@type': 'Country',
+          'name': 'El Salvador'
+        },
+        {
+          '@type': 'Country',
+          'name': 'Nicaragua'
+        }
+      ],
+      'sameAs': [
+        'https://www.facebook.com/llanotecnica2007/',
+        'https://www.instagram.com/llanotecnica'
+      ]
+    };
+    this.seoService.addStructuredData(localBusinessData);
+  }
+
+  private addVideoObjectSchemas(lang: string): void {
+    // Main introduction video
+    const introVideoSrc = lang === 'es'
+      ? 'https://www.llanotecnica.com/assets/compressedvideos/IntroductionSpanish.mp4'
+      : 'https://www.llanotecnica.com/assets/compressedvideos/IntroductionEnglish.mp4';
+
+    const introVideoData = {
+      '@context': 'https://schema.org',
+      '@type': 'VideoObject',
+      'name': lang === 'es' ? 'Introducción a Mezcladores de Concreto Llanotecnica' : 'Introduction to Llanotecnica Concrete Mixers',
+      'description': lang === 'es'
+        ? 'Video de presentación de nuestros mezcladores de concreto profesionales MT-370 y MT-480 para proyectos de construcción.'
+        : 'Introduction video showcasing our professional concrete mixers MT-370 and MT-480 for construction projects.',
+      'thumbnailUrl': 'https://www.llanotecnica.com/assets/photos/coverphoto.webp',
+      'uploadDate': '2024-01-01T00:00:00Z',
+      'contentUrl': introVideoSrc,
+      'embedUrl': introVideoSrc,
+      'duration': 'PT2M30S'
+    };
+    this.seoService.addStructuredData(introVideoData);
+
+    // Instruction video
+    const instructionVideoData = {
+      '@context': 'https://schema.org',
+      '@type': 'VideoObject',
+      'name': lang === 'es' ? 'Cómo Operar Mezcladores MT-370 y MT-480' : 'How to Operate MT-370 and MT-480 Mixers',
+      'description': lang === 'es'
+        ? 'Video instructivo detallado sobre la operación correcta de nuestros mezcladores de concreto MT-370 y MT-480.'
+        : 'Detailed instructional video on proper operation of our MT-370 and MT-480 concrete mixers.',
+      'thumbnailUrl': 'https://www.llanotecnica.com/assets/photos/instruction-poster.png',
+      'uploadDate': '2024-01-01T00:00:00Z',
+      'contentUrl': 'https://www.llanotecnica.com/assets/compressedvideos/instruction.mp4',
+      'embedUrl': 'https://www.llanotecnica.com/assets/compressedvideos/instruction.mp4',
+      'duration': 'PT5M00S'
+    };
+    this.seoService.addStructuredData(instructionVideoData);
+  }
+
+  private addItemListSchema(): void {
+    const itemListData = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      'itemListElement': [
+        {
+          '@type': 'Product',
+          'position': 1,
+          'name': 'MT-370 Concrete Mixer',
+          'description': 'Compact 370L capacity concrete mixer perfect for residential and small commercial projects.',
+          'image': 'https://www.llanotecnica.com/assets/photos/MT-370-optimized.jpg',
+          'brand': {
+            '@type': 'Brand',
+            'name': 'Llanotecnica'
+          },
+          'offers': {
+            '@type': 'Offer',
+            'availability': 'https://schema.org/InStock',
+            'priceCurrency': 'USD',
+            'url': 'https://www.llanotecnica.com/en/products'
+          }
+        },
+        {
+          '@type': 'Product',
+          'position': 2,
+          'name': 'MT-480 Concrete Mixer',
+          'description': 'Heavy-duty 480L capacity concrete mixer designed for large commercial construction projects.',
+          'image': 'https://www.llanotecnica.com/assets/photos/MT-480-optimized.jpg',
+          'brand': {
+            '@type': 'Brand',
+            'name': 'Llanotecnica'
+          },
+          'offers': {
+            '@type': 'Offer',
+            'availability': 'https://schema.org/InStock',
+            'priceCurrency': 'USD',
+            'url': 'https://www.llanotecnica.com/en/products'
+          }
+        }
+      ]
+    };
+    this.seoService.addStructuredData(itemListData);
+  }
+
+  private addHowToSchema(lang: string): void {
+    const howToData = {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      'name': lang === 'es' ? 'Cómo Operar un Mezclador de Concreto' : 'How to Operate a Concrete Mixer',
+      'description': lang === 'es'
+        ? 'Guía paso a paso para operar correctamente los mezcladores de concreto MT-370 y MT-480.'
+        : 'Step-by-step guide to properly operating MT-370 and MT-480 concrete mixers.',
+      'image': 'https://www.llanotecnica.com/assets/photos/instruction-poster.png',
+      'totalTime': 'PT10M',
+      'tool': [
+        {
+          '@type': 'HowToTool',
+          'name': lang === 'es' ? 'Mezclador de Concreto MT-370 o MT-480' : 'MT-370 or MT-480 Concrete Mixer'
+        }
+      ],
+      'supply': [
+        {
+          '@type': 'HowToSupply',
+          'name': lang === 'es' ? 'Cemento' : 'Cement'
+        },
+        {
+          '@type': 'HowToSupply',
+          'name': lang === 'es' ? 'Agregado' : 'Aggregate'
+        },
+        {
+          '@type': 'HowToSupply',
+          'name': lang === 'es' ? 'Agua' : 'Water'
+        }
+      ],
+      'step': [
+        {
+          '@type': 'HowToStep',
+          'position': 1,
+          'name': lang === 'es' ? 'Inspección previa' : 'Pre-operation check',
+          'text': lang === 'es'
+            ? 'Inspeccione todos los componentes y asegure la configuración adecuada antes de iniciar.'
+            : 'Inspect all components and ensure proper setup before starting.',
+          'url': 'https://www.llanotecnica.com/en#faq'
+        },
+        {
+          '@type': 'HowToStep',
+          'position': 2,
+          'name': lang === 'es' ? 'Encender el motor' : 'Start the engine',
+          'text': lang === 'es'
+            ? 'Siga los procedimientos apropiados de arranque del motor según el tipo de motor.'
+            : 'Follow proper engine startup procedures according to your engine type.',
+          'url': 'https://www.llanotecnica.com/en#faq'
+        },
+        {
+          '@type': 'HowToStep',
+          'position': 3,
+          'name': lang === 'es' ? 'Configurar posición del tambor' : 'Set drum position',
+          'text': lang === 'es'
+            ? 'Ajuste el tambor a la posición de mezcla apropiada usando el pedal de control.'
+            : 'Set drum to proper mixing position using the foot pedal control.',
+          'url': 'https://www.llanotecnica.com/en#faq'
+        },
+        {
+          '@type': 'HowToStep',
+          'position': 4,
+          'name': lang === 'es' ? 'Cargar materiales' : 'Load materials',
+          'text': lang === 'es'
+            ? 'Agregue cemento, agregado y agua según las proporciones de mezcla requeridas.'
+            : 'Add cement, aggregate, and water according to required mix proportions.',
+          'url': 'https://www.llanotecnica.com/en#faq'
+        }
+      ],
+      'video': {
+        '@type': 'VideoObject',
+        'name': lang === 'es' ? 'Video de Demostración de Operación' : 'Operation Demonstration Video',
+        'description': lang === 'es'
+          ? 'Video instructivo completo mostrando la operación correcta.'
+          : 'Complete instructional video showing proper operation.',
+        'thumbnailUrl': 'https://www.llanotecnica.com/assets/photos/instruction-poster.png',
+        'contentUrl': 'https://www.llanotecnica.com/assets/compressedvideos/instruction.mp4',
+        'uploadDate': '2024-01-01T00:00:00Z'
+      }
+    };
+    this.seoService.addStructuredData(howToData);
   }
 
   private setupScrollIndicator(): void {

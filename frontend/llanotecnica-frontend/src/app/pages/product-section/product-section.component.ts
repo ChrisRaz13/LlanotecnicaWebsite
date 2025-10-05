@@ -619,6 +619,8 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
   }
 
   private addProductStructuredData(): void {
+    const specs = this.productSpecs();
+
     const mt370Data = {
       '@context': 'https://schema.org',
       '@type': 'Product',
@@ -634,7 +636,12 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
         '@type': 'Organization',
         'name': 'Llanotecnica'
       },
-      'image': 'https://www.llanotecnica.com/assets/photos/MT-370-optimized.jpg',
+      'image': [
+        'https://www.llanotecnica.com/assets/photos/MT-370-optimized.jpg',
+        'https://www.llanotecnica.com/assets/photos/MT-370-GREEN-optimized.jpg',
+        'https://www.llanotecnica.com/assets/photos/MT-370-YELLOW-optimized.jpg',
+        'https://www.llanotecnica.com/assets/photos/MT-370-BLUE-optimized.jpg'
+      ],
       'offers': {
         '@type': 'Offer',
         'availability': 'https://schema.org/InStock',
@@ -642,28 +649,54 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
         'seller': {
           '@type': 'Organization',
           'name': 'Llanotecnica'
-        }
+        },
+        'url': 'https://www.llanotecnica.com/en/products'
       },
       'additionalProperty': [
         {
           '@type': 'PropertyValue',
           'name': 'Drum Capacity',
-          'value': '370 Liters'
+          'value': specs['MT-370'].drumSpecs.capacity
         },
         {
           '@type': 'PropertyValue',
-          'name': 'Mixing Capacity',
-          'value': '360 Liters'
+          'name': 'Opening Diameter',
+          'value': specs['MT-370'].drumSpecs.openingDiameter
         },
         {
           '@type': 'PropertyValue',
-          'name': 'Engine Power',
-          'value': '7-9 HP'
+          'name': 'Drum Depth',
+          'value': specs['MT-370'].drumSpecs.depth
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Discharge Height',
+          'value': specs['MT-370'].unitSpecs.dischargeHeight
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Length',
+          'value': specs['MT-370'].dimensions.length
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Width',
+          'value': specs['MT-370'].dimensions.width
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Height',
+          'value': specs['MT-370'].dimensions.height
         },
         {
           '@type': 'PropertyValue',
           'name': 'Weight',
-          'value': '750 kg'
+          'value': specs['MT-370'].dimensions.weight
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Power Supply Options',
+          'value': specs['MT-370'].unitSpecs.powerSupply
         }
       ]
     };
@@ -683,7 +716,12 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
         '@type': 'Organization',
         'name': 'Llanotecnica'
       },
-      'image': 'https://www.llanotecnica.com/assets/photos/MT-480-optimized.jpg',
+      'image': [
+        'https://www.llanotecnica.com/assets/photos/MT-480-optimized.jpg',
+        'https://www.llanotecnica.com/assets/photos/MT-480-GREEN-optimized.jpg',
+        'https://www.llanotecnica.com/assets/photos/MT-480-YELLOW-optimized.jpg',
+        'https://www.llanotecnica.com/assets/photos/MT-480-BLUE-optimized.jpg'
+      ],
       'offers': {
         '@type': 'Offer',
         'availability': 'https://schema.org/InStock',
@@ -691,34 +729,86 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
         'seller': {
           '@type': 'Organization',
           'name': 'Llanotecnica'
-        }
+        },
+        'url': 'https://www.llanotecnica.com/en/products'
       },
       'additionalProperty': [
         {
           '@type': 'PropertyValue',
           'name': 'Drum Capacity',
-          'value': '480 Liters'
+          'value': specs['MT-480'].drumSpecs.capacity
         },
         {
           '@type': 'PropertyValue',
-          'name': 'Mixing Capacity',
-          'value': '420 Liters'
+          'name': 'Opening Diameter',
+          'value': specs['MT-480'].drumSpecs.openingDiameter
         },
         {
           '@type': 'PropertyValue',
-          'name': 'Engine Power',
-          'value': '13+ HP'
+          'name': 'Drum Depth',
+          'value': specs['MT-480'].drumSpecs.depth
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Discharge Height',
+          'value': specs['MT-480'].unitSpecs.dischargeHeight
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Length',
+          'value': specs['MT-480'].dimensions.length
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Width',
+          'value': specs['MT-480'].dimensions.width
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Height',
+          'value': specs['MT-480'].dimensions.height
         },
         {
           '@type': 'PropertyValue',
           'name': 'Weight',
-          'value': '950 kg'
+          'value': specs['MT-480'].dimensions.weight
+        },
+        {
+          '@type': 'PropertyValue',
+          'name': 'Power Supply Options',
+          'value': specs['MT-480'].unitSpecs.powerSupply
         }
       ]
     };
 
     this.seoService.addStructuredData(mt370Data);
     this.seoService.addStructuredData(mt480Data);
+
+    // Add breadcrumb schema for products page
+    this.addBreadcrumbSchema();
+  }
+
+  private addBreadcrumbSchema(): void {
+    const currentLang = this.translate.currentLang || 'en';
+    const breadcrumbData = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        {
+          '@type': 'ListItem',
+          'position': 1,
+          'name': currentLang === 'es' ? 'Inicio' : 'Home',
+          'item': `https://www.llanotecnica.com/${currentLang}`
+        },
+        {
+          '@type': 'ListItem',
+          'position': 2,
+          'name': currentLang === 'es' ? 'Productos' : 'Products',
+          'item': currentLang === 'es' ? 'https://www.llanotecnica.com/es/productos' : 'https://www.llanotecnica.com/en/products'
+        }
+      ]
+    };
+    this.seoService.addStructuredData(breadcrumbData);
   }
 
   ngAfterViewInit() {
