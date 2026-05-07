@@ -1799,7 +1799,18 @@ private ensureImageDimensions(): void {
       'sameAs': [
         'https://www.facebook.com/llanotecnica2007/',
         'https://www.instagram.com/llanotecnica'
-      ]
+      ],
+      // Aggregate rating sourced from the verified Google Business Profile
+      // for LLANOTECNICA, S.A. — 4.8/5 across 5 customer reviews. Update
+      // these numbers whenever the GBP rating changes.
+      'aggregateRating': {
+        '@type': 'AggregateRating',
+        'ratingValue': '4.8',
+        'bestRating': '5',
+        'worstRating': '1',
+        'reviewCount': '5',
+        'ratingCount': '5'
+      }
     };
     this.seoService.addStructuredData(localBusinessData);
   }
