@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, addDoc, serverTimestamp } from '@angular/fire/firestore';
 import { catchError, from, Observable, throwError } from 'rxjs';
 
@@ -14,7 +14,7 @@ export interface ContactFormData {
   providedIn: 'root',
 })
 export class ContactService {
-  constructor(private firestore: Firestore) {}
+  private readonly firestore = inject(Firestore);
 
   submitContactForm(formData: ContactFormData): Observable<any> {
     // Prepare the data with timestamp

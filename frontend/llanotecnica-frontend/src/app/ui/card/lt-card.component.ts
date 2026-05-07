@@ -5,7 +5,6 @@ export type LtCardElevation = 'flat' | 'raised' | 'floating';
 
 @Component({
   selector: 'lt-card',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
   styleUrl: './lt-card.component.css',

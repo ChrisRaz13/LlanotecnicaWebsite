@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, OnDestroy } from '@angular/core';
 
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ export class WhatsappWidgetComponent implements OnInit, OnDestroy {
   private langChangeSubscription?: Subscription;
   private readonly phoneNumber = '50765664942'; // Your WhatsApp business number
 
-  constructor(private translate: TranslateService) {}
+  private readonly translate = inject(TranslateService);
 
   ngOnInit(): void {
     // Listen for language changes to update the widget

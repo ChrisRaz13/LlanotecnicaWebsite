@@ -9,7 +9,6 @@ type SupportedLanguage = 'en' | 'es';
 
 @Component({
   selector: 'app-language-redirect',
-  standalone: true,
   imports: [CommonModule, TranslateModule],
   template: `
     <div class="language-redirect-container">

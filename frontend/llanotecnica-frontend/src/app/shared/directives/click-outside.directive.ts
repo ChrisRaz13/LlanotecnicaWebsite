@@ -1,26 +1,21 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Output } from '@angular/core';
+import { Directive, ElementRef, inject, output } from '@angular/core';
 
 @Directive({
   selector: '[clickOutside]',
-  standalone: true
+  host: {
+    '(document:click)': 'onDocumentClick($event)',
+    '(document:touchstart)': 'onDocumentClick($event)',
+  },
 })
 export class ClickOutsideDirective {
-  @Output() clickOutside = new EventEmitter<Event>();
+  readonly clickOutside = output<Event>();
 
-  constructor(private elementRef: ElementRef) {}
+  private readonly elementRef = inject(ElementRef);
 
-  @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
     const targetElement = event.target as HTMLElement;
-
-    // Check if the click was inside the element
     if (targetElement && !this.elementRef.nativeElement.contains(targetElement)) {
       this.clickOutside.emit(event);
     }
-  }
-
-  @HostListener('document:touchstart', ['$event'])
-  onDocumentTouchStart(event: Event): void {
-    this.onDocumentClick(event);
   }
 }

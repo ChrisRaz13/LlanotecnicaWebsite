@@ -9,8 +9,7 @@ import { Response } from 'express';
 
 // Sitemap component for serving XML
 @Component({
-  template: '',
-  standalone: true
+  template: ''
 })
 export class SitemapComponent implements OnInit {
   constructor(

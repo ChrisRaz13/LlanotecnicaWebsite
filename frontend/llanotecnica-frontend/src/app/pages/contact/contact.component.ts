@@ -16,7 +16,6 @@ import {
   Component,
   OnInit,
   OnDestroy,
-  HostListener,
   Inject,
   PLATFORM_ID,
   NgZone,
@@ -68,6 +67,9 @@ interface SubmitResponse {
     styleUrls: ['./contact.component.css'],
     // Added TranslateModule, ClickOutsideDirective and LtButtonComponent to the imports array
     imports: [ReactiveFormsModule, TranslateModule, ClickOutsideDirective, LtButtonComponent],
+    host: {
+      '(window:keydown)': 'handleKeyboardEvent($event)'
+    },
     animations: [
         trigger('fadeSlideInOut', [
             transition(':enter', [
@@ -406,7 +408,6 @@ export class ContactComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedCountryIndex = -1;
   }
 
-  @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (!this.showCountryDropdown) return;
     switch (event.key) {

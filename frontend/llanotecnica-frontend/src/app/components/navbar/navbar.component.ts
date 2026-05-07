@@ -1,6 +1,5 @@
 import {
   Component,
-  HostListener,
   inject,
   OnInit,
   AfterViewInit,
@@ -26,6 +25,10 @@ type LanguageKey = typeof SUPPORTED_LANGUAGES[number];
   imports: [RouterModule, TranslateModule, NgOptimizedImage],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
+  host: {
+    '(window:scroll)': 'onWindowScroll()',
+    '(document:keydown.escape)': 'onEscape()',
+  },
 })
 export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('logoImg') logoElement!: ElementRef<HTMLImageElement>;
@@ -180,7 +183,6 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
       trimmed === '/es/';
   }
 
-  @HostListener('window:scroll', [])
   onWindowScroll(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     const bannerHeight = 96;
@@ -188,7 +190,6 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /** Close menu on Escape key */
-  @HostListener('document:keydown.escape')
   onEscape(): void {
     if (this.isMenuOpen) this.closeMenu();
   }

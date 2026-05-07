@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 export interface SitemapUrl {
@@ -29,8 +29,7 @@ export interface SitemapVideo {
 })
 export class SitemapService {
   private baseUrl = 'https://llanotecnica.com';
-
-  constructor(private router: Router) {}
+  private readonly router = inject(Router);
 
   generateSitemap(): string {
     const urls = this.getSitemapUrls();

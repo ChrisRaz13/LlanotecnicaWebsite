@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, PLATFORM_ID, Inject, HostListener } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
@@ -15,6 +15,10 @@ interface Language {
 @Component({
     selector: 'app-language-selector',
     imports: [TranslateModule],
+    host: {
+      '(document:click)': 'closeDropdown()',
+      '(window:resize)': 'checkScreenSize()'
+    },
     template: `
     <div class="language-selector">
       <div
@@ -281,7 +285,6 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
   /**
    * Close dropdown when clicking outside
    */
-  @HostListener('document:click')
   closeDropdown(): void {
     this.isDropdownOpen = false;
   }
@@ -289,7 +292,6 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
   /**
    * Check screen size to determine if mobile
    */
-  @HostListener('window:resize')
   checkScreenSize(): void {
     this.isMobile = window.innerWidth <= 768;
   }

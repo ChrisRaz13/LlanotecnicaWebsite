@@ -8,7 +8,6 @@ import {
   ViewChildren,
   ElementRef,
   QueryList,
-  HostListener,
   AfterViewInit
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -90,6 +89,9 @@ interface VideoHighlight {
     imports: [CommonModule, RouterModule, TranslateModule, LtButtonComponent],
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
+    host: {
+      '(window:keydown)': 'handleKeyDown($event)'
+    },
     animations: [
         // Core essential animations only
         trigger('fadeIn', [
@@ -1536,8 +1538,7 @@ private ensureImageDimensions(): void {
     });
   }
 
-  // Modal functionality with ESC key
-  @HostListener('window:keydown', ['$event'])
+  // Modal functionality with ESC key (bound via host on @Component)
   handleKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Escape' && this.isModalOpen) {
       this.closeCatalogModal();

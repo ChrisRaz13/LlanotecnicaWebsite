@@ -11,7 +11,6 @@ export type LtButtonSize = 'sm' | 'md' | 'lg';
 
 @Component({
   selector: 'lt-button, a[lt-button], button[lt-button]',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   // None: required so styles apply when used as `[lt-button]` directive on a host
   // <button> / <a> in another component's template (Emulated would scope-lock them).

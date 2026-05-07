@@ -6,7 +6,6 @@ export type LtSectionWidth = 'narrow' | 'base' | 'wide' | 'bleed';
 
 @Component({
   selector: 'lt-section',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="lt-section__inner" [attr.data-width]="width()">
