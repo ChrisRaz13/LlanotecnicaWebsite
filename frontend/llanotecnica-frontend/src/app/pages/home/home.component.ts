@@ -1705,7 +1705,13 @@ private ensureImageDimensions(): void {
       this.addBreadcrumbSchema(currentLang);
       this.addLocalBusinessSchema();
       this.addVideoObjectSchemas(currentLang);
-      this.addItemListSchema();
+      // ItemList of Products intentionally NOT emitted — Google's Product
+      // snippet schema requires `offers`, `review`, or `aggregateRating`.
+      // This is a B2B quote-only site (no public price, no public reviews),
+      // so any Product schema we emit is flagged as invalid in the Rich
+      // Results Test. Pages remain fully indexable via title/description/
+      // body content; we just don't claim a rich-result type we can't honestly
+      // satisfy.
       this.addHowToSchema(currentLang);
     });
   }
@@ -1834,39 +1840,6 @@ private ensureImageDimensions(): void {
       'duration': 'PT5M00S'
     };
     this.seoService.addStructuredData(instructionVideoData);
-  }
-
-  private addItemListSchema(): void {
-    const itemListData = {
-      '@context': 'https://schema.org',
-      '@type': 'ItemList',
-      'itemListElement': [
-        // NOTE: no `offers` block — pricing is quote-only (B2B). Including
-        // offers without a `price` value triggers Google's "Invalid item"
-        // warning for both Product snippets + Merchant listings rich results.
-        // Without offers, the Product is still valid schema (just not eligible
-        // for merchant-listing rich results, which it shouldn't be anyway).
-        {
-          '@type': 'Product',
-          'position': 1,
-          'name': 'MT-370 Concrete Mixer',
-          'description': 'Compact 370L capacity concrete mixer perfect for residential and small commercial projects.',
-          'image': 'https://www.llanotecnica.com/assets/photos/MT-370-optimized.jpg',
-          'url': 'https://www.llanotecnica.com/en/products',
-          'brand': { '@type': 'Brand', 'name': 'Llanotecnica' }
-        },
-        {
-          '@type': 'Product',
-          'position': 2,
-          'name': 'MT-480 Concrete Mixer',
-          'description': 'Heavy-duty 480L capacity concrete mixer designed for large commercial construction projects.',
-          'image': 'https://www.llanotecnica.com/assets/photos/MT-480-optimized.jpg',
-          'url': 'https://www.llanotecnica.com/en/products',
-          'brand': { '@type': 'Brand', 'name': 'Llanotecnica' }
-        }
-      ]
-    };
-    this.seoService.addStructuredData(itemListData);
   }
 
   private addHowToSchema(lang: string): void {
