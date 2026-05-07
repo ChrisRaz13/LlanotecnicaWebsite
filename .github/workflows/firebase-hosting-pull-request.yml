@@ -19,7 +19,8 @@ jobs:
           cache-dependency-path: frontend/llanotecnica-frontend/package-lock.json
       - name: Install + build (Angular SSG, postbuild lang patch)
         working-directory: frontend/llanotecnica-frontend
-        run: npm ci && npm run build
+        # See merge workflow for rationale on --legacy-peer-deps.
+        run: npm ci --legacy-peer-deps && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

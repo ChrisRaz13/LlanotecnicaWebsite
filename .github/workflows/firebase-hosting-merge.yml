@@ -19,7 +19,11 @@ jobs:
           cache-dependency-path: frontend/llanotecnica-frontend/package-lock.json
       - name: Install + build (Angular SSG, postbuild lang patch)
         working-directory: frontend/llanotecnica-frontend
-        run: npm ci && npm run build
+        # --legacy-peer-deps: @angular/fire@20.0.1 declares
+        # `peer @angular/common@^20.0.0` but this workspace runs Angular v21.
+        # The only @angular/fire@21 release is an RC (21.0.0-rc.0); we stay
+        # on 20.0.1 stable until a v21 stable lands. Functionally compatible.
+        run: npm ci --legacy-peer-deps && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
