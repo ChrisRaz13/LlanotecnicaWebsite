@@ -83,16 +83,16 @@
 
         <div class="lt-form-card__body">
           <!-- Alert messages -->
-          @if (submitSuccess) {
+          @if (submitSuccess()) {
             <div class="lt-form-alert lt-form-alert--success" role="alert" [@fadeSlideInOut]>
               <span class="lt-form-alert__icon" aria-hidden="true"><i class="fas fa-check-circle"></i></span>
               <span class="lt-form-alert__text">{{ 'CONTACT_PAGE.SUCCESS_MESSAGE' | translate }}</span>
             </div>
           }
-          @if (submitError) {
+          @if (submitError()) {
             <div class="lt-form-alert lt-form-alert--error" role="alert" [@fadeSlideInOut]>
               <span class="lt-form-alert__icon" aria-hidden="true"><i class="fas fa-exclamation-triangle"></i></span>
-              <span class="lt-form-alert__text">{{ errorMessage || ('CONTACT_PAGE.ERROR_MESSAGE' | translate) }}</span>
+              <span class="lt-form-alert__text">{{ errorMessage() || ('CONTACT_PAGE.ERROR_MESSAGE' | translate) }}</span>
             </div>
           }
 
@@ -176,9 +176,9 @@
                 </label>
                 <div class="lt-field__input-wrap lt-field__input-wrap--country" (clickOutside)="onClickOutside($event)" clickOutside>
                   <span class="lt-field__icon" aria-hidden="true">
-                    @if (!isLoadingCountries && getSelectedCountryFlag()) {
+                    @if (!isLoadingCountries() && getSelectedCountryFlag()) {
                       <img [src]="getSelectedCountryFlag()" alt="{{ 'CONTACT_PAGE.COUNTRY_FLAG_ALT' | translate }}" class="lt-field__flag">
-                    } @else if (isLoadingCountries) {
+                    } @else if (isLoadingCountries()) {
                       <span class="lt-field__spinner" role="status" aria-hidden="true"></span>
                     } @else {
                       <i class="fas fa-globe"></i>
@@ -195,22 +195,22 @@
                     (focus)="onCountryInputFocus()"
                     autocomplete="off">
 
-                  @if (showCountryDropdown && !isLoadingCountries) {
+                  @if (showCountryDropdown() && !isLoadingCountries()) {
                     <div class="lt-field__dropdown" role="listbox">
-                      @for (country of filteredCountries; track country.cca2; let i = $index) {
+                      @for (country of filteredCountries(); track country.cca2; let i = $index) {
                         <button
                           type="button"
                           class="lt-field__option"
-                          [class.lt-field__option--active]="i === selectedCountryIndex"
+                          [class.lt-field__option--active]="i === selectedCountryIndex()"
                           (click)="selectCountry(country)"
-                          (mouseenter)="selectedCountryIndex = i"
+                          (mouseenter)="selectedCountryIndex.set(i)"
                           role="option"
-                          [attr.aria-selected]="i === selectedCountryIndex">
+                          [attr.aria-selected]="i === selectedCountryIndex()">
                           <img [src]="country.flags.svg" [alt]="country.name.common + ' flag'" class="lt-field__option-flag">
                           <span>{{ country.name.common }}</span>
                         </button>
                       }
-                      @if (filteredCountries.length === 0) {
+                      @if (filteredCountries().length === 0) {
                         <div class="lt-field__option-empty">
                           {{ 'CONTACT_PAGE.NO_COUNTRIES_FOUND' | translate }}
                         </div>
@@ -290,10 +290,10 @@
                 variant="primary"
                 size="lg"
                 type="submit"
-                [disabled]="isSubmitting || contactForm.invalid"
-                [class.lt-form__submit--loading]="isSubmitting"
+                [disabled]="isSubmitting() || contactForm.invalid"
+                [class.lt-form__submit--loading]="isSubmitting()"
                 class="lt-form__submit">
-                @if (isSubmitting) {
+                @if (isSubmitting()) {
                   <span class="lt-form__spinner" role="status" aria-hidden="true"></span>
                   {{ 'CONTACT_PAGE.SENDING' | translate }}
                 } @else {
@@ -375,9 +375,9 @@
           </div>
 
           <div class="lt-info-card__map">
-            @if (mapUrl) {
+            @if (mapUrl(); as src) {
               <iframe
-                [src]="mapUrl"
+                [src]="src"
                 width="100%"
                 height="280"
                 loading="lazy"

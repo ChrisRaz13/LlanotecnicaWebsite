@@ -1,4 +1,3 @@
-import { RecaptchaService } from './../../services/language-selector/recaptcha.service';
 // Type declaration for Google reCAPTCHA Enterprise
 declare global {
   interface Window {
@@ -13,15 +12,15 @@ declare global {
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   OnInit,
   OnDestroy,
-  Inject,
   PLATFORM_ID,
-  NgZone,
   ElementRef,
   ViewChild,
-  ChangeDetectorRef
+  inject,
+  signal,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { isPlatformBrowser } from '@angular/common';
@@ -35,11 +34,10 @@ import { Router, NavigationEnd } from '@angular/router';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Import TranslateModule to make the translation pipe available in your template
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SeoService } from '../../services/seo.service';
+import { RecaptchaService } from '../../services/language-selector/recaptcha.service';
 
-// Import our custom directive and fallback data
 import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
 import { Country, FALLBACK_COUNTRIES } from '../../shared/data/countries.data';
 import { LtButtonComponent } from '../../ui/button/lt-button.component';
@@ -62,34 +60,32 @@ interface SubmitResponse {
 }
 
 @Component({
-    selector: 'app-contact',
-    templateUrl: './contact.component.html',
-    styleUrls: ['./contact.component.css'],
-    // Added TranslateModule, ClickOutsideDirective and LtButtonComponent to the imports array
-    imports: [ReactiveFormsModule, TranslateModule, ClickOutsideDirective, LtButtonComponent],
-    host: {
-      '(window:keydown)': 'handleKeyboardEvent($event)'
-    },
-    animations: [
-        trigger('fadeSlideInOut', [
-            transition(':enter', [
-                style({ opacity: 0, transform: 'translateY(-10px)' }),
-                animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-            ]),
-            transition(':leave', [
-                animate('300ms ease-in', style({ opacity: 0, transform: 'translateY(-10px)' }))
-            ])
-        ])
-    ]
+  selector: 'app-contact',
+  templateUrl: './contact.component.html',
+  styleUrls: ['./contact.component.css'],
+  imports: [ReactiveFormsModule, TranslateModule, ClickOutsideDirective, LtButtonComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(window:keydown)': 'handleKeyboardEvent($event)',
+  },
+  animations: [
+    trigger('fadeSlideInOut', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({ opacity: 0, transform: 'translateY(-10px)' })),
+      ]),
+    ]),
+  ],
 })
 export class ContactComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('countryInput') countryInput!: ElementRef;
-  @ViewChild('contactHeroSection') contactHeroSection?: ElementRef<HTMLElement>;
   @ViewChild('contactHeroEyebrow') contactHeroEyebrow?: ElementRef<HTMLElement>;
   @ViewChild('contactHeroTitle') contactHeroTitle?: ElementRef<HTMLElement>;
   @ViewChild('contactHeroDescription') contactHeroDescription?: ElementRef<HTMLElement>;
   @ViewChild('contactHeroLinks') contactHeroLinks?: ElementRef<HTMLElement>;
-
   @ViewChild('contactFormSection') contactFormSection?: ElementRef<HTMLElement>;
   @ViewChild('contactFormEyebrow') contactFormEyebrow?: ElementRef<HTMLElement>;
   @ViewChild('contactFormTitle') contactFormTitle?: ElementRef<HTMLElement>;
@@ -97,25 +93,46 @@ export class ContactComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('contactFormCard') contactFormCard?: ElementRef<HTMLElement>;
   @ViewChild('contactInfoCard') contactInfoCard?: ElementRef<HTMLElement>;
 
+  // ----- DI (modern v21 inject() pattern) -----
+  private readonly fb = inject(FormBuilder);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
+  private readonly recaptchaService = inject(RecaptchaService);
+  private readonly seoService = inject(SeoService);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly translate = inject(TranslateService);
+
+  // ----- Reactive form (FormGroup has its own change-tracking, kept as a property) -----
+  readonly contactForm: FormGroup = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-ZÀ-ÿ\s]*$/)]],
+    email: ['', [Validators.required, Validators.email, Validators.pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)]],
+    phone: ['', [Validators.pattern(/^\+?[\d\s-]{10,}$/)]],
+    country: ['', [Validators.required]],
+    countryCode: ['', [Validators.required]],
+    inquiryType: ['', Validators.required],
+    message: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
+    recaptchaToken: [''],
+  });
+
+  // ----- Signal-based state (templates read via `()`, OnPush picks up changes) -----
+  readonly countries = signal<Country[]>([]);
+  readonly filteredCountries = signal<Country[]>([]);
+  readonly showCountryDropdown = signal(false);
+  readonly isLoadingCountries = signal(false);
+  readonly selectedCountryIndex = signal(-1);
+  readonly isSubmitting = signal(false);
+  readonly submitSuccess = signal(false);
+  readonly submitError = signal(false);
+  readonly errorMessage = signal('');
+  readonly mapUrl = signal<SafeResourceUrl | undefined>(undefined);
+
+  private readonly destroy$ = new Subject<void>();
+  private recaptchaScript?: HTMLScriptElement;
   private heroEntryTimeline: gsap.core.Timeline | null = null;
   private contactScrollTriggers: ScrollTrigger[] = [];
 
-  contactForm!: FormGroup;
-  countries: Country[] = [];
-  filteredCountries: Country[] = [];
-  showCountryDropdown = false;
-  isLoadingCountries = false;
-  selectedCountryIndex = -1;
-  isSubmitting = false;
-  submitSuccess = false;
-  submitError = false;
-  errorMessage = '';
-  isFormTouched = false;
-  private destroy$ = new Subject<void>();
-  private recaptchaScript?: HTMLScriptElement;
-  mapUrl: SafeResourceUrl | undefined;
-
-  inquiryTypes: string[] = [
+  readonly inquiryTypes: ReadonlyArray<string> = [
     'Product Information',
     'Price Quote',
     'Spare Parts',
@@ -123,38 +140,26 @@ export class ContactComponent implements OnInit, OnDestroy, AfterViewInit {
     'Maintenance Service',
     'Dealer/Distribution',
     'Warranty Claim',
-    'General Inquiry'
+    'General Inquiry',
   ];
 
+  // companyDetails is mutated once during initializeMap (synchronously, in the
+  // constructor). By the time the view first paints the address is final, so
+  // a plain object is fine — no signal needed.
   companyDetails = {
     phone: '+507 6566-4942',
     whatsapp: 'https://wa.me/50765664942',
     email: 'ventas@llanotecnica.com',
     address: 'Panama City, Panama',
-    mapLocation: {
-      lat: 8.9824,
-      lng: -79.5199
-    }
+    mapLocation: { lat: 8.9824, lng: -79.5199 },
   };
 
-  socialLinks = {
+  readonly socialLinks = {
     facebook: 'https://www.facebook.com/llanotecnica2007/',
-    instagram: 'https://instagram.com/llanotecnica'
+    instagram: 'https://instagram.com/llanotecnica',
   };
 
-  constructor(
-    private fb: FormBuilder,
-    private sanitizer: DomSanitizer,
-    private ngZone: NgZone,
-    private http: HttpClient,
-    private cd: ChangeDetectorRef,
-    private router: Router,
-    private recaptchaService: RecaptchaService,
-    private seoService: SeoService,
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private translate: TranslateService
-  ) {
-    this.initializeForm();
+  constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.initializeMap();
     }
@@ -176,7 +181,6 @@ export class ContactComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
 
-      // Subscribe to language changes
       this.translate.onLangChange.subscribe(() => {
         this.setupSEO();
       });
@@ -186,33 +190,37 @@ export class ContactComponent implements OnInit, OnDestroy, AfterViewInit {
   private setupSEO(): void {
     const currentPath = this.router.url.split('?')[0];
 
-    // Determine canonical URL
     let canonicalPath = '/en/contact';
     if (currentPath.includes('/es/') || currentPath.includes('/contacto')) {
       canonicalPath = '/es/contacto';
     }
 
-    this.translate.get(['CONTACT_PAGE.SEO.TITLE', 'CONTACT_PAGE.SEO.DESCRIPTION', 'CONTACT_PAGE.SEO.KEYWORDS']).subscribe((translations: any) => {
-      const title = translations['CONTACT_PAGE.SEO.TITLE'] || 'Contact Us - Llanotecnica | Get a Quote';
-      const description = translations['CONTACT_PAGE.SEO.DESCRIPTION'] || 'Contact Llanotecnica for quotes, technical support, and product information. We\'re here to help with all your concrete mixer needs.';
-      const keywords = translations['CONTACT_PAGE.SEO.KEYWORDS'] || 'contact, quote, technical support, Llanotecnica, Panama';
+    this.translate
+      .get(['CONTACT_PAGE.SEO.TITLE', 'CONTACT_PAGE.SEO.DESCRIPTION', 'CONTACT_PAGE.SEO.KEYWORDS'])
+      .subscribe((translations: any) => {
+        const title = translations['CONTACT_PAGE.SEO.TITLE'] || "Contact Us - Llanotecnica | Get a Quote";
+        const description =
+          translations['CONTACT_PAGE.SEO.DESCRIPTION'] ||
+          "Contact Llanotecnica for quotes, technical support, and product information. We're here to help with all your concrete mixer needs.";
+        const keywords =
+          translations['CONTACT_PAGE.SEO.KEYWORDS'] ||
+          'contact, quote, technical support, Llanotecnica, Panama';
 
-      this.seoService.updateMetaTags({
-        title: title,
-        description: description,
-        keywords: keywords,
-        image: 'https://www.llanotecnica.com/assets/photos/coverphoto.webp',
-        url: canonicalPath,
-        type: 'website'
+        this.seoService.updateMetaTags({
+          title,
+          description,
+          keywords,
+          image: 'https://www.llanotecnica.com/assets/photos/coverphoto.webp',
+          url: canonicalPath,
+          type: 'website',
+        });
+
+        this.seoService.addHreflangTags([
+          { lang: 'en', url: 'https://www.llanotecnica.com/en/contact' },
+          { lang: 'es', url: 'https://www.llanotecnica.com/es/contacto' },
+          { lang: 'x-default', url: 'https://www.llanotecnica.com/en/contact' },
+        ]);
       });
-
-      // Add hreflang tags
-      this.seoService.addHreflangTags([
-        { lang: 'en', url: 'https://www.llanotecnica.com/en/contact' },
-        { lang: 'es', url: 'https://www.llanotecnica.com/es/contacto' },
-        { lang: 'x-default', url: 'https://www.llanotecnica.com/en/contact' }
-      ]);
-    });
   }
 
   ngAfterViewInit() {
@@ -292,11 +300,7 @@ export class ContactComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const tl = gsap.timeline({
       defaults: { ease: 'power3.out' },
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 78%',
-        toggleActions: 'play none none none',
-      },
+      scrollTrigger: { trigger: section, start: 'top 78%', toggleActions: 'play none none none' },
     });
     heads.forEach((el, i) => {
       tl.to(el, { opacity: 1, y: 0, duration: 0.5 }, i === 0 ? 0 : '-=0.3');
@@ -311,166 +315,125 @@ export class ContactComponent implements OnInit, OnDestroy, AfterViewInit {
     if (tl.scrollTrigger) this.contactScrollTriggers.push(tl.scrollTrigger);
   }
 
-  private initializeForm() {
-    this.contactForm = this.fb.group({
-      name: ['', [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.pattern(/^[a-zA-ZÀ-ÿ\s]*$/)
-      ]],
-      email: ['', [
-        Validators.required,
-        Validators.email,
-        Validators.pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
-      ]],
-      phone: ['', [
-        Validators.pattern(/^\+?[\d\s-]{10,}$/)
-      ]],
-      country: ['', [Validators.required]],
-      countryCode: ['', [Validators.required]],
-      inquiryType: ['', Validators.required],
-      message: ['', [
-        Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(1000)
-      ]],
-      recaptchaToken: ['']
-    });
-  }
-
   private setupCountrySearch() {
-    this.contactForm.get('country')?.valueChanges
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(value => {
-        if (typeof value === 'string') {
-          this.filterCountries(value);
-        }
+    this.contactForm
+      .get('country')
+      ?.valueChanges.pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((value) => {
+        if (typeof value === 'string') this.filterCountries(value);
       });
   }
 
   private async loadCountries() {
     try {
-      this.isLoadingCountries = true;
-      console.log('🌍 Loading countries from API...');
+      this.isLoadingCountries.set(true);
 
       const response = await this.http
         .get<Country[]>('https://restcountries.com/v3.1/all?fields=name,cca2,flags,region')
         .pipe(
-          timeout(5000), // 5 second timeout
-          map(countries => countries.sort((a, b) => a.name.common.localeCompare(b.name.common))),
-          catchError(error => {
-            console.warn('⚠️ API failed, using fallback countries:', error);
+          timeout(5000),
+          map((countries) => countries.sort((a, b) => a.name.common.localeCompare(b.name.common))),
+          catchError((error) => {
+            console.warn('⚠️ Countries API failed, using fallback list:', error);
             return of(FALLBACK_COUNTRIES.sort((a, b) => a.name.common.localeCompare(b.name.common)));
-          })
+          }),
         )
         .toPromise();
 
       if (response && response.length > 0) {
-        this.countries = response;
-        this.filteredCountries = [...this.countries];
-        console.log(`✅ Loaded ${this.countries.length} countries successfully`);
-        this.cd.detectChanges();
+        this.countries.set(response);
+        this.filteredCountries.set([...response]);
       } else {
         throw new Error('Empty response from API');
       }
     } catch (error) {
       console.error('🚨 Error loading countries, using fallback:', error);
-      // Use fallback countries if API fails completely
-      this.countries = [...FALLBACK_COUNTRIES].sort((a, b) => a.name.common.localeCompare(b.name.common));
-      this.filteredCountries = [...this.countries];
-      console.log(`🔄 Using ${this.countries.length} fallback countries`);
-      this.cd.detectChanges();
+      const fallback = [...FALLBACK_COUNTRIES].sort((a, b) =>
+        a.name.common.localeCompare(b.name.common),
+      );
+      this.countries.set(fallback);
+      this.filteredCountries.set(fallback);
     } finally {
-      this.isLoadingCountries = false;
+      this.isLoadingCountries.set(false);
     }
   }
 
   filterCountries(value: string) {
     const searchTerm = value.toLowerCase();
-    this.filteredCountries = this.countries.filter(country =>
-      country.name.common.toLowerCase().includes(searchTerm) ||
-      country.name.official.toLowerCase().includes(searchTerm)
+    this.filteredCountries.set(
+      this.countries().filter(
+        (c) =>
+          c.name.common.toLowerCase().includes(searchTerm) ||
+          c.name.official.toLowerCase().includes(searchTerm),
+      ),
     );
-    this.showCountryDropdown = true;
-    this.selectedCountryIndex = -1;
+    this.showCountryDropdown.set(true);
+    this.selectedCountryIndex.set(-1);
   }
 
   selectCountry(country: Country) {
-    this.contactForm.patchValue({
-      country: country.name.common,
-      countryCode: country.cca2
-    });
-    this.showCountryDropdown = false;
-    this.selectedCountryIndex = -1;
+    this.contactForm.patchValue({ country: country.name.common, countryCode: country.cca2 });
+    this.showCountryDropdown.set(false);
+    this.selectedCountryIndex.set(-1);
   }
 
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (!this.showCountryDropdown) return;
+    if (!this.showCountryDropdown()) return;
+    const max = this.filteredCountries().length - 1;
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        this.selectedCountryIndex = Math.min(
-          this.selectedCountryIndex + 1,
-          this.filteredCountries.length - 1
-        );
+        this.selectedCountryIndex.update((i) => Math.min(i + 1, max));
         this.scrollToSelectedCountry();
         break;
       case 'ArrowUp':
         event.preventDefault();
-        this.selectedCountryIndex = Math.max(this.selectedCountryIndex - 1, -1);
+        this.selectedCountryIndex.update((i) => Math.max(i - 1, -1));
         this.scrollToSelectedCountry();
         break;
       case 'Enter':
         event.preventDefault();
-        if (this.selectedCountryIndex >= 0) {
-          this.selectCountry(this.filteredCountries[this.selectedCountryIndex]);
-        }
+        const idx = this.selectedCountryIndex();
+        if (idx >= 0) this.selectCountry(this.filteredCountries()[idx]);
         break;
       case 'Escape':
-        this.showCountryDropdown = false;
-        this.selectedCountryIndex = -1;
+        this.showCountryDropdown.set(false);
+        this.selectedCountryIndex.set(-1);
         break;
     }
   }
 
   private scrollToSelectedCountry() {
-    if (this.selectedCountryIndex >= 0) {
-      const dropdown = document.querySelector('.country-dropdown');
-      const selectedOption = document.querySelector(
-        `.country-option:nth-child(${this.selectedCountryIndex + 1})`
-      );
-      if (dropdown && selectedOption) {
-        const dropdownRect = dropdown.getBoundingClientRect();
-        const selectedRect = selectedOption.getBoundingClientRect();
-        if (selectedRect.bottom > dropdownRect.bottom) {
-          dropdown.scrollTop += selectedRect.bottom - dropdownRect.bottom;
-        } else if (selectedRect.top < dropdownRect.top) {
-          dropdown.scrollTop -= dropdownRect.top - selectedRect.top;
-        }
-      }
+    const idx = this.selectedCountryIndex();
+    if (idx < 0) return;
+    const dropdown = document.querySelector('.country-dropdown');
+    const selectedOption = document.querySelector(`.country-option:nth-child(${idx + 1})`);
+    if (!dropdown || !selectedOption) return;
+    const dRect = dropdown.getBoundingClientRect();
+    const sRect = selectedOption.getBoundingClientRect();
+    if (sRect.bottom > dRect.bottom) {
+      dropdown.scrollTop += sRect.bottom - dRect.bottom;
+    } else if (sRect.top < dRect.top) {
+      dropdown.scrollTop -= dRect.top - sRect.top;
     }
   }
 
   onCountryInputFocus() {
-    if (this.filteredCountries.length > 0) {
-      this.showCountryDropdown = true;
+    if (this.filteredCountries().length > 0) {
+      this.showCountryDropdown.set(true);
     }
   }
 
   onClickOutside(event: Event) {
     if (!(event.target as HTMLElement).closest('.country-selector')) {
-      this.showCountryDropdown = false;
-      this.selectedCountryIndex = -1;
+      this.showCountryDropdown.set(false);
+      this.selectedCountryIndex.set(-1);
     }
   }
 
   getSelectedCountryFlag(): string | null {
-    const selectedCountry = this.countries.find(
-      country => country.name.common === this.contactForm.get('country')?.value
+    const selectedCountry = this.countries().find(
+      (c) => c.name.common === this.contactForm.get('country')?.value,
     );
     return selectedCountry?.flags.svg || null;
   }
@@ -481,87 +444,63 @@ export class ContactComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     const address = encodeURIComponent(
-      'Llanotecnica SA, Rio Chico, Calle Principal, Corregimiento de, Pacora, Provincia de Panamá, Panamá'
+      'Llanotecnica SA, Rio Chico, Calle Principal, Corregimiento de, Pacora, Provincia de Panamá, Panamá',
     );
-    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=${address}&zoom=16`
+    this.mapUrl.set(
+      this.sanitizer.bypassSecurityTrustResourceUrl(
+        `https://www.google.com/maps/embed/v1/place?key=${environment.googleMapsApiKey}&q=${address}&zoom=16`,
+      ),
     );
     this.companyDetails = {
       ...this.companyDetails,
-      address: 'Rio Chico, Calle Principal, Corregimiento de Pacora, Provincia de Panamá, Panamá'
+      address: 'Rio Chico, Calle Principal, Corregimiento de Pacora, Provincia de Panamá, Panamá',
     };
-  }
-
-  // This method is kept for backward compatibility but is no longer needed
-  // as the RecaptchaService handles this now
-  private loadRecaptcha() {
-    // Function kept for compatibility - no longer used actively
-    console.log('ℹ️ Using centralized RecaptchaService instead of local implementation');
   }
 
   async onSubmit() {
     if (!isPlatformBrowser(this.platformId)) return;
-    if (this.contactForm.valid && !this.isSubmitting) {
-      this.isSubmitting = true;
-      this.submitSuccess = false;
-      this.submitError = false;
-      this.errorMessage = '';
-      try {
-        // Use RecaptchaService to get the token
-        console.log('Generating reCAPTCHA token using RecaptchaService...');
-        const token = await this.recaptchaService.executeRecaptcha('contact_form_submit').toPromise();
-
-        const formData: ContactForm = {
-          ...this.contactForm.value,
-          recaptchaToken: token
-        };
-
-        console.log('DEBUG (Angular): Sending formData:', formData);
-        const response = await this.http
-          .post<SubmitResponse>(environment.contactFormEndpoint, formData)
-          .toPromise();
-
-        this.ngZone.run(() => {
-          this.submitSuccess = true;
-          this.contactForm.reset();
-          if (response?.recaptchaScore) {
-            console.log('📊 reCAPTCHA Score:', response.recaptchaScore);
-          }
-        });
-      } catch (error) {
-        this.ngZone.run(() => {
-          this.submitError = true;
-          if (error instanceof HttpErrorResponse) {
-            switch (error.status) {
-              case 400:
-                this.errorMessage = this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
-                break;
-              case 403:
-                this.errorMessage = this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
-                break;
-              case 429:
-                this.errorMessage = this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
-                break;
-              default:
-                this.errorMessage = this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
-            }
-          } else {
-            this.errorMessage = this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
-          }
-          console.error('🔥 Form submission error:', error);
-        });
-      } finally {
-        this.ngZone.run(() => {
-          this.isSubmitting = false;
-        });
-      }
-    } else {
+    if (!this.contactForm.valid || this.isSubmitting()) {
       this.markFormGroupTouched(this.contactForm);
+      return;
+    }
+
+    this.isSubmitting.set(true);
+    this.submitSuccess.set(false);
+    this.submitError.set(false);
+    this.errorMessage.set('');
+
+    try {
+      const token = await this.recaptchaService.executeRecaptcha('contact_form_submit').toPromise();
+
+      const formData: ContactForm = { ...this.contactForm.value, recaptchaToken: token };
+
+      const response = await this.http
+        .post<SubmitResponse>(environment.contactFormEndpoint, formData)
+        .toPromise();
+
+      this.submitSuccess.set(true);
+      this.contactForm.reset();
+      if (response?.recaptchaScore) {
+        console.log('📊 reCAPTCHA Score:', response.recaptchaScore);
+      }
+    } catch (error) {
+      this.submitError.set(true);
+      // All non-2xx HttpErrorResponses + network errors get the same generic
+      // message — the original code mapped 400/403/429/default all to the
+      // same key, so keep that behavior but skip the redundant switch.
+      this.errorMessage.set(this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE'));
+      if (error instanceof HttpErrorResponse) {
+        console.error(`🔥 Form submission HTTP ${error.status}:`, error);
+      } else {
+        console.error('🔥 Form submission error:', error);
+      }
+    } finally {
+      this.isSubmitting.set(false);
     }
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
-    Object.values(formGroup.controls).forEach(control => {
+    Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
       if (control instanceof FormGroup) {
         this.markFormGroupTouched(control);
@@ -573,43 +512,20 @@ export class ContactComponent implements OnInit, OnDestroy, AfterViewInit {
     const control = this.contactForm.get(controlName);
     if (!control || !control.errors || !control.touched) return '';
 
-    // Required
-    if (control.errors['required']) {
-      return this.translate.instant('CONTACT_PAGE.ERROR_REQUIRED');
-    }
-    // Email
-    if (control.errors['email']) {
-      return this.translate.instant('CONTACT_PAGE.ERROR_EMAIL');
-    }
-    // Min length
+    if (control.errors['required']) return this.translate.instant('CONTACT_PAGE.ERROR_REQUIRED');
+    if (control.errors['email']) return this.translate.instant('CONTACT_PAGE.ERROR_EMAIL');
     if (control.errors['minlength']) {
-      const requiredLength = control.errors['minlength'].requiredLength;
-      return this.translate.instant('CONTACT_PAGE.ERROR_MINLENGTH', { value: requiredLength });
+      return this.translate.instant('CONTACT_PAGE.ERROR_MINLENGTH', {
+        value: control.errors['minlength'].requiredLength,
+      });
     }
-    // Max length
     if (control.errors['maxlength']) {
-      const requiredLength = control.errors['maxlength'].requiredLength;
-      return this.translate.instant('CONTACT_PAGE.ERROR_MAXLENGTH', { value: requiredLength });
+      return this.translate.instant('CONTACT_PAGE.ERROR_MAXLENGTH', {
+        value: control.errors['maxlength'].requiredLength,
+      });
     }
-    // Pattern
-    if (control.errors['pattern']) {
-      return this.translate.instant('CONTACT_PAGE.ERROR_PATTERN');
-    }
+    if (control.errors['pattern']) return this.translate.instant('CONTACT_PAGE.ERROR_PATTERN');
 
-    // Fallback
     return this.translate.instant('CONTACT_PAGE.ERROR_MESSAGE');
-  }
-
-  private getPatternErrorMessage(controlName: string): string {
-    switch (controlName) {
-      case 'name':
-        return this.translate.instant('CONTACT_PAGE.ERROR_PATTERN_NAME');
-      case 'email':
-        return this.translate.instant('CONTACT_PAGE.ERROR_PATTERN_EMAIL');
-      case 'phone':
-        return this.translate.instant('CONTACT_PAGE.ERROR_PATTERN_PHONE');
-      default:
-        return this.translate.instant('CONTACT_PAGE.ERROR_PATTERN');
-    }
   }
 }
