@@ -741,16 +741,9 @@ export class ProductSectionComponent implements OnInit, AfterViewInit, OnDestroy
         'https://www.llanotecnica.com/assets/photos/MT-370-YELLOW-optimized.jpg',
         'https://www.llanotecnica.com/assets/photos/MT-370-BLUE-optimized.jpg'
       ],
-      'offers': {
-        '@type': 'Offer',
-        'availability': 'https://schema.org/InStock',
-        'priceCurrency': 'USD',
-        'seller': {
-          '@type': 'Organization',
-          'name': 'Llanotecnica'
-        },
-        'url': 'https://www.llanotecnica.com/en/products'
-      },
+      // No `offers`: pricing is quote-only. Including an Offer without a
+      // numeric `price` value flags the schema as invalid in Google Rich
+      // Results Test for both Product snippets and Merchant listings.
       'additionalProperty': [
         {
           '@type': 'PropertyValue',
@@ -821,16 +814,7 @@ export class ProductSectionComponent implements OnInit, AfterViewInit, OnDestroy
         'https://www.llanotecnica.com/assets/photos/MT-480-YELLOW-optimized.jpg',
         'https://www.llanotecnica.com/assets/photos/MT-480-BLUE-optimized.jpg'
       ],
-      'offers': {
-        '@type': 'Offer',
-        'availability': 'https://schema.org/InStock',
-        'priceCurrency': 'USD',
-        'seller': {
-          '@type': 'Organization',
-          'name': 'Llanotecnica'
-        },
-        'url': 'https://www.llanotecnica.com/en/products'
-      },
+      // No `offers`: see MT-370 above for rationale.
       'additionalProperty': [
         {
           '@type': 'PropertyValue',

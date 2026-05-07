@@ -1841,22 +1841,19 @@ private ensureImageDimensions(): void {
       '@context': 'https://schema.org',
       '@type': 'ItemList',
       'itemListElement': [
+        // NOTE: no `offers` block — pricing is quote-only (B2B). Including
+        // offers without a `price` value triggers Google's "Invalid item"
+        // warning for both Product snippets + Merchant listings rich results.
+        // Without offers, the Product is still valid schema (just not eligible
+        // for merchant-listing rich results, which it shouldn't be anyway).
         {
           '@type': 'Product',
           'position': 1,
           'name': 'MT-370 Concrete Mixer',
           'description': 'Compact 370L capacity concrete mixer perfect for residential and small commercial projects.',
           'image': 'https://www.llanotecnica.com/assets/photos/MT-370-optimized.jpg',
-          'brand': {
-            '@type': 'Brand',
-            'name': 'Llanotecnica'
-          },
-          'offers': {
-            '@type': 'Offer',
-            'availability': 'https://schema.org/InStock',
-            'priceCurrency': 'USD',
-            'url': 'https://www.llanotecnica.com/en/products'
-          }
+          'url': 'https://www.llanotecnica.com/en/products',
+          'brand': { '@type': 'Brand', 'name': 'Llanotecnica' }
         },
         {
           '@type': 'Product',
@@ -1864,16 +1861,8 @@ private ensureImageDimensions(): void {
           'name': 'MT-480 Concrete Mixer',
           'description': 'Heavy-duty 480L capacity concrete mixer designed for large commercial construction projects.',
           'image': 'https://www.llanotecnica.com/assets/photos/MT-480-optimized.jpg',
-          'brand': {
-            '@type': 'Brand',
-            'name': 'Llanotecnica'
-          },
-          'offers': {
-            '@type': 'Offer',
-            'availability': 'https://schema.org/InStock',
-            'priceCurrency': 'USD',
-            'url': 'https://www.llanotecnica.com/en/products'
-          }
+          'url': 'https://www.llanotecnica.com/en/products',
+          'brand': { '@type': 'Brand', 'name': 'Llanotecnica' }
         }
       ]
     };
