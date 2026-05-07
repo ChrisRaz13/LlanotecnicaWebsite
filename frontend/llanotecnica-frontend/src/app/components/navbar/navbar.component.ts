@@ -9,7 +9,7 @@ import {
   ViewChild,
   PLATFORM_ID,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { filter, Subject, takeUntil } from 'rxjs';
@@ -23,7 +23,7 @@ type LanguageKey = typeof SUPPORTED_LANGUAGES[number];
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterModule, TranslateModule],
+  imports: [RouterModule, TranslateModule, NgOptimizedImage],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })

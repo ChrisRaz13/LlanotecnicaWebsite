@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil, filter } from 'rxjs';
@@ -21,7 +21,7 @@ const ROUTE_MAPPINGS: Record<LanguageKey, Record<'about-us' | 'products' | 'cont
 
 @Component({
   selector: 'app-footer',
-  imports: [RouterModule, TranslateModule],
+  imports: [RouterModule, TranslateModule, NgOptimizedImage],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

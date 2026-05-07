@@ -5,12 +5,12 @@
     <!-- Logo Container - slides in when scrolled (desktop) / always visible (mobile) -->
     <div class="logo-container" [class.show]="isScrolled">
       <img #logoImg
-        src="assets/photos/logo.webp"
+        ngSrc="assets/photos/logo.webp"
         alt="{{ 'NAV.LOGO_ALT' | translate }}"
         class="logo"
         width="180"
         height="40"
-        loading="eager" />
+        priority />
       <span class="company-name">{{ 'NAV.COMPANY_NAME' | translate }}</span>
     </div>
 

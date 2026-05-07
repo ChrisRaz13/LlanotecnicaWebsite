@@ -71,13 +71,12 @@
             <div class="lt-product__stage-bg" aria-hidden="true"></div>
             <div class="lt-product__image-wrap">
               <img
-                [src]="getCurrentImageSrc(product.model)"
+                [ngSrc]="getCurrentImageSrc(product.model)"
                 [alt]="product.model + ' concrete mixer'"
                 [attr.data-model]="product.model"
                 width="600"
                 height="450"
-                loading="lazy"
-                decoding="async"
+                [priority]="pi === 0"
                 class="lt-product__image" />
             </div>
           </div>

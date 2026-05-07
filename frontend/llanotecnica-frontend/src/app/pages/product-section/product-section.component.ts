@@ -1,5 +1,5 @@
 import { Component, signal, computed, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, OnDestroy, TemplateRef, TrackByFunction, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog, MatDialogModule, MatDialogConfig } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -111,7 +111,7 @@ type EngineFilterType = 'all' | 'gas' | 'diesel' | 'electric';
 
 @Component({
     selector: 'app-product-section',
-    imports: [CommonModule, RouterModule, MatDialogModule, MatButtonModule, TranslateModule, LtButtonComponent],
+    imports: [CommonModule, RouterModule, MatDialogModule, MatButtonModule, TranslateModule, LtButtonComponent, NgOptimizedImage],
     templateUrl: './product-section.component.html',
     styleUrls: ['./product-section.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
