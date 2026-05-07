@@ -445,8 +445,29 @@ a.lt-footer__contact-item:focus-visible .lt-footer__contact-icon {
 .lt-footer__legal {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--lt-space-2);
   font-size: var(--lt-text-xs);
+}
+
+/* Site-credit attribution — keeps the prefix muted, names the agency
+   in safety-yellow so the brand still reads at a glance without
+   overwhelming the legal links. */
+.lt-footer__credit {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+.lt-footer__credit-name {
+  font-family: var(--lt-font-mono);
+  font-weight: var(--lt-weight-bold);
+  letter-spacing: var(--lt-tracking-wide);
+  color: var(--lt-color-safety-yellow);
+}
+.lt-footer__credit:hover .lt-footer__credit-name,
+.lt-footer__credit:focus-visible .lt-footer__credit-name {
+  color: var(--lt-color-safety-yellow-deep);
 }
 
 .lt-footer__legal-link {
