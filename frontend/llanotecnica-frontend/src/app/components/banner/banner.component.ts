@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 
 @Component({
     selector: 'app-banner',
     imports: [],
     templateUrl: './banner.component.html',
-    styleUrls: ['./banner.component.css']
+    styleUrls: ['./banner.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BannerComponent {
   phoneNumber = '+507 6566-4942';

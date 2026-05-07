@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, OnDestroy } from '@angular/core';
 
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -7,7 +7,8 @@ import { Subscription } from 'rxjs';
     selector: 'app-whatsapp-widget',
     imports: [TranslateModule],
     templateUrl: './whatsapp-widget.component.html',
-    styleUrls: ['./whatsapp-widget.component.css']
+    styleUrls: ['./whatsapp-widget.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WhatsappWidgetComponent implements OnInit, OnDestroy {
   private langChangeSubscription?: Subscription;
