@@ -24,6 +24,9 @@ import {
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SeoService } from '../../services/seo.service';
+import { LtButtonComponent } from '../../ui/button/lt-button.component';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 type FeatureCategory = 'safety' | 'performance' | 'design' | 'operation';
 type CategoryType = FeatureCategory | 'all';
@@ -83,42 +86,41 @@ interface VideoHighlight {
 }
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
-  animations: [
-    // Core essential animations only
-    trigger('fadeIn', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('0.4s ease-out', style({ opacity: 1 }))
-      ])
-    ]),
-    trigger('slideIn', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateX(-20px)' }),
-        animate('0.5s ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
-      ])
-    ]),
-    trigger('scrollIndicator', [
-      state('visible', style({ opacity: 1, transform: 'translateY(0)' })),
-      state('hidden', style({ opacity: 0, transform: 'translateY(20px)' })),
-      transition('visible <=> hidden', animate('0.3s ease-in-out'))
-    ]),
-    // Merged multiple stagger animations into one reusable animation
-    trigger('staggerItems', [
-      transition(':enter', [
-        query('.stagger-item', [
-          style({ opacity: 0, transform: 'translateY(15px)' }),
-          stagger(80, [
-            animate('0.4s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
-      ])
-    ])
-  ]
+    selector: 'app-home',
+    imports: [CommonModule, RouterModule, TranslateModule, LtButtonComponent],
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css'],
+    animations: [
+        // Core essential animations only
+        trigger('fadeIn', [
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('0.4s ease-out', style({ opacity: 1 }))
+            ])
+        ]),
+        trigger('slideIn', [
+            transition(':enter', [
+                style({ opacity: 0, transform: 'translateX(-20px)' }),
+                animate('0.5s ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
+            ])
+        ]),
+        trigger('scrollIndicator', [
+            state('visible', style({ opacity: 1, transform: 'translateY(0)' })),
+            state('hidden', style({ opacity: 0, transform: 'translateY(20px)' })),
+            transition('visible <=> hidden', animate('0.3s ease-in-out'))
+        ]),
+        // Merged multiple stagger animations into one reusable animation
+        trigger('staggerItems', [
+            transition(':enter', [
+                query('.stagger-item', [
+                    style({ opacity: 0, transform: 'translateY(15px)' }),
+                    stagger(80, [
+                        animate('0.4s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+                    ])
+                ], { optional: true })
+            ])
+        ])
+    ]
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly Math = Math;
@@ -127,6 +129,64 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('heroVideoMobile') heroVideoMobile?: ElementRef<HTMLVideoElement>;
   @ViewChild('mainVideo') mainVideo?: ElementRef<HTMLVideoElement>;
   @ViewChildren('productCard') productCards!: QueryList<ElementRef>;
+
+  /** 'en' or 'es' — derived from current URL, used for language-aware routing in template. */
+  get currentRouteLang(): 'en' | 'es' {
+    return this.router.url.startsWith('/es') ? 'es' : 'en';
+  }
+
+  // Hero animation refs
+  @ViewChild('heroSection') heroSection?: ElementRef<HTMLElement>;
+  @ViewChild('heroBackground') heroBackground?: ElementRef<HTMLElement>;
+  @ViewChild('heroEyebrow') heroEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('heroHeadline') heroHeadline?: ElementRef<HTMLElement>;
+  @ViewChild('heroDescription') heroDescription?: ElementRef<HTMLElement>;
+  @ViewChild('heroCta') heroCta?: ElementRef<HTMLElement>;
+  @ViewChild('heroScrollIndicator') heroScrollIndicator?: ElementRef<HTMLElement>;
+  private heroEntryTimeline: gsap.core.Timeline | null = null;
+  private heroParallaxTrigger: ScrollTrigger | null = null;
+
+  // Video section animation refs
+  @ViewChild('videoSection') videoSection?: ElementRef<HTMLElement>;
+  @ViewChild('videoSectionEyebrow') videoSectionEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('videoSectionTitle') videoSectionTitle?: ElementRef<HTMLElement>;
+  @ViewChild('videoSectionSubtitle') videoSectionSubtitle?: ElementRef<HTMLElement>;
+  @ViewChild('videoFrame') videoFrame?: ElementRef<HTMLElement>;
+  @ViewChild('videoInfo') videoInfo?: ElementRef<HTMLElement>;
+  private videoSectionTrigger: ScrollTrigger | null = null;
+
+  // Products section animation refs
+  @ViewChild('productsSection') productsSectionEl?: ElementRef<HTMLElement>;
+  @ViewChild('productsHeader') productsHeader?: ElementRef<HTMLElement>;
+  @ViewChild('productsEyebrow') productsEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('productsTitle') productsTitle?: ElementRef<HTMLElement>;
+  @ViewChild('productsSubtitle') productsSubtitle?: ElementRef<HTMLElement>;
+  @ViewChild('productCardsWrap') productCardsWrap?: ElementRef<HTMLElement>;
+  @ViewChild('productsCtaBar') productsCtaBar?: ElementRef<HTMLElement>;
+  @ViewChild('comparisonSection') comparisonSection?: ElementRef<HTMLElement>;
+  private productsSectionTriggers: ScrollTrigger[] = [];
+  private productsImageParallaxCleanups: Array<() => void> = [];
+
+  // Features + Company section refs
+  @ViewChild('featuresSection') featuresSectionEl?: ElementRef<HTMLElement>;
+  @ViewChild('featuresEyebrow') featuresEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('featuresTitle') featuresTitleEl?: ElementRef<HTMLElement>;
+  @ViewChild('featuresSubtitle') featuresSubtitleEl?: ElementRef<HTMLElement>;
+  @ViewChild('featuresGrid') featuresGrid?: ElementRef<HTMLElement>;
+  @ViewChild('companySection') companySectionEl?: ElementRef<HTMLElement>;
+  @ViewChild('companyEyebrow') companyEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('companyTitle') companyTitleEl?: ElementRef<HTMLElement>;
+  @ViewChild('companySubtitle') companySubtitleEl?: ElementRef<HTMLElement>;
+  @ViewChild('companyStatsGrid') companyStatsGrid?: ElementRef<HTMLElement>;
+  private featuresCompanyTriggers: ScrollTrigger[] = [];
+
+  // FAQ section refs
+  @ViewChild('faqSection') faqSection?: ElementRef<HTMLElement>;
+  @ViewChild('faqEyebrow') faqEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('faqTitle') faqTitle?: ElementRef<HTMLElement>;
+  @ViewChild('faqSubtitle') faqSubtitle?: ElementRef<HTMLElement>;
+  @ViewChild('faqList') faqList?: ElementRef<HTMLElement>;
+  private faqSectionTrigger: ScrollTrigger | null = null;
 
   // State variables
   activeSection = 'hero';
@@ -193,9 +253,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     { country: 'Belize', code: 'bz', region: 'centralAmerica' }
   ];
 
-  // No longer duplicating the flags in TypeScript
-  // CSS will handle the infinite scroll effect
-  flags_for_display = this.flags;
+  // Duplicated for seamless infinite scroll: when track translates -50%,
+  // the second copy aligns with the start, so the loop is invisible.
+  flags_for_display: Flag[] = [...this.flags, ...this.flags];
 
   mixers: Product[] = [];
   features: Feature[] = [];
@@ -254,6 +314,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
+      // Register the ScrollTrigger plugin once
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Build the cinematic hero entry sequence + scroll-driven parallax
+      this.buildHeroEntryTimeline();
+      this.setupHeroParallax();
+      this.setupVideoSectionReveal();
+      // Defer products animations until after first paint (cards + table only
+      // need to be ready by the time the user scrolls there)
+      requestAnimationFrame(() => {
+        this.setupProductsSectionReveal();
+        this.setupFeaturesAndCompanyReveal();
+        this.setupFaqSectionReveal();
+      });
+
       // IMMEDIATELY mute hero videos before any other configuration
       this.immediatelyMuteHeroVideos();
 
@@ -304,23 +379,26 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private loadHeroVideo(videoElement: HTMLVideoElement, type: 'desktop' | 'mobile'): void {
     if (!videoElement) return;
 
-    // Set poster image based on device type (using existing files)
-    const posterImage = type === 'desktop'
-      ? '/assets/photos/herosectionposter-optimized.jpg'
-      : '/assets/photos/herosectionposter-optimized.jpg';
+    // Don't re-inject sources if already done
+    if (videoElement.querySelector('source')) return;
 
-    videoElement.setAttribute('poster', posterImage);
+    // AV1 first (modern browsers, smaller + sharper), H.264 fallback (older Safari/iOS)
+    const av1Src = type === 'desktop'
+      ? '/assets/compressedvideos/hero-desktop.av1.mp4'
+      : '/assets/compressedvideos/hero-mobile.av1.mp4';
+    const h264Src = type === 'desktop'
+      ? '/assets/compressedvideos/hero-desktop.h264.mp4'
+      : '/assets/compressedvideos/hero-mobile.h264.mp4';
 
-    // Use existing video sources (fallback until optimized versions are created)
-    const videoSrc = type === 'desktop'
-      ? '/assets/compressedvideos/herosectiondesktop-ultra-optimized.mp4'
-      : '/assets/compressedvideos/herosectionmobile-ultra-optimized.mp4';
+    const av1Source = document.createElement('source');
+    av1Source.src = av1Src;
+    av1Source.type = 'video/mp4; codecs=av01.0.05M.08';
+    videoElement.appendChild(av1Source);
 
-    // Create and add video source
-    const source = document.createElement('source');
-    source.src = videoSrc;
-    source.type = 'video/mp4';
-    videoElement.appendChild(source);
+    const h264Source = document.createElement('source');
+    h264Source.src = h264Src;
+    h264Source.type = 'video/mp4; codecs=avc1.640028';
+    videoElement.appendChild(h264Source);
 
     // Force mute the video to ensure it stays muted - HERO VIDEOS MUST NEVER HAVE SOUND
     videoElement.muted = true;
@@ -534,6 +612,547 @@ private ensureImageDimensions(): void {
       this.intersectionObserver.disconnect();
       this.intersectionObserver = null;
     }
+
+    // Kill GSAP timeline + ScrollTriggers
+    this.heroEntryTimeline?.kill();
+    this.heroParallaxTrigger?.kill();
+    this.videoSectionTrigger?.kill();
+    this.productsSectionTriggers.forEach((t) => t.kill());
+    this.productsImageParallaxCleanups.forEach((cleanup) => cleanup());
+    this.featuresCompanyTriggers.forEach((t) => t.kill());
+    this.faqSectionTrigger?.kill();
+  }
+
+  /**
+   * Cinematic hero entry sequence (~1.4s total).
+   * Eyebrow → split-word headline reveal → description wipe → CTA cascade
+   * → scroll indicator. All starting states are set in CSS (opacity:0, etc.)
+   * so SSR HTML doesn't flash unstyled content.
+   */
+  private buildHeroEntryTimeline(): void {
+    const eyebrow = this.heroEyebrow?.nativeElement;
+    const headline = this.heroHeadline?.nativeElement;
+    const description = this.heroDescription?.nativeElement;
+    const ctaWrap = this.heroCta?.nativeElement;
+    const scrollInd = this.heroScrollIndicator?.nativeElement;
+
+    if (!eyebrow || !headline || !description || !ctaWrap) return;
+
+    // Reduced motion → skip animations, just reveal everything
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      gsap.set([eyebrow, description, scrollInd], { opacity: 1, y: 0 });
+      gsap.set(description, { clipPath: 'inset(0 0 0 0)' });
+      gsap.set(ctaWrap.children, { opacity: 1, y: 0, scale: 1 });
+      return;
+    }
+
+    // Manual word-split for headline (avoids the SplitText plugin dep —
+    // works for any text content, RTL-safe, screen-reader-friendly).
+    const originalHeadline = headline.textContent?.trim() || '';
+    if (originalHeadline && !headline.querySelector('.hero-headline__word')) {
+      headline.setAttribute('aria-label', originalHeadline);
+      const words = originalHeadline.split(/\s+/);
+      headline.innerHTML = words
+        .map(
+          (w) =>
+            `<span class="hero-headline__line"><span class="hero-headline__word" aria-hidden="true" style="display:inline-block;will-change:transform">${w}</span></span>`,
+        )
+        .join(' ');
+    }
+
+    // Same word-split for description (smaller / faster cascade than headline)
+    const originalDesc = description.textContent?.trim() || '';
+    if (originalDesc && !description.querySelector('.hero-description__word')) {
+      description.setAttribute('aria-label', originalDesc);
+      const descWords = originalDesc.split(/\s+/);
+      description.innerHTML = descWords
+        .map(
+          (w) =>
+            `<span class="hero-description__word" aria-hidden="true" style="display:inline-block;will-change:transform,opacity">${w}</span>`,
+        )
+        .join(' ');
+      // Reset the inline starting state we set in CSS — GSAP will manage from here
+      description.style.clipPath = '';
+      description.style.opacity = '1';
+    }
+
+    const headlineWords = headline.querySelectorAll('.hero-headline__word');
+    const descriptionWords = description.querySelectorAll('.hero-description__word');
+    const eyebrowBar = eyebrow.querySelector('.hero-eyebrow__bar');
+    const eyebrowLabel = eyebrow.querySelector('.hero-eyebrow__label');
+
+    this.heroEntryTimeline = gsap
+      .timeline({ defaults: { ease: 'power3.out' } })
+      // Eyebrow assembles: parent visible, bar draws to width, label fades + slides in
+      .set(eyebrow, { opacity: 1 })
+      .fromTo(
+        eyebrowBar,
+        { width: 0 },
+        { width: 32, duration: 0.4, ease: 'power3.out' },
+      )
+      .fromTo(
+        eyebrowLabel,
+        { opacity: 0, x: -6 },
+        { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' },
+        '-=0.15',
+      )
+      // Headline words: stagger reveal from below, expo-out (the showpiece)
+      .fromTo(
+        headlineWords,
+        { yPercent: 110, opacity: 0 },
+        {
+          yPercent: 0,
+          opacity: 1,
+          duration: 0.7,
+          stagger: 0.08,
+          ease: 'expo.out',
+        },
+        '-=0.2',
+      )
+      // Description words: smaller, faster cascade — flows visually from the headline
+      .fromTo(
+        descriptionWords,
+        { y: 12, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.45,
+          stagger: 0.018,
+          ease: 'power3.out',
+        },
+        '-=0.35',
+      )
+      // CTA buttons: decisive settle, no overshoot
+      .fromTo(
+        ctaWrap.children,
+        { y: 12, opacity: 0, scale: 0.96 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.55,
+          stagger: 0.08,
+          ease: 'power4.out',
+        },
+        '-=0.25',
+      );
+
+    if (scrollInd) {
+      this.heroEntryTimeline.fromTo(
+        scrollInd,
+        { y: 12, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.4, ease: 'power2.out' },
+        '-=0.1',
+      );
+    }
+  }
+
+  /**
+   * Scroll-driven parallax for the hero background — depth without distraction.
+   * Background drifts upward at ~0.6× scroll rate; text exits faster.
+   */
+  private setupHeroParallax(): void {
+    const heroSection = this.heroSection?.nativeElement;
+    const heroBg = this.heroBackground?.nativeElement;
+
+    if (!heroSection || !heroBg) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const tween = gsap.to(heroBg, {
+      yPercent: 18,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: heroSection,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.4,
+      },
+    });
+
+    // Hold a reference to the underlying ScrollTrigger so ngOnDestroy can kill it
+    this.heroParallaxTrigger = tween.scrollTrigger ?? null;
+  }
+
+  /**
+   * Scroll-triggered reveal for the demo-video section.
+   * Eyebrow → title → subtitle → video frame settle → highlights stagger → CTA.
+   * Plays once, ~600ms before the section is fully in view.
+   */
+  private setupVideoSectionReveal(): void {
+    const sectionEl = this.videoSection?.nativeElement;
+    const eyebrow = this.videoSectionEyebrow?.nativeElement;
+    const title = this.videoSectionTitle?.nativeElement;
+    const subtitle = this.videoSectionSubtitle?.nativeElement;
+    const frame = this.videoFrame?.nativeElement;
+    const infoCol = this.videoInfo?.nativeElement;
+
+    if (!sectionEl || !eyebrow || !title || !subtitle || !frame || !infoCol) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Children that animate inside the info column
+    const infoChildren = infoCol.querySelectorAll(
+      ':scope > *, :scope > .lt-video-info__highlights > li',
+    );
+
+    if (prefersReducedMotion) {
+      gsap.set([eyebrow, title, subtitle, frame, ...Array.from(infoChildren)], {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        clearProps: 'transform',
+      });
+      return;
+    }
+
+    // Set initial states (avoids FOUC if SSR hydrates before timeline runs)
+    gsap.set([eyebrow, title, subtitle], { opacity: 0, y: 24 });
+    gsap.set(frame, { opacity: 0, scale: 0.96, y: 20 });
+    gsap.set(infoChildren, { opacity: 0, y: 16 });
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'power3.out' },
+      scrollTrigger: {
+        trigger: sectionEl,
+        start: 'top 78%',
+        toggleActions: 'play none none reverse',
+      },
+    });
+
+    tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.45 })
+      .to(title, { opacity: 1, y: 0, duration: 0.6, ease: 'expo.out' }, '-=0.25')
+      .to(subtitle, { opacity: 1, y: 0, duration: 0.55 }, '-=0.4')
+      .to(
+        frame,
+        { opacity: 1, scale: 1, y: 0, duration: 0.7, ease: 'power4.out' },
+        '-=0.45',
+      )
+      .to(
+        infoChildren,
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: 'power3.out' },
+        '-=0.5',
+      );
+
+    this.videoSectionTrigger = tl.scrollTrigger ?? null;
+  }
+
+  /**
+   * Products section: orchestrated reveal — header → cards (with spec count-up)
+   * → CTA bar → comparison table. Plus cursor-aware image parallax on desktop.
+   */
+  private setupProductsSectionReveal(): void {
+    const sectionEl = this.productsSectionEl?.nativeElement;
+    const eyebrow = this.productsEyebrow?.nativeElement;
+    const title = this.productsTitle?.nativeElement;
+    const subtitle = this.productsSubtitle?.nativeElement;
+    const cardsWrap = this.productCardsWrap?.nativeElement;
+    const ctaBar = this.productsCtaBar?.nativeElement;
+    const compSection = this.comparisonSection?.nativeElement;
+
+    if (!sectionEl || !eyebrow || !title || !subtitle || !cardsWrap) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cards = cardsWrap.querySelectorAll('.lt-product-card');
+    const ctaActions = ctaBar?.querySelectorAll('.lt-products-cta-bar__actions > *');
+    const compRows = compSection?.querySelectorAll('.lt-comparison__table tbody tr');
+
+    if (prefersReducedMotion) {
+      gsap.set([eyebrow, title, subtitle, ...Array.from(cards)], {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+      });
+      if (ctaActions) gsap.set(Array.from(ctaActions), { opacity: 1, y: 0 });
+      if (compRows) gsap.set(Array.from(compRows), { opacity: 1, y: 0 });
+      return;
+    }
+
+    // Initial states
+    gsap.set([eyebrow, title, subtitle], { opacity: 0, y: 24 });
+    gsap.set(cards, { opacity: 0, y: 32, scale: 0.97 });
+    if (ctaActions) gsap.set(Array.from(ctaActions), { opacity: 0, y: 16 });
+    if (compRows) gsap.set(Array.from(compRows), { opacity: 0, y: 12 });
+
+    // 1. Header + cards reveal — fires when section is 78% in viewport
+    const headerCardsTl = gsap.timeline({
+      defaults: { ease: 'power3.out' },
+      scrollTrigger: {
+        trigger: sectionEl,
+        start: 'top 78%',
+        toggleActions: 'play none none none',
+      },
+    });
+    headerCardsTl
+      .to(eyebrow, { opacity: 1, y: 0, duration: 0.45 })
+      .to(title, { opacity: 1, y: 0, duration: 0.6, ease: 'expo.out' }, '-=0.25')
+      .to(subtitle, { opacity: 1, y: 0, duration: 0.55 }, '-=0.4')
+      .to(
+        cards,
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.18, ease: 'power4.out' },
+        '-=0.35',
+      )
+      .add(() => this.runSpecCountUps(cards), '-=0.3');
+    if (headerCardsTl.scrollTrigger) this.productsSectionTriggers.push(headerCardsTl.scrollTrigger);
+
+    // 2. CTA bar reveal
+    if (ctaBar && ctaActions) {
+      const ctaTl = gsap.timeline({
+        defaults: { ease: 'power3.out' },
+        scrollTrigger: { trigger: ctaBar, start: 'top 85%', toggleActions: 'play none none none' },
+      });
+      ctaTl.to(Array.from(ctaActions), {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        stagger: 0.08,
+      });
+      if (ctaTl.scrollTrigger) this.productsSectionTriggers.push(ctaTl.scrollTrigger);
+    }
+
+    // 3. Comparison table rows stagger
+    if (compSection && compRows && compRows.length) {
+      const compTl = gsap.timeline({
+        defaults: { ease: 'power3.out' },
+        scrollTrigger: { trigger: compSection, start: 'top 80%', toggleActions: 'play none none none' },
+      });
+      compTl.to(Array.from(compRows), {
+        opacity: 1,
+        y: 0,
+        duration: 0.45,
+        stagger: 0.07,
+      });
+      if (compTl.scrollTrigger) this.productsSectionTriggers.push(compTl.scrollTrigger);
+    }
+
+    // 4. Cursor-aware parallax on product images (desktop only, hover-capable input)
+    if (window.matchMedia('(hover: hover) and (min-width: 1024px)').matches) {
+      cards.forEach((card) => {
+        const cardEl = card as HTMLElement;
+        const imgWrap = cardEl.querySelector('.lt-product-card__image-wrap') as HTMLElement | null;
+        const img = cardEl.querySelector('.lt-product-card__image') as HTMLElement | null;
+        if (!imgWrap || !img) return;
+
+        const onMove = (e: MouseEvent) => {
+          const rect = imgWrap.getBoundingClientRect();
+          const cx = (e.clientX - rect.left) / rect.width - 0.5; // -0.5..0.5
+          const cy = (e.clientY - rect.top) / rect.height - 0.5;
+          gsap.to(img, {
+            x: cx * 14,
+            y: cy * 10,
+            duration: 0.6,
+            ease: 'power3.out',
+            overwrite: 'auto',
+          });
+        };
+        const onLeave = () => {
+          gsap.to(img, { x: 0, y: 0, duration: 0.7, ease: 'power3.out' });
+        };
+
+        imgWrap.addEventListener('mousemove', onMove);
+        imgWrap.addEventListener('mouseleave', onLeave);
+        this.productsImageParallaxCleanups.push(() => {
+          imgWrap.removeEventListener('mousemove', onMove);
+          imgWrap.removeEventListener('mouseleave', onLeave);
+        });
+      });
+    }
+  }
+
+  /**
+   * Features (dark) + Company (light) sections reveal:
+   * - Features: header → 3 feature cards stagger fade-up
+   * - Company: header → 3 stat cards stagger fade-up + count-up numbers → CTA
+   */
+  private setupFeaturesAndCompanyReveal(): void {
+    // ----- FEATURES -----
+    const fSection = this.featuresSectionEl?.nativeElement;
+    const fEyebrow = this.featuresEyebrow?.nativeElement;
+    const fTitle = this.featuresTitleEl?.nativeElement;
+    const fSubtitle = this.featuresSubtitleEl?.nativeElement;
+    const fGrid = this.featuresGrid?.nativeElement;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (fSection && fEyebrow && fTitle && fSubtitle && fGrid) {
+      const fCards = fGrid.querySelectorAll('.lt-feature-card');
+
+      if (prefersReducedMotion) {
+        gsap.set([fEyebrow, fTitle, fSubtitle, ...Array.from(fCards)], {
+          opacity: 1, y: 0, scale: 1,
+        });
+      } else {
+        gsap.set([fEyebrow, fTitle, fSubtitle], { opacity: 0, y: 24 });
+        gsap.set(fCards, { opacity: 0, y: 32, scale: 0.97 });
+
+        const fTl = gsap.timeline({
+          defaults: { ease: 'power3.out' },
+          scrollTrigger: {
+            trigger: fSection,
+            start: 'top 78%',
+            toggleActions: 'play none none none',
+          },
+        });
+        fTl.to(fEyebrow, { opacity: 1, y: 0, duration: 0.45 })
+          .to(fTitle, { opacity: 1, y: 0, duration: 0.6, ease: 'expo.out' }, '-=0.25')
+          .to(fSubtitle, { opacity: 1, y: 0, duration: 0.55 }, '-=0.4')
+          .to(
+            fCards,
+            { opacity: 1, y: 0, scale: 1, duration: 0.65, stagger: 0.12, ease: 'power4.out' },
+            '-=0.3',
+          );
+        if (fTl.scrollTrigger) this.featuresCompanyTriggers.push(fTl.scrollTrigger);
+      }
+    }
+
+    // ----- COMPANY -----
+    const cSection = this.companySectionEl?.nativeElement;
+    const cEyebrow = this.companyEyebrow?.nativeElement;
+    const cTitle = this.companyTitleEl?.nativeElement;
+    const cSubtitle = this.companySubtitleEl?.nativeElement;
+    const cGrid = this.companyStatsGrid?.nativeElement;
+
+    if (cSection && cEyebrow && cTitle && cSubtitle && cGrid) {
+      const cStats = cGrid.querySelectorAll('.lt-stat');
+      const cCta = cSection.querySelector('.lt-company-section__cta');
+
+      if (prefersReducedMotion) {
+        gsap.set(
+          [cEyebrow, cTitle, cSubtitle, ...Array.from(cStats), cCta].filter(Boolean) as Element[],
+          { opacity: 1, y: 0, scale: 1 },
+        );
+      } else {
+        gsap.set([cEyebrow, cTitle, cSubtitle], { opacity: 0, y: 24 });
+        gsap.set(cStats, { opacity: 0, y: 28, scale: 0.97 });
+        if (cCta) gsap.set(cCta, { opacity: 0, y: 16 });
+
+        const cTl = gsap.timeline({
+          defaults: { ease: 'power3.out' },
+          scrollTrigger: {
+            trigger: cSection,
+            start: 'top 78%',
+            toggleActions: 'play none none none',
+          },
+        });
+        cTl.to(cEyebrow, { opacity: 1, y: 0, duration: 0.45 })
+          .to(cTitle, { opacity: 1, y: 0, duration: 0.6, ease: 'expo.out' }, '-=0.25')
+          .to(cSubtitle, { opacity: 1, y: 0, duration: 0.55 }, '-=0.4')
+          .to(
+            cStats,
+            { opacity: 1, y: 0, scale: 1, duration: 0.65, stagger: 0.12, ease: 'power4.out' },
+            '-=0.3',
+          )
+          .add(() => this.runStatCountUps(cStats), '-=0.3');
+        if (cCta) {
+          cTl.to(cCta, { opacity: 1, y: 0, duration: 0.5 }, '-=0.2');
+        }
+        if (cTl.scrollTrigger) this.featuresCompanyTriggers.push(cTl.scrollTrigger);
+      }
+    }
+  }
+
+  /**
+   * FAQ section reveal: header → accordion items stagger-fade up from below.
+   * The accordion expand-collapse itself is pure CSS (grid-template-rows trick).
+   */
+  private setupFaqSectionReveal(): void {
+    const sectionEl = this.faqSection?.nativeElement;
+    const eyebrow = this.faqEyebrow?.nativeElement;
+    const title = this.faqTitle?.nativeElement;
+    const subtitle = this.faqSubtitle?.nativeElement;
+    const list = this.faqList?.nativeElement;
+
+    if (!sectionEl || !eyebrow || !title || !subtitle || !list) return;
+
+    const items = list.querySelectorAll('.lt-faq-item');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      gsap.set([eyebrow, title, subtitle, ...Array.from(items)], { opacity: 1, y: 0 });
+      return;
+    }
+
+    gsap.set([eyebrow, title, subtitle], { opacity: 0, y: 24 });
+    gsap.set(items, { opacity: 0, y: 16 });
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'power3.out' },
+      scrollTrigger: {
+        trigger: sectionEl,
+        start: 'top 78%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.45 })
+      .to(title, { opacity: 1, y: 0, duration: 0.6, ease: 'expo.out' }, '-=0.25')
+      .to(subtitle, { opacity: 1, y: 0, duration: 0.55 }, '-=0.4')
+      .to(
+        items,
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.06, ease: 'power3.out' },
+        '-=0.3',
+      );
+
+    this.faqSectionTrigger = tl.scrollTrigger ?? null;
+  }
+
+  /**
+   * Animate the company stat numbers up from 0 to their target value.
+   * Reads `data-stat-value` so the source-of-truth is in the DOM.
+   */
+  private runStatCountUps(stats: NodeListOf<Element>): void {
+    stats.forEach((stat) => {
+      const valueEl = stat.querySelector('.lt-stat__value') as HTMLElement | null;
+      if (!valueEl) return;
+      const target = parseInt(valueEl.dataset['statValue'] || valueEl.textContent || '0', 10);
+      if (!Number.isFinite(target) || target <= 0) return;
+      const counter = { val: 0 };
+      gsap.to(counter, {
+        val: target,
+        duration: 1.4,
+        ease: 'power2.out',
+        onUpdate: () => {
+          valueEl.textContent = String(Math.round(counter.val));
+        },
+        onComplete: () => {
+          valueEl.textContent = String(target);
+        },
+      });
+    });
+  }
+
+  /**
+   * For each product card, find the spec values and animate the leading number
+   * up from 0. Pure visual flourish — works for any leading-number string format
+   * ("370 Liters", "9 HP", "750 kg", "13+ HP") by parsing the prefix.
+   */
+  private runSpecCountUps(cards: NodeListOf<Element>): void {
+    cards.forEach((card) => {
+      const specValues = card.querySelectorAll('.lt-spec__value');
+      specValues.forEach((el) => {
+        const text = el.textContent?.trim() || '';
+        const match = text.match(/^(\d+(?:\.\d+)?)/);
+        if (!match) return;
+        const target = parseFloat(match[1]);
+        const suffix = text.slice(match[0].length); // " Liters", " HP", "+ HP", etc.
+        const counter = { val: 0 };
+        gsap.to(counter, {
+          val: target,
+          duration: 1.1,
+          ease: 'power2.out',
+          onUpdate: () => {
+            const current = Math.round(counter.val);
+            el.textContent = current + suffix;
+          },
+          onComplete: () => {
+            // Snap to original text (preserves any decimals/special chars)
+            el.textContent = text;
+          },
+        });
+      });
+    });
   }
 
   // Load translated content for dynamic elements - optimized to run once
@@ -609,41 +1228,110 @@ private ensureImageDimensions(): void {
     });
   }
 
-  // Optimize video source updates
+  /**
+   * Single source of truth for the demo-video language source.
+   * Called on init AND on every language change.
+   * Preserves playback position across the swap so switching mid-video doesn't
+   * jolt the user back to 0:00.
+   */
   private updateVideoSources(): void {
     const currentLang = this.translate.currentLang || 'en';
 
-    // Set poster image - use WebP format for better performance with fallback
-    this.currentVideoPoster = '/assets/photos/coverphoto.webp';
+    // Language-aware poster — actual frame from the corresponding video at ~3.5s.
+    // Naturally matches the 3:4 portrait frame, looks like a paused video.
+    const lcLang = currentLang === 'es' ? 'spanish' : 'english';
+    this.currentVideoPoster = `/assets/photos/intro-poster-${lcLang}.webp`;
 
-    // Set video source based on language (using existing files)
-    this.currentVideoSrc = currentLang === 'es'
-      ? '/assets/compressedvideos/IntroductionSpanish.mp4'
-      : '/assets/compressedvideos/IntroductionEnglish.mp4';
+    // Pick AV1 (smaller, sharper) for modern browsers, H.264 for older Safari/iOS.
+    // Portrait-cropped 720x1080 sources — natively match the 3:4 frame, no
+    // wasted pixels. Down from 47-48MB original master to 12-13MB AV1.
+    const useAv1 = this.canPlayAv1();
+    const codec = useAv1 ? 'av1' : 'h264';
+    this.currentVideoSrc = `/assets/compressedvideos/intro-${lcLang}-portrait.${codec}.mp4`;
 
-    // Lazy load if element exists
-    if (this.mainVideo && this.mainVideo.nativeElement) {
-      // Use setAttribute to avoid triggering immediate load
-      this.mainVideo.nativeElement.setAttribute('poster', this.currentVideoPoster);
+    if (!isPlatformBrowser(this.platformId)) return;
 
-      // Delay loading video source until it's visible
-      if (isPlatformBrowser(this.platformId) && 'IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting && this.mainVideo?.nativeElement) {
-              this.mainVideo.nativeElement.src = this.currentVideoSrc;
-              this.mainVideo.nativeElement.load();
-              observer.disconnect();
+    const videoEl = this.mainVideo?.nativeElement;
+    if (!videoEl) return;
+
+    videoEl.setAttribute('poster', this.currentVideoPoster);
+
+    // Capture playback state BEFORE swapping the source
+    const wasPlaying = !videoEl.paused && !videoEl.ended;
+    const previousTime = videoEl.currentTime;
+    const sameSrcAlready = videoEl.currentSrc.endsWith(this.currentVideoSrc);
+
+    // Initial-load path: defer the actual src load until video is in viewport.
+    // Subsequent language switches: swap immediately if already in viewport.
+    if (!videoEl.currentSrc) {
+      // Never loaded yet — observe and load on viewport entry
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+          (entries, obs) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting && this.mainVideo?.nativeElement) {
+                this.swapVideoSrc(this.mainVideo.nativeElement, this.currentVideoSrc);
+                obs.disconnect();
+              }
             }
-          });
-        }, { threshold: 0.1 });
-
-        observer.observe(this.mainVideo.nativeElement);
+          },
+          { threshold: 0.1 },
+        );
+        observer.observe(videoEl);
       } else {
-        // Fallback for browsers without IntersectionObserver
-        this.mainVideo.nativeElement.load();
+        this.swapVideoSrc(videoEl, this.currentVideoSrc);
       }
+      return;
     }
+
+    // Already loaded — language change scenario. Only swap if the src actually changed.
+    if (sameSrcAlready) return;
+
+    this.swapVideoSrc(videoEl, this.currentVideoSrc, previousTime, wasPlaying);
+  }
+
+  /**
+   * Detect AV1 video playback support. Cached after first call.
+   * Returns true on Chrome/Edge ≥90, Firefox, Safari ≥17. False on older Safari/iOS.
+   */
+  private _av1Supported: boolean | null = null;
+  private canPlayAv1(): boolean {
+    if (this._av1Supported !== null) return this._av1Supported;
+    if (!isPlatformBrowser(this.platformId)) return false;
+    const probe = document.createElement('video');
+    const support = probe.canPlayType('video/mp4; codecs=av01.0.05M.08');
+    this._av1Supported = support === 'probably' || support === 'maybe';
+    return this._av1Supported;
+  }
+
+  /**
+   * Swap the video element's source and load it.
+   * Optionally restores playback position + resumes if user was watching.
+   */
+  private swapVideoSrc(
+    videoEl: HTMLVideoElement,
+    src: string,
+    restoreTime = 0,
+    resume = false,
+  ): void {
+    const onMetadata = () => {
+      try {
+        if (restoreTime > 0 && restoreTime < videoEl.duration) {
+          videoEl.currentTime = restoreTime;
+        }
+        if (resume) {
+          videoEl.play().catch(() => {
+            // Autoplay was blocked — that's fine, user clicks play
+          });
+        }
+      } finally {
+        videoEl.removeEventListener('loadedmetadata', onMetadata);
+      }
+    };
+
+    videoEl.addEventListener('loadedmetadata', onMetadata, { once: true });
+    videoEl.src = src;
+    videoEl.load();
   }
 
   // Separated translation processing methods for clarity
@@ -1464,31 +2152,32 @@ private ensureImageDimensions(): void {
   }
 
   private loadVideoSources(): void {
-    // Only load the video source for the current device type
-    if (this.isMobileDevice) {
-      // Load only mobile video source
-      if (this.heroVideoMobile?.nativeElement) {
-        const mobileVideo = this.heroVideoMobile.nativeElement;
-        if (!mobileVideo.querySelector('source')) {
-          const source = document.createElement('source');
-          source.src = '/assets/compressedvideos/herosectionmobile-ultra-optimized.mp4';
-          source.type = 'video/mp4';
-          mobileVideo.appendChild(source);
-          mobileVideo.load();
-        }
-      }
-    } else {
-      // Load only desktop video source
-      if (this.heroVideoDesktop?.nativeElement) {
-        const desktopVideo = this.heroVideoDesktop.nativeElement;
-        if (!desktopVideo.querySelector('source')) {
-          const source = document.createElement('source');
-          source.src = '/assets/compressedvideos/herosectiondesktop-ultra-optimized.mp4';
-          source.type = 'video/mp4';
-          desktopVideo.appendChild(source);
-          desktopVideo.load();
-        }
-      }
-    }
+    // Inject AV1 + H.264 sources for the device type. Browser picks AV1 if it
+    // can decode it (smaller + sharper); falls back to H.264 otherwise.
+    const target = this.isMobileDevice
+      ? this.heroVideoMobile?.nativeElement
+      : this.heroVideoDesktop?.nativeElement;
+
+    if (!target) return;
+    if (target.querySelector('source')) return; // already loaded
+
+    const av1Path = this.isMobileDevice
+      ? '/assets/compressedvideos/hero-mobile.av1.mp4'
+      : '/assets/compressedvideos/hero-desktop.av1.mp4';
+    const h264Path = this.isMobileDevice
+      ? '/assets/compressedvideos/hero-mobile.h264.mp4'
+      : '/assets/compressedvideos/hero-desktop.h264.mp4';
+
+    const av1 = document.createElement('source');
+    av1.src = av1Path;
+    av1.type = 'video/mp4; codecs=av01.0.05M.08';
+    target.appendChild(av1);
+
+    const h264 = document.createElement('source');
+    h264.src = h264Path;
+    h264.type = 'video/mp4; codecs=avc1.640028';
+    target.appendChild(h264);
+
+    target.load();
   }
 }

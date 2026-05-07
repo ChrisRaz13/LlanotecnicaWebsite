@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
-  selector: 'app-banner',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './banner.component.html',
-  styleUrls: ['./banner.component.css']
+    selector: 'app-banner',
+    imports: [],
+    templateUrl: './banner.component.html',
+    styleUrls: ['./banner.component.css']
 })
 export class BannerComponent {
   phoneNumber = '+507 6566-4942';

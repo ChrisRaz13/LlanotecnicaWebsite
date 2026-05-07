@@ -1,6 +1,8 @@
 *.mp4
-*.mp4
 .DS_Store
+
+# Archived assets (kept on disk, never shipped or committed)
+/_archive/
 Servers
 target
 build

@@ -1,5 +1,6 @@
 import { ApplicationConfig, importProvidersFrom, PLATFORM_ID } from '@angular/core';
-import { provideRouter, withViewTransitions, withInMemoryScrolling, withPreloading, PreloadAllModules } from '@angular/router';
+import { provideRouter, withViewTransitions, withInMemoryScrolling, withPreloading } from '@angular/router';
+import { SelectivePreloadingStrategy } from './core/selective-preloading-strategy';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
@@ -28,7 +29,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
         anchorScrolling: 'enabled',
       }),
-      withPreloading(PreloadAllModules)
+      withPreloading(SelectivePreloadingStrategy)
     ),
     provideAnimations(),
     provideHttpClient(),

@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, OnDestroy, PLATFORM_ID, Inject, HostListener } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -13,52 +13,56 @@ interface Language {
 }
 
 @Component({
-  selector: 'app-language-selector',
-  standalone: true,
-  imports: [CommonModule, TranslateModule],
-  template: `
+    selector: 'app-language-selector',
+    imports: [TranslateModule],
+    template: `
     <div class="language-selector">
       <div
         class="lang-toggle"
         (click)="toggleDropdown($event)"
         [attr.aria-label]="'COMMON.CHANGE_LANGUAGE' | translate">
-
+    
         <!-- Flag Toggle (Both Desktop and Mobile) -->
         <div class="flag-option" [class.active]="currentLang === 'en'" (click)="switchLanguage('en', $event)">
           <img src="assets/flags/gb.svg" alt="English" class="flag-icon" />
         </div>
-
+    
         <span class="divider">|</span>
-
+    
         <div class="flag-option" [class.active]="currentLang === 'es'" (click)="switchLanguage('es', $event)">
           <img src="assets/flags/es.svg" alt="Español" class="flag-icon" />
         </div>
       </div>
-
+    
       <!-- Mobile Dropdown (Only shown when dropdown is explicitly opened) -->
-      <div class="language-dropdown" *ngIf="isDropdownOpen && isMobile" role="menu" [attr.aria-label]="'COMMON.LANGUAGE_SELECTION' | translate">
-        <div class="dropdown-header">
-          <span>{{ 'COMMON.SELECT_LANGUAGE' | translate }}</span>
+      @if (isDropdownOpen && isMobile) {
+        <div class="language-dropdown" role="menu" [attr.aria-label]="'COMMON.LANGUAGE_SELECTION' | translate">
+          <div class="dropdown-header">
+            <span>{{ 'COMMON.SELECT_LANGUAGE' | translate }}</span>
+          </div>
+          <div class="dropdown-items">
+            @for (language of languages; track language) {
+              <button
+                class="language-option"
+                [class.active]="language.key === currentLang"
+                (click)="switchLanguage(language.key, $event)"
+                role="menuitem">
+                <img
+                  [src]="'assets/flags/' + (language.key === 'en' ? 'gb' : language.key) + '.svg'"
+                  [alt]="language.name"
+                  class="flag-icon" />
+                <span class="language-name">{{language.nativeName}}</span>
+                @if (language.key === currentLang) {
+                  <span class="language-check">✓</span>
+                }
+              </button>
+            }
+          </div>
         </div>
-        <div class="dropdown-items">
-          <button
-            *ngFor="let language of languages"
-            class="language-option"
-            [class.active]="language.key === currentLang"
-            (click)="switchLanguage(language.key, $event)"
-            role="menuitem">
-            <img
-              [src]="'assets/flags/' + (language.key === 'en' ? 'gb' : language.key) + '.svg'"
-              [alt]="language.name"
-              class="flag-icon" />
-            <span class="language-name">{{language.nativeName}}</span>
-            <span class="language-check" *ngIf="language.key === currentLang">✓</span>
-          </button>
-        </div>
-      </div>
+      }
     </div>
-  `,
-  styles: [`
+    `,
+    styles: [`
     /* Base Container */
     .language-selector {
       position: relative;

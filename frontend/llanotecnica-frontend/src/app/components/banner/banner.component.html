@@ -42,11 +42,13 @@
 </div>
 
 <!-- Catalog Modal -->
-<div class="manual-modal" *ngIf="showCatalogModal">
-  <div class="modal-content">
-    <h2>Select Catalog</h2>
-    <button (click)="downloadCatalog('en')">English</button>
-    <button (click)="downloadCatalog('es')">Español</button>
-    <button (click)="toggleCatalogModal()">Cancel</button>
+@if (showCatalogModal) {
+  <div class="manual-modal">
+    <div class="modal-content">
+      <h2>Select Catalog</h2>
+      <button (click)="downloadCatalog('en')">English</button>
+      <button (click)="downloadCatalog('es')">Español</button>
+      <button (click)="toggleCatalogModal()">Cancel</button>
+    </div>
   </div>
-</div>
+}

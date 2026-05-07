@@ -1,7 +1,7 @@
 import {
   Component, OnInit, AfterViewInit, OnDestroy, ElementRef, QueryList, ViewChildren, ViewChild, Inject, PLATFORM_ID, ChangeDetectorRef, NgZone
 } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -12,6 +12,9 @@ import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operato
 import { Subject } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SeoService } from '../../services/seo.service';
+import { LtButtonComponent } from '../../ui/button/lt-button.component';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // Removed RecaptchaModule import as it's not needed for Enterprise
 
 // Interface for reCAPTCHA Enterprise window object
@@ -27,35 +30,71 @@ declare global {
 }
 
 @Component({
-  selector: 'app-about-us',
-  standalone: true,
-  imports: [
-    CommonModule,
+    selector: 'app-about-us',
+    imports: [
     ReactiveFormsModule,
     RouterLink,
-    TranslateModule
-    // Removed RecaptchaModule from imports
-  ],
-  templateUrl: './about-us.component.html',
-  styleUrls: ['./about-us.component.css'],
-  animations: [
-    trigger('fadeSlideInOut', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(-10px)' }),
-        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-      ]),
-      transition(':leave', [
-        animate('300ms ease-in', style({ opacity: 0, transform: 'translateY(-10px)' }))
-      ])
-    ])
-  ]
+    TranslateModule,
+    LtButtonComponent
+],
+    templateUrl: './about-us.component.html',
+    styleUrls: ['./about-us.component.css'],
+    animations: [
+        trigger('fadeSlideInOut', [
+            transition(':enter', [
+                style({ opacity: 0, transform: 'translateY(-10px)' }),
+                animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+            ]),
+            transition(':leave', [
+                animate('300ms ease-in', style({ opacity: 0, transform: 'translateY(-10px)' }))
+            ])
+        ])
+    ]
 })
 export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
+  // Legacy refs (preserved for backwards compat with leftover code)
   @ViewChildren('stageElement') stageElements!: QueryList<ElementRef>;
   @ViewChild('finalCtaElement') finalCtaElement!: ElementRef;
   @ViewChild('videoElement') videoElement!: ElementRef;
   @ViewChild('heroContent') heroContent!: ElementRef;
   @ViewChildren('statNumber') statNumbers!: QueryList<ElementRef>;
+
+  // ----- New token-based section refs (heavy-equipment overhaul) -----
+  @ViewChild('aboutHeroSection') aboutHeroSection?: ElementRef<HTMLElement>;
+  @ViewChild('aboutHeroEyebrow') aboutHeroEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('aboutHeroTagline') aboutHeroTagline?: ElementRef<HTMLElement>;
+  @ViewChild('aboutHeroTitle') aboutHeroTitle?: ElementRef<HTMLElement>;
+  @ViewChild('aboutHeroDescription') aboutHeroDescription?: ElementRef<HTMLElement>;
+  @ViewChild('aboutHeroCta') aboutHeroCta?: ElementRef<HTMLElement>;
+
+  @ViewChild('aboutMissionSection') aboutMissionSection?: ElementRef<HTMLElement>;
+  @ViewChild('aboutMissionEyebrow') aboutMissionEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('aboutMissionTitle') aboutMissionTitle?: ElementRef<HTMLElement>;
+  @ViewChild('aboutMissionText') aboutMissionText?: ElementRef<HTMLElement>;
+  @ViewChild('aboutMissionImage') aboutMissionImage?: ElementRef<HTMLElement>;
+
+  @ViewChild('aboutValuesSection') aboutValuesSection?: ElementRef<HTMLElement>;
+  @ViewChild('aboutValuesEyebrow') aboutValuesEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('aboutValuesTitle') aboutValuesTitle?: ElementRef<HTMLElement>;
+  @ViewChild('aboutValuesGrid') aboutValuesGrid?: ElementRef<HTMLElement>;
+
+  @ViewChild('aboutProductionSection') aboutProductionSection?: ElementRef<HTMLElement>;
+  @ViewChild('aboutProductionEyebrow') aboutProductionEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('aboutProductionTitle') aboutProductionTitle?: ElementRef<HTMLElement>;
+  @ViewChild('aboutProductionSubtitle') aboutProductionSubtitle?: ElementRef<HTMLElement>;
+  @ViewChild('aboutProductionTimeline') aboutProductionTimeline?: ElementRef<HTMLElement>;
+
+  @ViewChild('aboutFinalCtaSection') aboutFinalCtaSection?: ElementRef<HTMLElement>;
+  @ViewChild('aboutFinalContent') aboutFinalContent?: ElementRef<HTMLElement>;
+  @ViewChild('aboutFinalImage') aboutFinalImage?: ElementRef<HTMLElement>;
+
+  private heroEntryTimeline: gsap.core.Timeline | null = null;
+  private aboutScrollTriggers: ScrollTrigger[] = [];
+
+  /** Language-aware contact page route. */
+  get contactRoute(): string {
+    return this.router.url.startsWith('/es') ? '/es/contacto' : '/en/contact';
+  }
 
   contactForm: FormGroup;
   finalCtaVisible = false;
@@ -308,13 +347,154 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.videoElement?.nativeElement) {
         this.videoElement.nativeElement.muted = true;
       }
-      setTimeout(() => {
-        this.setupIntersectionObservers();
-        this.setupFinalCtaObserver();
-        this.setupHeroAnimation();
-        this.setupStatsAnimation();
-      }, 0);
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Hero entry runs immediately; section reveals defer to next paint
+      this.buildAboutHeroEntry();
+      requestAnimationFrame(() => {
+        this.setupAboutSectionsReveal();
+      });
     }
+  }
+
+  /** Cinematic hero entry — eyebrow bar draws → tagline → title → desc → CTA. */
+  private buildAboutHeroEntry(): void {
+    const eyebrow = this.aboutHeroEyebrow?.nativeElement;
+    const tagline = this.aboutHeroTagline?.nativeElement;
+    const title = this.aboutHeroTitle?.nativeElement;
+    const desc = this.aboutHeroDescription?.nativeElement;
+    const cta = this.aboutHeroCta?.nativeElement;
+
+    if (!eyebrow || !tagline || !title || !desc || !cta) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      gsap.set([eyebrow, tagline, title, desc, cta].filter(Boolean) as Element[], {
+        opacity: 1, y: 0,
+      });
+      return;
+    }
+
+    const eyebrowBar = eyebrow.querySelector('.lt-about-hero__eyebrow-bar');
+    const eyebrowText = eyebrow.querySelector('.lt-about-hero__eyebrow-text');
+
+    // Initial states (also defined in CSS to prevent FOUC)
+    gsap.set(eyebrow, { opacity: 1 });
+    gsap.set(eyebrowBar, { width: 0 });
+    gsap.set(eyebrowText, { opacity: 0, x: -6 });
+    gsap.set([tagline, title, desc, cta].filter(Boolean) as Element[], { opacity: 0, y: 20 });
+
+    this.heroEntryTimeline = gsap
+      .timeline({ defaults: { ease: 'power3.out' } })
+      .to(eyebrowBar, { width: 32, duration: 0.4 })
+      .to(eyebrowText, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' }, '-=0.15')
+      .to(tagline, { opacity: 1, y: 0, duration: 0.45 }, '-=0.1')
+      .to(title, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out' }, '-=0.25')
+      .to(desc, { opacity: 1, y: 0, duration: 0.55 }, '-=0.4')
+      .to(cta, { opacity: 1, y: 0, duration: 0.5, ease: 'power4.out' }, '-=0.3');
+  }
+
+  /** Wire scroll-triggered reveals for mission, values, production, final CTA. */
+  private setupAboutSectionsReveal(): void {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reveal = (
+      sectionEl: HTMLElement | undefined,
+      heads: Array<HTMLElement | undefined | null>,
+      payloads: Array<Element | NodeListOf<Element> | null | undefined>,
+    ) => {
+      if (!sectionEl) return;
+      const headEls = heads.filter(Boolean) as HTMLElement[];
+      const payloadEls: Element[] = [];
+      payloads.forEach((p) => {
+        if (!p) return;
+        if (p instanceof NodeList) payloadEls.push(...Array.from(p));
+        else payloadEls.push(p);
+      });
+
+      if (prefersReducedMotion) {
+        gsap.set([...headEls, ...payloadEls], { opacity: 1, y: 0, scale: 1 });
+        return;
+      }
+      gsap.set(headEls, { opacity: 0, y: 24 });
+      gsap.set(payloadEls, { opacity: 0, y: 28, scale: 0.97 });
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power3.out' },
+        scrollTrigger: {
+          trigger: sectionEl,
+          start: 'top 78%',
+          toggleActions: 'play none none none',
+        },
+      });
+      headEls.forEach((el, i) => {
+        tl.to(el, { opacity: 1, y: 0, duration: 0.5 }, i === 0 ? 0 : '-=0.3');
+      });
+      if (payloadEls.length) {
+        tl.to(
+          payloadEls,
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.1, ease: 'power4.out' },
+          '-=0.25',
+        );
+      }
+      if (tl.scrollTrigger) this.aboutScrollTriggers.push(tl.scrollTrigger);
+    };
+
+    // Mission
+    reveal(
+      this.aboutMissionSection?.nativeElement,
+      [this.aboutMissionEyebrow?.nativeElement, this.aboutMissionTitle?.nativeElement],
+      [this.aboutMissionText?.nativeElement, this.aboutMissionImage?.nativeElement],
+    );
+
+    // Values
+    const valueCards = this.aboutValuesGrid?.nativeElement.querySelectorAll('.lt-value-card');
+    reveal(
+      this.aboutValuesSection?.nativeElement,
+      [this.aboutValuesEyebrow?.nativeElement, this.aboutValuesTitle?.nativeElement],
+      [valueCards],
+    );
+
+    // Production header
+    reveal(
+      this.aboutProductionSection?.nativeElement,
+      [
+        this.aboutProductionEyebrow?.nativeElement,
+        this.aboutProductionTitle?.nativeElement,
+        this.aboutProductionSubtitle?.nativeElement,
+      ],
+      [],
+    );
+
+    // Production timeline — each stage individually triggered as it enters viewport
+    const stages = this.aboutProductionTimeline?.nativeElement.querySelectorAll('.lt-stage');
+    if (stages && !prefersReducedMotion) {
+      stages.forEach((stage) => {
+        const stageEl = stage as HTMLElement;
+        gsap.set(stageEl, { opacity: 0, y: 32 });
+        const tw = gsap.to(stageEl, {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: stageEl,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        });
+        if (tw.scrollTrigger) this.aboutScrollTriggers.push(tw.scrollTrigger);
+      });
+    } else if (stages) {
+      gsap.set(Array.from(stages), { opacity: 1, y: 0 });
+    }
+
+    // Final CTA
+    reveal(
+      this.aboutFinalCtaSection?.nativeElement,
+      [],
+      [this.aboutFinalContent?.nativeElement, this.aboutFinalImage?.nativeElement],
+    );
   }
 
   private setupIntersectionObservers(): void {
@@ -541,6 +721,10 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.statsObserver?.disconnect();
     this.destroy$.next();
     this.destroy$.complete();
+
+    // GSAP cleanup
+    this.heroEntryTimeline?.kill();
+    this.aboutScrollTriggers.forEach((t) => t.kill());
 
     // Remove reCAPTCHA script if it exists
     if (isPlatformBrowser(this.platformId) && this.recaptchaScript) {

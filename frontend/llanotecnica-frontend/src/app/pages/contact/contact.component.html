@@ -13,14 +13,18 @@
         </h2>
 
         <!-- Alert Messages -->
-        <div *ngIf="submitSuccess" class="alert alert-success" role="alert" [@fadeSlideInOut]>
-          <i class="fas fa-check-circle me-2"></i>
-          {{ 'CONTACT_PAGE.SUCCESS_MESSAGE' | translate }}
-        </div>
-        <div *ngIf="submitError" class="alert alert-danger" role="alert" [@fadeSlideInOut]>
-          <i class="fas fa-exclamation-circle me-2"></i>
-          {{ errorMessage || ('CONTACT_PAGE.ERROR_MESSAGE' | translate) }}
-        </div>
+        @if (submitSuccess) {
+          <div class="alert alert-success" role="alert" [@fadeSlideInOut]>
+            <i class="fas fa-check-circle me-2"></i>
+            {{ 'CONTACT_PAGE.SUCCESS_MESSAGE' | translate }}
+          </div>
+        }
+        @if (submitError) {
+          <div class="alert alert-danger" role="alert" [@fadeSlideInOut]>
+            <i class="fas fa-exclamation-circle me-2"></i>
+            {{ errorMessage || ('CONTACT_PAGE.ERROR_MESSAGE' | translate) }}
+          </div>
+        }
 
         <!-- Contact Form -->
         <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
@@ -99,30 +103,39 @@
                   placeholder="{{ 'CONTACT_PAGE.COUNTRY_PLACEHOLDER' | translate }}"
                   (focus)="onCountryInputFocus()"
                   autocomplete="off">
-                <span class="input-group-text" *ngIf="isLoadingCountries">
-                  <div class="spinner-border spinner-border-sm text-primary" role="status">
-                    <span class="visually-hidden">{{ 'CONTACT_PAGE.LOADING' | translate }}</span>
-                  </div>
-                </span>
-                <span class="input-group-text" *ngIf="!isLoadingCountries && getSelectedCountryFlag()">
-                  <img [src]="getSelectedCountryFlag()" alt="{{ 'CONTACT_PAGE.COUNTRY_FLAG_ALT' | translate }}" class="country-flag">
-                </span>
+                @if (isLoadingCountries) {
+                  <span class="input-group-text">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                      <span class="visually-hidden">{{ 'CONTACT_PAGE.LOADING' | translate }}</span>
+                    </div>
+                  </span>
+                }
+                @if (!isLoadingCountries && getSelectedCountryFlag()) {
+                  <span class="input-group-text">
+                    <img [src]="getSelectedCountryFlag()" alt="{{ 'CONTACT_PAGE.COUNTRY_FLAG_ALT' | translate }}" class="country-flag">
+                  </span>
+                }
               </div>
 
-              <div class="country-dropdown shadow-sm" *ngIf="showCountryDropdown && !isLoadingCountries">
-                <div
-                  *ngFor="let country of filteredCountries; let i = index"
-                  class="country-option"
-                  [class.selected]="i === selectedCountryIndex"
-                  (click)="selectCountry(country)"
-                  (mouseenter)="selectedCountryIndex = i">
-                  <img [src]="country.flags.svg" [alt]="country.name.common + ' flag'" class="country-flag">
-                  <span>{{ country.name.common }}</span>
+              @if (showCountryDropdown && !isLoadingCountries) {
+                <div class="country-dropdown shadow-sm">
+                  @for (country of filteredCountries; track country; let i = $index) {
+                    <div
+                      class="country-option"
+                      [class.selected]="i === selectedCountryIndex"
+                      (click)="selectCountry(country)"
+                      (mouseenter)="selectedCountryIndex = i">
+                      <img [src]="country.flags.svg" [alt]="country.name.common + ' flag'" class="country-flag">
+                      <span>{{ country.name.common }}</span>
+                    </div>
+                  }
+                  @if (filteredCountries.length === 0) {
+                    <div class="p-3 text-center text-muted">
+                      {{ 'CONTACT_PAGE.NO_COUNTRIES_FOUND' | translate }}
+                    </div>
+                  }
                 </div>
-                <div class="p-3 text-center text-muted" *ngIf="filteredCountries.length === 0">
-                  {{ 'CONTACT_PAGE.NO_COUNTRIES_FOUND' | translate }}
-                </div>
-              </div>
+              }
 
               <div class="invalid-feedback" [@fadeSlideInOut]>
                 {{ getErrorMessage('country') }}
@@ -142,9 +155,11 @@
               class="form-control"
               [class.is-invalid]="contactForm.get('inquiryType')?.touched && contactForm.get('inquiryType')?.invalid">
               <option value="">{{ 'CONTACT_PAGE.SELECT_INQUIRY_TYPE' | translate }}</option>
-              <option *ngFor="let type of inquiryTypes" [value]="type">
-                {{ ('CONTACT_FORM.INQUIRY_TYPES.' + type) | translate }}
-              </option>
+              @for (type of inquiryTypes; track type) {
+                <option [value]="type">
+                  {{ ('CONTACT_FORM.INQUIRY_TYPES.' + type) | translate }}
+                </option>
+              }
             </select>
             <div class="invalid-feedback" [@fadeSlideInOut]>
               {{ getErrorMessage('inquiryType') }}
@@ -163,7 +178,7 @@
               class="form-control"
               rows="5"
               [class.is-invalid]="contactForm.get('message')?.touched && contactForm.get('message')?.invalid"
-              placeholder="{{ 'CONTACT_PAGE.MESSAGE_PLACEHOLDER' | translate }}"></textarea>
+            placeholder="{{ 'CONTACT_PAGE.MESSAGE_PLACEHOLDER' | translate }}"></textarea>
             <div class="invalid-feedback" [@fadeSlideInOut]>
               {{ getErrorMessage('message') }}
             </div>
@@ -179,9 +194,11 @@
             [disabled]="isSubmitting || contactForm.invalid"
             [class.loading]="isSubmitting">
             <div class="button-content">
-              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status">
-                <span class="visually-hidden">{{ 'CONTACT_PAGE.LOADING' | translate }}</span>
-              </span>
+              @if (isSubmitting) {
+                <span class="spinner-border spinner-border-sm me-2" role="status">
+                  <span class="visually-hidden">{{ 'CONTACT_PAGE.LOADING' | translate }}</span>
+                </span>
+              }
               <i class="fas" [class.fa-paper-plane]="!isSubmitting" [class.fa-spinner]="isSubmitting"></i>
               {{ isSubmitting ? ('CONTACT_PAGE.SENDING' | translate) : ('CONTACT_PAGE.SEND_MESSAGE' | translate) }}
             </div>
@@ -246,16 +263,17 @@
           </div>
           <!-- Google Maps -->
           <div class="google-map">
-            <iframe
-              *ngIf="mapUrl"
-              [src]="mapUrl"
-              width="100%"
-              height="250"
-              loading="lazy"
-              allowfullscreen
-              referrerpolicy="no-referrer-when-downgrade"
-              [attr.title]=" 'CONTACT_PAGE.GOOGLE_MAP_TITLE' | translate ">
-            </iframe>
+            @if (mapUrl) {
+              <iframe
+                [src]="mapUrl"
+                width="100%"
+                height="250"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                [attr.title]=" 'CONTACT_PAGE.GOOGLE_MAP_TITLE' | translate ">
+              </iframe>
+            }
           </div>
         </div>
       </div>

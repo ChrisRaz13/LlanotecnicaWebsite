@@ -1,98 +1,161 @@
-import { Component, HostListener, inject, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  HostListener,
+  inject,
+  OnInit,
+  AfterViewInit,
+  OnDestroy,
+  ElementRef,
+  ViewChild,
+  PLATFORM_ID,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { filter } from 'rxjs/operators';
+import { filter, Subject, takeUntil } from 'rxjs';
+import gsap from 'gsap';
 
-// Define type constants outside the class
 const SUPPORTED_ROUTES = ['about-us', 'products', 'contact'] as const;
 const SUPPORTED_LANGUAGES = ['en', 'es'] as const;
 
-// Define the types based on the constants
 type RouteKey = typeof SUPPORTED_ROUTES[number];
 type LanguageKey = typeof SUPPORTED_LANGUAGES[number];
 
 @Component({
   selector: 'app-navbar',
-  standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule], // Removed LanguageSelectorComponent
+  imports: [RouterModule, TranslateModule],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent implements OnInit, AfterViewInit {
+export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('logoImg') logoElement!: ElementRef<HTMLImageElement>;
+  @ViewChild('mobileOverlay') mobileOverlayEl?: ElementRef<HTMLDivElement>;
 
   isScrolled = false;
   isMenuOpen = false;
   isCatalogModalOpen = false;
+  isOnHomePage = true;
   currentLang: LanguageKey = 'en';
 
-  // Inject services
   private translate = inject(TranslateService);
   private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+  private destroy$ = new Subject<void>();
+  private menuTimeline: gsap.core.Timeline | null = null;
 
-  // Reference the constants in the class
   private readonly supportedRoutes = SUPPORTED_ROUTES;
   private readonly supportedLanguages = SUPPORTED_LANGUAGES;
 
-  // Define bidirectional route mappings for all supported languages
   private routeMappings: Record<LanguageKey, Record<RouteKey, string>> = {
-    'en': {
-      'about-us': 'about-us',
-      'products': 'products',
-      'contact': 'contact'
-    },
-    'es': {
-      'about-us': 'sobre-nosotros',
-      'products': 'productos',
-      'contact': 'contacto'
-    }
+    en: { 'about-us': 'about-us', products: 'products', contact: 'contact' },
+    es: { 'about-us': 'sobre-nosotros', products: 'productos', contact: 'contacto' },
   };
 
-  // Map of translated routes back to base route keys
   private translatedToBaseRoute: Record<string, RouteKey> = {
-    // English routes map to themselves
     'about-us': 'about-us',
-    'products': 'products',
-    'contact': 'contact',
-    // Spanish translations map to English base routes
+    products: 'products',
+    contact: 'contact',
     'sobre-nosotros': 'about-us',
-    'productos': 'products',
-    'contacto': 'contact'
+    productos: 'products',
+    contacto: 'contact',
   };
 
   ngOnInit(): void {
-    // Set initial language based on URL
     this.updateLanguageFromUrl(this.router.url);
+    this.updateHomePageFlag(this.router.url);
 
-    // Listen for route changes to update language
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      this.updateLanguageFromUrl(event.url);
-    });
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((event: any) => {
+        this.updateLanguageFromUrl(event.url);
+        this.updateHomePageFlag(event.url);
+      });
 
-    // Also listen to language service changes
-    this.translate.onLangChange.subscribe(event => {
+    this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       this.currentLang = event.lang as LanguageKey;
     });
   }
 
   ngAfterViewInit(): void {
-    // Ensure the logo maintains proper dimensions
     if (this.logoElement?.nativeElement) {
-      // Force correct dimensions
       const logo = this.logoElement.nativeElement;
       logo.style.width = 'auto';
-      logo.style.height = '40px';
       logo.style.maxWidth = '180px';
       logo.style.objectFit = 'contain';
+    }
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.buildMenuTimeline();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.menuTimeline?.kill();
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.classList.remove('menu-open');
     }
   }
 
   /**
-   * Update language based on URL
+   * Build a paused GSAP timeline for the mobile overlay.
+   * - Backdrop fades + scales in
+   * - Numbered links stagger-fade up with weighty easing
+   * - Catalog CTA settles last
+   * Reverse on close.
    */
+  private buildMenuTimeline(): void {
+    const overlay = this.mobileOverlayEl?.nativeElement;
+    if (!overlay) return;
+
+    const content = overlay.querySelector('.overlay-content');
+    const links = overlay.querySelectorAll('.overlay-links li');
+    const catalog = overlay.querySelector('.overlay-catalog');
+
+    // Respect reduced-motion preference — instant open/close
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      this.menuTimeline = gsap.timeline({ paused: true })
+        .set(overlay, { autoAlpha: 1 })
+        .set([content, links, catalog], { autoAlpha: 1, x: 0, y: 0 });
+      return;
+    }
+
+    this.menuTimeline = gsap
+      .timeline({ paused: true, defaults: { ease: 'power3.out' } })
+      .set(overlay, { display: 'block' })
+      .fromTo(
+        overlay,
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.32, ease: 'power2.out' },
+      )
+      .fromTo(
+        content,
+        { y: 24, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.5 },
+        '-=0.1',
+      )
+      .fromTo(
+        links,
+        { y: 32, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.55, stagger: 0.07 },
+        '-=0.35',
+      )
+      .fromTo(
+        catalog,
+        { y: 16, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.4 },
+        '-=0.3',
+      );
+  }
+
   private updateLanguageFromUrl(url: string): void {
     if (url.startsWith('/es')) {
       this.currentLang = 'es';
@@ -103,105 +166,106 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Home is the only page where the navbar is transparent over a hero.
+   * Match: '/', '/en', '/en/', '/es', '/es/' — anything else gets the solid bar.
+   */
+  private updateHomePageFlag(url: string): void {
+    const trimmed = url.split('?')[0].split('#')[0];
+    this.isOnHomePage =
+      trimmed === '/' ||
+      trimmed === '/en' ||
+      trimmed === '/en/' ||
+      trimmed === '/es' ||
+      trimmed === '/es/';
+  }
+
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
     const bannerHeight = 96;
     this.isScrolled = window.scrollY >= bannerHeight;
   }
 
-  /**
-   * Get localized route path based on current language and base path
-   */
-  getRoutePath(basePath: string): string {
-    // For home page (empty path)
-    if (!basePath) {
-      return `/${this.currentLang}`;
-    }
+  /** Close menu on Escape key */
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.isMenuOpen) this.closeMenu();
+  }
 
-    // Ensure we're working with a valid route
+  getRoutePath(basePath: string): string {
+    if (!basePath) return `/${this.currentLang}`;
     if (this.isValidRouteKey(basePath)) {
-      // It's a supported route, get its localized version
       return `/${this.currentLang}/${this.routeMappings[this.currentLang][basePath]}`;
     }
-
-    // Fallback for any other routes
     return `/${this.currentLang}/${basePath}`;
   }
 
-  /**
-   * Type guard to check if a string is a valid route key
-   */
   private isValidRouteKey(key: string): key is RouteKey {
     return this.supportedRoutes.includes(key as any);
   }
 
-  /**
-   * Switch language while maintaining current page context
-   */
   switchLanguage(newLang: string): void {
-    // Ensure we're switching to a valid language
-    if (!this.isValidLanguageKey(newLang) || newLang === this.currentLang) {
-      return;
-    }
+    if (!this.isValidLanguageKey(newLang) || newLang === this.currentLang) return;
 
     const typedLang = newLang as LanguageKey;
 
-    // Save preference
-    try {
-      localStorage.setItem('preferredLanguage', typedLang);
-    } catch (error) {
-      console.error('Error saving language preference:', error);
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        localStorage.setItem('preferredLanguage', typedLang);
+      } catch (error) {
+        console.error('Error saving language preference:', error);
+      }
     }
 
-    // Set language in translate service
     this.translate.use(typedLang);
 
-    // Get current URL path to maintain context when switching
     const currentPath = this.router.url;
-    const segments = currentPath.split('/').filter(s => s);
+    const segments = currentPath.split('/').filter((s) => s);
 
-    // Skip if we only have the language segment or no segments
     if (segments.length <= 1) {
       this.router.navigate([`/${typedLang}`]);
       return;
     }
 
-    // Get current route (second segment)
     const currentRoute = segments[1];
-
-    // If this is a known route, find the equivalent in the target language
     if (currentRoute in this.translatedToBaseRoute) {
-      // Get the base route key
       const baseRouteKey = this.translatedToBaseRoute[currentRoute];
-
-      // Get the version in the target language
       const targetRoute = this.routeMappings[typedLang][baseRouteKey];
-
-      // Navigate to equivalent page in new language
       this.router.navigate([`/${typedLang}/${targetRoute}`]);
     } else {
-      // Unknown route, just change the language prefix
       this.router.navigate([`/${typedLang}/${currentRoute}`]);
     }
   }
 
-  /**
-   * Type guard for language keys
-   */
   private isValidLanguageKey(key: string): key is LanguageKey {
     return this.supportedLanguages.includes(key as any);
   }
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
-    document.body.classList.toggle('menu-open', this.isMenuOpen);
+
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.classList.toggle('menu-open', this.isMenuOpen);
+
+      if (this.menuTimeline) {
+        if (this.isMenuOpen) {
+          this.menuTimeline.timeScale(1).play();
+        } else {
+          // Snappier close
+          this.menuTimeline.timeScale(1.6).reverse();
+        }
+      }
+    }
   }
 
   closeMenu(): void {
-    if (this.isMenuOpen) {
-      this.isMenuOpen = false;
+    if (!this.isMenuOpen) return;
+    this.isMenuOpen = false;
+
+    if (isPlatformBrowser(this.platformId)) {
       document.body.classList.remove('menu-open');
-      window.scrollTo({ top: 0, behavior: 'instant' });
+      this.menuTimeline?.timeScale(1.6).reverse();
     }
   }
 
@@ -215,6 +279,8 @@ export class NavbarComponent implements OnInit, AfterViewInit {
 
   downloadCatalog(language: LanguageKey): void {
     const fileName = language === 'en' ? 'Catalog-Eng.pdf' : 'Catalog-Esp.pdf';
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const link = document.createElement('a');
     link.setAttribute('target', '_blank');
     link.setAttribute('href', `assets/photos/${fileName}`);

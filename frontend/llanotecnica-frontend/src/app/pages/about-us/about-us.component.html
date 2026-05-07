@@ -1,121 +1,273 @@
-<section class="hero">
-  <!-- Background Elements -->
-  <div class="hero-background">
-    <div class="hero-overlay"></div>
-    <div class="hero-wave"></div>
+<!-- ============================================================
+     ABOUT US — heavy-equipment industrial
+     Sections (visual rhythm: dark → light → dark → light → yellow):
+       /01 hero (dark, vignetted background photo)
+       /02 mission (light, two-column)
+       /03 values (dark brand-800, organic backdrop)
+       /04 production process (light, alternating timeline)
+       /05 final CTA (safety-yellow — won't clash with dark green footer)
+     ============================================================ -->
+
+<!-- ============================================================
+     /01 — HERO
+     ============================================================ -->
+<section #aboutHeroSection class="lt-about-hero" aria-labelledby="about-hero-title">
+  <div class="lt-about-hero__bg" aria-hidden="true">
+    <img src="assets/photos/aboutus-herosection.jpg"
+      alt=""
+      class="lt-about-hero__image"
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync" />
   </div>
 
-  <!-- Main Content -->
-  <div class="hero-wrapper">
-    <div class="hero-content" [class.visible]="heroContentVisible" #heroContent>
-      <div class="hero-tagline">{{ 'ABOUT_US_PAGE.HERO.TAGLINE' | translate }}</div>
-      <h1 class="hero-title">{{ 'ABOUT_US_PAGE.HERO.TITLE' | translate }}</h1>
-      <div class="hero-description">
-        <p>{{ 'ABOUT_US_PAGE.HERO.DESCRIPTION' | translate }}</p>
+  <!-- Vignette + bottom gradient frame the text -->
+  <div class="lt-about-hero__vignette" aria-hidden="true"></div>
+  <div class="lt-about-hero__bottom-gradient" aria-hidden="true"></div>
+  <div class="lt-about-hero__grid-pattern" aria-hidden="true"></div>
+
+  <div class="lt-about-hero__content">
+    <div class="lt-about-hero__text">
+      <p class="lt-about-hero__eyebrow" #aboutHeroEyebrow>
+        <span class="lt-about-hero__eyebrow-bar" aria-hidden="true"></span>
+        <span class="lt-about-hero__eyebrow-num">/01</span>
+        <span class="lt-about-hero__eyebrow-text">{{ 'ABOUT_US_PAGE.EYEBROWS.OUR_STORY' | translate }}</span>
+      </p>
+      <p class="lt-about-hero__tagline" #aboutHeroTagline>{{ 'ABOUT_US_PAGE.HERO.TAGLINE' | translate }}</p>
+      <h1 id="about-hero-title" class="lt-about-hero__title" #aboutHeroTitle>
+        {{ 'ABOUT_US_PAGE.HERO.TITLE' | translate }}
+      </h1>
+      <p class="lt-about-hero__description" #aboutHeroDescription>
+        {{ 'ABOUT_US_PAGE.HERO.DESCRIPTION' | translate }}
+      </p>
+      <div class="lt-about-hero__cta" #aboutHeroCta>
+        <a
+          lt-button
+          variant="accent"
+          size="lg"
+          [routerLink]="contactRoute"
+          [attr.aria-label]="'ABOUT_US_PAGE.HERO.CTA_BUTTON' | translate">
+          {{ 'ABOUT_US_PAGE.HERO.CTA_BUTTON' | translate }}
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
       </div>
-      <a routerLink="/contact" class="hero-button">
-        <span>{{ 'ABOUT_US_PAGE.HERO.CTA_BUTTON' | translate }}</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-      </a>
-    </div>
-  </div>
-
-  <!-- Decorative Elements -->
-  <div class="hero-decoration hero-decoration-1"></div>
-  <div class="hero-decoration hero-decoration-2"></div>
-</section>
-
-<!-- Mission Section -->
-<section class="mission">
-  <div class="mission-wrapper">
-    <div class="mission-content">
-      <img src="assets/photos/logo.webp" [alt]="'ABOUT_US_PAGE.MISSION.LOGO_ALT' | translate" class="mission-logo" width="120" height="60" loading="lazy" decoding="async" />
-      <h2>{{ 'ABOUT_US_PAGE.MISSION.TITLE' | translate }}</h2>
-      <p [innerHTML]="'ABOUT_US_PAGE.MISSION.PARAGRAPH_1' | translate"></p>
-      <p [innerHTML]="'ABOUT_US_PAGE.MISSION.PARAGRAPH_2' | translate"></p>
-    </div>
-    <div class="mission-image">
-      <img src="assets/photos/teamphoto.jpg" [alt]="'ABOUT_US_PAGE.MISSION.TEAM_IMAGE_ALT' | translate" width="600" height="400" loading="lazy" decoding="async" />
     </div>
   </div>
 </section>
 
-<!-- Values Section -->
-<section class="values">
-  <h2>{{ 'ABOUT_US_PAGE.VALUES.TITLE' | translate }}</h2>
-  <div class="values-grid">
-    <ng-container *ngFor="let value of ('ABOUT_US_PAGE.VALUES.VALUES_LIST' | translate)">
-      <div class="value-card">
-        <i [class]="value.ICON"></i>
-        <h3>{{ value.TITLE }}</h3>
-        <p>{{ value.DESCRIPTION }}</p>
+<!-- ============================================================
+     /02 — MISSION (light, two-column)
+     ============================================================ -->
+<section #aboutMissionSection class="lt-about-mission" aria-labelledby="about-mission-title">
+  <div class="lt-about-mission__stripe" aria-hidden="true"></div>
+  <div class="lt-about-mission__inner">
+    <header class="lt-about-mission__header">
+      <p class="lt-about-mission__eyebrow" #aboutMissionEyebrow>
+        <span class="lt-about-mission__eyebrow-num">/02</span>
+        <span class="lt-about-mission__eyebrow-divider" aria-hidden="true"></span>
+        <span class="lt-about-mission__eyebrow-text">{{ 'ABOUT_US_PAGE.EYEBROWS.OUR_MISSION' | translate }}</span>
+      </p>
+      <h2 id="about-mission-title" class="lt-about-mission__title" #aboutMissionTitle>
+        {{ 'ABOUT_US_PAGE.MISSION.TITLE' | translate }}
+      </h2>
+    </header>
+
+    <div class="lt-about-mission__grid">
+      <div class="lt-about-mission__text" #aboutMissionText>
+        <div class="lt-about-mission__logo-wrap">
+          <img src="assets/photos/logo.webp"
+            [alt]="'ABOUT_US_PAGE.MISSION.LOGO_ALT' | translate"
+            class="lt-about-mission__logo"
+            width="48"
+            height="48"
+            loading="lazy"
+            decoding="async" />
+        </div>
+        <p class="lt-about-mission__paragraph" [innerHTML]="'ABOUT_US_PAGE.MISSION.PARAGRAPH_1' | translate"></p>
+        <p class="lt-about-mission__paragraph" [innerHTML]="'ABOUT_US_PAGE.MISSION.PARAGRAPH_2' | translate"></p>
       </div>
-    </ng-container>
-  </div>
-</section>
 
-<!-- Production Story Section -->
-<section class="production-story">
-  <h2 class="story-title">{{ 'ABOUT_US_PAGE.PRODUCTION_STORY.TITLE' | translate }}</h2>
-  <div class="story-subtitle">
-    {{ 'ABOUT_US_PAGE.PRODUCTION_STORY.SUBTITLE' | translate }}
-  </div>
-
-  <div class="story-timeline">
-    <ng-container *ngFor="let stage of ('ABOUT_US_PAGE.PRODUCTION_STORY.STAGES' | translate); let i = index">
-      <div class="timeline-item" #stageElement [class.visible]="stageVisibility[i]">
-        <div class="timeline-connector" *ngIf="i < ('ABOUT_US_PAGE.PRODUCTION_STORY.STAGES' | translate).length - 1"></div>
-
-        <div class="timeline-content">
-          <div class="parallax-container">
-            <img [src]="'assets/photos/worker' + (i + 1) + '.jpg'"
-                 [alt]="stage.TITLE"
-                 class="parallax-image"
-                 [class.visible]="stageVisibility[i]"
-                 width="400"
-                 height="300"
-                 loading="lazy"
-                 decoding="async">
-          </div>
-
-          <div class="timeline-text" [class.visible]="stageVisibility[i]">
-            <div class="stage-number">{{ 'ABOUT_US_PAGE.PRODUCTION_STORY.STAGE_LABEL' | translate }} {{i + 1}}</div>
-            <h3>{{ stage.TITLE }}</h3>
-            <p>{{ stage.DESCRIPTION }}</p>
-          </div>
+      <div class="lt-about-mission__image-wrap" #aboutMissionImage>
+        <div class="lt-about-mission__image-frame">
+          <img src="assets/photos/teamphoto.jpg"
+            [alt]="'ABOUT_US_PAGE.MISSION.TEAM_IMAGE_ALT' | translate"
+            width="600"
+            height="400"
+            loading="lazy"
+            decoding="async"
+            class="lt-about-mission__image" />
+          <span class="lt-about-mission__corner lt-about-mission__corner--tl" aria-hidden="true"></span>
+          <span class="lt-about-mission__corner lt-about-mission__corner--tr" aria-hidden="true"></span>
+          <span class="lt-about-mission__corner lt-about-mission__corner--bl" aria-hidden="true"></span>
+          <span class="lt-about-mission__corner lt-about-mission__corner--br" aria-hidden="true"></span>
         </div>
       </div>
-    </ng-container>
+    </div>
   </div>
 </section>
 
-<!-- Final CTA Section -->
-<section class="final-cta-section">
-  <div class="final-cta-container" #finalCtaElement [class.visible]="finalCtaVisible">
-    <div class="final-cta-content">
-      <h2 class="final-cta-title">{{ 'ABOUT_US_PAGE.FINAL_CTA.TITLE' | translate }}</h2>
-      <p class="final-cta-text">
+<!-- ============================================================
+     /03 — VALUES (dark brand-800, organic backdrop)
+     ============================================================ -->
+<section #aboutValuesSection class="lt-about-values" aria-labelledby="about-values-title">
+  <div class="lt-about-values__stripe" aria-hidden="true"></div>
+  <div class="lt-about-values__bg" aria-hidden="true">
+    <svg class="lt-about-values__streaks" viewBox="0 0 1600 800" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="lt-values-streak" x1="0" y1="0" x2="1" y2="0.5">
+          <stop offset="0%" stop-color="rgba(255,255,255,0)" />
+          <stop offset="50%" stop-color="rgba(255,255,255,0.04)" />
+          <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+        </linearGradient>
+        <linearGradient id="lt-values-yellow" x1="0" y1="0" x2="1" y2="-0.3">
+          <stop offset="0%" stop-color="rgba(255,212,0,0)" />
+          <stop offset="50%" stop-color="rgba(255,212,0,0.05)" />
+          <stop offset="100%" stop-color="rgba(255,212,0,0)" />
+        </linearGradient>
+      </defs>
+      <path d="M-100,160 L 1700,40 L 1700,200 L -100,320 Z" fill="url(#lt-values-streak)" />
+      <path d="M-100,520 L 1700,360 L 1700,520 L -100,680 Z" fill="url(#lt-values-yellow)" />
+    </svg>
+  </div>
+
+  <div class="lt-about-values__inner">
+    <header class="lt-about-values__header">
+      <p class="lt-about-values__eyebrow" #aboutValuesEyebrow>
+        <span class="lt-about-values__eyebrow-num">/03</span>
+        <span class="lt-about-values__eyebrow-divider" aria-hidden="true"></span>
+        <span class="lt-about-values__eyebrow-text">{{ 'ABOUT_US_PAGE.EYEBROWS.OUR_VALUES' | translate }}</span>
+      </p>
+      <h2 id="about-values-title" class="lt-about-values__title" #aboutValuesTitle>
+        {{ 'ABOUT_US_PAGE.VALUES.TITLE' | translate }}
+      </h2>
+    </header>
+
+    <div class="lt-about-values__grid" #aboutValuesGrid>
+      @for (value of ('ABOUT_US_PAGE.VALUES.VALUES_LIST' | translate); track value.TITLE; let i = $index) {
+        <article class="lt-value-card">
+          <span class="lt-value-card__num" aria-hidden="true">/{{ (i + 1).toString().padStart(2, '0') }}</span>
+          <div class="lt-value-card__icon">
+            <i [class]="value.ICON" aria-hidden="true"></i>
+          </div>
+          <h3 class="lt-value-card__title">{{ value.TITLE }}</h3>
+          <p class="lt-value-card__description">{{ value.DESCRIPTION }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     /04 — PRODUCTION PROCESS (light, alternating timeline)
+     ============================================================ -->
+<section #aboutProductionSection class="lt-about-production" aria-labelledby="about-production-title">
+  <div class="lt-about-production__stripe" aria-hidden="true"></div>
+  <div class="lt-about-production__bg" aria-hidden="true"></div>
+
+  <div class="lt-about-production__inner">
+    <header class="lt-about-production__header">
+      <p class="lt-about-production__eyebrow" #aboutProductionEyebrow>
+        <span class="lt-about-production__eyebrow-num">/04</span>
+        <span class="lt-about-production__eyebrow-divider" aria-hidden="true"></span>
+        <span class="lt-about-production__eyebrow-text">{{ 'ABOUT_US_PAGE.EYEBROWS.PRODUCTION_PROCESS' | translate }}</span>
+      </p>
+      <h2 id="about-production-title" class="lt-about-production__title" #aboutProductionTitle>
+        {{ 'ABOUT_US_PAGE.PRODUCTION_STORY.TITLE' | translate }}
+      </h2>
+      <p class="lt-about-production__subtitle" #aboutProductionSubtitle>
+        {{ 'ABOUT_US_PAGE.PRODUCTION_STORY.SUBTITLE' | translate }}
+      </p>
+    </header>
+
+    <ol class="lt-about-production__timeline" #aboutProductionTimeline>
+      @for (stage of ('ABOUT_US_PAGE.PRODUCTION_STORY.STAGES' | translate); track stage.TITLE; let i = $index) {
+        <li class="lt-stage" [attr.data-index]="i">
+          <div class="lt-stage__connector" aria-hidden="true"></div>
+          <div class="lt-stage__marker" aria-hidden="true">
+            <span class="lt-stage__marker-num">{{ (i + 1).toString().padStart(2, '0') }}</span>
+          </div>
+          <div class="lt-stage__image-wrap">
+            <div class="lt-stage__image-frame">
+              <img [src]="'assets/photos/worker' + (i + 1) + '.jpg'"
+                [alt]="stage.TITLE"
+                width="600"
+                height="400"
+                loading="lazy"
+                decoding="async"
+                class="lt-stage__image" />
+              <span class="lt-stage__corner lt-stage__corner--tl" aria-hidden="true"></span>
+              <span class="lt-stage__corner lt-stage__corner--tr" aria-hidden="true"></span>
+              <span class="lt-stage__corner lt-stage__corner--bl" aria-hidden="true"></span>
+              <span class="lt-stage__corner lt-stage__corner--br" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="lt-stage__content">
+            <p class="lt-stage__label">
+              <span class="lt-stage__label-bar" aria-hidden="true"></span>
+              {{ 'ABOUT_US_PAGE.PRODUCTION_STORY.STAGE_LABEL' | translate }} {{ i + 1 }}
+            </p>
+            <h3 class="lt-stage__title">{{ stage.TITLE }}</h3>
+            <p class="lt-stage__description">{{ stage.DESCRIPTION }}</p>
+          </div>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================
+     /05 — FINAL CTA (safety-yellow — high-vis, no clash with footer)
+     ============================================================ -->
+<section #aboutFinalCtaSection class="lt-about-final" aria-labelledby="about-final-title">
+  <!-- Industrial caution-stripe at top -->
+  <div class="lt-about-final__caution" aria-hidden="true"></div>
+
+  <!-- Organic curve — NOT a grid (so no clash with footer's grid pattern) -->
+  <div class="lt-about-final__bg" aria-hidden="true">
+    <svg class="lt-about-final__contour" viewBox="0 0 1600 600" preserveAspectRatio="none">
+      <path d="M0,300 C 280,260 480,360 720,310 S 1140,260 1380,310 S 1600,360 1600,300 L 1600,600 L 0,600 Z"
+            fill="rgba(0, 27, 17, 0.06)" />
+      <path d="M0,400 C 240,360 380,460 600,420 S 980,360 1200,420 S 1500,520 1600,460"
+            fill="none"
+            stroke="rgba(0, 27, 17, 0.1)"
+            stroke-width="1.5" />
+    </svg>
+  </div>
+
+  <div class="lt-about-final__inner">
+    <div class="lt-about-final__content" #aboutFinalContent>
+      <p class="lt-about-final__eyebrow">
+        <span class="lt-about-final__eyebrow-bar" aria-hidden="true"></span>
+        <span class="lt-about-final__eyebrow-num">/05</span>
+        <span class="lt-about-final__eyebrow-text">{{ 'ABOUT_US_PAGE.EYEBROWS.GET_IN_TOUCH' | translate }}</span>
+      </p>
+      <h2 id="about-final-title" class="lt-about-final__title">
+        {{ 'ABOUT_US_PAGE.FINAL_CTA.TITLE' | translate }}
+      </h2>
+      <p class="lt-about-final__text">
         {{ 'ABOUT_US_PAGE.FINAL_CTA.TEXT' | translate }}
       </p>
-      <div class="final-cta-buttons">
-        <a routerLink="/contact" class="cta-button primary-cta">{{ 'ABOUT_US_PAGE.FINAL_CTA.CTA_BUTTON' | translate }}</a>
+      <div class="lt-about-final__actions">
+        <a
+          lt-button
+          variant="primary"
+          size="lg"
+          [routerLink]="contactRoute"
+          [attr.aria-label]="'ABOUT_US_PAGE.FINAL_CTA.CTA_BUTTON' | translate">
+          {{ 'ABOUT_US_PAGE.FINAL_CTA.CTA_BUTTON' | translate }}
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
       </div>
     </div>
-    <div class="final-image-container">
-      <picture>
-        <!-- WebP format for modern browsers -->
-        <source srcset="assets/photos/MT-480.2-optimized.webp" type="image/webp">
-        <!-- Fallback to original PNG for older browsers -->
-        <img
-          src="assets/photos/MT-480.2.png"
-          [alt]="'ABOUT_US_PAGE.FINAL_CTA.IMAGE_ALT' | translate"
-          class="final-image"
-          width="500"
-          height="400"
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
+
+    <div class="lt-about-final__image-wrap" #aboutFinalImage>
+      <img src="assets/photos/MT-480.2-optimized.webp"
+        [alt]="'ABOUT_US_PAGE.FINAL_CTA.IMAGE_ALT' | translate"
+        width="500"
+        height="400"
+        loading="lazy"
+        decoding="async"
+        class="lt-about-final__image" />
     </div>
   </div>
 </section>

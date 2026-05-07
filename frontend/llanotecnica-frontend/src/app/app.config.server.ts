@@ -1,5 +1,5 @@
+import { provideServerRendering } from '@angular/ssr';
 import { mergeApplicationConfig, ApplicationConfig, APP_INITIALIZER } from '@angular/core';
-import { provideServerRendering } from '@angular/platform-server';
 import { appConfig } from './app.config';
 import { INITIAL_LANGUAGE } from './core/i18n/injection-tokens';
 import { TranslateService } from '@ngx-translate/core';

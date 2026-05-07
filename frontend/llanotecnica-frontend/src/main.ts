@@ -4,7 +4,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideRouter, withViewTransitions, withInMemoryScrolling, withPreloading, PreloadAllModules } from '@angular/router';
 import { routes } from './app/app.routes';
-import { APP_INITIALIZER, importProvidersFrom } from '@angular/core';
+import { APP_INITIALIZER, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 
 // Firebase imports
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -53,7 +53,7 @@ export function initializeLanguageSettings(translateService: TranslateService, s
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideAnimations(),
+    provideZoneChangeDetection(),provideAnimations(),
     provideHttpClient(withFetch()),
 
     provideRouter(

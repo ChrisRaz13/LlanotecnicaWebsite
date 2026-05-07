@@ -1,9 +1,10 @@
+import { provideZoneChangeDetection } from "@angular/core";
 import { renderApplication } from '@angular/platform-server';
 import { APP_BASE_HREF } from '@angular/common';
 import { INITIAL_LANGUAGE } from './app/core/i18n/injection-tokens';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
-import { bootstrapApplication } from '@angular/platform-browser';
+import { bootstrapApplication, BootstrapContext } from '@angular/platform-browser';
 
 const detectLanguageFromUrl = (url: string): string => {
   if (url.startsWith('/es/') || url === '/es') {
@@ -28,15 +29,15 @@ export default async function bootstrap({
     `<html lang="${lang}">`
   );
 
-  return renderApplication(() =>
+  return renderApplication((context: BootstrapContext) =>
     bootstrapApplication(AppComponent, {
       ...appConfig,
       providers: [
-        { provide: APP_BASE_HREF, useValue: '/' },
+        provideZoneChangeDetection(),{ provide: APP_BASE_HREF, useValue: '/' },
         { provide: INITIAL_LANGUAGE, useValue: lang },
         ...providers,
       ],
-    }),
+    }, context),
     {
       document: documentWithLang,
       url,

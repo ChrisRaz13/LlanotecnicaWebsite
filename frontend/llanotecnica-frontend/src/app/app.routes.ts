@@ -1,10 +1,10 @@
 import { Routes, ResolveFn, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { PLATFORM_ID, inject } from '@angular/core';
+import { PLATFORM_ID, inject, DOCUMENT } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { isPlatformBrowser } from '@angular/common';
 import { SitemapService } from './services/sitemap.service';
 import { Component, OnInit, Inject, PLATFORM_ID as PLATFORM_ID_TOKEN } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+
 import { Response } from 'express';
 
 // Sitemap component for serving XML
@@ -108,12 +108,12 @@ export const routes: Routes = [
   {
     path: 'en/about-us',
     loadChildren: () => import('./pages/about-us/about-us.module').then(m => m.AboutUsModule),
-    data: { language: 'en' }
+    data: { language: 'en', preload: true }
   },
   {
     path: 'en/products',
     loadChildren: () => import('./pages/product-section/product-section.module').then(m => m.ProductSectionModule),
-    data: { language: 'en' }
+    data: { language: 'en', preload: true }
   },
   {
     path: 'en/contact',
@@ -130,12 +130,12 @@ export const routes: Routes = [
   {
     path: 'es/sobre-nosotros',
     loadChildren: () => import('./pages/about-us/about-us.module').then(m => m.AboutUsModule),
-    data: { language: 'es' }
+    data: { language: 'es', preload: true }
   },
   {
     path: 'es/productos',
     loadChildren: () => import('./pages/product-section/product-section.module').then(m => m.ProductSectionModule),
-    data: { language: 'es' }
+    data: { language: 'es', preload: true }
   },
   {
     path: 'es/contacto',

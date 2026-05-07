@@ -1,3 +1,5 @@
+/* Design tokens — heavy-equipment industrial system */
+@import './styles/tokens.css';
 
 /* Self-hosted Montserrat fonts with layout shift prevention */
 /* montserrat-regular - latin */
@@ -74,23 +76,6 @@
   font-display: swap; /* Improve font loading performance */
 }
 
-/* FontAwesome font-display optimization - Override external CSS */
-@font-face {
-  font-family: 'Font Awesome 6 Free';
-  font-style: normal;
-  font-weight: 900;
-  font-display: swap !important; /* Force override external CSS */
-  src: url('/media/fa-solid-900.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Font Awesome 6 Brands';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap !important; /* Force override external CSS */
-  src: url('/media/fa-brands-400.woff2') format('woff2');
-}
-
 /* Self-hosted Roboto fonts with layout shift prevention */
 /* roboto-300 - latin */
 @font-face {
@@ -106,93 +91,112 @@
   size-adjust: 100%;
 }
 
-/* roboto-regular - latin */
+/* roboto-regular - latin (with layout shift prevention) */
 @font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 400;
   font-display: swap;
-  src: url('/assets/fonts/montserrat-v31-latin-regular.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('/assets/fonts/montserrat-v31-latin-500.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('/assets/fonts/montserrat-v31-latin-600.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/assets/fonts/montserrat-v31-latin-700.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url('/assets/fonts/montserrat-v31-latin-800.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url('/assets/fonts/roboto-v30-latin-300.woff2') format('woff2');
-}
-
-@font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
-  src: url('/assets/fonts/roboto-v30-latin-regular.woff2') format('woff2');
+  src: url('assets/fonts/roboto-v30-latin-regular.woff2') format('woff2');
+  ascent-override: 92%;
+  descent-override: 23%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
 }
 
+/* roboto-500 - latin (with layout shift prevention) */
 @font-face {
+  font-display: swap;
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
-  font-display: swap;
-  src: url('/assets/fonts/roboto-v30-latin-500.woff2') format('woff2');
+  src: url('assets/fonts/roboto-v30-latin-500.woff2') format('woff2');
+  ascent-override: 92%;
+  descent-override: 23%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
 }
 
-* {
+/* ============================================================================
+   BASELINE — token-driven, heavy-equipment aesthetic
+   ============================================================================ */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-/* Performance optimization: Reduce layout shifts */
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* Optimize animations for better performance */
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--lt-font-body);
+  font-size: var(--lt-text-base);
+  font-weight: var(--lt-weight-regular);
+  line-height: var(--lt-leading-normal);
+  color: var(--lt-text-primary);
+  background-color: var(--lt-surface-canvas);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Performance optimization: Reduce layout shifts */
+img,
+picture,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Headings default to display family — tighter and bolder */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: var(--lt-font-heading);
+  font-weight: var(--lt-weight-bold);
+  line-height: var(--lt-leading-tight);
+  letter-spacing: var(--lt-tracking-snug);
+  color: var(--lt-text-primary);
+}
+
+p { margin: 0; }
+
+a {
+  color: var(--lt-color-brand-600);
+  text-decoration: none;
+  transition: color var(--lt-duration-fast) var(--lt-ease-standard);
+}
+
+a:hover { color: var(--lt-color-brand-700); }
+
+a:focus-visible {
+  outline: 2px solid var(--lt-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--lt-radius-xs);
+}
+
+/* Selection in brand colors — subtle industrial accent */
+::selection {
+  background-color: var(--lt-color-brand-500);
+  color: var(--lt-text-on-brand);
+}
+
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

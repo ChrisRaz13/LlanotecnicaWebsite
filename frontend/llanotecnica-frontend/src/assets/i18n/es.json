@@ -73,6 +73,24 @@
       "TITLE": "Mezcladoras de Concreto Profesionales | Soluciones Industriales de Mezcla",
       "DESCRIPTION": "Mezcladoras de concreto de grado profesional que brindan confiabilidad y rendimiento por más de dos décadas. Explore nuestra gama de soluciones industriales de mezcla."
     },
+    "EYEBROWS": {
+      "DEMONSTRATION": "DEMOSTRACIÓN",
+      "PRODUCT_RANGE": "GAMA DE PRODUCTOS",
+      "NEXT_STEP": "SIGUIENTE PASO",
+      "TECHNICAL_SPEC": "ESPECIFICACIÓN TÉCNICA",
+      "ENGINEERING": "INGENIERÍA",
+      "TRUSTED_WORLDWIDE": "CONFIANZA MUNDIAL",
+      "SUPPORT": "SOPORTE",
+      "FEATURED": "DESTACADO"
+    },
+    "LABELS": {
+      "EST_PANAMA": "EST. 2002 · PANAMÁ",
+      "KEY_FEATURES_HEADING": "CARACTERÍSTICAS CLAVE",
+      "FLAGSHIP": "INSIGNIA",
+      "SPEC": "ESPEC",
+      "MEDIUM_DUTY": "Servicio Medio",
+      "HEAVY_DUTY": "Servicio Pesado"
+    },
     "HERO": {
       "TITLE": "Diseñadas para Fuerza, Construidas para Durar",
       "DESCRIPTION": "Mezcladoras de concreto de grado profesional que brindan confiabilidad y rendimiento incomparables durante más de dos décadas. Descubre la potencia de la ingeniería de precisión en cada vertida.",
@@ -258,6 +276,13 @@
     "SEO": {
       "TITLE": "Sobre Nosotros | Llanotecnica | Soluciones Profesionales de Mezcla",
       "DESCRIPTION": "Descubre nuestra trayectoria fabricando mezcladoras de concreto de alta calidad, nuestros valores y compromiso con la innovación desde 2007."
+    },
+    "EYEBROWS": {
+      "OUR_STORY": "NUESTRA HISTORIA",
+      "OUR_MISSION": "NUESTRA MISIÓN",
+      "OUR_VALUES": "NUESTROS VALORES",
+      "PRODUCTION_PROCESS": "PROCESO DE PRODUCCIÓN",
+      "GET_IN_TOUCH": "CONTÁCTANOS"
     },
     "HERO": {
       "TAGLINE": "Bienvenido a Nuestra Historia",

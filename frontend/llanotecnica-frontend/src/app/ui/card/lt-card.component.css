@@ -1,0 +1,110 @@
+/* ============================================================================
+   <lt-card> — heavy-equipment industrial surface
+   Variants: default, spec (technical-doc styling), feature, outline
+   ============================================================================ */
+
+.lt-card {
+  display: block;
+  position: relative;
+  background-color: var(--lt-surface-raised);
+  border: 1px solid var(--lt-border-subtle);
+  border-radius: var(--lt-radius-md);
+  padding: var(--lt-space-6);
+  color: var(--lt-text-primary);
+  transition:
+    transform var(--lt-duration-base) var(--lt-ease-emphasized),
+    box-shadow var(--lt-duration-base) var(--lt-ease-out),
+    border-color var(--lt-duration-fast) var(--lt-ease-standard);
+}
+
+/* ----- ELEVATION ----- */
+.lt-card[data-elevation='flat']     { box-shadow: none; }
+.lt-card[data-elevation='raised']   { box-shadow: var(--lt-shadow-sm); }
+.lt-card[data-elevation='floating'] { box-shadow: var(--lt-shadow-lg); }
+
+/* ----- INTERACTIVE — for clickable cards (links, expanders) ----- */
+.lt-card[data-interactive] {
+  cursor: pointer;
+}
+
+.lt-card[data-interactive]:hover {
+  border-color: var(--lt-border-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--lt-shadow-lg);
+}
+
+.lt-card[data-interactive]:active {
+  transform: translateY(0);
+  transition-duration: var(--lt-duration-instant);
+}
+
+.lt-card[data-interactive]:focus-visible {
+  outline: 2px solid var(--lt-border-focus);
+  outline-offset: 3px;
+}
+
+/* ============================================================================
+   VARIANT — DEFAULT (general content card)
+   ============================================================================ */
+.lt-card[data-variant='default'] {
+  /* Inherits base */
+}
+
+/* ============================================================================
+   VARIANT — SPEC (technical-documentation styling)
+   - Mono accents, hard corners, blueprint-blue header bar
+   - Use for: spec sheets, dimension callouts, serial-number displays
+   ============================================================================ */
+.lt-card[data-variant='spec'] {
+  background-color: var(--lt-surface-raised);
+  border-radius: var(--lt-radius-xs);
+  border: 1px solid var(--lt-color-steel-300);
+  font-family: var(--lt-font-mono);
+  font-size: var(--lt-text-sm);
+  padding: 0;
+  overflow: hidden;
+}
+
+.lt-card[data-variant='spec']::before {
+  content: '';
+  display: block;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--lt-color-blueprint),
+    var(--lt-color-brand-500)
+  );
+}
+
+.lt-card[data-variant='spec'] > * {
+  padding-inline: var(--lt-space-5);
+  padding-block: var(--lt-space-3);
+}
+
+/* ============================================================================
+   VARIANT — FEATURE (large hero-adjacent card with brand accent)
+   ============================================================================ */
+.lt-card[data-variant='feature'] {
+  background-color: var(--lt-surface-raised);
+  border-left: 4px solid var(--lt-color-brand-500);
+  border-radius: 0 var(--lt-radius-md) var(--lt-radius-md) 0;
+  padding: var(--lt-space-8);
+}
+
+.lt-card[data-variant='feature']:hover {
+  border-left-color: var(--lt-color-safety-yellow);
+}
+
+/* ============================================================================
+   VARIANT — OUTLINE (minimal, transparent — for grouped content)
+   ============================================================================ */
+.lt-card[data-variant='outline'] {
+  background-color: transparent;
+  border: 1px solid var(--lt-border-default);
+  box-shadow: none;
+}
+
+.lt-card[data-variant='outline'][data-interactive]:hover {
+  background-color: var(--lt-surface-subtle);
+  border-color: var(--lt-border-strong);
+}

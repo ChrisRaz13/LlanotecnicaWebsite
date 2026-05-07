@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-whatsapp-widget',
-  standalone: true,
-  imports: [CommonModule, TranslateModule],
-  templateUrl: './whatsapp-widget.component.html',
-  styleUrls: ['./whatsapp-widget.component.css']
+    selector: 'app-whatsapp-widget',
+    imports: [TranslateModule],
+    templateUrl: './whatsapp-widget.component.html',
+    styleUrls: ['./whatsapp-widget.component.css']
 })
 export class WhatsappWidgetComponent implements OnInit, OnDestroy {
   private langChangeSubscription?: Subscription;

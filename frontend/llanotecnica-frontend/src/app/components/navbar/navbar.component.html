@@ -1,45 +1,21 @@
-<nav [class.scrolled]="isScrolled">
+<nav
+  [class.scrolled]="isScrolled"
+  [class.is-transparent]="isOnHomePage && !isScrolled">
   <div class="nav-content">
-    <!-- Logo Container - slides in when scrolled -->
+    <!-- Logo Container - slides in when scrolled (desktop) / always visible (mobile) -->
     <div class="logo-container" [class.show]="isScrolled">
       <img #logoImg
-           src="assets/photos/logo.webp"
-           alt="{{ 'NAV.LOGO_ALT' | translate }}"
-           class="logo"
-           width="180"
-           height="40"
-           loading="eager" />
+        src="assets/photos/logo.webp"
+        alt="{{ 'NAV.LOGO_ALT' | translate }}"
+        class="logo"
+        width="180"
+        height="40"
+        loading="eager" />
       <span class="company-name">{{ 'NAV.COMPANY_NAME' | translate }}</span>
     </div>
 
-    <!-- Hamburger Menu Button -->
-    <button class="hamburger"
-            (click)="toggleMenu()"
-            [class.active]="isMenuOpen"
-            [attr.aria-label]="isMenuOpen ? ('NAV.CLOSE_MENU' | translate) : ('NAV.OPEN_MENU' | translate)"
-            [attr.aria-expanded]="isMenuOpen">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
-    <!-- Inline Language Selector for Mobile -->
-    <div class="mobile-language-selector">
-      <div class="lang-toggle">
-        <a href="/en" class="flag-option" [class.active]="currentLang === 'en'" (click)="switchLanguage('en'); $event.preventDefault()">
-          <img src="assets/flags/gb.svg" alt="English" class="flag-icon" />
-          <span>EN</span>
-        </a>
-        <span class="divider">|</span>
-        <a href="/es" class="flag-option" [class.active]="currentLang === 'es'" (click)="switchLanguage('es'); $event.preventDefault()">
-          <img src="assets/flags/es.svg" alt="Español" class="flag-icon" />
-          <span>ES</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Nav Links -->
-    <ul class="nav-links" [class.show-mobile]="isMenuOpen" [class.scrolled-nav]="isScrolled">
+    <!-- Desktop Nav Links (hidden on mobile, replaced by overlay) -->
+    <ul class="nav-links desktop-nav">
       <li>
         <a
           [routerLink]="getRoutePath('')"
@@ -73,50 +49,122 @@
           {{ 'NAV.CONTACT' | translate }}
         </a>
       </li>
+    </ul>
 
-      <!-- Mobile-Only: Download Catalog Link (opens language selector modal) -->
-      <li class="mobile-only">
-        <a href="#catalog" (click)="openCatalogModal(); closeMenu(); $event.preventDefault()">
-          <img src="assets/photos/pdf.png" alt="PDF Icon" class="download-icon" width="30" height="30" loading="lazy" decoding="async" />
-          {{ 'NAV.DOWNLOAD_CATALOG' | translate }}
+    <!-- Desktop Catalog Download CTA - safety-yellow accent -->
+    <button
+      type="button"
+      class="nav-catalog"
+      (click)="openCatalogModal()"
+      [attr.aria-label]="'NAV.DOWNLOAD_CATALOG' | translate">
+      <i class="fas fa-file-pdf" aria-hidden="true"></i>
+      <span class="nav-catalog__label">{{ 'NAV.DOWNLOAD_CATALOG' | translate }}</span>
+    </button>
+
+    <!-- Compact Language Toggle - always visible -->
+    <div class="lang-toggle-wrap">
+      <div class="lang-toggle">
+        <a href="/en" class="flag-option" [class.active]="currentLang === 'en'" (click)="switchLanguage('en'); $event.preventDefault()" aria-label="English">
+          <img src="assets/flags/gb.svg" alt="" class="flag-icon" />
+          <span class="lang-label">EN</span>
+        </a>
+        <a href="/es" class="flag-option" [class.active]="currentLang === 'es'" (click)="switchLanguage('es'); $event.preventDefault()" aria-label="Español">
+          <img src="assets/flags/es.svg" alt="" class="flag-icon" />
+          <span class="lang-label">ES</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Hamburger Menu Button (mobile only) -->
+    <button class="hamburger"
+      (click)="toggleMenu()"
+      [class.active]="isMenuOpen"
+      [attr.aria-label]="isMenuOpen ? ('NAV.CLOSE_MENU' | translate) : ('NAV.OPEN_MENU' | translate)"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-controls="mobile-menu-overlay">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Full-Screen Overlay Menu (GSAP-animated) -->
+<div #mobileOverlay
+  id="mobile-menu-overlay"
+  class="mobile-overlay"
+  [class.is-open]="isMenuOpen"
+  [attr.aria-hidden]="!isMenuOpen"
+  (click)="closeMenu()">
+  <div class="overlay-content" (click)="$event.stopPropagation()">
+    <ul class="overlay-links">
+      <li>
+        <a
+          [routerLink]="getRoutePath('')"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}"
+          (click)="closeMenu()">
+          <span class="overlay-link-num">01</span>
+          <span class="overlay-link-text">{{ 'NAV.HOME' | translate }}</span>
+        </a>
+      </li>
+      <li>
+        <a
+          [routerLink]="getRoutePath('about-us')"
+          routerLinkActive="active"
+          (click)="closeMenu()">
+          <span class="overlay-link-num">02</span>
+          <span class="overlay-link-text">{{ 'NAV.ABOUT_US' | translate }}</span>
+        </a>
+      </li>
+      <li>
+        <a
+          [routerLink]="getRoutePath('products')"
+          routerLinkActive="active"
+          (click)="closeMenu()">
+          <span class="overlay-link-num">03</span>
+          <span class="overlay-link-text">{{ 'NAV.PRODUCTS' | translate }}</span>
+        </a>
+      </li>
+      <li>
+        <a
+          [routerLink]="getRoutePath('contact')"
+          routerLinkActive="active"
+          (click)="closeMenu()">
+          <span class="overlay-link-num">04</span>
+          <span class="overlay-link-text">{{ 'NAV.CONTACT' | translate }}</span>
         </a>
       </li>
     </ul>
 
-    <!-- Inline Desktop Language Selector -->
-    <div class="desktop-language-selector">
-      <div class="lang-toggle">
-        <a href="/en" class="flag-option" [class.active]="currentLang === 'en'" (click)="switchLanguage('en'); $event.preventDefault()">
-          <img src="assets/flags/gb.svg" alt="English" class="flag-icon" />
-          <span>EN</span>
-        </a>
-        <span class="divider">|</span>
-        <a href="/es" class="flag-option" [class.active]="currentLang === 'es'" (click)="switchLanguage('es'); $event.preventDefault()">
-          <img src="assets/flags/es.svg" alt="Español" class="flag-icon" />
-          <span>ES</span>
-        </a>
+    <a href="#catalog"
+      class="overlay-catalog"
+      (click)="openCatalogModal(); closeMenu(); $event.preventDefault()">
+      <i class="fas fa-file-pdf" aria-hidden="true"></i>
+      {{ 'NAV.DOWNLOAD_CATALOG' | translate }}
+    </a>
+  </div>
+</div>
+
+<!-- Catalog Modal Overlay (placed outside the nav for proper centering) -->
+@if (isCatalogModalOpen) {
+  <div class="catalog-modal-overlay" (click)="closeCatalogModal()">
+    <div class="catalog-modal" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeCatalogModal()">
+        <i class="fas fa-times"></i>
+      </button>
+      <h3>{{ 'NAV.CATALOG_MODAL.TITLE' | translate }}</h3>
+      <p>{{ 'NAV.CATALOG_MODAL.SUBTITLE' | translate }}</p>
+      <div class="language-options">
+        <button (click)="downloadCatalog('en')">
+          <img src="assets/flags/gb.svg" alt="English" width="28" height="21" />
+          {{ 'NAV.CATALOG_MODAL.ENGLISH' | translate }}
+        </button>
+        <button (click)="downloadCatalog('es')">
+          <img src="assets/flags/es.svg" alt="Español" width="28" height="21" />
+          {{ 'NAV.CATALOG_MODAL.SPANISH' | translate }}
+        </button>
       </div>
     </div>
   </div>
-</nav>
-
-<!-- Catalog Modal Overlay (placed outside the nav for proper centering) -->
-<div class="catalog-modal-overlay" *ngIf="isCatalogModalOpen" (click)="closeCatalogModal()">
-  <div class="catalog-modal" (click)="$event.stopPropagation()">
-    <button class="modal-close" (click)="closeCatalogModal()">
-      <i class="fas fa-times"></i>
-    </button>
-    <h3>{{ 'NAV.CATALOG_MODAL.TITLE' | translate }}</h3>
-    <p>{{ 'NAV.CATALOG_MODAL.SUBTITLE' | translate }}</p>
-    <div class="language-options">
-      <button (click)="downloadCatalog('en')">
-        <img src="assets/flags/gb.svg" alt="English" width="28" height="21" />
-        {{ 'NAV.CATALOG_MODAL.ENGLISH' | translate }}
-      </button>
-      <button (click)="downloadCatalog('es')">
-        <img src="assets/flags/es.svg" alt="Español" width="28" height="21" />
-        {{ 'NAV.CATALOG_MODAL.SPANISH' | translate }}
-      </button>
-    </div>
-  </div>
-</div>
+}

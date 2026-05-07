@@ -105,12 +105,11 @@ interface ManualDialogData {
 type EngineFilterType = 'all' | 'gas' | 'diesel' | 'electric';
 
 @Component({
-  selector: 'app-product-section',
-  standalone: true,
-  imports: [CommonModule, RouterModule, MatDialogModule, MatButtonModule, TranslateModule],
-  templateUrl: './product-section.component.html',
-  styleUrls: ['./product-section.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-product-section',
+    imports: [CommonModule, RouterModule, MatDialogModule, MatButtonModule, TranslateModule],
+    templateUrl: './product-section.component.html',
+    styleUrls: ['./product-section.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductSectionComponent implements OnInit, AfterViewInit {
   activeTab = signal<'specs' | 'engines'>('specs');

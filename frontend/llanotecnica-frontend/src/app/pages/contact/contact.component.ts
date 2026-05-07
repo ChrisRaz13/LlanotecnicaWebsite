@@ -24,7 +24,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -59,23 +59,22 @@ interface SubmitResponse {
 }
 
 @Component({
-  selector: 'app-contact',
-  templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.css'],
-  standalone: true,
-  // Added TranslateModule and ClickOutsideDirective to the imports array
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, ClickOutsideDirective],
-  animations: [
-    trigger('fadeSlideInOut', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(-10px)' }),
-        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-      ]),
-      transition(':leave', [
-        animate('300ms ease-in', style({ opacity: 0, transform: 'translateY(-10px)' }))
-      ])
-    ])
-  ]
+    selector: 'app-contact',
+    templateUrl: './contact.component.html',
+    styleUrls: ['./contact.component.css'],
+    // Added TranslateModule and ClickOutsideDirective to the imports array
+    imports: [ReactiveFormsModule, TranslateModule, ClickOutsideDirective],
+    animations: [
+        trigger('fadeSlideInOut', [
+            transition(':enter', [
+                style({ opacity: 0, transform: 'translateY(-10px)' }),
+                animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+            ]),
+            transition(':leave', [
+                animate('300ms ease-in', style({ opacity: 0, transform: 'translateY(-10px)' }))
+            ])
+        ])
+    ]
 })
 export class ContactComponent implements OnInit, OnDestroy {
   @ViewChild('countryInput') countryInput!: ElementRef;

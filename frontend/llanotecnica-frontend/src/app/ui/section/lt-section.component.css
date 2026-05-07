@@ -1,0 +1,82 @@
+/* ============================================================================
+   <lt-section> — consistent vertical rhythm + width container
+   ============================================================================ */
+
+.lt-section {
+  display: block;
+  position: relative;
+  padding-block: var(--lt-section-py);
+}
+
+.lt-section[data-padding='large'] {
+  padding-block: var(--lt-section-py-lg);
+}
+
+.lt-section[data-padding='none'] {
+  padding-block: 0;
+}
+
+/* ----- TONE — surface variants ----- */
+.lt-section[data-tone='canvas'] {
+  background-color: var(--lt-surface-canvas);
+  color: var(--lt-text-primary);
+}
+
+.lt-section[data-tone='subtle'] {
+  background-color: var(--lt-surface-subtle);
+  color: var(--lt-text-primary);
+}
+
+.lt-section[data-tone='inverse'] {
+  background-color: var(--lt-color-steel-900);
+  color: var(--lt-text-on-dark);
+}
+
+.lt-section[data-tone='inverse'] :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--lt-text-on-dark);
+}
+
+/* Subtle blueprint grid overlay on dark sections — industrial motif */
+.lt-section[data-tone='inverse']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.lt-section[data-tone='inverse'] > .lt-section__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.lt-section[data-tone='brand'] {
+  background-color: var(--lt-color-brand-700);
+  color: var(--lt-text-on-brand);
+}
+
+.lt-section[data-tone='brand'] :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--lt-text-on-brand);
+}
+
+/* ----- WIDTH — content container ----- */
+.lt-section__inner {
+  margin-inline: auto;
+  padding-inline: var(--lt-space-6);
+  width: 100%;
+}
+
+.lt-section__inner[data-width='narrow'] { max-width: var(--lt-container-narrow); }
+.lt-section__inner[data-width='base']   { max-width: var(--lt-container-base); }
+.lt-section__inner[data-width='wide']   { max-width: var(--lt-container-wide); }
+.lt-section__inner[data-width='bleed']  { max-width: 100%; padding-inline: 0; }
+
+@media (min-width: 768px) {
+  .lt-section__inner {
+    padding-inline: var(--lt-space-8);
+  }
+}

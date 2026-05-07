@@ -1,112 +1,122 @@
 <main class="home-container" role="main">
-  <!-- Hero Section -->
-  <section id="hero" class="hero-section" aria-label="Welcome to our concrete mixer solutions">
-    <div class="hero-background">
-      <!-- Optimized background image for immediate LCP -->
-      <div class="hero-bg-image"
-           [style.background-image]="heroBackgroundImage"
-           [class.loaded]="heroImageLoaded"></div>
+  <!-- ============================================================
+       HERO SECTION — heavy-equipment industrial
+       Asymmetric layout, vignette overlay, GSAP-animated entry.
+       ============================================================ -->
+  <section #heroSection id="hero" class="hero-section" aria-label="Llanotecnica industrial concrete mixers">
 
-      <!-- Hero Poster Image - EAGER loading for LCP optimization with responsive images -->
-      <div class="hero-poster-container"
-           [class.hidden]="heroVideoPlaying">
-        <picture>
-          <!-- Mobile WebP -->
-          <source media="(max-width: 768px)"
-                  srcset="/assets/photos/background-mobile-780x1080.webp"
-                  type="image/webp">
-          <!-- Desktop WebP -->
-          <source media="(min-width: 769px)"
-                  srcset="/assets/photos/background-desktop-1920x1080.webp"
-                  type="image/webp">
-          <!-- Fallback for browsers that don't support WebP -->
-          <img
-            loading="eager"
-            src="/assets/photos/background-desktop-1920x1080.webp"
-            alt="Professional concrete mixers - Industrial mixing solutions"
-            width="1920"
-            height="1080"
-            class="hero-poster-image"
-            decoding="sync"
-            fetchpriority="high"
-            (load)="onHeroPosterLoaded()">
-        </picture>
-      </div>
+    <!-- Background layer: poster (LCP) → video (lazy, after idle) -->
+    <div class="hero-background" #heroBackground>
+      <picture>
+        <source media="(max-width: 768px)"
+          srcset="/assets/photos/hero-poster-780.webp"
+          type="image/webp">
+        <source media="(min-width: 769px)"
+          srcset="/assets/photos/hero-poster-1920.webp"
+          type="image/webp">
+        <img
+          src="/assets/photos/hero-poster-1920.webp"
+          [alt]="'HOME_PAGE.HERO.TITLE' | translate"
+          width="1920"
+          height="1080"
+          class="hero-poster"
+          loading="eager"
+          fetchpriority="high"
+          decoding="sync"
+          (load)="onHeroPosterLoaded()" />
+      </picture>
 
-      <!-- Desktop Video background - Only loads on desktop devices -->
-      <video
-        *ngIf="!isMobileDevice"
-        #heroVideoDesktop
-        class="hero-bg-video desktop-video"
-        [class.visible]="heroVideoPlaying"
-        width="1920"
-        height="1080"
-        preload="none"
-        poster="/assets/photos/herosectionposter-optimized.jpg"
-        loop
-        muted="muted"
-        defaultMuted
-        playsinline
-        (canplaythrough)="onHeroVideoReady('desktop')"
-        (loadeddata)="onHeroVideoLoaded('desktop')">
-        <!-- Video source will be loaded dynamically -->
-        <track kind="captions" src="/assets/captions/hero-video-en.vtt" srclang="en" label="English">
-        <track kind="captions" src="/assets/captions/hero-video-es.vtt" srclang="es" label="Español">
-      </video>
+      <!-- Desktop video — AV1 first, H.264 fallback. Sources injected post-LCP via TS. -->
+      @if (!isMobileDevice) {
+        <video
+          #heroVideoDesktop
+          class="hero-video"
+          [class.is-playing]="heroVideoPlaying"
+          width="1280"
+          height="720"
+          preload="none"
+          loop
+          muted
+          playsinline
+          (canplaythrough)="onHeroVideoReady('desktop')"
+          (loadeddata)="onHeroVideoLoaded('desktop')"
+          aria-hidden="true">
+          <track kind="captions" src="/assets/captions/hero-video-en.vtt" srclang="en" label="English">
+          <track kind="captions" src="/assets/captions/hero-video-es.vtt" srclang="es" label="Español">
+        </video>
+      }
 
-      <!-- Mobile Video background - Delayed loading to prevent LCP blocking -->
-      <video
-        *ngIf="isMobileDevice && heroImageLoaded"
-        #heroVideoMobile
-        class="hero-bg-video mobile-video"
-        [class.visible]="heroVideoPlaying"
-        width="780"
-        height="1080"
-        preload="none"
-        poster="/assets/photos/herosectionposter-optimized.jpg"
-        loop
-        muted="muted"
-        defaultMuted
-        playsinline
-        webkit-playsinline
-        x-webkit-airplay="allow"
-        controls="false"
-        (canplaythrough)="onHeroVideoReady('mobile')"
-        (loadeddata)="onHeroVideoLoaded('mobile')">
-        <!-- Video source will be loaded dynamically -->
-        <track kind="captions" src="/assets/captions/hero-video-en.vtt" srclang="en" label="English">
-        <track kind="captions" src="/assets/captions/hero-video-es.vtt" srclang="es" label="Español">
-      </video>
-
-      <div class="hero-overlay"></div>
+      <!-- Mobile video — square crop, even more aggressive lazy-load -->
+      @if (isMobileDevice && heroImageLoaded) {
+        <video
+          #heroVideoMobile
+          class="hero-video hero-video--mobile"
+          [class.is-playing]="heroVideoPlaying"
+          width="720"
+          height="720"
+          preload="none"
+          loop
+          muted
+          playsinline
+          webkit-playsinline
+          (canplaythrough)="onHeroVideoReady('mobile')"
+          (loadeddata)="onHeroVideoLoaded('mobile')"
+          aria-hidden="true">
+          <track kind="captions" src="/assets/captions/hero-video-en.vtt" srclang="en" label="English">
+          <track kind="captions" src="/assets/captions/hero-video-es.vtt" srclang="es" label="Español">
+        </video>
+      }
     </div>
 
-    <div class="hero-content">
-      <div class="hero-text" @fadeIn>
-        <h1>{{ 'HOME_PAGE.HERO.TITLE' | translate }}</h1>
-        <p>{{ 'HOME_PAGE.HERO.DESCRIPTION' | translate }}</p>
+    <!-- Vignette + bottom industrial gradient (overlays the background) -->
+    <div class="hero-vignette" aria-hidden="true"></div>
+    <div class="hero-bottom-gradient" aria-hidden="true"></div>
+    <div class="hero-grid-pattern" aria-hidden="true"></div>
 
-        <div class="hero-cta" @slideIn>
+    <!-- Foreground content: asymmetric, anchored bottom-left -->
+    <div class="hero-content">
+      <div class="hero-text">
+        <p class="hero-eyebrow" #heroEyebrow>
+          <span class="hero-eyebrow__bar" aria-hidden="true"></span>
+          <span class="hero-eyebrow__label">{{ 'HOME_PAGE.LABELS.EST_PANAMA' | translate }}</span>
+        </p>
+
+        <h1 class="hero-headline" #heroHeadline>
+          {{ 'HOME_PAGE.HERO.TITLE' | translate }}
+        </h1>
+
+        <p class="hero-description" #heroDescription>
+          {{ 'HOME_PAGE.HERO.DESCRIPTION' | translate }}
+        </p>
+
+        <div class="hero-cta" #heroCta>
           <button
-            class="btn-primary"
+            lt-button
+            variant="primary"
+            size="lg"
             (click)="scrollToSection('products')"
-            aria-label="Explore our product range">
+            [attr.aria-label]="'HOME_PAGE.HERO.CTA_EXPLORE' | translate">
             {{ 'HOME_PAGE.HERO.CTA_EXPLORE' | translate }}
             <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </button>
 
           <button
-            class="btn-secondary"
+            lt-button
+            variant="primary"
+            size="lg"
+            class="hero-cta__video"
             (click)="playDemoVideo()"
-            aria-label="Watch product demonstration video">
-            {{ 'HOME_PAGE.HERO.CTA_VIDEO' | translate }}
+            [attr.aria-label]="'HOME_PAGE.HERO.CTA_VIDEO' | translate">
             <i class="fas fa-play" aria-hidden="true"></i>
+            {{ 'HOME_PAGE.HERO.CTA_VIDEO' | translate }}
           </button>
 
           <button
-            class="btn-accent flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200"
+            lt-button
+            variant="accent"
+            size="lg"
             (click)="requestQuote()"
-            aria-label="Request a product quote">
+            [attr.aria-label]="'HOME_PAGE.HERO.CTA_QUOTE' | translate">
             {{ 'HOME_PAGE.HERO.CTA_QUOTE' | translate }}
             <i class="fas fa-paper-plane" aria-hidden="true"></i>
           </button>
@@ -114,608 +124,826 @@
       </div>
     </div>
 
+    <!-- Scroll indicator — industrial control-panel style -->
     <div
-      class="scroll-indicator"
-      [class.hide]="!showScrollIndicator"
-      @scrollIndicator
+      #heroScrollIndicator
+      class="hero-scroll"
+      [class.is-hidden]="!showScrollIndicator"
       aria-hidden="true">
-      <span>{{ 'HOME_PAGE.HERO.SCROLL_INDICATOR' | translate }}</span>
-      <i class="fas fa-chevron-down"></i>
+      <span class="hero-scroll__label">{{ 'HOME_PAGE.HERO.SCROLL_INDICATOR' | translate }}</span>
+      <span class="hero-scroll__arrow">
+        <i class="fas fa-chevron-down"></i>
+      </span>
     </div>
   </section>
 
-  <!-- Flag Carousel Section -->
-  <section class="flag-carousel-section">
-    <div class="delivery-note">
-      {{ 'HOME_PAGE.FLAG_CAROUSEL.DELIVERY_NOTE' | translate }}
-    </div>
-    <div class="flag-carousel-container">
-      <div class="flag-carousel-track">
-        <div class="flag-item" *ngFor="let flag of flags_for_display">
-          <div class="flag-wrapper">
-            <img [src]="'/assets/flags/' + flag.code.toLowerCase() + '.svg'"
-                 [alt]="('HOME_PAGE.FLAG_CAROUSEL.FLAG_ALT' | translate: {country: flag.country})"
-                 width="48"
-                 height="36"
-                 loading="lazy"
-                 decoding="async"
-                 importance="low">
-          </div>
-          <span class="country-name">{{flag.country}}</span>
+      <!-- ============================================================
+           FLAG CAROUSEL — seamless infinite loop, heavy-equipment styled
+           Array is duplicated 2x in TS so track can translate -50% smoothly.
+           ============================================================ -->
+      <section class="flag-carousel-section" aria-label="Countries served">
+        <div class="flag-carousel-label">
+          <span class="flag-carousel-label__bar" aria-hidden="true"></span>
+          <span class="flag-carousel-label__text">
+            {{ 'HOME_PAGE.FLAG_CAROUSEL.DELIVERY_NOTE' | translate }}
+          </span>
+          <span class="flag-carousel-label__bar" aria-hidden="true"></span>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Video Section - Updated for portrait video with info sidebar -->
-  <section id="video" class="video-section">
-    <div class="section-container">
-      <header class="section-header" @fadeIn>
-        <div class="header-accent"></div>
-        <h2>{{ 'HOME_PAGE.VIDEO_SECTION.TITLE' | translate }}</h2>
-        <p>{{ 'HOME_PAGE.VIDEO_SECTION.SUBTITLE' | translate }}</p>
-      </header>
-
-      <div class="portrait-video-wrapper">
-        <div class="video-container">
-          <video
-            #mainVideo
-            controls
-            preload="none"
-            [poster]="currentVideoPoster"
-            class="portrait-video"
-            loading="lazy">
-            <source [src]="currentVideoSrc" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-
-        <div class="video-info-sidebar" @videoInfoFadeIn>
-          <div class="video-info-content">
-            <h3>{{ videoInfoTitle }}</h3>
-            <p>{{ videoInfoDescription }}</p>
-
-            <div class="video-highlights" @highlightFadeIn>
-              <div class="highlight-item" *ngFor="let highlight of videoHighlights">
-                <i class="fas" [ngClass]="'fa-' + highlight.icon"></i>
-                <span>{{ highlight.text }}</span>
+        <div class="flag-carousel-container">
+          <div class="flag-carousel-track" aria-hidden="true">
+            @for (flag of flags_for_display; track $index) {
+              <div class="flag-item">
+                <div class="flag-wrapper">
+                  <img [src]="'/assets/flags/' + flag.code.toLowerCase() + '.svg'"
+                    [alt]="('HOME_PAGE.FLAG_CAROUSEL.FLAG_ALT' | translate: {country: flag.country})"
+                    width="48"
+                    height="36"
+                    loading="lazy"
+                    decoding="async"
+                    importance="low">
+                </div>
+                <span class="country-name">{{flag.country}}</span>
               </div>
-            </div>
-
-            <div class="video-cta">
-              <button class="btn-primary" (click)="requestConsultation()">
-                {{ videoCTAText }}
-                <i class="fas fa-arrow-right"></i>
-              </button>
-            </div>
+            }
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- Our Mixer Range Section -->
-  <section id="products" class="products-section">
-    <div class="products-background">
-      <div class="geometric-pattern"></div>
-      <div class="gradient-overlay"></div>
-    </div>
+      <!-- ============================================================
+           VIDEO SECTION — heavy-equipment industrial, language-aware
+           Single video element; src + poster bound directly (no <source>
+           child). Language-switch logic preserves playback position.
+           ============================================================ -->
+      <section #videoSection id="video" class="lt-video-section" aria-labelledby="video-section-title">
+        <!-- Yellow caution stripe at top -->
+        <div class="lt-video-section__stripe" aria-hidden="true"></div>
 
-    <div class="section-container">
-      <header class="section-header" @fadeIn>
-        <div class="header-accent"></div>
-        <h2>{{ 'HOME_PAGE.PRODUCTS.TITLE' | translate }}</h2>
-        <p>{{ 'HOME_PAGE.PRODUCTS.SUBTITLE' | translate }}</p>
-      </header>
+        <!-- Organic background — radial glows + a single SVG curve.
+             No grids, no rectangles, brand-green only. -->
+        <div class="lt-video-section__bg" aria-hidden="true">
+          <svg
+            class="lt-video-section__contour"
+            viewBox="0 0 1600 600"
+            preserveAspectRatio="none">
+            <path
+              d="M0,420 C 200,360 320,500 540,460 S 920,360 1140,420 S 1480,540 1600,460 L 1600,600 L 0,600 Z"
+              fill="rgba(255,255,255,0.04)" />
+            <path
+              d="M0,460 C 240,400 380,540 600,500 S 980,400 1200,460 S 1500,580 1600,520"
+              fill="none"
+              stroke="rgba(255,212,0,0.12)"
+              stroke-width="1.5" />
+          </svg>
+        </div>
 
-      <!-- Product Grid Layout -->
-      <div class="product-display-grid" *ngIf="mixers && mixers.length > 0">
-        <!-- First Mixer - MT-370 -->
-        <div class="product-card" *ngIf="mixers[0]">
-          <div class="product-image-container">
-            <picture>
-              <!-- WebP format for better compression -->
-              <source [srcset]="mixers[0].image.replace('.png', '.webp').replace('.jpg', '.webp')" type="image/webp">
-              <!-- Fallback to original format -->
-              <img [src]="mixers[0].image"
-                   [alt]="('HOME_PAGE.PRODUCTS.MT370_IMAGE_ALT' | translate)"
-                   width="600"
-                   height="400"
-                   loading="lazy"
-                   decoding="async"
-                   class="product-image">
-            </picture>
-          </div>
-          <div class="product-content">
-            <h3>{{ mixers[0].name }}</h3>
-            <p class="product-tagline">{{ 'HOME_PAGE.PRODUCTS.MT370.TAGLINE' | translate }}</p>
+        <div class="lt-video-section__inner">
+          <header class="lt-video-section__header" #videoSectionHeader>
+            <p class="lt-video-section__eyebrow" #videoSectionEyebrow>
+              <span class="lt-video-section__eyebrow-num">/01</span>
+              <span class="lt-video-section__eyebrow-divider" aria-hidden="true"></span>
+              <span class="lt-video-section__eyebrow-text">{{ 'HOME_PAGE.EYEBROWS.DEMONSTRATION' | translate }}</span>
+            </p>
+            <h2 id="video-section-title" class="lt-video-section__title" #videoSectionTitle>
+              {{ 'HOME_PAGE.VIDEO_SECTION.TITLE' | translate }}
+            </h2>
+            <p class="lt-video-section__subtitle" #videoSectionSubtitle>
+              {{ 'HOME_PAGE.VIDEO_SECTION.SUBTITLE' | translate }}
+            </p>
+          </header>
 
-            <div class="product-specs">
-              <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-ruler-combined"></i></div>
-                <div class="spec-info">
-                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.CAPACITY' | translate }}</span>
-                  <span class="spec-value">{{ mixers[0].specs.capacity }}</span>
-                </div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-bolt"></i></div>
-                <div class="spec-info">
-                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.POWER' | translate }}</span>
-                  <span class="spec-value">{{ mixers[0].specs.enginePower }}</span>
-                </div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-weight-hanging"></i></div>
-                <div class="spec-info">
-                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.WEIGHT' | translate }}</span>
-                  <span class="spec-value">{{ mixers[0].specs.weight }}</span>
-                </div>
+          <div class="lt-video-section__grid">
+            <!-- Video frame — manufacturer's nameplate treatment -->
+            <div class="lt-video-frame" #videoFrame>
+              <div class="lt-video-frame__plate">
+                <video
+                  #mainVideo
+                  class="lt-video-frame__media"
+                  controls
+                  preload="none"
+                  [poster]="currentVideoPoster"
+                  [src]="currentVideoSrc"
+                  playsinline
+                  aria-label="Llanotecnica industrial concrete mixers in action">
+                  Your browser does not support the video tag.
+                </video>
+                <span class="lt-video-frame__corner lt-video-frame__corner--tl" aria-hidden="true"></span>
+                <span class="lt-video-frame__corner lt-video-frame__corner--tr" aria-hidden="true"></span>
+                <span class="lt-video-frame__corner lt-video-frame__corner--bl" aria-hidden="true"></span>
+                <span class="lt-video-frame__corner lt-video-frame__corner--br" aria-hidden="true"></span>
               </div>
             </div>
 
-            <div class="product-description">
-              <p>{{ mixers[0].description }}</p>
-            </div>
+            <!-- Info column — direct on green, no card -->
+            <div class="lt-video-info" #videoInfo>
+              <p class="lt-video-info__eyebrow">
+                <span class="lt-video-info__eyebrow-num">/A</span>
+                <span class="lt-video-info__eyebrow-text">{{ 'HOME_PAGE.EYEBROWS.FEATURED' | translate }}</span>
+              </p>
 
-            <div class="product-features">
-              <h4>{{ 'HOME_PAGE.PRODUCTS.KEY_FEATURES' | translate }}</h4>
-              <ul class="feature-list">
-                <li *ngFor="let feature of mixers[0].features">
-                  <i class="fas fa-check-circle"></i>
-                  <span>{{ feature }}</span>
-                </li>
+              <h3 class="lt-video-info__title" #videoInfoTitleEl>{{ videoInfoTitle }}</h3>
+              <p class="lt-video-info__description" #videoInfoDesc>{{ videoInfoDescription }}</p>
+
+              <div class="lt-video-info__divider" aria-hidden="true">
+                <span class="lt-video-info__divider-text">{{ 'HOME_PAGE.LABELS.KEY_FEATURES_HEADING' | translate }}</span>
+              </div>
+
+              <ul class="lt-video-info__highlights" #videoHighlightsList>
+                @for (highlight of videoHighlights; track $index) {
+                  <li class="lt-highlight">
+                    <span class="lt-highlight__num">/{{ ($index + 1).toString().padStart(2, '0') }}</span>
+                    <i class="fas lt-highlight__icon" [ngClass]="'fa-' + highlight.icon" aria-hidden="true"></i>
+                    <span class="lt-highlight__text">{{ highlight.text }}</span>
+                  </li>
+                }
               </ul>
-            </div>
 
-            <div class="product-actions">
-              <button class="btn-primary" [routerLink]="['/products']">
-                {{ 'HOME_PAGE.PRODUCTS.VIEW_DETAILS' | translate }}
-                <i class="fas fa-arrow-right"></i>
+              <div class="lt-video-info__cta">
+                <button
+                  lt-button
+                  variant="accent"
+                  size="lg"
+                  (click)="requestConsultation()"
+                  [attr.aria-label]="videoCTAText">
+                  {{ videoCTAText }}
+                  <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           PRODUCTS SECTION — heavy-equipment industrial spec sheets.
+           Light brand surface (visual rhythm vs dark video above).
+           Cards = manufacturer datasheets. Comparison table = technical spec.
+           ============================================================ -->
+      <section #productsSection id="products" class="lt-products-section" aria-labelledby="products-section-title">
+        <div class="lt-products-section__stripe" aria-hidden="true"></div>
+
+        <!-- Subtle organic curve at top, echoing the video section curve below it -->
+        <div class="lt-products-section__bg" aria-hidden="true">
+          <svg class="lt-products-section__contour" viewBox="0 0 1600 200" preserveAspectRatio="none">
+            <path d="M0,80 C 280,140 480,40 720,80 S 1140,140 1380,80 S 1600,40 1600,80 L 1600,0 L 0,0 Z"
+                  fill="var(--lt-color-brand-700)" />
+          </svg>
+        </div>
+
+        <div class="lt-products-section__inner">
+          <header class="lt-products-section__header" #productsHeader>
+            <p class="lt-products-section__eyebrow" #productsEyebrow>
+              <span class="lt-products-section__eyebrow-num">/02</span>
+              <span class="lt-products-section__eyebrow-divider" aria-hidden="true"></span>
+              <span class="lt-products-section__eyebrow-text">{{ 'HOME_PAGE.EYEBROWS.PRODUCT_RANGE' | translate }}</span>
+            </p>
+            <h2 id="products-section-title" class="lt-products-section__title" #productsTitle>
+              {{ 'HOME_PAGE.PRODUCTS.TITLE' | translate }}
+            </h2>
+            <p class="lt-products-section__subtitle" #productsSubtitle>
+              {{ 'HOME_PAGE.PRODUCTS.SUBTITLE' | translate }}
+            </p>
+          </header>
+
+          @if (mixers && mixers.length > 0) {
+            <div class="lt-product-grid" #productCardsWrap>
+              @for (mixer of mixers; track $index) {
+                <article class="lt-product-card" [attr.data-index]="$index">
+                  <!-- Header bar — model + classification badge -->
+                  <header class="lt-product-card__header">
+                    <span class="lt-product-card__model">/{{ mixer.name.replace('Concrete Mixer ', '').replace('Mezcladora de Concreto ', '') }}</span>
+                    <span
+                      class="lt-product-card__class"
+                      [class.lt-product-card__class--flagship]="$index === 1">
+                      @if ($index === 1) {
+                        <span class="lt-product-card__flag" aria-hidden="true"></span>
+                      }
+                      {{ mixer.shortDesc }}
+                    </span>
+                  </header>
+
+                  <div class="lt-product-card__body">
+                    <!-- Image side -->
+                    <div class="lt-product-card__image-wrap">
+                      <div class="lt-product-card__image-bg" aria-hidden="true"></div>
+                      <picture>
+                        <source [srcset]="mixer.image.replace('.png', '.webp').replace('.jpg', '.webp')" type="image/webp">
+                        <img [src]="mixer.image"
+                          [alt]="$index === 0 ? ('HOME_PAGE.PRODUCTS.MT370_IMAGE_ALT' | translate) : ('HOME_PAGE.PRODUCTS.MT480_IMAGE_ALT' | translate)"
+                          width="600"
+                          height="500"
+                          loading="lazy"
+                          decoding="async"
+                          class="lt-product-card__image">
+                      </picture>
+                    </div>
+
+                    <!-- Content side -->
+                    <div class="lt-product-card__content">
+                      <!-- Spec badges — dashboard readouts -->
+                      <div class="lt-spec-grid">
+                        <div class="lt-spec">
+                          <span class="lt-spec__value" data-spec-value="capacity">{{ mixer.specs.capacity }}</span>
+                          <span class="lt-spec__label">{{ 'HOME_PAGE.PRODUCTS.SPECS.CAPACITY' | translate }}</span>
+                        </div>
+                        <div class="lt-spec">
+                          <span class="lt-spec__value" data-spec-value="power">{{ mixer.specs.enginePower }}</span>
+                          <span class="lt-spec__label">{{ 'HOME_PAGE.PRODUCTS.SPECS.POWER' | translate }}</span>
+                        </div>
+                        <div class="lt-spec">
+                          <span class="lt-spec__value" data-spec-value="weight">{{ mixer.specs.weight }}</span>
+                          <span class="lt-spec__label">{{ 'HOME_PAGE.PRODUCTS.SPECS.WEIGHT' | translate }}</span>
+                        </div>
+                      </div>
+
+                      <p class="lt-product-card__description">{{ mixer.description }}</p>
+
+                      <div class="lt-product-card__features">
+                        <p class="lt-product-card__features-label">
+                          <span class="lt-product-card__features-bar" aria-hidden="true"></span>
+                          {{ 'HOME_PAGE.PRODUCTS.KEY_FEATURES' | translate }}
+                        </p>
+                        <ul class="lt-product-card__features-list">
+                          @for (feature of mixer.features; track feature) {
+                            <li>
+                              <span class="lt-product-card__check" aria-hidden="true">
+                                <i class="fas fa-check"></i>
+                              </span>
+                              <span>{{ feature }}</span>
+                            </li>
+                          }
+                        </ul>
+                      </div>
+
+                      <div class="lt-product-card__actions">
+                        <button
+                          lt-button
+                          variant="primary"
+                          size="md"
+                          [routerLink]="['/' + currentRouteLang + '/' + (currentRouteLang === 'es' ? 'productos' : 'products')]"
+                          [attr.aria-label]="'HOME_PAGE.PRODUCTS.VIEW_DETAILS' | translate">
+                          {{ 'HOME_PAGE.PRODUCTS.VIEW_DETAILS' | translate }}
+                          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                        <button
+                          lt-button
+                          variant="accent"
+                          size="md"
+                          (click)="requestQuote()"
+                          [attr.aria-label]="'HOME_PAGE.PRODUCTS.REQUEST_QUOTE' | translate">
+                          {{ 'HOME_PAGE.PRODUCTS.REQUEST_QUOTE' | translate }}
+                          <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- ============================================================
+             CTA bar — dark conversion strip between cards & comparison
+             ============================================================ -->
+        <div class="lt-products-cta-bar" #productsCtaBar>
+          <div class="lt-products-cta-bar__inner">
+            <div class="lt-products-cta-bar__copy">
+              <p class="lt-products-cta-bar__eyebrow">
+                <span class="lt-products-cta-bar__eyebrow-num">/03</span>
+                <span class="lt-products-cta-bar__eyebrow-text">{{ 'HOME_PAGE.EYEBROWS.NEXT_STEP' | translate }}</span>
+              </p>
+              <h3 class="lt-products-cta-bar__title">{{ 'HOME_PAGE.PRODUCTS.CTA.TITLE' | translate }}</h3>
+              <p class="lt-products-cta-bar__subtitle">{{ 'HOME_PAGE.PRODUCTS.CTA.SUBTITLE' | translate }}</p>
+            </div>
+            <div class="lt-products-cta-bar__actions">
+              <button
+                lt-button
+                variant="accent"
+                size="lg"
+                (click)="requestQuote()"
+                [attr.aria-label]="'HOME_PAGE.PRODUCTS.CTA.REQUEST_QUOTE' | translate">
+                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                {{ 'HOME_PAGE.PRODUCTS.CTA.REQUEST_QUOTE' | translate }}
               </button>
-              <button class="btn-secondary" (click)="requestQuote()">
-                {{ 'HOME_PAGE.PRODUCTS.REQUEST_QUOTE' | translate }}
-                <i class="fas fa-paper-plane"></i>
+              <button
+                lt-button
+                variant="primary"
+                size="lg"
+                (click)="openCatalogModal()"
+                [attr.aria-label]="'HOME_PAGE.PRODUCTS.CTA.DOWNLOAD_CATALOG' | translate">
+                <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                {{ 'HOME_PAGE.PRODUCTS.CTA.DOWNLOAD_CATALOG' | translate }}
+              </button>
+              <button
+                lt-button
+                variant="ghost"
+                size="lg"
+                data-on-dark="true"
+                (click)="scrollToComparison()"
+                [attr.aria-label]="'HOME_PAGE.PRODUCTS.CTA.COMPARE_MODELS' | translate">
+                <i class="fas fa-scale-balanced" aria-hidden="true"></i>
+                {{ 'HOME_PAGE.PRODUCTS.CTA.COMPARE_MODELS' | translate }}
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Second Mixer - MT-480 -->
-        <div class="product-card" *ngIf="mixers.length > 1">
-          <div class="product-image-container">
-            <picture>
-              <!-- WebP format for better compression -->
-              <source [srcset]="mixers[1].image.replace('.png', '.webp').replace('.jpg', '.webp')" type="image/webp">
-              <!-- Fallback to original format -->
-              <img [src]="mixers[1].image"
-                   [alt]="('HOME_PAGE.PRODUCTS.MT480_IMAGE_ALT' | translate)"
-                   width="600"
-                   height="400"
-                   loading="lazy"
-                   decoding="async"
-                   class="product-image">
-            </picture>
-          </div>
-          <div class="product-content">
-            <h3>{{ mixers[1].name }}</h3>
-            <p class="product-tagline">{{ 'HOME_PAGE.PRODUCTS.MT480.TAGLINE' | translate }}</p>
+        <!-- ============================================================
+             COMPARISON TABLE — technical datasheet
+             ============================================================ -->
+        <div id="comparison" class="lt-comparison" #comparisonSection>
+          <div class="lt-comparison__inner">
+            <header class="lt-comparison__header">
+              <p class="lt-comparison__eyebrow">
+                <span class="lt-comparison__eyebrow-num">/04</span>
+                <span class="lt-comparison__eyebrow-text">{{ 'HOME_PAGE.EYEBROWS.TECHNICAL_SPEC' | translate }}</span>
+              </p>
+              <h3 class="lt-comparison__title">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.TITLE' | translate }}</h3>
+            </header>
 
-            <div class="product-specs">
-              <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-ruler-combined"></i></div>
-                <div class="spec-info">
-                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.CAPACITY' | translate }}</span>
-                  <span class="spec-value">{{ mixers[1].specs.capacity }}</span>
-                </div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-bolt"></i></div>
-                <div class="spec-info">
-                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.POWER' | translate }}</span>
-                  <span class="spec-value">{{ mixers[1].specs.enginePower }}</span>
-                </div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-icon"><i class="fas fa-weight-hanging"></i></div>
-                <div class="spec-info">
-                  <span class="spec-label">{{ 'HOME_PAGE.PRODUCTS.SPECS.WEIGHT' | translate }}</span>
-                  <span class="spec-value">{{ mixers[1].specs.weight }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="product-description">
-              <p>{{ mixers[1].description }}</p>
-            </div>
-
-            <div class="product-features">
-              <h4>{{ 'HOME_PAGE.PRODUCTS.KEY_FEATURES' | translate }}</h4>
-              <ul class="feature-list">
-                <li *ngFor="let feature of mixers[1].features">
-                  <i class="fas fa-check-circle"></i>
-                  <span>{{ feature }}</span>
-                </li>
-              </ul>
-            </div>
-
-            <div class="product-actions">
-              <button class="btn-primary" [routerLink]="['/products']">
-                {{ 'HOME_PAGE.PRODUCTS.VIEW_DETAILS' | translate }}
-                <i class="fas fa-arrow-right"></i>
-              </button>
-              <button class="btn-secondary" (click)="requestQuote()">
-                {{ 'HOME_PAGE.PRODUCTS.REQUEST_QUOTE' | translate }}
-                <i class="fas fa-paper-plane"></i>
-              </button>
+            <div class="lt-comparison__scroll" role="region" aria-label="Mixer comparison table" tabindex="0">
+              <table class="lt-comparison__table">
+                <thead>
+                  <tr>
+                    <th class="lt-comparison__th lt-comparison__th--label">
+                      {{ 'HOME_PAGE.PRODUCTS.COMPARISON.SPECIFICATION' | translate }}
+                    </th>
+                    <th class="lt-comparison__th">
+                      <span class="lt-comparison__model">MT-370</span>
+                      <span class="lt-comparison__class">{{ 'HOME_PAGE.LABELS.MEDIUM_DUTY' | translate }}</span>
+                    </th>
+                    <th class="lt-comparison__th lt-comparison__th--flagship">
+                      <span class="lt-comparison__flagship-tag">{{ 'HOME_PAGE.LABELS.FLAGSHIP' | translate }}</span>
+                      <span class="lt-comparison__model">MT-480</span>
+                      <span class="lt-comparison__class">{{ 'HOME_PAGE.LABELS.HEAVY_DUTY' | translate }}</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="lt-comparison__row-label">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.DRUM_CAPACITY' | translate }}</td>
+                    <td class="lt-comparison__cell">370 L <span class="lt-comparison__unit">(13 ft³)</span></td>
+                    <td class="lt-comparison__cell lt-comparison__cell--winner">480 L <span class="lt-comparison__unit">(15 ft³)</span></td>
+                  </tr>
+                  <tr>
+                    <td class="lt-comparison__row-label">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.MIXING_CAPACITY' | translate }}</td>
+                    <td class="lt-comparison__cell">1 Bag <span class="lt-comparison__unit">(360 L)</span></td>
+                    <td class="lt-comparison__cell lt-comparison__cell--winner">2 Bags <span class="lt-comparison__unit">(420 L)</span></td>
+                  </tr>
+                  <tr>
+                    <td class="lt-comparison__row-label">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.DRUM_OPENING' | translate }}</td>
+                    <td class="lt-comparison__cell">18 in <span class="lt-comparison__unit">(450 mm)</span></td>
+                    <td class="lt-comparison__cell lt-comparison__cell--winner">19 in <span class="lt-comparison__unit">(460 mm)</span></td>
+                  </tr>
+                  <tr>
+                    <td class="lt-comparison__row-label">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.DRUM_DEPTH' | translate }}</td>
+                    <td class="lt-comparison__cell">32 in <span class="lt-comparison__unit">(800 mm)</span></td>
+                    <td class="lt-comparison__cell lt-comparison__cell--winner">41 in <span class="lt-comparison__unit">(1020 mm)</span></td>
+                  </tr>
+                  <tr>
+                    <td class="lt-comparison__row-label">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.BEST_USE_CASE' | translate }}</td>
+                    <td class="lt-comparison__cell">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.SMALL_MEDIUM_PROJECTS' | translate }}</td>
+                    <td class="lt-comparison__cell">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.LARGE_COMMERCIAL_PROJECTS' | translate }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Centered CTA Section -->
-      <div class="products-cta">
-        <div class="cta-content">
-          <h3>{{ 'HOME_PAGE.PRODUCTS.CTA.TITLE' | translate }}</h3>
-          <p>{{ 'HOME_PAGE.PRODUCTS.CTA.SUBTITLE' | translate }}</p>
+        <!-- Download Catalog Modal -->
+        <div class="modal-overlay" [class.active]="isModalOpen" (click)="onModalBackdropClick($event)">
+          <div class="modal-container">
+            <button class="modal-close" (click)="closeCatalogModal()" aria-label="Close">
+              <i class="fas fa-times"></i>
+            </button>
+            <h3 class="modal-title">{{ 'HOME_PAGE.MODAL.TITLE' | translate }}</h3>
+            <p class="modal-subtitle">{{ 'HOME_PAGE.MODAL.SUBTITLE' | translate }}</p>
+            <div class="language-grid">
+              <a href="/assets/photos/Catalog-Eng.pdf" download (click)="closeCatalogModal()" class="language-option">
+                <img src="https://flagcdn.com/w80/us.png"
+                  alt="English"
+                  width="80"
+                  height="60"
+                  loading="lazy"
+                  decoding="async"
+                  class="language-flag" />
+                <span class="language-label">{{ 'HOME_PAGE.MODAL.ENGLISH' | translate }}</span>
+              </a>
+              <a href="/assets/photos/Catalog-Esp.pdf" download (click)="closeCatalogModal()" class="language-option">
+                <img src="https://flagcdn.com/w80/es.png"
+                  alt="Español"
+                  width="80"
+                  height="60"
+                  loading="lazy"
+                  decoding="async"
+                  class="language-flag" />
+                <span class="language-label">{{ 'HOME_PAGE.MODAL.SPANISH' | translate }}</span>
+              </a>
+            </div>
+            <div class="modal-footer">
+              {{ 'HOME_PAGE.MODAL.FILE_INFO' | translate }}
+            </div>
+          </div>
+        </div>
 
-          <div class="cta-buttons">
-            <button
-              class="cta-button btn-primary"
-              (click)="requestQuote()"
-              aria-label="Request a quote">
-              <i class="fas fa-paper-plane"></i>
-              {{ 'HOME_PAGE.PRODUCTS.CTA.REQUEST_QUOTE' | translate }}
+        <!-- Download Catalog Modal - Angular style -->
+        <div class="modal-overlay" [class.active]="isModalOpen" (click)="onModalBackdropClick($event)">
+          <div class="modal-container">
+            <button class="modal-close" (click)="closeCatalogModal()">
+              <i class="fas fa-times"></i>
             </button>
 
+            <h3 class="modal-title">{{ 'HOME_PAGE.MODAL.TITLE' | translate }}</h3>
+            <p class="modal-subtitle">{{ 'HOME_PAGE.MODAL.SUBTITLE' | translate }}</p>
+
+            <div class="language-grid">
+              <a
+                href="/assets/photos/Catalog-Eng.pdf"
+                download
+                (click)="closeCatalogModal()"
+                class="language-option"
+                >
+                <img src="https://flagcdn.com/w80/us.png"
+                  alt="English"
+                  width="80"
+                  height="60"
+                  loading="lazy"
+                  decoding="async"
+                  importance="low"
+                  class="language-flag" />
+                <span class="language-label">{{ 'HOME_PAGE.MODAL.ENGLISH' | translate }}</span>
+              </a>
+
+              <a
+                href="/assets/photos/Catalog-Esp.pdf"
+                download
+                (click)="closeCatalogModal()"
+                class="language-option"
+                >
+                <img src="https://flagcdn.com/w80/es.png"
+                  alt="Español"
+                  width="80"
+                  height="60"
+                  loading="lazy"
+                  decoding="async"
+                  importance="low"
+                  class="language-flag" />
+                <span class="language-label">{{ 'HOME_PAGE.MODAL.SPANISH' | translate }}</span>
+              </a>
+            </div>
+
+            <div class="modal-footer">
+              {{ 'HOME_PAGE.MODAL.FILE_INFO' | translate }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           FEATURES SECTION — engineering specs, dark brand backdrop
+           ============================================================ -->
+      <section #featuresSection id="features" class="lt-features-section" aria-labelledby="features-section-title">
+        <div class="lt-features-section__stripe" aria-hidden="true"></div>
+
+        <!-- Subtle blueprint grid overlay (industrial signature) -->
+        <div class="lt-features-section__bg" aria-hidden="true"></div>
+
+        <div class="lt-features-section__inner">
+          <header class="lt-features-section__header">
+            <p class="lt-features-section__eyebrow" #featuresEyebrow>
+              <span class="lt-features-section__eyebrow-num">/05</span>
+              <span class="lt-features-section__eyebrow-divider" aria-hidden="true"></span>
+              <span class="lt-features-section__eyebrow-text">{{ 'HOME_PAGE.EYEBROWS.ENGINEERING' | translate }}</span>
+            </p>
+            <h2 id="features-section-title" class="lt-features-section__title" #featuresTitle>
+              {{ 'HOME_PAGE.FEATURES.TITLE' | translate }}
+            </h2>
+            <p class="lt-features-section__subtitle" #featuresSubtitle>
+              {{ 'HOME_PAGE.FEATURES.SUBTITLE' | translate }}
+            </p>
+          </header>
+
+          <div class="lt-features-grid" #featuresGrid>
+            <article class="lt-feature-card">
+              <div class="lt-feature-card__num" aria-hidden="true">/01</div>
+              <div class="lt-feature-card__icon">
+                <i class="fas fa-shield" aria-hidden="true"></i>
+              </div>
+              <h3 class="lt-feature-card__title">{{ 'HOME_PAGE.FEATURES.REINFORCED_DRUM.TITLE' | translate }}</h3>
+              <p class="lt-feature-card__description">{{ 'HOME_PAGE.FEATURES.REINFORCED_DRUM.DESCRIPTION' | translate }}</p>
+              <div class="lt-feature-card__highlight">
+                <span class="lt-feature-card__highlight-tag">{{ 'HOME_PAGE.LABELS.SPEC' | translate }}</span>
+                <span class="lt-feature-card__highlight-text">{{ 'HOME_PAGE.FEATURES.REINFORCED_DRUM.HIGHLIGHT' | translate }}</span>
+              </div>
+            </article>
+
+            <article class="lt-feature-card">
+              <div class="lt-feature-card__num" aria-hidden="true">/02</div>
+              <div class="lt-feature-card__icon">
+                <i class="fas fa-gears" aria-hidden="true"></i>
+              </div>
+              <h3 class="lt-feature-card__title">{{ 'HOME_PAGE.FEATURES.GEAR_MECHANISM.TITLE' | translate }}</h3>
+              <p class="lt-feature-card__description">{{ 'HOME_PAGE.FEATURES.GEAR_MECHANISM.DESCRIPTION' | translate }}</p>
+              <div class="lt-feature-card__highlight">
+                <span class="lt-feature-card__highlight-tag">{{ 'HOME_PAGE.LABELS.SPEC' | translate }}</span>
+                <span class="lt-feature-card__highlight-text">{{ 'HOME_PAGE.FEATURES.GEAR_MECHANISM.HIGHLIGHT' | translate }}</span>
+              </div>
+            </article>
+
+            <article class="lt-feature-card">
+              <div class="lt-feature-card__num" aria-hidden="true">/03</div>
+              <div class="lt-feature-card__icon">
+                <i class="fas fa-shield-halved" aria-hidden="true"></i>
+              </div>
+              <h3 class="lt-feature-card__title">{{ 'HOME_PAGE.FEATURES.SAFETY.TITLE' | translate }}</h3>
+              <p class="lt-feature-card__description">{{ 'HOME_PAGE.FEATURES.SAFETY.DESCRIPTION' | translate }}</p>
+              <div class="lt-feature-card__highlight">
+                <span class="lt-feature-card__highlight-tag">{{ 'HOME_PAGE.LABELS.SPEC' | translate }}</span>
+                <span class="lt-feature-card__highlight-text">{{ 'HOME_PAGE.FEATURES.SAFETY.HIGHLIGHT' | translate }}</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           COMPANY / CREDIBILITY SECTION — light surface, big stats
+           ============================================================ -->
+      <section #companySection id="company" class="lt-company-section" aria-labelledby="company-section-title">
+        <div class="lt-company-section__stripe" aria-hidden="true"></div>
+
+        <!-- Organic curve (no grids) at top -->
+        <div class="lt-company-section__bg" aria-hidden="true">
+          <svg class="lt-company-section__contour" viewBox="0 0 1600 200" preserveAspectRatio="none">
+            <path d="M0,80 C 240,40 460,140 720,100 S 1140,40 1380,100 S 1600,140 1600,80 L 1600,0 L 0,0 Z"
+                  fill="var(--lt-color-brand-800)" />
+          </svg>
+        </div>
+
+        <div class="lt-company-section__inner">
+          <header class="lt-company-section__header">
+            <p class="lt-company-section__eyebrow" #companyEyebrow>
+              <span class="lt-company-section__eyebrow-num">/06</span>
+              <span class="lt-company-section__eyebrow-divider" aria-hidden="true"></span>
+              <span class="lt-company-section__eyebrow-text">{{ 'HOME_PAGE.EYEBROWS.TRUSTED_WORLDWIDE' | translate }}</span>
+            </p>
+            <h2 id="company-section-title" class="lt-company-section__title" #companyTitle>
+              {{ 'HOME_PAGE.COMPANY.TITLE' | translate }}
+            </h2>
+            <p class="lt-company-section__subtitle" #companySubtitle>
+              {{ 'HOME_PAGE.COMPANY.SUBTITLE' | translate }}
+            </p>
+          </header>
+
+          <div class="lt-stats-grid" #companyStatsGrid>
+            <article class="lt-stat">
+              <div class="lt-stat__icon">
+                <i class="fas fa-industry" aria-hidden="true"></i>
+              </div>
+              <div class="lt-stat__value-row">
+                <span class="lt-stat__value" data-stat-value="20">20</span>
+                <span class="lt-stat__plus" aria-hidden="true">+</span>
+              </div>
+              <div class="lt-stat__divider" aria-hidden="true"></div>
+              <p class="lt-stat__label">{{ 'HOME_PAGE.COMPANY.STATS.YEARS_EXPERIENCE' | translate }}</p>
+              <p class="lt-stat__detail">{{ 'HOME_PAGE.COMPANY.STATS.YEARS_DETAIL' | translate }}</p>
+            </article>
+
+            <article class="lt-stat">
+              <div class="lt-stat__icon">
+                <i class="fas fa-truck" aria-hidden="true"></i>
+              </div>
+              <div class="lt-stat__value-row">
+                <span class="lt-stat__value" data-stat-value="5000">5000</span>
+                <span class="lt-stat__plus" aria-hidden="true">+</span>
+              </div>
+              <div class="lt-stat__divider" aria-hidden="true"></div>
+              <p class="lt-stat__label">{{ 'HOME_PAGE.COMPANY.STATS.MIXERS_DELIVERED' | translate }}</p>
+              <p class="lt-stat__detail">{{ 'HOME_PAGE.COMPANY.STATS.MIXERS_DETAIL' | translate }}</p>
+            </article>
+
+            <article class="lt-stat">
+              <div class="lt-stat__icon">
+                <i class="fas fa-globe" aria-hidden="true"></i>
+              </div>
+              <div class="lt-stat__value-row">
+                <span class="lt-stat__value" data-stat-value="30">30</span>
+                <span class="lt-stat__plus" aria-hidden="true">+</span>
+              </div>
+              <div class="lt-stat__divider" aria-hidden="true"></div>
+              <p class="lt-stat__label">{{ 'HOME_PAGE.COMPANY.STATS.COUNTRIES_SERVED' | translate }}</p>
+              <p class="lt-stat__detail">{{ 'HOME_PAGE.COMPANY.STATS.COUNTRIES_DETAIL' | translate }}</p>
+            </article>
+          </div>
+
+          <div class="lt-company-section__cta">
             <button
-              class="cta-button btn-secondary"
-              (click)="openCatalogModal()"
-              aria-label="Download product catalog">
-              <i class="fas fa-file-pdf"></i>
-              {{ 'HOME_PAGE.PRODUCTS.CTA.DOWNLOAD_CATALOG' | translate }}
-            </button>
-
-            <button
-              class="cta-button btn-accent"
-              (click)="scrollToComparison()"
-              aria-label="Compare mixer models">
-              <i class="fas fa-scale-balanced"></i>
-              {{ 'HOME_PAGE.PRODUCTS.CTA.COMPARE_MODELS' | translate }}
+              lt-button
+              variant="accent"
+              size="lg"
+              [routerLink]="['/' + currentRouteLang + '/' + (currentRouteLang === 'es' ? 'sobre-nosotros' : 'about-us')]"
+              [attr.aria-label]="'HOME_PAGE.COMPANY.CTA' | translate">
+              {{ 'HOME_PAGE.COMPANY.CTA' | translate }}
+              <i class="fas fa-arrow-right" aria-hidden="true"></i>
             </button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Quick Comparison Table -->
-      <div id="comparison" class="comparison-section">
-        <h3 class="comparison-title">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.TITLE' | translate }}</h3>
-        <div class="comparison-table-container">
-          <table class="comparison-table">
-            <thead>
-              <tr>
-                <th>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.SPECIFICATION' | translate }}</th>
-                <th>MT-370</th>
-                <th>MT-480</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.DRUM_CAPACITY' | translate }}</td>
-                <td class="table-center">370 L (13 cu. ft)</td>
-                <td class="table-center">480 L (15 cu. ft)</td>
-              </tr>
-              <tr>
-                <td>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.MIXING_CAPACITY' | translate }}</td>
-                <td class="table-center">1 Bag (360 L)</td>
-                <td class="table-center">2 Bags (420 L)</td>
-              </tr>
-              <tr>
-                <td>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.DRUM_OPENING' | translate }}</td>
-                <td class="table-center">18 in (450 mm)</td>
-                <td class="table-center">19 in (460 mm)</td>
-              </tr>
-              <tr>
-                <td>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.DRUM_DEPTH' | translate }}</td>
-                <td class="table-center">32 in (800 mm)</td>
-                <td class="table-center">41 in (1020 mm)</td>
-              </tr>
-              <tr>
-                <td>{{ 'HOME_PAGE.PRODUCTS.COMPARISON.BEST_USE_CASE' | translate }}</td>
-                <td class="table-center">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.SMALL_MEDIUM_PROJECTS' | translate }}</td>
-                <td class="table-center">{{ 'HOME_PAGE.PRODUCTS.COMPARISON.LARGE_COMMERCIAL_PROJECTS' | translate }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+      <!-- ============================================================
+           FAQ SECTION — heavy-equipment industrial accordion
+           No grid pattern (footer owns that). Diagonal-streak organic bg.
+           ============================================================ -->
+      <section #faqSection id="faq" class="lt-faq-section" aria-labelledby="faq-section-title">
+        <div class="lt-faq-section__stripe" aria-hidden="true"></div>
 
-    <!-- Download Catalog Modal - Angular style -->
-    <div class="modal-overlay" [class.active]="isModalOpen" (click)="onModalBackdropClick($event)">
-      <div class="modal-container">
-        <button class="modal-close" (click)="closeCatalogModal()">
-          <i class="fas fa-times"></i>
-        </button>
-
-        <h3 class="modal-title">{{ 'HOME_PAGE.MODAL.TITLE' | translate }}</h3>
-        <p class="modal-subtitle">{{ 'HOME_PAGE.MODAL.SUBTITLE' | translate }}</p>
-
-        <div class="language-grid">
-          <a
-            href="/assets/photos/Catalog-Eng.pdf"
-            download
-            (click)="closeCatalogModal()"
-            class="language-option"
-          >
-            <img src="https://flagcdn.com/w80/us.png"
-                 alt="English"
-                 width="80"
-                 height="60"
-                 loading="lazy"
-                 decoding="async"
-                 importance="low"
-                 class="language-flag" />
-            <span class="language-label">{{ 'HOME_PAGE.MODAL.ENGLISH' | translate }}</span>
-          </a>
-
-          <a
-            href="/assets/photos/Catalog-Esp.pdf"
-            download
-            (click)="closeCatalogModal()"
-            class="language-option"
-          >
-            <img src="https://flagcdn.com/w80/es.png"
-                 alt="Español"
-                 width="80"
-                 height="60"
-                 loading="lazy"
-                 decoding="async"
-                 importance="low"
-                 class="language-flag" />
-            <span class="language-label">{{ 'HOME_PAGE.MODAL.SPANISH' | translate }}</span>
-          </a>
+        <!-- Organic diagonal-streak backdrop — explicitly NOT a grid -->
+        <div class="lt-faq-section__bg" aria-hidden="true">
+          <svg class="lt-faq-section__streaks" viewBox="0 0 1600 800" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="lt-faq-streak-1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgba(0,135,81,0)" />
+                <stop offset="50%" stop-color="rgba(0,135,81,0.06)" />
+                <stop offset="100%" stop-color="rgba(0,135,81,0)" />
+              </linearGradient>
+              <linearGradient id="lt-faq-streak-2" x1="0" y1="0" x2="1" y2="-1">
+                <stop offset="0%" stop-color="rgba(255,212,0,0)" />
+                <stop offset="50%" stop-color="rgba(255,212,0,0.05)" />
+                <stop offset="100%" stop-color="rgba(255,212,0,0)" />
+              </linearGradient>
+            </defs>
+            <path d="M-100,200 L 1700,-100 L 1700,40 L -100,340 Z" fill="url(#lt-faq-streak-1)" />
+            <path d="M-100,500 L 1700,200 L 1700,340 L -100,640 Z" fill="url(#lt-faq-streak-2)" />
+            <path d="M-100,720 L 1700,420 L 1700,560 L -100,860 Z" fill="url(#lt-faq-streak-1)" />
+          </svg>
         </div>
 
-        <div class="modal-footer">
-          {{ 'HOME_PAGE.MODAL.FILE_INFO' | translate }}
-        </div>
-      </div>
-    </div>
-  </section>
+        <div class="lt-faq-section__inner">
+          <header class="lt-faq-section__header">
+            <p class="lt-faq-section__eyebrow" #faqEyebrow>
+              <span class="lt-faq-section__eyebrow-num">/07</span>
+              <span class="lt-faq-section__eyebrow-divider" aria-hidden="true"></span>
+              <span class="lt-faq-section__eyebrow-text">{{ 'HOME_PAGE.EYEBROWS.SUPPORT' | translate }}</span>
+            </p>
+            <h2 id="faq-section-title" class="lt-faq-section__title" #faqTitle>
+              {{ 'HOME_PAGE.FAQ.TITLE' | translate }}
+            </h2>
+            <p class="lt-faq-section__subtitle" #faqSubtitle>
+              {{ 'HOME_PAGE.FAQ.SUBTITLE' | translate }}
+            </p>
+          </header>
 
-  <!-- Advanced Features Section -->
-  <section id="features" class="features-section">
-    <div class="section-container">
-      <header class="section-header" @fadeIn>
-        <h2>{{ 'HOME_PAGE.FEATURES.TITLE' | translate }}</h2>
-        <p>{{ 'HOME_PAGE.FEATURES.SUBTITLE' | translate }}</p>
-      </header>
-      <div class="features-grid" @staggerFade>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-shield"></i>
-          </div>
-          <div class="feature-content">
-            <h3>{{ 'HOME_PAGE.FEATURES.REINFORCED_DRUM.TITLE' | translate }}</h3>
-            <p>{{ 'HOME_PAGE.FEATURES.REINFORCED_DRUM.DESCRIPTION' | translate }}</p>
-            <div class="feature-highlight">
-              <span>{{ 'HOME_PAGE.FEATURES.REINFORCED_DRUM.HIGHLIGHT' | translate }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-gears"></i>
-          </div>
-          <div class="feature-content">
-            <h3>{{ 'HOME_PAGE.FEATURES.GEAR_MECHANISM.TITLE' | translate }}</h3>
-            <p>{{ 'HOME_PAGE.FEATURES.GEAR_MECHANISM.DESCRIPTION' | translate }}</p>
-            <div class="feature-highlight">
-              <span>{{ 'HOME_PAGE.FEATURES.GEAR_MECHANISM.HIGHLIGHT' | translate }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-shield-halved"></i>
-          </div>
-          <div class="feature-content">
-            <h3>{{ 'HOME_PAGE.FEATURES.SAFETY.TITLE' | translate }}</h3>
-            <p>{{ 'HOME_PAGE.FEATURES.SAFETY.DESCRIPTION' | translate }}</p>
-            <div class="feature-highlight">
-              <span>{{ 'HOME_PAGE.FEATURES.SAFETY.HIGHLIGHT' | translate }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+          <div class="lt-faq-list" #faqList role="region" aria-label="Frequently asked questions">
+            <!-- Q1 — Operation (with video + 4-step guide) -->
+            <div class="lt-faq-item" [class.lt-faq-item--active]="activeFaq === 0">
+              <button
+                class="lt-faq-question"
+                (click)="toggleFaq(0)"
+                [attr.aria-expanded]="activeFaq === 0"
+                aria-controls="faq-answer-0">
+                <span class="lt-faq-question__num" aria-hidden="true">Q1</span>
+                <span class="lt-faq-question__text">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.QUESTION' | translate }}</span>
+                <span class="lt-faq-question__chevron" aria-hidden="true">
+                  <i class="fas fa-chevron-down"></i>
+                </span>
+              </button>
+              <div class="lt-faq-answer" id="faq-answer-0" [attr.aria-hidden]="activeFaq !== 0">
+                <div class="lt-faq-answer__inner">
+                  <p class="lt-faq-answer__intro">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.ANSWER_INTRO' | translate }}</p>
 
-  <!-- Company Section -->
-  <section id="company" class="company-section">
-    <div class="company-background">
-      <div class="geometric-pattern"></div>
-      <div class="gradient-overlay"></div>
-    </div>
-
-    <div class="section-container">
-      <div class="company-content" @fadeIn>
-        <div class="text-center mb-12">
-          <h2 class="company-title">{{ 'HOME_PAGE.COMPANY.TITLE' | translate }}</h2>
-          <p class="company-subtitle">{{ 'HOME_PAGE.COMPANY.SUBTITLE' | translate }}</p>
-        </div>
-
-        <div class="company-stats-grid">
-          <div class="stat-card" @statFadeIn>
-            <div class="stat-icon">🏭</div>
-            <div class="stat-number">20+</div>
-            <div class="stat-label">{{ 'HOME_PAGE.COMPANY.STATS.YEARS_EXPERIENCE' | translate }}</div>
-            <div class="stat-detail">{{ 'HOME_PAGE.COMPANY.STATS.YEARS_DETAIL' | translate }}</div>
-          </div>
-          <div class="stat-card" @statFadeIn>
-            <div class="stat-icon">🚛</div>
-            <div class="stat-number">5000+</div>
-            <div class="stat-label">{{ 'HOME_PAGE.COMPANY.STATS.MIXERS_DELIVERED' | translate }}</div>
-            <div class="stat-detail">{{ 'HOME_PAGE.COMPANY.STATS.MIXERS_DETAIL' | translate }}</div>
-          </div>
-          <div class="stat-card" @statFadeIn>
-            <div class="stat-icon">🌍</div>
-            <div class="stat-number">30+</div>
-            <div class="stat-label">{{ 'HOME_PAGE.COMPANY.STATS.COUNTRIES_SERVED' | translate }}</div>
-            <div class="stat-detail">{{ 'HOME_PAGE.COMPANY.STATS.COUNTRIES_DETAIL' | translate }}</div>
-          </div>
-        </div>
-
-        <div class="company-cta">
-          <a [routerLink]="['/about-us']" class="btn-secondary">
-            {{ 'HOME_PAGE.COMPANY.CTA' | translate }}
-            <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section id="faq" class="faq-section">
-    <div class="section-container">
-      <header class="section-header" @fadeIn>
-        <h2>{{ 'HOME_PAGE.FAQ.TITLE' | translate }}</h2>
-        <p>{{ 'HOME_PAGE.FAQ.SUBTITLE' | translate }}</p>
-      </header>
-      <div class="faq-list">
-        <div class="faq-item" @fadeIn>
-          <button class="faq-question" (click)="toggleFaq(0)"
-            [class.active]="activeFaq === 0">
-            {{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.QUESTION' | translate }}
-            <i class="fas" [class.fa-chevron-down]="activeFaq !== 0"
-              [class.fa-chevron-up]="activeFaq === 0"></i>
-          </button>
-          <div class="faq-answer" [class.active]="activeFaq === 0">
-            <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.ANSWER_INTRO' | translate }}</p>
-              <div class="faq-video">
-                <div class="faq-video-container">
-                  <video #demoVideo
-                         controls
-                         width="640"
-                         height="360"
-                         preload="none"
-                         loading="lazy"
-                         poster="/assets/photos/instruction-poster.webp">
-                    <source src="/assets/compressedvideos/instruction.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              <div class="faq-video-info">
-                <div class="guide-title">
-                  <div class="guide-icon">
-                    <i class="fas fa-list-check"></i>
-                  </div>
-                  <h4>{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEPS_TITLE' | translate }}</h4>
-                </div>
-                <div class="operation-steps">
-                  <div class="step-item">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                      <div class="step-header">
-                        <div class="step-icon">
-                          <i class="fas fa-tools"></i>
-                        </div>
-                        <div class="step-title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP1.TITLE' | translate }}</div>
+                  <div class="lt-faq-operation">
+                    <!-- Demo video (16:9 instruction video) -->
+                    <div class="lt-faq-operation__video">
+                      <div class="lt-faq-operation__video-frame">
+                        <video #demoVideo
+                          controls
+                          width="640"
+                          height="360"
+                          preload="none"
+                          loading="lazy"
+                          poster="/assets/photos/instruction-poster.webp"
+                          class="lt-faq-operation__video-media">
+                          <source src="/assets/compressedvideos/instruction.mp4" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                        <span class="lt-faq-operation__corner lt-faq-operation__corner--tl" aria-hidden="true"></span>
+                        <span class="lt-faq-operation__corner lt-faq-operation__corner--tr" aria-hidden="true"></span>
+                        <span class="lt-faq-operation__corner lt-faq-operation__corner--bl" aria-hidden="true"></span>
+                        <span class="lt-faq-operation__corner lt-faq-operation__corner--br" aria-hidden="true"></span>
                       </div>
-                      <div class="step-desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP1.DESC' | translate }}</div>
                     </div>
-                  </div>
 
-                  <div class="step-item">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                      <div class="step-header">
-                        <div class="step-icon">
-                          <i class="fas fa-power-off"></i>
-                        </div>
-                        <div class="step-title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP2.TITLE' | translate }}</div>
+                    <!-- 4-step operation guide -->
+                    <div class="lt-faq-operation__steps">
+                      <div class="lt-faq-operation__steps-header">
+                        <span class="lt-faq-operation__steps-icon" aria-hidden="true">
+                          <i class="fas fa-list-check"></i>
+                        </span>
+                        <h4 class="lt-faq-operation__steps-title">
+                          {{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEPS_TITLE' | translate }}
+                        </h4>
                       </div>
-                      <div class="step-desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP2.DESC' | translate }}</div>
-                    </div>
-                  </div>
-
-                  <div class="step-item">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                      <div class="step-header">
-                        <div class="step-icon">
-                          <i class="fas fa-rotate"></i>
-                        </div>
-                        <div class="step-title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP3.TITLE' | translate }}</div>
-                      </div>
-                      <div class="step-desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP3.DESC' | translate }}</div>
-                    </div>
-                  </div>
-
-                  <div class="step-item">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                      <div class="step-header">
-                        <div class="step-icon">
-                          <i class="fas fa-fill-drip"></i>
-                        </div>
-                        <div class="step-title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP4.TITLE' | translate }}</div>
-                      </div>
-                      <div class="step-desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP4.DESC' | translate }}</div>
+                      <ol class="lt-faq-operation__steps-list">
+                        <li class="lt-step">
+                          <span class="lt-step__num">01</span>
+                          <span class="lt-step__icon" aria-hidden="true"><i class="fas fa-tools"></i></span>
+                          <div class="lt-step__body">
+                            <span class="lt-step__title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP1.TITLE' | translate }}</span>
+                            <span class="lt-step__desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP1.DESC' | translate }}</span>
+                          </div>
+                        </li>
+                        <li class="lt-step">
+                          <span class="lt-step__num">02</span>
+                          <span class="lt-step__icon" aria-hidden="true"><i class="fas fa-power-off"></i></span>
+                          <div class="lt-step__body">
+                            <span class="lt-step__title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP2.TITLE' | translate }}</span>
+                            <span class="lt-step__desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP2.DESC' | translate }}</span>
+                          </div>
+                        </li>
+                        <li class="lt-step">
+                          <span class="lt-step__num">03</span>
+                          <span class="lt-step__icon" aria-hidden="true"><i class="fas fa-rotate"></i></span>
+                          <div class="lt-step__body">
+                            <span class="lt-step__title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP3.TITLE' | translate }}</span>
+                            <span class="lt-step__desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP3.DESC' | translate }}</span>
+                          </div>
+                        </li>
+                        <li class="lt-step">
+                          <span class="lt-step__num">04</span>
+                          <span class="lt-step__icon" aria-hidden="true"><i class="fas fa-fill-drip"></i></span>
+                          <div class="lt-step__body">
+                            <span class="lt-step__title">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP4.TITLE' | translate }}</span>
+                            <span class="lt-step__desc">{{ 'HOME_PAGE.FAQ.QUESTIONS.OPERATION.STEP4.DESC' | translate }}</span>
+                          </div>
+                        </li>
+                      </ol>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- Q2 — Maintenance -->
+            <div class="lt-faq-item" [class.lt-faq-item--active]="activeFaq === 1">
+              <button class="lt-faq-question" (click)="toggleFaq(1)"
+                [attr.aria-expanded]="activeFaq === 1" aria-controls="faq-answer-1">
+                <span class="lt-faq-question__num" aria-hidden="true">Q2</span>
+                <span class="lt-faq-question__text">{{ 'HOME_PAGE.FAQ.QUESTIONS.MAINTENANCE.QUESTION' | translate }}</span>
+                <span class="lt-faq-question__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+              </button>
+              <div class="lt-faq-answer" id="faq-answer-1" [attr.aria-hidden]="activeFaq !== 1">
+                <div class="lt-faq-answer__inner">
+                  <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.MAINTENANCE.ANSWER' | translate }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Q3 — Which Mixer -->
+            <div class="lt-faq-item" [class.lt-faq-item--active]="activeFaq === 2">
+              <button class="lt-faq-question" (click)="toggleFaq(2)"
+                [attr.aria-expanded]="activeFaq === 2" aria-controls="faq-answer-2">
+                <span class="lt-faq-question__num" aria-hidden="true">Q3</span>
+                <span class="lt-faq-question__text">{{ 'HOME_PAGE.FAQ.QUESTIONS.WHICH_MIXER.QUESTION' | translate }}</span>
+                <span class="lt-faq-question__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+              </button>
+              <div class="lt-faq-answer" id="faq-answer-2" [attr.aria-hidden]="activeFaq !== 2">
+                <div class="lt-faq-answer__inner">
+                  <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.WHICH_MIXER.ANSWER' | translate }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Q4 — Warranty -->
+            <div class="lt-faq-item" [class.lt-faq-item--active]="activeFaq === 3">
+              <button class="lt-faq-question" (click)="toggleFaq(3)"
+                [attr.aria-expanded]="activeFaq === 3" aria-controls="faq-answer-3">
+                <span class="lt-faq-question__num" aria-hidden="true">Q4</span>
+                <span class="lt-faq-question__text">{{ 'HOME_PAGE.FAQ.QUESTIONS.WARRANTY.QUESTION' | translate }}</span>
+                <span class="lt-faq-question__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+              </button>
+              <div class="lt-faq-answer" id="faq-answer-3" [attr.aria-hidden]="activeFaq !== 3">
+                <div class="lt-faq-answer__inner">
+                  <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.WARRANTY.ANSWER' | translate }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Q5 — Spare Parts -->
+            <div class="lt-faq-item" [class.lt-faq-item--active]="activeFaq === 4">
+              <button class="lt-faq-question" (click)="toggleFaq(4)"
+                [attr.aria-expanded]="activeFaq === 4" aria-controls="faq-answer-4">
+                <span class="lt-faq-question__num" aria-hidden="true">Q5</span>
+                <span class="lt-faq-question__text">{{ 'HOME_PAGE.FAQ.QUESTIONS.SPARE_PARTS.QUESTION' | translate }}</span>
+                <span class="lt-faq-question__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+              </button>
+              <div class="lt-faq-answer" id="faq-answer-4" [attr.aria-hidden]="activeFaq !== 4">
+                <div class="lt-faq-answer__inner">
+                  <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.SPARE_PARTS.ANSWER' | translate }}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="faq-item" @fadeIn>
-          <button class="faq-question" (click)="toggleFaq(1)"
-            [class.active]="activeFaq === 1">
-            {{ 'HOME_PAGE.FAQ.QUESTIONS.MAINTENANCE.QUESTION' | translate }}
-            <i class="fas" [class.fa-chevron-down]="activeFaq !== 1"
-              [class.fa-chevron-up]="activeFaq === 1"></i>
-          </button>
-          <div class="faq-answer" [class.active]="activeFaq === 1">
-            <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.MAINTENANCE.ANSWER' | translate }}</p>
-          </div>
-        </div>
-        <div class="faq-item" @fadeIn>
-          <button class="faq-question" (click)="toggleFaq(2)"
-            [class.active]="activeFaq === 2">
-            {{ 'HOME_PAGE.FAQ.QUESTIONS.WHICH_MIXER.QUESTION' | translate }}
-            <i class="fas" [class.fa-chevron-down]="activeFaq !== 2"
-              [class.fa-chevron-up]="activeFaq === 2"></i>
-          </button>
-          <div class="faq-answer" [class.active]="activeFaq === 2">
-            <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.WHICH_MIXER.ANSWER' | translate }}</p>
-          </div>
-        </div>
-        <div class="faq-item" @fadeIn>
-          <button class="faq-question" (click)="toggleFaq(3)"
-            [class.active]="activeFaq === 3">
-            {{ 'HOME_PAGE.FAQ.QUESTIONS.WARRANTY.QUESTION' | translate }}
-            <i class="fas" [class.fa-chevron-down]="activeFaq !== 3"
-              [class.fa-chevron-up]="activeFaq === 3"></i>
-          </button>
-          <div class="faq-answer" [class.active]="activeFaq === 3">
-            <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.WARRANTY.ANSWER' | translate }}</p>
-          </div>
-        </div>
-        <div class="faq-item" @fadeIn>
-          <button class="faq-question" (click)="toggleFaq(4)"
-            [class.active]="activeFaq === 4">
-            {{ 'HOME_PAGE.FAQ.QUESTIONS.SPARE_PARTS.QUESTION' | translate }}
-            <i class="fas" [class.fa-chevron-down]="activeFaq !== 4"
-              [class.fa-chevron-up]="activeFaq === 4"></i>
-          </button>
-          <div class="faq-answer" [class.active]="activeFaq === 4">
-            <p>{{ 'HOME_PAGE.FAQ.QUESTIONS.SPARE_PARTS.ANSWER' | translate }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
+      </section>
+    </main>

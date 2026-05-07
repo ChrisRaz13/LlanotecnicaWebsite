@@ -1,8 +1,7 @@
-import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject, DOCUMENT } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { BannerComponent } from './components/banner/banner.component';
 import { FooterComponent } from "./components/footer/footer.component";
 import { WhatsappWidgetComponent } from './components/whatsapp-widget/whatsapp-widget.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -12,18 +11,15 @@ import { SeoLanguageService } from './services/language-selector/seo-language.se
 import { RecaptchaService } from './services/language-selector/recaptcha.service';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    NavbarComponent,
-    BannerComponent,
-    FooterComponent,
-    WhatsappWidgetComponent,
-    TranslateModule
-  ],
-  template: `
-    <app-banner></app-banner>
+    selector: 'app-root',
+    imports: [
+        RouterOutlet,
+        NavbarComponent,
+        FooterComponent,
+        WhatsappWidgetComponent,
+        TranslateModule
+    ],
+    template: `
     <app-navbar></app-navbar>
     <router-outlet></router-outlet>
     <app-footer></app-footer>

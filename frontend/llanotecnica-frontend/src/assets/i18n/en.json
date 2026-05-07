@@ -73,6 +73,24 @@
       "TITLE": "Professional Concrete Mixers | Industrial Mixing Solutions",
       "DESCRIPTION": "Professional-grade concrete mixers delivering reliability and performance for over two decades. Explore our range of industrial mixing solutions."
     },
+    "EYEBROWS": {
+      "DEMONSTRATION": "DEMONSTRATION",
+      "PRODUCT_RANGE": "PRODUCT RANGE",
+      "NEXT_STEP": "NEXT STEP",
+      "TECHNICAL_SPEC": "TECHNICAL SPECIFICATION",
+      "ENGINEERING": "ENGINEERING",
+      "TRUSTED_WORLDWIDE": "TRUSTED WORLDWIDE",
+      "SUPPORT": "SUPPORT",
+      "FEATURED": "FEATURED"
+    },
+    "LABELS": {
+      "EST_PANAMA": "EST. 2002 · PANAMÁ",
+      "KEY_FEATURES_HEADING": "KEY FEATURES",
+      "FLAGSHIP": "FLAGSHIP",
+      "SPEC": "SPEC",
+      "MEDIUM_DUTY": "Medium-Duty",
+      "HEAVY_DUTY": "Heavy-Duty"
+    },
     "HERO": {
       "TITLE": "Engineered for Strength, Built to Last",
       "DESCRIPTION": "Professional-grade concrete mixers delivering unmatched reliability and performance for over two decades. Experience the power of precision engineering in every pour.",
@@ -258,6 +276,13 @@
     "SEO": {
       "TITLE": "About Us | Llanotecnica | Professional Mixing Solutions",
       "DESCRIPTION": "Discover our journey of manufacturing high-quality concrete mixers, our values, and commitment to innovation since 2007."
+    },
+    "EYEBROWS": {
+      "OUR_STORY": "OUR STORY",
+      "OUR_MISSION": "OUR MISSION",
+      "OUR_VALUES": "OUR VALUES",
+      "PRODUCTION_PROCESS": "PRODUCTION PROCESS",
+      "GET_IN_TOUCH": "GET IN TOUCH"
     },
     "HERO": {
       "TAGLINE": "Welcome to Our Story",

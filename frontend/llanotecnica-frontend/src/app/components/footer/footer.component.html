@@ -1,98 +1,223 @@
-<!-- FOOTER TEMPORARILY COMMENTED OUT FOR CLS TESTING -->
-<!--
-<footer class="site-footer">
-  <div class="footer-main">
-    <div class="footer-container">
-      <div class="footer-content">
-        <div class="footer-section company-section">
-          <div class="footer-brand">
-            <div class="footer-logo-container">
-              <img src="assets/photos/logo.webp"
-                   alt="Llanotecnica Logo"
-                   class="footer-logo"
-                   width="48"
-                   height="48"
-                   loading="lazy"
-                   decoding="async">
-            </div>
-            <div class="brand-text">
-              <h2 class="footer-company-name">Llanotecnica</h2>
-              <p class="company-tagline">Company description here</p>
-            </div>
-          </div>
-          <div class="footer-social">
-            <h4 class="social-title">Follow Us</h4>
-            <div class="social-links">
-              <a href="#" class="social-icon facebook">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" class="social-icon instagram">
-                <i class="fab fa-instagram"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="footer-section navigation-section">
-          <div class="nav-group">
-            <h3 class="section-title">Quick Links</h3>
-            <ul class="footer-nav-list">
-              <li><a href="#" class="footer-nav-link">About Us</a></li>
-              <li><a href="#" class="footer-nav-link">Products</a></li>
-              <li><a href="#" class="footer-nav-link">Contact</a></li>
-            </ul>
-          </div>
-          <div class="products-group">
-            <h3 class="section-title">Products</h3>
-            <ul class="footer-nav-list">
-              <li><a href="#" class="footer-nav-link">MT-370</a></li>
-              <li><a href="#" class="footer-nav-link">MT-480</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="footer-section contact-section">
-          <h3 class="section-title">Contact Information</h3>
-          <div class="contact-info">
-            <div class="contact-item">
-              <i class="contact-icon fas fa-phone"></i>
-              <div class="contact-details">
-                <span class="contact-label">Phone</span>
-                <a href="#" class="contact-link">+507-6566-4942</a>
-              </div>
-            </div>
-            <div class="contact-item">
-              <i class="contact-icon fas fa-envelope"></i>
-              <div class="contact-details">
-                <span class="contact-label">Email</span>
-                <a href="#" class="contact-link">ventas@llanotecnica.com</a>
-              </div>
-            </div>
-          </div>
-          <div class="support-group">
-            <h4 class="support-title">Support</h4>
-            <ul class="support-list">
-              <li><a href="#" class="support-link">User Manual</a></li>
-              <li><a href="#" class="support-link">FAQ</a></li>
-              <li><a href="#" class="support-link">Product Catalog</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-container">
-      <div class="footer-bottom-content">
-        <p>© 2025 Llanotecnica All rights reserved</p>
-        <div class="footer-bottom-links">
-          <span class="footer-bottom-text">Privacy Policy</span>
-          <span class="separator">|</span>
-          <span class="footer-bottom-text">Terms of Service</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
--->
+<footer class="lt-footer">
+  <!-- Brand stripe — heavy-equipment signature -->
+  <div class="lt-footer__stripe" aria-hidden="true"></div>
 
-<!-- Empty div to prevent any layout issues -->
-<div></div>
+  <div class="lt-footer__main">
+    <div class="lt-footer__container">
+      <div class="lt-footer__grid">
+
+        <!-- Column 1: Brand & social -->
+        <div class="lt-footer__col lt-footer__col--brand">
+          <div class="lt-footer__logo-wrap">
+            <img
+              src="assets/photos/logo.webp"
+              [alt]="'NAV.LOGO_ALT' | translate"
+              class="lt-footer__logo"
+              width="64"
+              height="64"
+              loading="lazy"
+              decoding="async" />
+            <div class="lt-footer__logo-meta">
+              <span class="lt-footer__company-name">LLANOTECNICA</span>
+              <span class="lt-footer__est">{{ 'HOME_PAGE.LABELS.EST_PANAMA' | translate }}</span>
+            </div>
+          </div>
+          <p class="lt-footer__description">
+            {{ 'FOOTER.COMPANY_DESCRIPTION' | translate }}
+          </p>
+          <div class="lt-footer__social">
+            <span class="lt-footer__eyebrow">{{ 'FOOTER.FOLLOW_US_TITLE' | translate }}</span>
+            <div class="lt-footer__social-row">
+              <a
+                [href]="companyInfo.socialLinks.facebook"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="lt-footer__social-icon"
+                aria-label="Facebook">
+                <i class="fab fa-facebook-f" aria-hidden="true"></i>
+              </a>
+              <a
+                [href]="companyInfo.socialLinks.instagram"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="lt-footer__social-icon"
+                aria-label="Instagram">
+                <i class="fab fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a
+                [href]="companyInfo.whatsapp"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="lt-footer__social-icon"
+                aria-label="WhatsApp">
+                <i class="fab fa-whatsapp" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="lt-footer__col">
+          <h3 class="lt-footer__heading">
+            <span class="lt-footer__heading-num">01</span>
+            {{ 'FOOTER.QUICK_LINKS_TITLE' | translate }}
+          </h3>
+          <ul class="lt-footer__list">
+            @for (link of quickLinks; track link.text) {
+              <li>
+                <a [routerLink]="link.route" class="lt-footer__link">
+                  <span class="lt-footer__link-arrow" aria-hidden="true">→</span>
+                  {{ link.text }}
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <!-- Column 3: Products -->
+        <div class="lt-footer__col">
+          <h3 class="lt-footer__heading">
+            <span class="lt-footer__heading-num">02</span>
+            {{ 'FOOTER.PRODUCTS_TITLE' | translate }}
+          </h3>
+          <ul class="lt-footer__list">
+            @for (product of products; track product.text) {
+              <li>
+                <a [routerLink]="product.route" class="lt-footer__link">
+                  <span class="lt-footer__link-arrow" aria-hidden="true">→</span>
+                  {{ product.text }}
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact + Resources -->
+        <div class="lt-footer__col lt-footer__col--contact">
+          <h3 class="lt-footer__heading">
+            <span class="lt-footer__heading-num">03</span>
+            {{ 'NAV.CONTACT' | translate }}
+          </h3>
+
+          <div class="lt-footer__contact">
+            @if (companyInfo.phone) {
+              <a [href]="phoneTelLink" class="lt-footer__contact-item">
+                <i class="fas fa-phone lt-footer__contact-icon" aria-hidden="true"></i>
+                <div>
+                  <span class="lt-footer__contact-label">Phone</span>
+                  <span class="lt-footer__contact-value">{{ companyInfo.phone }}</span>
+                </div>
+              </a>
+            }
+            @if (companyInfo.email) {
+              <a [href]="emailMailtoLink" class="lt-footer__contact-item">
+                <i class="fas fa-envelope lt-footer__contact-icon" aria-hidden="true"></i>
+                <div>
+                  <span class="lt-footer__contact-label">Email</span>
+                  <span class="lt-footer__contact-value">{{ companyInfo.email }}</span>
+                </div>
+              </a>
+            }
+            @if (companyInfo.address) {
+              <div class="lt-footer__contact-item">
+                <i class="fas fa-map-marker-alt lt-footer__contact-icon" aria-hidden="true"></i>
+                <div>
+                  <span class="lt-footer__contact-label">Address</span>
+                  <span class="lt-footer__contact-value">{{ companyInfo.address }}</span>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Resource buttons (manual + catalog) -->
+          <div class="lt-footer__resources">
+            <button
+              type="button"
+              class="lt-footer__resource-btn"
+              (click)="toggleManualModal()">
+              <i class="fas fa-file-pdf" aria-hidden="true"></i>
+              {{ 'FOOTER.SUPPORT.1.TEXT' | translate }}
+            </button>
+            <button
+              type="button"
+              class="lt-footer__resource-btn"
+              (click)="toggleCatalogModal()">
+              <i class="fas fa-file-pdf" aria-hidden="true"></i>
+              {{ 'NAV.DOWNLOAD_CATALOG' | translate }}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="lt-footer__bottom">
+    <div class="lt-footer__container">
+      <div class="lt-footer__bottom-inner">
+        <p class="lt-footer__copyright">
+          © {{ currentYear }} Llanotecnica · {{ 'FOOTER.ALL_RIGHTS_RESERVED' | translate }}
+        </p>
+        <div class="lt-footer__legal">
+          <a href="#" class="lt-footer__legal-link">{{ 'FOOTER.PRIVACY_POLICY' | translate }}</a>
+          <span class="lt-footer__legal-sep" aria-hidden="true">·</span>
+          <a href="#" class="lt-footer__legal-link">{{ 'FOOTER.TERMS_OF_SERVICE' | translate }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back-to-top button (offset from WhatsApp widget) -->
+  <button
+    type="button"
+    class="lt-footer__top"
+    (click)="scrollToTop()"
+    aria-label="Back to top">
+    <span aria-hidden="true">↑</span>
+  </button>
+</footer>
+
+<!-- Manual download modal -->
+@if (showManualModal) {
+  <div class="lt-footer-modal-overlay" (click)="closeManualModal()">
+    <div class="lt-footer-modal" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+      <button type="button" class="lt-footer-modal__close" (click)="closeManualModal()" aria-label="Close">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+      <h3 class="lt-footer-modal__title">{{ 'FOOTER.SELECT_MANUAL_LANGUAGE' | translate }}</h3>
+      <div class="lt-footer-modal__options">
+        <button type="button" (click)="downloadManual('en')">
+          <img src="assets/flags/gb.svg" alt="" width="24" height="18" />
+          {{ 'FOOTER.LANGUAGE_ENGLISH' | translate }}
+        </button>
+        <button type="button" (click)="downloadManual('es')">
+          <img src="assets/flags/es.svg" alt="" width="24" height="18" />
+          {{ 'FOOTER.LANGUAGE_SPANISH' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Catalog download modal -->
+@if (showCatalogModal) {
+  <div class="lt-footer-modal-overlay" (click)="closeCatalogModal()">
+    <div class="lt-footer-modal" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+      <button type="button" class="lt-footer-modal__close" (click)="closeCatalogModal()" aria-label="Close">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+      <h3 class="lt-footer-modal__title">{{ 'FOOTER.SELECT_CATALOG' | translate }}</h3>
+      <div class="lt-footer-modal__options">
+        <button type="button" (click)="downloadCatalog('en')">
+          <img src="assets/flags/gb.svg" alt="" width="24" height="18" />
+          {{ 'FOOTER.LANGUAGE_ENGLISH' | translate }}
+        </button>
+        <button type="button" (click)="downloadCatalog('es')">
+          <img src="assets/flags/es.svg" alt="" width="24" height="18" />
+          {{ 'FOOTER.LANGUAGE_SPANISH' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

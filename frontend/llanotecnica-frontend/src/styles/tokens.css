@@ -1,0 +1,216 @@
+/* ============================================================================
+   LLANOTECNICA DESIGN TOKENS
+   Heavy-equipment industrial aesthetic.
+   References: Caterpillar, John Deere, SANY, Komatsu, Volvo CE.
+   ============================================================================ */
+
+:root {
+  /* ----- COLOR — BRAND ----- */
+  --lt-color-brand-50:  #e6f5ee;
+  --lt-color-brand-100: #b8e1cb;
+  --lt-color-brand-200: #87cba6;
+  --lt-color-brand-300: #4fb47e;
+  --lt-color-brand-400: #1ea35d;
+  --lt-color-brand-500: #008751;  /* primary brand green */
+  --lt-color-brand-600: #007347;
+  --lt-color-brand-700: #005d3a;
+  --lt-color-brand-800: #00472d;
+  --lt-color-brand-900: #00301f;
+  --lt-color-brand-950: #001b11;
+
+  /* ----- COLOR — SAFETY ACCENT (caution yellow + alert orange) ----- */
+  --lt-color-safety-yellow: #ffd400;
+  --lt-color-safety-yellow-deep: #f2c200;
+  --lt-color-safety-orange: #ff6b00;
+  --lt-color-safety-orange-deep: #cc5500;
+
+  /* ----- COLOR — MACHINE / NEUTRAL (industrial steel grays) ----- */
+  --lt-color-steel-25:  #fafafa;
+  --lt-color-steel-50:  #f4f4f5;
+  --lt-color-steel-100: #e4e4e7;
+  --lt-color-steel-200: #c8c8cd;
+  --lt-color-steel-300: #a8a8ae;
+  --lt-color-steel-400: #74747a;
+  --lt-color-steel-500: #52525a;
+  --lt-color-steel-600: #3f3f46;
+  --lt-color-steel-700: #2d2d33;
+  --lt-color-steel-800: #1c1c20;
+  --lt-color-steel-900: #0d0d10;
+  --lt-color-steel-950: #050507;
+
+  /* ----- COLOR — TECHNICAL (blueprint blue for spec sheets / accents) ----- */
+  --lt-color-blueprint: #0a3d62;
+  --lt-color-blueprint-light: #1e5a8a;
+
+  /* ----- COLOR — SEMANTIC ----- */
+  --lt-color-success: var(--lt-color-brand-500);
+  --lt-color-warning: var(--lt-color-safety-yellow-deep);
+  --lt-color-danger:  #c1272d;
+  --lt-color-info:    var(--lt-color-blueprint-light);
+
+  /* ----- SURFACE (theme-agnostic; remap for dark mode later) ----- */
+  --lt-surface-canvas:    #ffffff;
+  --lt-surface-subtle:    var(--lt-color-steel-50);
+  --lt-surface-raised:    #ffffff;
+  --lt-surface-overlay:   rgba(13, 13, 16, 0.85);
+  --lt-surface-inverse:   var(--lt-color-steel-900);
+
+  /* ----- TEXT ----- */
+  --lt-text-primary:    var(--lt-color-steel-900);
+  --lt-text-secondary:  var(--lt-color-steel-600);
+  --lt-text-muted:      var(--lt-color-steel-500);
+  --lt-text-disabled:   var(--lt-color-steel-300);
+  --lt-text-on-brand:   #ffffff;
+  --lt-text-on-dark:    #ffffff;
+  --lt-text-on-accent:  var(--lt-color-steel-900);
+
+  /* ----- BORDER ----- */
+  --lt-border-subtle:   var(--lt-color-steel-100);
+  --lt-border-default:  var(--lt-color-steel-200);
+  --lt-border-strong:   var(--lt-color-steel-400);
+  --lt-border-brand:    var(--lt-color-brand-500);
+  --lt-border-focus:    var(--lt-color-brand-400);
+
+  /* ============================================================================
+     TYPOGRAPHY
+     Display: Anton (condensed bold, industrial signage)
+     UI:      Roboto Condensed (sub-display, eyebrows, button labels)
+     Body:    Roboto / Montserrat (current site already loads these)
+     Mono:    JetBrains Mono / system mono (spec sheets, serial numbers)
+     ============================================================================ */
+  --lt-font-display:  'Anton', 'Impact', 'Helvetica Neue Condensed', sans-serif;
+  --lt-font-heading:  'Roboto', 'Montserrat', system-ui, sans-serif;
+  --lt-font-body:     'Montserrat', 'Roboto', system-ui, sans-serif;
+  --lt-font-mono:     'JetBrains Mono', 'SF Mono', 'Consolas', 'Liberation Mono', monospace;
+
+  /* Fluid type scale — clamps min / preferred / max for responsive sizing */
+  --lt-text-2xs:   0.6875rem;                                 /* 11px */
+  --lt-text-xs:    0.75rem;                                   /* 12px */
+  --lt-text-sm:    0.875rem;                                  /* 14px */
+  --lt-text-base:  1rem;                                      /* 16px */
+  --lt-text-md:    1.125rem;                                  /* 18px */
+  --lt-text-lg:    clamp(1.25rem, 1.0rem + 1vw, 1.5rem);
+  --lt-text-xl:    clamp(1.5rem, 1.2rem + 1.4vw, 2rem);
+  --lt-text-2xl:   clamp(1.875rem, 1.4rem + 2vw, 2.5rem);
+  --lt-text-3xl:   clamp(2.25rem, 1.6rem + 2.8vw, 3.25rem);
+  --lt-text-4xl:   clamp(3rem, 2rem + 4vw, 4.5rem);           /* hero subhead */
+  --lt-text-display: clamp(3.5rem, 2.2rem + 6vw, 6.5rem);     /* hero headline */
+
+  --lt-leading-tight:   1.05;
+  --lt-leading-snug:    1.2;
+  --lt-leading-normal:  1.5;
+  --lt-leading-relaxed: 1.65;
+
+  --lt-tracking-tight:   -0.02em;
+  --lt-tracking-snug:    -0.01em;
+  --lt-tracking-normal:  0;
+  --lt-tracking-wide:    0.04em;
+  --lt-tracking-wider:   0.08em;     /* eyebrow / label uppercase */
+  --lt-tracking-widest:  0.16em;
+
+  --lt-weight-regular:  400;
+  --lt-weight-medium:   500;
+  --lt-weight-semibold: 600;
+  --lt-weight-bold:     700;
+  --lt-weight-black:    800;
+
+  /* ============================================================================
+     SPACING — 4px grid (industrial, decisive intervals)
+     ============================================================================ */
+  --lt-space-0:   0;
+  --lt-space-1:   0.25rem;   /* 4 */
+  --lt-space-2:   0.5rem;    /* 8 */
+  --lt-space-3:   0.75rem;   /* 12 */
+  --lt-space-4:   1rem;      /* 16 */
+  --lt-space-5:   1.25rem;   /* 20 */
+  --lt-space-6:   1.5rem;    /* 24 */
+  --lt-space-8:   2rem;      /* 32 */
+  --lt-space-10:  2.5rem;    /* 40 */
+  --lt-space-12:  3rem;      /* 48 */
+  --lt-space-16:  4rem;      /* 64 */
+  --lt-space-20:  5rem;      /* 80 */
+  --lt-space-24:  6rem;      /* 96 */
+  --lt-space-32:  8rem;      /* 128 */
+
+  /* Section vertical rhythm — fluid */
+  --lt-section-py:       clamp(3.5rem, 2rem + 5vw, 6rem);     /* default section */
+  --lt-section-py-lg:    clamp(5rem, 3rem + 6vw, 8rem);       /* hero / feature */
+
+  /* ============================================================================
+     RADIUS — small. Heavy machinery has hard angles.
+     ============================================================================ */
+  --lt-radius-none: 0;
+  --lt-radius-xs:   2px;
+  --lt-radius-sm:   3px;
+  --lt-radius-md:   4px;
+  --lt-radius-lg:   6px;
+  --lt-radius-pill: 999px;
+
+  /* ============================================================================
+     SHADOW — hard, directional. Mass casts a clear shadow on concrete.
+     ============================================================================ */
+  --lt-shadow-xs:   0 1px 0 rgba(13, 13, 16, 0.08);
+  --lt-shadow-sm:   0 2px 4px rgba(13, 13, 16, 0.1), 0 1px 2px rgba(13, 13, 16, 0.06);
+  --lt-shadow-md:   0 4px 12px rgba(13, 13, 16, 0.12), 0 2px 4px rgba(13, 13, 16, 0.08);
+  --lt-shadow-lg:   0 12px 24px rgba(13, 13, 16, 0.18), 0 4px 8px rgba(13, 13, 16, 0.1);
+  --lt-shadow-xl:   0 24px 48px rgba(13, 13, 16, 0.25), 0 8px 16px rgba(13, 13, 16, 0.12);
+  --lt-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  /* Brand glow for primary CTA hover */
+  --lt-shadow-brand-glow: 0 8px 24px rgba(0, 135, 81, 0.35), 0 2px 4px rgba(0, 135, 81, 0.2);
+  --lt-shadow-safety-glow: 0 8px 24px rgba(255, 212, 0, 0.4);
+
+  /* ============================================================================
+     MOTION — weighty, decisive. No bounce, no elastic.
+     ============================================================================ */
+  --lt-ease-standard:  cubic-bezier(0.65, 0, 0.35, 1);    /* heavy machine deceleration */
+  --lt-ease-out:       cubic-bezier(0.16, 1, 0.3, 1);     /* expo-out, weight settling */
+  --lt-ease-in:        cubic-bezier(0.7, 0, 0.84, 0);     /* expo-in, mass starting up */
+  --lt-ease-emphasized: cubic-bezier(0.34, 1.06, 0.64, 1);/* slight overshoot, no bounce */
+
+  --lt-duration-instant: 100ms;
+  --lt-duration-fast:    200ms;
+  --lt-duration-base:    320ms;
+  --lt-duration-slow:    500ms;
+  --lt-duration-slower:  720ms;
+  --lt-duration-cinematic: 1200ms;  /* hero reveals, page transitions */
+
+  /* ============================================================================
+     LAYOUT
+     ============================================================================ */
+  --lt-container-narrow:  720px;
+  --lt-container-base:    1100px;
+  --lt-container-wide:    1320px;
+  --lt-container-bleed:   100%;
+
+  /* Z-index scale — explicit, no random magic numbers */
+  --lt-z-base:     1;
+  --lt-z-raised:   10;
+  --lt-z-sticky:   100;
+  --lt-z-overlay:  500;
+  --lt-z-modal:    1000;
+  --lt-z-toast:    2000;
+  --lt-z-tooltip:  3000;
+
+  /* ============================================================================
+     INDUSTRIAL MOTIFS (decorative tokens for blueprint accents)
+     ============================================================================ */
+  --lt-grid-line: rgba(13, 13, 16, 0.06);                   /* subtle grid overlay */
+  --lt-grid-line-strong: rgba(13, 13, 16, 0.12);
+  --lt-stripe-warning: repeating-linear-gradient(
+    45deg,
+    var(--lt-color-safety-yellow) 0 12px,
+    var(--lt-color-steel-900) 12px 24px
+  );
+}
+
+/* Reduced motion — collapse all durations to near-zero */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --lt-duration-instant: 1ms;
+    --lt-duration-fast:    1ms;
+    --lt-duration-base:    1ms;
+    --lt-duration-slow:    1ms;
+    --lt-duration-slower:  1ms;
+    --lt-duration-cinematic: 1ms;
+  }
+}

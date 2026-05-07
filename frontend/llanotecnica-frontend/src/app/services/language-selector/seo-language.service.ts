@@ -1,5 +1,5 @@
-import { Injectable, Inject, PLATFORM_ID, OnDestroy } from '@angular/core';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Injectable, Inject, PLATFORM_ID, OnDestroy, DOCUMENT } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
