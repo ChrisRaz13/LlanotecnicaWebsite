@@ -1787,11 +1787,19 @@
   }
   .lt-product__tab-bar::-webkit-scrollbar { display: none; }
   .lt-product__tab {
-    padding: var(--lt-space-3) var(--lt-space-2);
-    font-size: 0.72rem;
+    /* Long Spanish labels (e.g. "ESPECIFICACIONES CLAVE") would otherwise
+       overflow into the next tab — allow wrap to 2 lines, keep tap target. */
+    padding: var(--lt-space-2) var(--lt-space-1);
+    font-size: 0.7rem;
+    line-height: 1.15;
     min-height: 44px;
-    white-space: nowrap;
+    white-space: normal;
+    text-align: center;
+    overflow-wrap: anywhere;
     flex: 1 1 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Spec rows — stack on mobile; right-aligned values collide with long
