@@ -26,22 +26,24 @@
 
   <!-- External preconnects removed - all dependencies now self-hosted -->
 
-  <!-- Preload self-hosted fonts for better performance -->
+  <!-- Preload self-hosted fonts for better performance.
+       Anton is preloaded too (though .ttf, not woff2) because it's the
+       display font on every section title — without preload, Anton swaps
+       in late and the line-height delta cascades into a viewport-worth
+       of CLS pushing the footer down. -->
+  <link rel="preload" href="/assets/fonts/Anton-Regular.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="/assets/fonts/montserrat-v31-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/montserrat-v31-latin-500.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/roboto-v30-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/roboto-v30-latin-500.woff2" as="font" type="font/woff2" crossorigin>
 
-  <!-- CRITICAL: Preload LCP hero image with highest priority -->
-  <link rel="preload" href="/assets/photos/background-desktop-1920x1080.webp" as="image" type="image/webp" fetchpriority="high" media="(min-width: 769px)" crossorigin>
-  <link rel="preload" href="/assets/photos/background-mobile-780x1080.webp" as="image" type="image/webp" fetchpriority="high" media="(max-width: 768px)" crossorigin>
-
-  <!-- Preload critical CSS and JS resources -->
-  <link rel="modulepreload" href="/main.js" crossorigin>
-
-  <!-- Secondary image preloads -->
-  <link rel="preload" href="/assets/photos/coverphoto.webp" as="image" type="image/webp">
-  <link rel="prefetch" href="/assets/photos/MT-480.2-optimized.webp" as="image" type="image/webp">
+  <!-- CRITICAL: Preload the actual LCP hero image. The <picture> element in
+       home.component.html uses these exact files via media-matched <source>s,
+       so the browser uses the preloaded copy instead of fetching it on parse.
+       NOTE: media + imagesrcset must match the picture's <source> media queries
+       exactly, otherwise the preload becomes a wasted fetch. -->
+  <link rel="preload" href="/assets/photos/hero-poster-780.webp" as="image" type="image/webp" fetchpriority="high" media="(max-width: 768px)">
+  <link rel="preload" href="/assets/photos/hero-poster-1920.webp" as="image" type="image/webp" fetchpriority="high" media="(min-width: 769px)">
 
 
   <!-- Favicon (these are small and loaded as needed) -->

@@ -63,11 +63,11 @@
             {{ 'FOOTER.QUICK_LINKS_TITLE' | translate }}
           </h3>
           <ul class="lt-footer__list">
-            @for (link of quickLinks; track link.text) {
+            @for (link of quickLinks; track link.textKey) {
               <li>
                 <a [routerLink]="link.route" class="lt-footer__link">
                   <span class="lt-footer__link-arrow" aria-hidden="true">→</span>
-                  {{ link.text }}
+                  {{ link.textKey | translate }}
                 </a>
               </li>
             }
@@ -81,11 +81,11 @@
             {{ 'FOOTER.PRODUCTS_TITLE' | translate }}
           </h3>
           <ul class="lt-footer__list">
-            @for (product of products; track product.text) {
+            @for (product of products; track product.textKey) {
               <li>
                 <a [routerLink]="product.route" class="lt-footer__link">
                   <span class="lt-footer__link-arrow" aria-hidden="true">→</span>
-                  {{ product.text }}
+                  {{ product.textKey | translate }}
                 </a>
               </li>
             }
@@ -100,33 +100,27 @@
           </h3>
 
           <div class="lt-footer__contact">
-            @if (companyInfo.phone) {
-              <a [href]="phoneTelLink" class="lt-footer__contact-item">
-                <i class="fas fa-phone lt-footer__contact-icon" aria-hidden="true"></i>
-                <div>
-                  <span class="lt-footer__contact-label">Phone</span>
-                  <span class="lt-footer__contact-value">{{ companyInfo.phone }}</span>
-                </div>
-              </a>
-            }
-            @if (companyInfo.email) {
-              <a [href]="emailMailtoLink" class="lt-footer__contact-item">
-                <i class="fas fa-envelope lt-footer__contact-icon" aria-hidden="true"></i>
-                <div>
-                  <span class="lt-footer__contact-label">Email</span>
-                  <span class="lt-footer__contact-value">{{ companyInfo.email }}</span>
-                </div>
-              </a>
-            }
-            @if (companyInfo.address) {
-              <div class="lt-footer__contact-item">
-                <i class="fas fa-map-marker-alt lt-footer__contact-icon" aria-hidden="true"></i>
-                <div>
-                  <span class="lt-footer__contact-label">Address</span>
-                  <span class="lt-footer__contact-value">{{ companyInfo.address }}</span>
-                </div>
+            <a [href]="phoneTelLink" class="lt-footer__contact-item">
+              <i class="fas fa-phone lt-footer__contact-icon" aria-hidden="true"></i>
+              <div>
+                <span class="lt-footer__contact-label">Phone</span>
+                <span class="lt-footer__contact-value">{{ 'FOOTER.COMPANY_INFO.PHONE' | translate }}</span>
               </div>
-            }
+            </a>
+            <a [href]="emailMailtoLink" class="lt-footer__contact-item">
+              <i class="fas fa-envelope lt-footer__contact-icon" aria-hidden="true"></i>
+              <div>
+                <span class="lt-footer__contact-label">Email</span>
+                <span class="lt-footer__contact-value">{{ 'FOOTER.COMPANY_INFO.EMAIL' | translate }}</span>
+              </div>
+            </a>
+            <div class="lt-footer__contact-item">
+              <i class="fas fa-map-marker-alt lt-footer__contact-icon" aria-hidden="true"></i>
+              <div>
+                <span class="lt-footer__contact-label">Address</span>
+                <span class="lt-footer__contact-value">{{ 'FOOTER.COMPANY_INFO.ADDRESS' | translate }}</span>
+              </div>
+            </div>
           </div>
 
           <!-- Resource buttons (manual + catalog) -->

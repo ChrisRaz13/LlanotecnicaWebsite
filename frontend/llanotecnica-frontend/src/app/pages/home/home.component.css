@@ -317,10 +317,36 @@ section {
   .flag-carousel-label {
     font-size: 0.65rem;
     gap: var(--lt-space-3);
+    padding-inline: var(--lt-space-4);
+  }
+
+  .flag-carousel-label__text {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.4;
+    max-width: 32ch;
+    text-wrap: balance;
   }
 
   .flag-carousel-label__bar {
     max-width: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Tiny screens — drop the decorative side bars so the caption can breathe */
+  .flag-carousel-label {
+    gap: var(--lt-space-2);
+    padding-inline: var(--lt-space-3);
+    font-size: 0.6rem;
+  }
+
+  .flag-carousel-label__bar {
+    display: none;
+  }
+
+  .flag-carousel-label__text {
+    max-width: 100%;
   }
 }
 

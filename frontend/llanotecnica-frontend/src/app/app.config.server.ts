@@ -1,38 +1,27 @@
 import { provideServerRendering } from '@angular/ssr';
-import { mergeApplicationConfig, ApplicationConfig, APP_INITIALIZER } from '@angular/core';
+import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { TranslateLoader } from '@ngx-translate/core';
 import { appConfig } from './app.config';
-import { INITIAL_LANGUAGE } from './core/i18n/injection-tokens';
-import { TranslateService } from '@ngx-translate/core';
+import { serverTranslateLoaderFactory } from './server-translate-loader';
 
 /**
- * Server-side translation provider factory function
+ * Server-side overrides for SSR/prerender:
+ *   - Enables Angular server rendering
+ *   - Swaps the browser animations module for the noop one (the BrowserAnimations
+ *     module needs DOM APIs unavailable during prerender)
+ *   - Replaces the HTTP-based ngx-translate loader with a filesystem-based
+ *     loader so prerender (Node, no HTTP server) can resolve translation JSON.
  */
-export function serverLanguageInitializer(translate: TranslateService) {
-  return () => {
-    // Set available languages
-    translate.addLangs(['en', 'es']);
-    translate.setDefaultLang('en');
-
-    // Default to English, but the INITIAL_LANGUAGE provider will override this
-    translate.use('en');
-
-    // Force translations to load synchronously for SSR
-    return translate.get('HOME_PAGE.SEO.TITLE').toPromise();
-  };
-}
-
 const serverConfig: ApplicationConfig = {
   providers: [
     provideServerRendering(),
-
-    // Basic language initialization
+    provideNoopAnimations(),
     {
-      provide: APP_INITIALIZER,
-      useFactory: serverLanguageInitializer,
-      deps: [TranslateService],
-      multi: true
-    }
-  ]
+      provide: TranslateLoader,
+      useFactory: serverTranslateLoaderFactory,
+    },
+  ],
 };
 
 export const config = mergeApplicationConfig(appConfig, serverConfig);

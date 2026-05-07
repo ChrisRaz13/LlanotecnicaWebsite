@@ -13,9 +13,6 @@ import { routes } from './app.routes';
 import { environment } from '../environments/environment.prod';
 import { TRANSLATION_PROVIDERS } from './translation-initializer';
 
-import { existsSync, readFileSync } from 'fs';
-import { join } from 'path';
-
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
 }

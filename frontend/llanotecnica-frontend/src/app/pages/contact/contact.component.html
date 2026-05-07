@@ -1,282 +1,394 @@
-<div class="contact-page">
-  <!-- Decorative Elements -->
-  <div class="decorative-element left"></div>
-  <div class="decorative-element right"></div>
+<!-- ============================================================
+     CONTACT PAGE — heavy-equipment industrial
+     /01 hero (dark)
+     /02 contact grid (form + info sidebar)
+     ============================================================ -->
 
-  <div class="cards-container">
-    <!-- Contact Form Card -->
-    <div class="card-wrapper col-lg-8">
-      <div class="contact-form-card">
-        <h2 class="section-title">
-          <i class="fas fa-envelope-open-text me-2"></i>
-          {{ 'CONTACT_PAGE.GET_IN_TOUCH' | translate }}
-        </h2>
+<!-- /01 — HERO -->
+<section #contactHeroSection class="lt-contact-hero" aria-labelledby="contact-hero-title">
+  <div class="lt-contact-hero__bg" aria-hidden="true"></div>
+  <div class="lt-contact-hero__vignette" aria-hidden="true"></div>
+  <div class="lt-contact-hero__grid-pattern" aria-hidden="true"></div>
 
-        <!-- Alert Messages -->
-        @if (submitSuccess) {
-          <div class="alert alert-success" role="alert" [@fadeSlideInOut]>
-            <i class="fas fa-check-circle me-2"></i>
-            {{ 'CONTACT_PAGE.SUCCESS_MESSAGE' | translate }}
-          </div>
-        }
-        @if (submitError) {
-          <div class="alert alert-danger" role="alert" [@fadeSlideInOut]>
-            <i class="fas fa-exclamation-circle me-2"></i>
-            {{ errorMessage || ('CONTACT_PAGE.ERROR_MESSAGE' | translate) }}
-          </div>
-        }
+  <div class="lt-contact-hero__content">
+    <p class="lt-contact-hero__eyebrow" #contactHeroEyebrow>
+      <span class="lt-contact-hero__eyebrow-bar" aria-hidden="true"></span>
+      <span class="lt-contact-hero__eyebrow-num">/01</span>
+      <span class="lt-contact-hero__eyebrow-text">{{ 'CONTACT_PAGE.EYEBROWS.GET_IN_TOUCH' | translate }}</span>
+    </p>
+    <h1 id="contact-hero-title" class="lt-contact-hero__title" #contactHeroTitle>
+      {{ 'CONTACT_PAGE.HERO.TITLE' | translate }}
+    </h1>
+    <p class="lt-contact-hero__description" #contactHeroDescription>
+      {{ 'CONTACT_PAGE.HERO.DESCRIPTION' | translate }}
+    </p>
+    <div class="lt-contact-hero__quick-links" #contactHeroLinks>
+      <a [href]="'tel:' + companyDetails.phone" class="lt-contact-quick">
+        <span class="lt-contact-quick__icon" aria-hidden="true">
+          <i class="fas fa-phone"></i>
+        </span>
+        <span class="lt-contact-quick__body">
+          <span class="lt-contact-quick__label">{{ 'CONTACT_PAGE.PHONE' | translate }}</span>
+          <span class="lt-contact-quick__value">{{ companyDetails.phone }}</span>
+        </span>
+      </a>
+      <a [href]="companyDetails.whatsapp" target="_blank" rel="noopener" class="lt-contact-quick">
+        <span class="lt-contact-quick__icon lt-contact-quick__icon--whatsapp" aria-hidden="true">
+          <i class="fab fa-whatsapp"></i>
+        </span>
+        <span class="lt-contact-quick__body">
+          <span class="lt-contact-quick__label">{{ 'CONTACT_PAGE.WHATSAPP' | translate }}</span>
+          <span class="lt-contact-quick__value">{{ companyDetails.phone }}</span>
+        </span>
+      </a>
+      <a [href]="'mailto:' + companyDetails.email" class="lt-contact-quick">
+        <span class="lt-contact-quick__icon" aria-hidden="true">
+          <i class="fas fa-envelope"></i>
+        </span>
+        <span class="lt-contact-quick__body">
+          <span class="lt-contact-quick__label">{{ 'CONTACT_PAGE.EMAIL' | translate }}</span>
+          <span class="lt-contact-quick__value">{{ companyDetails.email }}</span>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
 
-        <!-- Contact Form -->
-        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
-          <!-- Name Field -->
-          <div class="form-group">
-            <label for="name" class="form-label">
-              <i class="fas fa-user me-2"></i>
-              {{ 'CONTACT_PAGE.FULL_NAME' | translate }} *
-            </label>
-            <input
-              type="text"
-              id="name"
-              formControlName="name"
-              class="form-control"
-              [class.is-invalid]="contactForm.get('name')?.touched && contactForm.get('name')?.invalid"
-              placeholder="{{ 'CONTACT_PAGE.FULL_NAME_PLACEHOLDER' | translate }}"
-              autocomplete="name">
-            <div class="invalid-feedback" [@fadeSlideInOut]>
-              {{ getErrorMessage('name') }}
+<!-- /02 — CONTACT GRID (form + info sidebar) -->
+<section #contactFormSection class="lt-contact-grid" aria-labelledby="contact-grid-title">
+  <div class="lt-contact-grid__stripe" aria-hidden="true"></div>
+  <div class="lt-contact-grid__inner">
+    <header class="lt-contact-grid__header">
+      <p class="lt-contact-grid__eyebrow" #contactFormEyebrow>
+        <span class="lt-contact-grid__eyebrow-num">/02</span>
+        <span class="lt-contact-grid__eyebrow-divider" aria-hidden="true"></span>
+        <span class="lt-contact-grid__eyebrow-text">{{ 'CONTACT_PAGE.EYEBROWS.SEND_MESSAGE' | translate }}</span>
+      </p>
+      <h2 id="contact-grid-title" class="lt-contact-grid__title" #contactFormTitle>
+        {{ 'CONTACT_PAGE.FORM_TITLE' | translate }}
+      </h2>
+      <p class="lt-contact-grid__subtitle" #contactFormSubtitle>
+        {{ 'CONTACT_PAGE.FORM_SUBTITLE' | translate }}
+      </p>
+    </header>
+
+    <div class="lt-contact-grid__layout">
+
+      <!-- ===== FORM CARD ===== -->
+      <div class="lt-form-card" #contactFormCard>
+        <div class="lt-form-card__header">
+          <span class="lt-form-card__model">/A</span>
+          <span class="lt-form-card__type">{{ 'CONTACT_PAGE.GET_IN_TOUCH' | translate }}</span>
+        </div>
+
+        <div class="lt-form-card__body">
+          <!-- Alert messages -->
+          @if (submitSuccess) {
+            <div class="lt-form-alert lt-form-alert--success" role="alert" [@fadeSlideInOut]>
+              <span class="lt-form-alert__icon" aria-hidden="true"><i class="fas fa-check-circle"></i></span>
+              <span class="lt-form-alert__text">{{ 'CONTACT_PAGE.SUCCESS_MESSAGE' | translate }}</span>
             </div>
-          </div>
-
-          <!-- Email Field -->
-          <div class="form-group">
-            <label for="email" class="form-label">
-              <i class="fas fa-envelope me-2"></i>
-              {{ 'CONTACT_PAGE.EMAIL_ADDRESS' | translate }} *
-            </label>
-            <input
-              type="email"
-              id="email"
-              formControlName="email"
-              class="form-control"
-              [class.is-invalid]="contactForm.get('email')?.touched && contactForm.get('email')?.invalid"
-              placeholder="{{ 'CONTACT_PAGE.EMAIL_ADDRESS_PLACEHOLDER' | translate }}"
-              autocomplete="email">
-            <div class="invalid-feedback" [@fadeSlideInOut]>
-              {{ getErrorMessage('email') }}
+          }
+          @if (submitError) {
+            <div class="lt-form-alert lt-form-alert--error" role="alert" [@fadeSlideInOut]>
+              <span class="lt-form-alert__icon" aria-hidden="true"><i class="fas fa-exclamation-triangle"></i></span>
+              <span class="lt-form-alert__text">{{ errorMessage || ('CONTACT_PAGE.ERROR_MESSAGE' | translate) }}</span>
             </div>
-          </div>
+          }
 
-          <!-- Phone Field -->
-          <div class="form-group">
-            <label for="phone" class="form-label">
-              <i class="fas fa-phone me-2"></i>
-              {{ 'CONTACT_PAGE.PHONE_NUMBER' | translate }}
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              formControlName="phone"
-              class="form-control"
-              [class.is-invalid]="contactForm.get('phone')?.touched && contactForm.get('phone')?.invalid"
-              placeholder="{{ 'CONTACT_PAGE.PHONE_NUMBER_PLACEHOLDER' | translate }}"
-              autocomplete="tel">
-            <div class="invalid-feedback" [@fadeSlideInOut]>
-              {{ getErrorMessage('phone') }}
-            </div>
-          </div>
-
-          <!-- Country Field -->
-          <div class="form-group">
-            <label for="country" class="form-label">
-              <i class="fas fa-globe me-2"></i>
-              {{ 'CONTACT_PAGE.COUNTRY' | translate }} *
-            </label>
-            <div class="country-selector" (clickOutside)="onClickOutside($event)" clickOutside>
-              <div class="input-group">
-                <input
-                  type="text"
-                  id="country"
-                  #countryInput
-                  formControlName="country"
-                  class="form-control"
-                  [class.is-invalid]="contactForm.get('country')?.touched && contactForm.get('country')?.invalid"
-                  placeholder="{{ 'CONTACT_PAGE.COUNTRY_PLACEHOLDER' | translate }}"
-                  (focus)="onCountryInputFocus()"
-                  autocomplete="off">
-                @if (isLoadingCountries) {
-                  <span class="input-group-text">
-                    <div class="spinner-border spinner-border-sm text-primary" role="status">
-                      <span class="visually-hidden">{{ 'CONTACT_PAGE.LOADING' | translate }}</span>
-                    </div>
-                  </span>
-                }
-                @if (!isLoadingCountries && getSelectedCountryFlag()) {
-                  <span class="input-group-text">
-                    <img [src]="getSelectedCountryFlag()" alt="{{ 'CONTACT_PAGE.COUNTRY_FLAG_ALT' | translate }}" class="country-flag">
-                  </span>
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="lt-form" novalidate>
+            <!-- Name + Email -->
+            <div class="lt-form__row lt-form__row--two">
+              <div class="lt-field">
+                <label for="name" class="lt-field__label">
+                  <span class="lt-field__label-num">/01</span>
+                  {{ 'CONTACT_PAGE.FULL_NAME' | translate }}
+                  <span class="lt-field__required" aria-hidden="true">*</span>
+                </label>
+                <div class="lt-field__input-wrap">
+                  <span class="lt-field__icon" aria-hidden="true"><i class="fas fa-user"></i></span>
+                  <input
+                    type="text"
+                    id="name"
+                    formControlName="name"
+                    class="lt-field__input"
+                    [class.lt-field__input--invalid]="contactForm.get('name')?.touched && contactForm.get('name')?.invalid"
+                    placeholder="{{ 'CONTACT_PAGE.FULL_NAME_PLACEHOLDER' | translate }}"
+                    autocomplete="name">
+                </div>
+                @if (contactForm.get('name')?.touched && contactForm.get('name')?.invalid) {
+                  <p class="lt-field__error" [@fadeSlideInOut]>{{ getErrorMessage('name') }}</p>
                 }
               </div>
 
-              @if (showCountryDropdown && !isLoadingCountries) {
-                <div class="country-dropdown shadow-sm">
-                  @for (country of filteredCountries; track country; let i = $index) {
-                    <div
-                      class="country-option"
-                      [class.selected]="i === selectedCountryIndex"
-                      (click)="selectCountry(country)"
-                      (mouseenter)="selectedCountryIndex = i">
-                      <img [src]="country.flags.svg" [alt]="country.name.common + ' flag'" class="country-flag">
-                      <span>{{ country.name.common }}</span>
-                    </div>
-                  }
-                  @if (filteredCountries.length === 0) {
-                    <div class="p-3 text-center text-muted">
-                      {{ 'CONTACT_PAGE.NO_COUNTRIES_FOUND' | translate }}
+              <div class="lt-field">
+                <label for="email" class="lt-field__label">
+                  <span class="lt-field__label-num">/02</span>
+                  {{ 'CONTACT_PAGE.EMAIL_ADDRESS' | translate }}
+                  <span class="lt-field__required" aria-hidden="true">*</span>
+                </label>
+                <div class="lt-field__input-wrap">
+                  <span class="lt-field__icon" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+                  <input
+                    type="email"
+                    id="email"
+                    formControlName="email"
+                    class="lt-field__input"
+                    [class.lt-field__input--invalid]="contactForm.get('email')?.touched && contactForm.get('email')?.invalid"
+                    placeholder="{{ 'CONTACT_PAGE.EMAIL_ADDRESS_PLACEHOLDER' | translate }}"
+                    autocomplete="email">
+                </div>
+                @if (contactForm.get('email')?.touched && contactForm.get('email')?.invalid) {
+                  <p class="lt-field__error" [@fadeSlideInOut]>{{ getErrorMessage('email') }}</p>
+                }
+              </div>
+            </div>
+
+            <!-- Phone + Country -->
+            <div class="lt-form__row lt-form__row--two">
+              <div class="lt-field">
+                <label for="phone" class="lt-field__label">
+                  <span class="lt-field__label-num">/03</span>
+                  {{ 'CONTACT_PAGE.PHONE_NUMBER' | translate }}
+                  <span class="lt-field__optional">{{ 'CONTACT_PAGE.OPTIONAL' | translate }}</span>
+                </label>
+                <div class="lt-field__input-wrap">
+                  <span class="lt-field__icon" aria-hidden="true"><i class="fas fa-phone"></i></span>
+                  <input
+                    type="tel"
+                    id="phone"
+                    formControlName="phone"
+                    class="lt-field__input"
+                    [class.lt-field__input--invalid]="contactForm.get('phone')?.touched && contactForm.get('phone')?.invalid"
+                    placeholder="{{ 'CONTACT_PAGE.PHONE_NUMBER_PLACEHOLDER' | translate }}"
+                    autocomplete="tel">
+                </div>
+                @if (contactForm.get('phone')?.touched && contactForm.get('phone')?.invalid) {
+                  <p class="lt-field__error" [@fadeSlideInOut]>{{ getErrorMessage('phone') }}</p>
+                }
+              </div>
+
+              <div class="lt-field">
+                <label for="country" class="lt-field__label">
+                  <span class="lt-field__label-num">/04</span>
+                  {{ 'CONTACT_PAGE.COUNTRY' | translate }}
+                  <span class="lt-field__required" aria-hidden="true">*</span>
+                </label>
+                <div class="lt-field__input-wrap lt-field__input-wrap--country" (clickOutside)="onClickOutside($event)" clickOutside>
+                  <span class="lt-field__icon" aria-hidden="true">
+                    @if (!isLoadingCountries && getSelectedCountryFlag()) {
+                      <img [src]="getSelectedCountryFlag()" alt="{{ 'CONTACT_PAGE.COUNTRY_FLAG_ALT' | translate }}" class="lt-field__flag">
+                    } @else if (isLoadingCountries) {
+                      <span class="lt-field__spinner" role="status" aria-hidden="true"></span>
+                    } @else {
+                      <i class="fas fa-globe"></i>
+                    }
+                  </span>
+                  <input
+                    type="text"
+                    id="country"
+                    #countryInput
+                    formControlName="country"
+                    class="lt-field__input"
+                    [class.lt-field__input--invalid]="contactForm.get('country')?.touched && contactForm.get('country')?.invalid"
+                    placeholder="{{ 'CONTACT_PAGE.COUNTRY_PLACEHOLDER' | translate }}"
+                    (focus)="onCountryInputFocus()"
+                    autocomplete="off">
+
+                  @if (showCountryDropdown && !isLoadingCountries) {
+                    <div class="lt-field__dropdown" role="listbox">
+                      @for (country of filteredCountries; track country.cca2; let i = $index) {
+                        <button
+                          type="button"
+                          class="lt-field__option"
+                          [class.lt-field__option--active]="i === selectedCountryIndex"
+                          (click)="selectCountry(country)"
+                          (mouseenter)="selectedCountryIndex = i"
+                          role="option"
+                          [attr.aria-selected]="i === selectedCountryIndex">
+                          <img [src]="country.flags.svg" [alt]="country.name.common + ' flag'" class="lt-field__option-flag">
+                          <span>{{ country.name.common }}</span>
+                        </button>
+                      }
+                      @if (filteredCountries.length === 0) {
+                        <div class="lt-field__option-empty">
+                          {{ 'CONTACT_PAGE.NO_COUNTRIES_FOUND' | translate }}
+                        </div>
+                      }
                     </div>
                   }
                 </div>
-              }
-
-              <div class="invalid-feedback" [@fadeSlideInOut]>
-                {{ getErrorMessage('country') }}
+                @if (contactForm.get('country')?.touched && contactForm.get('country')?.invalid) {
+                  <p class="lt-field__error" [@fadeSlideInOut]>{{ getErrorMessage('country') }}</p>
+                }
               </div>
             </div>
-          </div>
 
-          <!-- Inquiry Type Dropdown -->
-          <div class="form-group">
-            <label for="inquiryType" class="form-label">
-              <i class="fas fa-question-circle me-2"></i>
-              {{ 'CONTACT_PAGE.INQUIRY_TYPE' | translate }} *
-            </label>
-            <select
-              id="inquiryType"
-              formControlName="inquiryType"
-              class="form-control"
-              [class.is-invalid]="contactForm.get('inquiryType')?.touched && contactForm.get('inquiryType')?.invalid">
-              <option value="">{{ 'CONTACT_PAGE.SELECT_INQUIRY_TYPE' | translate }}</option>
-              @for (type of inquiryTypes; track type) {
-                <option [value]="type">
-                  {{ ('CONTACT_FORM.INQUIRY_TYPES.' + type) | translate }}
-                </option>
-              }
-            </select>
-            <div class="invalid-feedback" [@fadeSlideInOut]>
-              {{ getErrorMessage('inquiryType') }}
+            <!-- Inquiry type -->
+            <div class="lt-form__row">
+              <div class="lt-field">
+                <label for="inquiryType" class="lt-field__label">
+                  <span class="lt-field__label-num">/05</span>
+                  {{ 'CONTACT_PAGE.INQUIRY_TYPE' | translate }}
+                  <span class="lt-field__required" aria-hidden="true">*</span>
+                </label>
+                <div class="lt-field__input-wrap">
+                  <span class="lt-field__icon" aria-hidden="true"><i class="fas fa-tag"></i></span>
+                  <select
+                    id="inquiryType"
+                    formControlName="inquiryType"
+                    class="lt-field__input lt-field__input--select"
+                    [class.lt-field__input--invalid]="contactForm.get('inquiryType')?.touched && contactForm.get('inquiryType')?.invalid">
+                    <option value="">{{ 'CONTACT_PAGE.SELECT_INQUIRY_TYPE' | translate }}</option>
+                    @for (type of inquiryTypes; track type) {
+                      <option [value]="type">{{ ('CONTACT_FORM.INQUIRY_TYPES.' + type) | translate }}</option>
+                    }
+                  </select>
+                  <span class="lt-field__chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                @if (contactForm.get('inquiryType')?.touched && contactForm.get('inquiryType')?.invalid) {
+                  <p class="lt-field__error" [@fadeSlideInOut]>{{ getErrorMessage('inquiryType') }}</p>
+                }
+              </div>
             </div>
-          </div>
 
-          <!-- Message Field -->
-          <div class="form-group">
-            <label for="message" class="form-label">
-              <i class="fas fa-comment me-2"></i>
-              {{ 'CONTACT_PAGE.MESSAGE' | translate }} *
-            </label>
-            <textarea
-              id="message"
-              formControlName="message"
-              class="form-control"
-              rows="5"
-              [class.is-invalid]="contactForm.get('message')?.touched && contactForm.get('message')?.invalid"
-            placeholder="{{ 'CONTACT_PAGE.MESSAGE_PLACEHOLDER' | translate }}"></textarea>
-            <div class="invalid-feedback" [@fadeSlideInOut]>
-              {{ getErrorMessage('message') }}
+            <!-- Message -->
+            <div class="lt-form__row">
+              <div class="lt-field">
+                <label for="message" class="lt-field__label">
+                  <span class="lt-field__label-num">/06</span>
+                  {{ 'CONTACT_PAGE.MESSAGE' | translate }}
+                  <span class="lt-field__required" aria-hidden="true">*</span>
+                </label>
+                <div class="lt-field__input-wrap lt-field__input-wrap--textarea">
+                  <textarea
+                    id="message"
+                    formControlName="message"
+                    rows="5"
+                    class="lt-field__input lt-field__input--textarea"
+                    [class.lt-field__input--invalid]="contactForm.get('message')?.touched && contactForm.get('message')?.invalid"
+                    placeholder="{{ 'CONTACT_PAGE.MESSAGE_PLACEHOLDER' | translate }}"></textarea>
+                </div>
+                <div class="lt-field__meta">
+                  @if (contactForm.get('message')?.touched && contactForm.get('message')?.invalid) {
+                    <p class="lt-field__error" [@fadeSlideInOut]>{{ getErrorMessage('message') }}</p>
+                  } @else {
+                    <span></span>
+                  }
+                  <span class="lt-field__counter"
+                    [class.lt-field__counter--error]="contactForm.get('message')?.errors?.['maxlength']">
+                    {{ contactForm.get('message')?.value?.length || 0 }} / 1000
+                  </span>
+                </div>
+              </div>
             </div>
-            <div class="character-count" [class.error]="contactForm.get('message')?.errors?.['maxlength']">
-              {{ contactForm.get('message')?.value?.length || 0 }}/1000
-            </div>
-          </div>
 
-          <!-- Submit Button -->
-          <button
-            type="submit"
-            class="btn btn-primary w-100"
-            [disabled]="isSubmitting || contactForm.invalid"
-            [class.loading]="isSubmitting">
-            <div class="button-content">
-              @if (isSubmitting) {
-                <span class="spinner-border spinner-border-sm me-2" role="status">
-                  <span class="visually-hidden">{{ 'CONTACT_PAGE.LOADING' | translate }}</span>
-                </span>
-              }
-              <i class="fas" [class.fa-paper-plane]="!isSubmitting" [class.fa-spinner]="isSubmitting"></i>
-              {{ isSubmitting ? ('CONTACT_PAGE.SENDING' | translate) : ('CONTACT_PAGE.SEND_MESSAGE' | translate) }}
+            <!-- Submit -->
+            <div class="lt-form__submit-row">
+              <button
+                lt-button
+                variant="primary"
+                size="lg"
+                type="submit"
+                [disabled]="isSubmitting || contactForm.invalid"
+                [class.lt-form__submit--loading]="isSubmitting"
+                class="lt-form__submit">
+                @if (isSubmitting) {
+                  <span class="lt-form__spinner" role="status" aria-hidden="true"></span>
+                  {{ 'CONTACT_PAGE.SENDING' | translate }}
+                } @else {
+                  <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                  {{ 'CONTACT_PAGE.SEND_MESSAGE' | translate }}
+                }
+              </button>
+              <p class="lt-form__notice">
+                <i class="fas fa-shield-halved" aria-hidden="true"></i>
+                {{ 'CONTACT_PAGE.PRIVACY_NOTICE' | translate }}
+              </p>
             </div>
-          </button>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
 
-    <!-- Company Info Card -->
-    <div class="card-wrapper col-lg-4">
-      <div class="company-info-card">
-        <h3 class="section-title">
-          <i class="fas fa-building me-2"></i>
-          {{ 'CONTACT_PAGE.CONTACT_INFORMATION' | translate }}
-        </h3>
-        <div class="card-content">
-          <div class="contact-details">
-            <!-- Phone -->
-            <a href="tel:{{ companyDetails.phone }}" class="contact-item" [attr.aria-label]=" 'CONTACT_PAGE.CALL_US' | translate ">
-              <i class="fas fa-phone"></i>
-              <div>
-                <p><strong>{{ 'CONTACT_PAGE.PHONE' | translate }}</strong></p>
-                <p>{{ companyDetails.phone }}</p>
+      <!-- ===== INFO SIDEBAR ===== -->
+      <aside class="lt-info-card" #contactInfoCard>
+        <div class="lt-info-card__header">
+          <span class="lt-info-card__model">/B</span>
+          <span class="lt-info-card__type">{{ 'CONTACT_PAGE.CONTACT_INFORMATION' | translate }}</span>
+        </div>
+
+        <div class="lt-info-card__body">
+          <p class="lt-info-card__lede">{{ 'CONTACT_PAGE.RESPONSE_NOTE' | translate }}</p>
+
+          <ul class="lt-info-list">
+            <li>
+              <a [href]="'tel:' + companyDetails.phone" class="lt-info-row" [attr.aria-label]="'CONTACT_PAGE.CALL_US' | translate">
+                <span class="lt-info-row__icon" aria-hidden="true"><i class="fas fa-phone"></i></span>
+                <span class="lt-info-row__body">
+                  <span class="lt-info-row__label">{{ 'CONTACT_PAGE.PHONE' | translate }}</span>
+                  <span class="lt-info-row__value">{{ companyDetails.phone }}</span>
+                </span>
+                <span class="lt-info-row__arrow" aria-hidden="true"><i class="fas fa-arrow-up-right-from-square"></i></span>
+              </a>
+            </li>
+            <li>
+              <a [href]="companyDetails.whatsapp" target="_blank" rel="noopener" class="lt-info-row lt-info-row--whatsapp" [attr.aria-label]="'CONTACT_PAGE.WHATSAPP' | translate">
+                <span class="lt-info-row__icon" aria-hidden="true"><i class="fab fa-whatsapp"></i></span>
+                <span class="lt-info-row__body">
+                  <span class="lt-info-row__label">{{ 'CONTACT_PAGE.WHATSAPP' | translate }}</span>
+                  <span class="lt-info-row__value">{{ companyDetails.phone }}</span>
+                </span>
+                <span class="lt-info-row__arrow" aria-hidden="true"><i class="fas fa-arrow-up-right-from-square"></i></span>
+              </a>
+            </li>
+            <li>
+              <a [href]="'mailto:' + companyDetails.email" class="lt-info-row" [attr.aria-label]="'CONTACT_PAGE.EMAIL_US' | translate">
+                <span class="lt-info-row__icon" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+                <span class="lt-info-row__body">
+                  <span class="lt-info-row__label">{{ 'CONTACT_PAGE.EMAIL' | translate }}</span>
+                  <span class="lt-info-row__value">{{ companyDetails.email }}</span>
+                </span>
+                <span class="lt-info-row__arrow" aria-hidden="true"><i class="fas fa-arrow-up-right-from-square"></i></span>
+              </a>
+            </li>
+            <li>
+              <div class="lt-info-row lt-info-row--static">
+                <span class="lt-info-row__icon" aria-hidden="true"><i class="fas fa-map-marker-alt"></i></span>
+                <span class="lt-info-row__body">
+                  <span class="lt-info-row__label">{{ 'CONTACT_PAGE.ADDRESS' | translate }}</span>
+                  <span class="lt-info-row__value">{{ companyDetails.address }}</span>
+                </span>
               </div>
+            </li>
+          </ul>
+
+          <div class="lt-info-card__socials" role="group" [attr.aria-label]="'CONTACT_PAGE.FOLLOW_US' | translate">
+            <a [href]="socialLinks.facebook" target="_blank" rel="noopener" class="lt-info-social lt-info-social--facebook" [attr.aria-label]="'CONTACT_PAGE.FACEBOOK' | translate">
+              <i class="fab fa-facebook-f" aria-hidden="true"></i>
             </a>
-            <!-- WhatsApp -->
-            <a [href]="companyDetails.whatsapp" target="_blank" class="contact-item" [attr.aria-label]=" 'CONTACT_PAGE.WHATSAPP' | translate ">
-              <i class="fab fa-whatsapp"></i>
-              <div>
-                <p><strong>{{ 'CONTACT_PAGE.WHATSAPP' | translate }}</strong></p>
-                <p>{{ companyDetails.phone }}</p>
-              </div>
+            <a [href]="socialLinks.instagram" target="_blank" rel="noopener" class="lt-info-social lt-info-social--instagram" [attr.aria-label]="'CONTACT_PAGE.INSTAGRAM' | translate">
+              <i class="fab fa-instagram" aria-hidden="true"></i>
             </a>
-            <!-- Email -->
-            <a [href]="'mailto:' + companyDetails.email" class="contact-item" [attr.aria-label]=" 'CONTACT_PAGE.EMAIL_US' | translate ">
-              <i class="fas fa-envelope"></i>
-              <div>
-                <p><strong>{{ 'CONTACT_PAGE.EMAIL' | translate }}</strong></p>
-                <p>{{ companyDetails.email }}</p>
-              </div>
+            <a [href]="companyDetails.whatsapp" target="_blank" rel="noopener" class="lt-info-social lt-info-social--whatsapp" [attr.aria-label]="'CONTACT_PAGE.WHATSAPP' | translate">
+              <i class="fab fa-whatsapp" aria-hidden="true"></i>
             </a>
-            <!-- Address -->
-            <div class="contact-item">
-              <i class="fas fa-map-marker-alt"></i>
-              <div>
-                <p><strong>{{ 'CONTACT_PAGE.ADDRESS' | translate }}</strong></p>
-                <p>{{ companyDetails.address }}</p>
-              </div>
-            </div>
           </div>
-          <!-- Social Media Links -->
-          <div class="social-links">
-            <a [href]="socialLinks.facebook" target="_blank" class="social-icon facebook" [attr.aria-label]=" 'CONTACT_PAGE.FACEBOOK' | translate ">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a [href]="socialLinks.instagram" target="_blank" class="social-icon instagram" [attr.aria-label]=" 'CONTACT_PAGE.INSTAGRAM' | translate ">
-              <i class="fab fa-instagram"></i>
-            </a>
-            <a [href]="companyDetails.whatsapp" target="_blank" class="social-icon whatsapp" [attr.aria-label]=" 'CONTACT_PAGE.WHATSAPP' | translate ">
-              <i class="fab fa-whatsapp"></i>
-            </a>
-          </div>
-          <!-- Google Maps -->
-          <div class="google-map">
+
+          <div class="lt-info-card__map">
             @if (mapUrl) {
               <iframe
                 [src]="mapUrl"
                 width="100%"
-                height="250"
+                height="280"
                 loading="lazy"
                 allowfullscreen
                 referrerpolicy="no-referrer-when-downgrade"
-                [attr.title]=" 'CONTACT_PAGE.GOOGLE_MAP_TITLE' | translate ">
+                [attr.title]="'CONTACT_PAGE.GOOGLE_MAP_TITLE' | translate">
               </iframe>
             }
           </div>
         </div>
-      </div>
+      </aside>
     </div>
   </div>
-</div>
+</section>

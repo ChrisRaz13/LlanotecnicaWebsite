@@ -1,0 +1,9 @@
+/
+/en
+/en/about-us
+/en/products
+/en/contact
+/es
+/es/sobre-nosotros
+/es/productos
+/es/contacto

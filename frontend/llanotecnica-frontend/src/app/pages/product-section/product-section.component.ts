@@ -1,10 +1,13 @@
-import { Component, signal, computed, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, TemplateRef, TrackByFunction, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, signal, computed, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, OnDestroy, TemplateRef, TrackByFunction, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog, MatDialogModule, MatDialogConfig } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SeoService } from '../../services/seo.service';
+import { LtButtonComponent } from '../../ui/button/lt-button.component';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 // Interfaces
 interface EngineCompatibility {
@@ -77,6 +80,8 @@ interface EngineOption {
   mt370Compatible: boolean;
   mt480Compatible: boolean;
   features: string[];
+  /** Explicit key into engineSpecs — avoids fragile name/power-derived mapping. */
+  specKey: string;
 }
 
 interface EngineSpecification {
@@ -106,16 +111,21 @@ type EngineFilterType = 'all' | 'gas' | 'diesel' | 'electric';
 
 @Component({
     selector: 'app-product-section',
-    imports: [CommonModule, RouterModule, MatDialogModule, MatButtonModule, TranslateModule],
+    imports: [CommonModule, RouterModule, MatDialogModule, MatButtonModule, TranslateModule, LtButtonComponent],
     templateUrl: './product-section.component.html',
     styleUrls: ['./product-section.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductSectionComponent implements OnInit, AfterViewInit {
+export class ProductSectionComponent implements OnInit, AfterViewInit, OnDestroy {
   activeTab = signal<'specs' | 'engines'>('specs');
   selectedEngine = signal<EngineSpecification | null>(null);
   showEngineDialog = signal<boolean>(false);
   activeEngineFilter = signal<EngineFilterType>('all');
+  // Per-product tab state (signal-driven; replaces old DOM-mutating switchTab)
+  productTabs = signal<Record<string, 'basic' | 'drum' | 'dimensions'>>({
+    'MT-370': 'basic',
+    'MT-480': 'basic',
+  });
   // Add this property to store the current product model
   currentProductModel: string = '';
 
@@ -410,6 +420,7 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
           name: '4Power Gasoline',
           power: '7 HP',
           type: 'gas',
+          specKey: '170F',
           mt370Compatible: true,
           mt480Compatible: false,
           features: ['Cost-effective', 'Easy maintenance', 'Optimal efficiency']
@@ -418,6 +429,7 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
           name: '4Power Gasoline',
           power: '9 HP',
           type: 'gas',
+          specKey: '177F',
           mt370Compatible: true,
           mt480Compatible: false,
           features: ['Enhanced power', 'Reliable performance', 'Versatile usage']
@@ -426,6 +438,7 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
           name: '4Power Gasoline',
           power: '13 HP',
           type: 'gas',
+          specKey: '188F',
           mt370Compatible: false,
           mt480Compatible: true,
           features: ['High power', 'Heavy-duty performance', 'Maximum output']
@@ -439,6 +452,7 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
           name: '4Power Diesel',
           power: '7 HP',
           type: 'diesel',
+          specKey: '4Power-D7',
           mt370Compatible: true,
           mt480Compatible: false,
           features: ['Fuel efficient', 'High torque', 'Durable design']
@@ -447,6 +461,7 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
           name: '4Power Diesel',
           power: '9 HP',
           type: 'diesel',
+          specKey: '4Power-D9',
           mt370Compatible: false,
           mt480Compatible: true,
           features: ['Enhanced efficiency', 'Maximum torque', 'Long-lasting']
@@ -460,22 +475,16 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
           name: 'Honda GX160',
           power: '5.5HP',
           type: 'honda',
+          specKey: 'GX160H2',
           mt370Compatible: true,
           mt480Compatible: false,
           features: ['Premium quality', 'Reliable', 'Low maintenance']
         },
         {
-          name: 'Honda GX200',
-          power: '6.5HP',
-          type: 'honda',
-          mt370Compatible: true,
-          mt480Compatible: false,
-          features: ['Premium quality', 'Enhanced power', 'Efficient operation']
-        },
-        {
           name: 'Honda GX270',
           power: '9HP',
           type: 'honda',
+          specKey: 'GX270H2',
           mt370Compatible: true,
           mt480Compatible: false,
           features: ['Premium quality', 'High performance', 'Professional grade']
@@ -484,6 +493,7 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
           name: 'Honda GX390',
           power: '13HP',
           type: 'honda',
+          specKey: 'GX390H2',
           mt370Compatible: false,
           mt480Compatible: true,
           features: ['Premium quality', 'Maximum power', 'Industrial strength']
@@ -495,16 +505,18 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
       options: [
         {
           name: '4Power Electric',
-          power: '2HP-5HP (1725 RPM)',
+          power: '2HP (1725 RPM)',
           type: 'electric',
+          specKey: 'electric-2hp',
           mt370Compatible: true,
           mt480Compatible: false,
           features: ['Zero emissions', 'Low maintenance', 'Quiet operation']
         },
         {
           name: '4Power Electric Plus',
-          power: '3HP-5HP (1725 RPM)',
+          power: '5HP (1725 RPM)',
           type: 'electric',
+          specKey: 'electric-5hp',
           mt370Compatible: false,
           mt480Compatible: true,
           features: ['Clean energy', 'Enhanced power', 'Silent performance']
@@ -517,9 +529,96 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
   @ViewChild('engineDialog') engineDialog!: TemplateRef<any>;
   @ViewChild('manualDialog') manualDialog!: TemplateRef<any>;
 
-  readonly drumSpecs = computed(() => this.getDrumSpecs());
-  readonly unitSpecs = computed(() => this.getUnitSpecs());
+  // ----- New token-based section refs (heavy-equipment overhaul) -----
+  @ViewChild('productsHeroSection') productsHeroSection?: ElementRef<HTMLElement>;
+  @ViewChild('productsHeroEyebrow') productsHeroEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('productsHeroTitle') productsHeroTitle?: ElementRef<HTMLElement>;
+  @ViewChild('productsHeroDescription') productsHeroDescription?: ElementRef<HTMLElement>;
+
+  @ViewChild('productsLineupSection') productsLineupSection?: ElementRef<HTMLElement>;
+  @ViewChild('productsLineupEyebrow') productsLineupEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('productsLineupTitle') productsLineupTitle?: ElementRef<HTMLElement>;
+  @ViewChild('productsLineupSubtitle') productsLineupSubtitle?: ElementRef<HTMLElement>;
+  @ViewChild('productsLineupGrid') productsLineupGrid?: ElementRef<HTMLElement>;
+
+  @ViewChild('productsCompareSection') productsCompareSection?: ElementRef<HTMLElement>;
+  @ViewChild('productsCompareEyebrow') productsCompareEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('productsCompareTitle') productsCompareTitle?: ElementRef<HTMLElement>;
+  @ViewChild('productsCompareSubtitle') productsCompareSubtitle?: ElementRef<HTMLElement>;
+
+  @ViewChild('productsEnginesSection') productsEnginesSection?: ElementRef<HTMLElement>;
+  @ViewChild('productsEnginesEyebrow') productsEnginesEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('productsEnginesTitle') productsEnginesTitle?: ElementRef<HTMLElement>;
+  @ViewChild('productsEnginesSubtitle') productsEnginesSubtitle?: ElementRef<HTMLElement>;
+  @ViewChild('engineGridEl') engineGridEl?: ElementRef<HTMLElement>;
+
+  @ViewChild('productsCtaSection') productsCtaSection?: ElementRef<HTMLElement>;
+  @ViewChild('productsFinalContent') productsFinalContent?: ElementRef<HTMLElement>;
+
+  private heroEntryTimeline: gsap.core.Timeline | null = null;
+  private productsScrollTriggers: ScrollTrigger[] = [];
+
+  readonly drumSpecs = computed(() => this.buildDrumComparison());
+  readonly unitSpecs = computed(() => this.buildUnitComparison());
   readonly filteredEngineCount = computed(() => this.getFilteredEngineCount());
+
+  /** Combined comparison specs (unit + drum + dimensions) for /03 datasheet table. */
+  readonly comparisonSpecs = computed<ComparisonSpec[]>(() => [
+    ...this.buildUnitComparison(),
+    ...this.buildDrumComparison(),
+    ...this.getDimensionSpecs(),
+  ]);
+
+  /** Per-product raw spec accessors (used in /02 product cards). */
+  getUnitSpecs(model: string): ProductSpecs['unitSpecs'] | undefined {
+    return this.productSpecs()[model]?.unitSpecs;
+  }
+
+  getDrumSpecs(model: string): ProductSpecs['drumSpecs'] | undefined {
+    return this.productSpecs()[model]?.drumSpecs;
+  }
+
+  getDimensions(model: string): ProductSpecs['dimensions'] | undefined {
+    return this.productSpecs()[model]?.dimensions;
+  }
+
+  /** Alias for setActiveTab — keeps template hooks readable. */
+  switchActiveTab(tab: 'specs' | 'engines'): void {
+    this.setActiveTab(tab);
+  }
+
+  /** Per-product tab switcher. Replaces the old DOM-querying switchTab. */
+  setProductTab(model: string, tab: 'basic' | 'drum' | 'dimensions'): void {
+    this.productTabs.update((curr) => ({ ...curr, [model]: tab }));
+  }
+
+  isProductTab(model: string, tab: 'basic' | 'drum' | 'dimensions'): boolean {
+    return (this.productTabs()[model] ?? 'basic') === tab;
+  }
+
+  /**
+   * Engine categories filtered by activeEngineFilter, with empty categories
+   * stripped. The "gas" filter intentionally bundles Honda since both run on
+   * gasoline — surfacing them together matches buyer intent.
+   */
+  readonly filteredEngineCategories = computed<EngineCategory[]>(() => {
+    const filter = this.activeEngineFilter();
+    if (filter === 'all') return this.engineCategories();
+
+    return this.engineCategories()
+      .map((cat) => ({
+        ...cat,
+        options: cat.options.filter((eng) => {
+          if (filter === 'gas') return eng.type === 'gas' || eng.type === 'honda';
+          return eng.type === filter;
+        }),
+      }))
+      .filter((cat) => cat.options.length > 0);
+  });
+
+  readonly filteredEngineTotal = computed<number>(() =>
+    this.filteredEngineCategories().reduce((n, c) => n + c.options.length, 0),
+  );
 
   readonly productImages = signal<ProductImage[]>([
     {
@@ -571,10 +670,11 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.setupSEO();
+    // SEO setup must run during prerender so each route emits the correct
+    // canonical/hreflang/og tags.
+    this.setupSEO();
 
-      // Subscribe to language changes
+    if (isPlatformBrowser(this.platformId)) {
       this.translate.onLangChange.subscribe(() => {
         this.setupSEO();
       });
@@ -811,47 +911,25 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // Check if window is defined (to avoid errors during SSR)
-    if (typeof window !== 'undefined') {
-      this.setupLazyLoading();
+    if (typeof window === 'undefined') return;
 
-      // Initialize active tabs for each product
-      this.productImages().forEach(product => {
-        this.activeProductTabs[product.model] = 'basic-specs-' + product.model;
-      });
+    this.setupLazyLoading();
 
-      // We'll replace the setupSpecsTabs() with our own logic
-    }
+    // GSAP — register plugin once, run hero entry, defer scroll reveals
+    gsap.registerPlugin(ScrollTrigger);
+    this.buildProductsHeroEntry();
+    requestAnimationFrame(() => this.setupProductsSectionReveals());
   }
 
-  // Method to switch tabs
+  // Legacy entry kept for any external callers — delegates to signal state.
   switchTab(event: Event, tabId: string, productModel: string): void {
     event.preventDefault();
-
-    // Get all tab buttons and content for this specific product
-    const productTabsContainer = (event.target as HTMLElement).closest('.specs-tabs');
-    if (!productTabsContainer) return;
-
-    const tabButtons = productTabsContainer.querySelectorAll('.specs-tab');
-    const productContent = productTabsContainer.closest('.product-content');
-
-    if (!productContent) return;
-
-    const tabContents = productContent.querySelectorAll('.specs-content');
-
-    // Deactivate all tabs within this product card only
-    tabButtons.forEach(tab => tab.classList.remove('active'));
-    tabContents.forEach(content => content.classList.remove('active'));
-
-    // Activate clicked tab and content
-    (event.target as HTMLElement).classList.add('active');
-    const content = document.getElementById(tabId);
-    if (content) {
-      content.classList.add('active');
-    }
-
-    // Update active tab for this product
-    this.activeProductTabs[productModel] = tabId;
+    const tab: 'basic' | 'drum' | 'dimensions' = tabId.startsWith('drum')
+      ? 'drum'
+      : tabId.startsWith('dimensions')
+        ? 'dimensions'
+        : 'basic';
+    this.setProductTab(productModel, tab);
   }
 
   private setupLazyLoading(): void {
@@ -898,7 +976,7 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getDrumSpecs(): ComparisonSpec[] {
+  private buildDrumComparison(): ComparisonSpec[] {
     const specs = this.productSpecs();
     return [
       {
@@ -925,7 +1003,7 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
     ];
   }
 
-  getUnitSpecs(): ComparisonSpec[] {
+  private buildUnitComparison(): ComparisonSpec[] {
     const specs = this.productSpecs();
     return [
       {
@@ -1141,29 +1219,7 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
   }
 
   private getEngineSpecForOption(engine: EngineOption): EngineSpecification | null {
-    const engineKey = this.mapEngineOptionToSpecKey(engine);
-    const specs = this.engineSpecs();
-    return specs[engineKey] || null;
-  }
-
-  private mapEngineOptionToSpecKey(engine: EngineOption): string {
-    switch (engine.type.toLowerCase()) {
-      case 'honda':
-        return `GX${engine.power.replace('HP', '').trim()}H2`;
-      case 'diesel':
-        return `4Power-D${engine.power.replace(' HP', '')}`;
-      case 'gas':
-        const power = parseInt(engine.power);
-        if (power === 7) return '170F';
-        if (power === 9) return '177F';
-        if (power === 13) return '188F';
-        break;
-      case 'electric':
-        const powerRange = engine.power.split('-')[0];
-        const hp = parseInt(powerRange);
-        return `electric-${hp}hp`;
-    }
-    return '';
+    return this.engineSpecs()[engine.specKey] || null;
   }
 
   getRecommendedEngine(model: string): string {
@@ -1203,9 +1259,15 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
   // Color selection methods
   selectColor(model: string, color: string): void {
     const currentColors = this.selectedColors();
+    if (currentColors[model] === color) return; // no-op if same color
+
+    // Trigger GSAP crossfade BEFORE the data update — captures current image,
+    // animates out, then swaps src + animates in
+    this.animateImageSwap(model, color);
+
     this.selectedColors.set({
       ...currentColors,
-      [model]: color
+      [model]: color,
     });
   }
 
@@ -1218,16 +1280,172 @@ export class ProductSectionComponent implements OnInit, AfterViewInit {
     return ['GREEN', 'YELLOW', 'BLUE'];
   }
 
-  getColorDisplayName(color: string): string {
-    switch (color) {
-      case 'GREEN': return 'Green';
-      case 'YELLOW': return 'Yellow';
-      case 'BLUE': return 'Blue';
-      default: return color;
-    }
-  }
-
   isColorSelected(model: string, color: string): boolean {
     return this.selectedColors()[model] === color;
+  }
+
+  /**
+   * GSAP image crossfade: scales down + fades current image, swap happens via
+   * Angular reactivity, then scales back + fades new image in. Safety-blur
+   * during transition adds tactile feel.
+   */
+  private animateImageSwap(model: string, _newColor: string): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const grid = this.productsLineupGrid?.nativeElement;
+    if (!grid) return;
+    const img = grid.querySelector<HTMLImageElement>(
+      `.lt-product[data-model="${model}"] .lt-product__image`,
+    );
+    if (!img) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    // Quick fade-out → src changes via signal → fade back in
+    gsap.killTweensOf(img);
+    gsap.to(img, {
+      opacity: 0,
+      scale: 0.96,
+      filter: 'blur(6px)',
+      duration: 0.22,
+      ease: 'power2.in',
+      onComplete: () => {
+        // src has updated by now (Angular flushed the binding); fade in
+        gsap.fromTo(
+          img,
+          { opacity: 0, scale: 1.04, filter: 'blur(6px)' },
+          {
+            opacity: 1,
+            scale: 1,
+            filter: 'blur(0px)',
+            duration: 0.5,
+            ease: 'power3.out',
+          },
+        );
+      },
+    });
+  }
+
+  /** Hero entry — eyebrow bar draws, then title + description + cascade. */
+  private buildProductsHeroEntry(): void {
+    const eyebrow = this.productsHeroEyebrow?.nativeElement;
+    const title = this.productsHeroTitle?.nativeElement;
+    const desc = this.productsHeroDescription?.nativeElement;
+    if (!eyebrow || !title || !desc) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      gsap.set([eyebrow, title, desc], { opacity: 1, y: 0 });
+      return;
+    }
+
+    const eyebrowBar = eyebrow.querySelector('.lt-products-hero__eyebrow-bar');
+    const eyebrowText = eyebrow.querySelector('.lt-products-hero__eyebrow-text');
+
+    gsap.set(eyebrow, { opacity: 1 });
+    gsap.set(eyebrowBar, { width: 0 });
+    gsap.set(eyebrowText, { opacity: 0, x: -6 });
+    gsap.set([title, desc], { opacity: 0, y: 20 });
+
+    this.heroEntryTimeline = gsap
+      .timeline({ defaults: { ease: 'power3.out' } })
+      .to(eyebrowBar, { width: 32, duration: 0.4 })
+      .to(eyebrowText, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' }, '-=0.15')
+      .to(title, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out' }, '-=0.1')
+      .to(desc, { opacity: 1, y: 0, duration: 0.55 }, '-=0.4');
+  }
+
+  /** Scroll-triggered reveals for /02-/05 sections. */
+  private setupProductsSectionReveals(): void {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const reveal = (
+      sectionEl: HTMLElement | undefined,
+      heads: Array<HTMLElement | undefined | null>,
+      payloads: Array<Element | NodeListOf<Element> | null | undefined>,
+    ) => {
+      if (!sectionEl) return;
+      const headEls = heads.filter(Boolean) as HTMLElement[];
+      const payloadEls: Element[] = [];
+      payloads.forEach((p) => {
+        if (!p) return;
+        if (p instanceof NodeList) payloadEls.push(...Array.from(p));
+        else payloadEls.push(p);
+      });
+
+      if (prefersReducedMotion) {
+        gsap.set([...headEls, ...payloadEls], { opacity: 1, y: 0, scale: 1 });
+        return;
+      }
+      gsap.set(headEls, { opacity: 0, y: 24 });
+      gsap.set(payloadEls, { opacity: 0, y: 28, scale: 0.97 });
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power3.out' },
+        scrollTrigger: {
+          trigger: sectionEl,
+          start: 'top 78%',
+          toggleActions: 'play none none none',
+        },
+      });
+      headEls.forEach((el, i) => {
+        tl.to(el, { opacity: 1, y: 0, duration: 0.5 }, i === 0 ? 0 : '-=0.3');
+      });
+      if (payloadEls.length) {
+        tl.to(
+          payloadEls,
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.12, ease: 'power4.out' },
+          '-=0.25',
+        );
+      }
+      if (tl.scrollTrigger) this.productsScrollTriggers.push(tl.scrollTrigger);
+    };
+
+    // /02 Lineup
+    const productCards = this.productsLineupGrid?.nativeElement.querySelectorAll('.lt-product');
+    reveal(
+      this.productsLineupSection?.nativeElement,
+      [
+        this.productsLineupEyebrow?.nativeElement,
+        this.productsLineupTitle?.nativeElement,
+        this.productsLineupSubtitle?.nativeElement,
+      ],
+      [productCards],
+    );
+
+    // /03 Compare
+    reveal(
+      this.productsCompareSection?.nativeElement,
+      [
+        this.productsCompareEyebrow?.nativeElement,
+        this.productsCompareTitle?.nativeElement,
+        this.productsCompareSubtitle?.nativeElement,
+      ],
+      [],
+    );
+
+    // /04 Engines
+    const engineCards = this.engineGridEl?.nativeElement.querySelectorAll('.lt-engine-card');
+    reveal(
+      this.productsEnginesSection?.nativeElement,
+      [
+        this.productsEnginesEyebrow?.nativeElement,
+        this.productsEnginesTitle?.nativeElement,
+        this.productsEnginesSubtitle?.nativeElement,
+      ],
+      [engineCards],
+    );
+
+    // /05 Final CTA
+    reveal(
+      this.productsCtaSection?.nativeElement,
+      [],
+      [this.productsFinalContent?.nativeElement],
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.heroEntryTimeline?.kill();
+    this.productsScrollTriggers.forEach((t) => t.kill());
   }
 }

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration=production",
+    "build": "ng build --configuration=production && node scripts/postbuild-lang.mjs",
     "build:ssr": "ng build --configuration=production && ng run llanotecnica:server",
     "serve:ssr": "node dist/llanotecnica/server/main.js",
     "watch": "ng build --watch --configuration development",

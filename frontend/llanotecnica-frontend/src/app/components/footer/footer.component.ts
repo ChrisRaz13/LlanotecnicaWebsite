@@ -5,7 +5,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil, filter } from 'rxjs';
 
 interface LinkItem {
-  text: string;
+  /** i18n key, resolved via the | translate pipe in the template (avoids
+   *  rehydration CLS that imperative translate.instant() lookups cause). */
+  textKey: string;
   route: string;
   action?: 'manual' | 'faq' | 'catalog';
 }
@@ -105,25 +107,26 @@ export class FooterComponent implements OnInit, OnDestroy {
       };
     });
 
-    // Quick links — language-aware routes (preserves Spanish URLs)
+    // Build link arrays with translation KEYS, not resolved strings. The
+    // template uses the `| translate` pipe, which keeps emitting the key
+    // (or last known value) during translation file reloads — preventing
+    // empty <li> renders and the resulting layout shift.
     this.quickLinks = [
-      { text: this.translate.instant('FOOTER.QUICK_LINKS.0.TEXT'), route: this.getRoutePath('about-us') },
-      { text: this.translate.instant('FOOTER.QUICK_LINKS.1.TEXT'), route: this.getRoutePath('products') },
-      { text: this.translate.instant('FOOTER.QUICK_LINKS.3.TEXT'), route: this.getRoutePath('contact') },
+      { textKey: 'FOOTER.QUICK_LINKS.0.TEXT', route: this.getRoutePath('about-us') },
+      { textKey: 'FOOTER.QUICK_LINKS.1.TEXT', route: this.getRoutePath('products') },
+      { textKey: 'FOOTER.QUICK_LINKS.3.TEXT', route: this.getRoutePath('contact') },
     ];
 
-    // Product links all go to the products page
     this.products = [
-      { text: this.translate.instant('FOOTER.PRODUCTS.0.TEXT'), route: this.getRoutePath('products') },
-      { text: this.translate.instant('FOOTER.PRODUCTS.1.TEXT'), route: this.getRoutePath('products') },
-      { text: this.translate.instant('FOOTER.PRODUCTS.2.TEXT'), route: this.getRoutePath('products') },
+      { textKey: 'FOOTER.PRODUCTS.0.TEXT', route: this.getRoutePath('products') },
+      { textKey: 'FOOTER.PRODUCTS.1.TEXT', route: this.getRoutePath('products') },
+      { textKey: 'FOOTER.PRODUCTS.2.TEXT', route: this.getRoutePath('products') },
     ];
 
-    // Support items trigger actions instead of navigating
     this.support = [
-      { text: this.translate.instant('FOOTER.SUPPORT.1.TEXT'), action: 'manual', route: '' },
-      { text: this.translate.instant('FOOTER.SUPPORT.2.TEXT'), action: 'faq', route: '' },
-      { text: this.translate.instant('FOOTER.SUPPORT.3.TEXT'), action: 'catalog', route: '' },
+      { textKey: 'FOOTER.SUPPORT.1.TEXT', action: 'manual', route: '' },
+      { textKey: 'FOOTER.SUPPORT.2.TEXT', action: 'faq', route: '' },
+      { textKey: 'FOOTER.SUPPORT.3.TEXT', action: 'catalog', route: '' },
     ];
   }
 

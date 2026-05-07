@@ -16,11 +16,17 @@
             "outputPath": "dist/llanotecnica",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "server": "src/main.server.ts",
+            "prerender": {
+              "routesFile": "src/prerender-routes.txt",
+              "discoverRoutes": false
+            },
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/assets",
               "src/robots.txt",
+              "src/sitemap.xml",
               "src/sw.js",
               {
                 "glob": "**/*",

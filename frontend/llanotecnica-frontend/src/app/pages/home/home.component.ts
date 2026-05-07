@@ -279,6 +279,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    // SEO must run on the server too so prerendered HTML has correct
+    // canonical/hreflang/og tags. If gated to browser-only, every prerendered
+    // route inherits the index.html defaults and Google flags them as
+    // alternates of /.
+    this.setupSEO();
+
     if (isPlatformBrowser(this.platformId)) {
       // Detect device type for optimized video loading
       this.detectDeviceType();
@@ -289,8 +295,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       // Initialize hero background image for immediate LCP
       this.initializeHeroBackground();
 
-      // Critical content first
-      this.setupSEO();
       this.loadTranslations();
       this.updateVideoSources();
 

@@ -368,8 +368,23 @@
   "CONTACT_PAGE": {
     "SEO": {
       "TITLE": "Contáctanos | Venta de Mezcladoras de Concreto Profesionales | Llanotecnica",
-      "DESCRIPTION": "Ponte en contacto con Llanotecnica para venta de mezcladoras de concreto, soporte técnico y repuestos. Sirviendo a Panamá y más de 30 países en todo el mundo."
+      "DESCRIPTION": "Ponte en contacto con Llanotecnica para venta de mezcladoras de concreto, soporte técnico y repuestos. Sirviendo a Panamá y más de 30 países en todo el mundo.",
+      "KEYWORDS": "contacto, cotización, soporte técnico, Llanotecnica, Panamá, venta de mezcladoras de concreto"
     },
+    "EYEBROWS": {
+      "GET_IN_TOUCH": "PONTE EN CONTACTO",
+      "SEND_MESSAGE": "ENVÍANOS UN MENSAJE"
+    },
+    "HERO": {
+      "TITLE": "Construyamos Algo Grande Juntos",
+      "DESCRIPTION": "Habla con nuestro equipo sobre precios, repuestos, soporte técnico o distribución. Respondemos rápido y enviamos a más de 30 países."
+    },
+    "FORM_TITLE": "Cuéntanos Sobre Tu Proyecto",
+    "FORM_SUBTITLE": "Completa el formulario y nuestro equipo de ventas se comunicará contigo dentro de un día hábil.",
+    "RESPONSE_NOTE": "Generalmente respondemos en 24 horas, de lunes a viernes.",
+    "PRIVACY_NOTICE": "Tu información está encriptada y nunca se comparte con terceros.",
+    "OPTIONAL": "Opcional",
+    "FOLLOW_US": "Síguenos",
     "GET_IN_TOUCH": "Contáctanos",
     "SUCCESS_MESSAGE": "¡Gracias por tu mensaje! Te responderemos a la brevedad.",
     "ERROR_MESSAGE": "Ocurrió un error al enviar tu mensaje. Por favor, inténtalo de nuevo.",
@@ -424,7 +439,34 @@
   "PRODUCTS_PAGE": {
     "SEO": {
       "TITLE": "Mezcladoras de Concreto Profesionales MT-370 y MT-480 | Llanotecnica",
-      "DESCRIPTION": "Explora nuestra gama de mezcladoras de concreto profesionales: MT-370 para proyectos de uso medio y MT-480 para construcción pesada. Construidas para durabilidad y rendimiento."
+      "DESCRIPTION": "Explora nuestra gama de mezcladoras de concreto profesionales: MT-370 para proyectos de uso medio y MT-480 para construcción pesada. Construidas para durabilidad y rendimiento.",
+      "KEYWORDS": "MT-370, MT-480, mezcladora de concreto, especificaciones, motores Honda, motores diésel, motores eléctricos, equipo de construcción, mezcladora industrial"
+    },
+    "EYEBROWS": {
+      "PRODUCT_RANGE": "GAMA DE PRODUCTOS",
+      "PRODUCT_LINEUP": "LA LÍNEA",
+      "SPECIFICATIONS": "ESPECIFICACIONES",
+      "ENGINE_CATALOG": "CATÁLOGO DE MOTORES",
+      "NEXT_STEP": "SIGUIENTE PASO",
+      "COLORWAY": "COLORES",
+      "STANDARD": "ESTÁNDAR",
+      "OPTION": "OPCIÓN"
+    },
+    "LABELS": {
+      "SELECT_COLOR": "SELECCIONAR COLOR",
+      "VIEW_SPECS": "VER ESPECIFICACIONES",
+      "REQUEST_QUOTE_CTA": "SOLICITAR COTIZACIÓN",
+      "DOWNLOAD_MANUAL_CTA": "DESCARGAR MANUAL",
+      "COMPATIBLE": "COMPATIBLE",
+      "NOT_COMPATIBLE": "NO COMPATIBLE",
+      "MEDIUM_DUTY": "Servicio Medio",
+      "HEAVY_DUTY": "Servicio Pesado",
+      "FLAGSHIP": "INSIGNIA"
+    },
+    "COLORS": {
+      "GREEN": "Verde Bosque",
+      "YELLOW": "Amarillo Construcción",
+      "BLUE": "Azul Señal"
     },
     "HERO": {
       "TITLE": "Mezcladoras de Concreto Durables y de Alto Rendimiento",
@@ -466,6 +508,7 @@
       },
       "TABS": {
         "KEY_SPECS": "Especificaciones Clave",
+        "DRUM": "Tambor",
         "FEATURES": "Características",
         "DIMENSIONS": "Dimensiones"
       },
@@ -473,6 +516,12 @@
         "CAPACITY": "Capacidad",
         "DRUM_OPENING": "Apertura del Tambor",
         "DRUM_DEPTH": "Profundidad del Tambor",
+        "DUMP_TYPE": "Tipo de Volcado",
+        "DRUM_TYPE": "Tipo de Tambor",
+        "CHASSIS_TYPE": "Tipo de Chasis",
+        "PAINT_TYPE": "Tipo de Pintura",
+        "POWER_SUPPLY": "Alimentación Eléctrica",
+        "TRAILER_TYPE": "Tipo de Remolque",
         "LENGTH": "Longitud",
         "WIDTH": "Ancho",
         "HEIGHT": "Altura",
@@ -544,6 +593,11 @@
         "SINGLE_PHASE": "Monofásico",
         "THREE_PHASE": "Trifásico"
       },
+      "CARD": {
+        "POWER": "Potencia",
+        "TYPE": "Tipo",
+        "COMPATIBILITY": "Compatibilidad"
+      },
       "NO_RESULTS": {
         "TITLE": "No se encontraron motores",
         "DESCRIPTION": "No hay motores disponibles con los filtros seleccionados",
@@ -551,6 +605,8 @@
       }
     },
     "ENGINE_DIALOG": {
+      "SPECS_TITLE": "Especificaciones del Motor",
+      "ADDITIONAL_FEATURES": "Características Adicionales",
       "MAX_POWER": "Potencia Máxima",
       "MAX_TORQUE": "Torque Máximo",
       "ENGINE_DIMENSIONS": "Dimensiones del Motor",
@@ -579,6 +635,10 @@
       "ENGLISH": "Inglés",
       "SPANISH": "Español",
       "CANCEL": "Cancelar"
+    },
+    "FINAL_CTA": {
+      "TITLE": "¿Listo para Impulsar tu Próximo Proyecto?",
+      "DESCRIPTION": "Habla con nuestro equipo sobre qué mezcladora se adapta a tu obra. Te ayudamos a especificar la configuración correcta y a enviarla donde la necesites."
     }
   },
   "PRODUCTS_PAGE.MT-370.SERIES_TITLE": "Serie MT-370",
@@ -589,5 +649,67 @@
   "PRODUCTS_PAGE.MT-480.DETAILED_DESCRIPTION": "Construida para necesidades de construcción a gran escala, esta mezcladora cuenta con un tambor de 420L con rotación de 360° para carga mejorada y múltiples posiciones de descarga. Su chasis tubular reforzado en T y paletas de tambor optimizadas proporcionan un rendimiento fiable de alto volumen. La transmisión por correa en V reduce las vibraciones para una operación más suave, mientras que el posicionamiento controlado por pedal y las piezas dentadas de hierro fundido permiten un manejo sencillo por un solo operador. La MT-480 prospera bajo demandas de mezcla continua en obras exigentes.",
   "WHATSAPP": {
     "MESSAGE": "¡Hola! Estoy interesado en conocer más sobre sus mezcladoras de concreto. ¿Podrían proporcionarme información sobre precios, disponibilidad y especificaciones técnicas? ¡Gracias!"
-  }
+  },
+  "Single cylinder 4 stroke": "Monocilíndrico de 4 tiempos",
+  "Inclined cylinder 25°": "Cilindro inclinado a 25°",
+  "Steel jacket": "Camisa de acero",
+  "OHV Gasoline engine type": "Motor a gasolina tipo OHV",
+  "Single-cylinder, vertical": "Monocilíndrico vertical",
+  "4-stroke, air-cooled": "4 tiempos, refrigerado por aire",
+  "Direct injection system": "Sistema de inyección directa",
+  "Left rotation output axis": "Eje de salida con rotación izquierda",
+  "4-stroke 25° single cylinder": "Monocilíndrico de 4 tiempos a 25°",
+  "Air-cooled system": "Sistema de refrigeración por aire",
+  "Semi-dry type air cleaner": "Filtro de aire tipo semiseco",
+  "Enhanced fuel efficiency": "Eficiencia de combustible mejorada",
+  "Semi-dry, oil bath type air cleaner": "Filtro de aire semiseco con baño de aceite",
+  "Professional grade performance": "Rendimiento de grado profesional",
+  "Heavy-duty industrial performance": "Rendimiento industrial de uso pesado",
+  "Single phase operation": "Operación monofásica",
+  "Thermal protection": "Protección térmica",
+  "IP54 protection rating": "Grado de protección IP54",
+  "Maintenance-free design": "Diseño libre de mantenimiento",
+  "Three phase operation": "Operación trifásica",
+  "Enhanced thermal protection": "Protección térmica mejorada",
+  "IP55 protection rating": "Grado de protección IP55",
+  "Industrial grade efficiency": "Eficiencia de grado industrial",
+  "Cost-effective": "Económico",
+  "Easy maintenance": "Mantenimiento fácil",
+  "Optimal efficiency": "Eficiencia óptima",
+  "Enhanced power": "Potencia mejorada",
+  "Reliable performance": "Rendimiento confiable",
+  "Versatile usage": "Uso versátil",
+  "High power": "Alta potencia",
+  "Heavy-duty performance": "Rendimiento de uso pesado",
+  "Maximum output": "Salida máxima",
+  "Fuel efficient": "Eficiente en combustible",
+  "High torque": "Alto torque",
+  "Durable design": "Diseño duradero",
+  "Enhanced efficiency": "Eficiencia mejorada",
+  "Maximum torque": "Torque máximo",
+  "Long-lasting": "Larga duración",
+  "Premium quality": "Calidad premium",
+  "Reliable": "Confiable",
+  "Low maintenance": "Bajo mantenimiento",
+  "Efficient operation": "Operación eficiente",
+  "High performance": "Alto rendimiento",
+  "Professional grade": "Grado profesional",
+  "Maximum power": "Potencia máxima",
+  "Industrial strength": "Resistencia industrial",
+  "Zero emissions": "Cero emisiones",
+  "Quiet operation": "Operación silenciosa",
+  "Clean energy": "Energía limpia",
+  "Silent performance": "Rendimiento silencioso",
+  "Manual": "Manual",
+  "Manual (Electrical start option)": "Manual (opción de arranque eléctrico)",
+  "Manual/Electric start": "Arranque manual/eléctrico",
+  "Manual / Electric start": "Arranque manual / eléctrico",
+  "Recoil and hand-operated": "Tirador y operación manual",
+  "Electric": "Eléctrico",
+  "Electric switch": "Interruptor eléctrico",
+  "Electric switch with soft start": "Interruptor eléctrico con arranque suave",
+  "Transistorized coil": "Bobina transistorizada",
+  "Direct Injection": "Inyección directa",
+  "Non-contact transistorized ignition (TCI)": "Encendido transistorizado sin contacto (TCI)",
+  "Electric motor": "Motor eléctrico"
 }

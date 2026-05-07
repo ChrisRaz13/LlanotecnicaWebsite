@@ -368,8 +368,23 @@
   "CONTACT_PAGE": {
     "SEO": {
       "TITLE": "Contact Us | Professional Concrete Mixer Sales | Llanotecnica",
-      "DESCRIPTION": "Get in touch with Llanotecnica for concrete mixer sales, technical support, and spare parts. Serving Panama and 30+ countries worldwide."
+      "DESCRIPTION": "Get in touch with Llanotecnica for concrete mixer sales, technical support, and spare parts. Serving Panama and 30+ countries worldwide.",
+      "KEYWORDS": "contact, quote, technical support, Llanotecnica, Panama, concrete mixer sales"
     },
+    "EYEBROWS": {
+      "GET_IN_TOUCH": "GET IN TOUCH",
+      "SEND_MESSAGE": "SEND A MESSAGE"
+    },
+    "HERO": {
+      "TITLE": "Let's Build Something Together",
+      "DESCRIPTION": "Talk to our team about pricing, parts, technical support, or distribution. We respond fast and ship to over 30 countries."
+    },
+    "FORM_TITLE": "Tell Us About Your Project",
+    "FORM_SUBTITLE": "Fill out the form and our sales team will get back to you within one business day.",
+    "RESPONSE_NOTE": "We typically respond within 24 hours, Monday through Friday.",
+    "PRIVACY_NOTICE": "Your information is encrypted and never shared with third parties.",
+    "OPTIONAL": "Optional",
+    "FOLLOW_US": "Follow us",
     "GET_IN_TOUCH": "Get in Touch",
     "SUCCESS_MESSAGE": "Thank you for your message! We'll respond shortly.",
     "ERROR_MESSAGE": "There was an error sending your message. Please try again.",
@@ -424,7 +439,34 @@
   "PRODUCTS_PAGE": {
     "SEO": {
       "TITLE": "Professional Concrete Mixers MT-370 & MT-480 | Llanotecnica",
-      "DESCRIPTION": "Explore our professional concrete mixer range: MT-370 for medium-duty projects and MT-480 for heavy-duty construction. Built for durability and performance."
+      "DESCRIPTION": "Explore our professional concrete mixer range: MT-370 for medium-duty projects and MT-480 for heavy-duty construction. Built for durability and performance.",
+      "KEYWORDS": "MT-370, MT-480, concrete mixer, specifications, Honda engines, diesel engines, electric motors, construction equipment, industrial mixer"
+    },
+    "EYEBROWS": {
+      "PRODUCT_RANGE": "PRODUCT RANGE",
+      "PRODUCT_LINEUP": "THE LINEUP",
+      "SPECIFICATIONS": "SPECIFICATIONS",
+      "ENGINE_CATALOG": "ENGINE CATALOG",
+      "NEXT_STEP": "NEXT STEP",
+      "COLORWAY": "COLORWAY",
+      "STANDARD": "STANDARD",
+      "OPTION": "OPTION"
+    },
+    "LABELS": {
+      "SELECT_COLOR": "SELECT COLOR",
+      "VIEW_SPECS": "VIEW SPECS",
+      "REQUEST_QUOTE_CTA": "REQUEST A QUOTE",
+      "DOWNLOAD_MANUAL_CTA": "DOWNLOAD MANUAL",
+      "COMPATIBLE": "COMPATIBLE",
+      "NOT_COMPATIBLE": "NOT COMPATIBLE",
+      "MEDIUM_DUTY": "Medium-Duty",
+      "HEAVY_DUTY": "Heavy-Duty",
+      "FLAGSHIP": "FLAGSHIP"
+    },
+    "COLORS": {
+      "GREEN": "Forest Green",
+      "YELLOW": "Construction Yellow",
+      "BLUE": "Signal Blue"
     },
     "HERO": {
       "TITLE": "Durable & High-Performance Concrete Mixers",
@@ -466,6 +508,7 @@
       },
       "TABS": {
         "KEY_SPECS": "Key Specs",
+        "DRUM": "Drum",
         "FEATURES": "Features",
         "DIMENSIONS": "Dimensions"
       },
@@ -473,6 +516,12 @@
         "CAPACITY": "Capacity",
         "DRUM_OPENING": "Drum Opening",
         "DRUM_DEPTH": "Drum Depth",
+        "DUMP_TYPE": "Dump Type",
+        "DRUM_TYPE": "Drum Type",
+        "CHASSIS_TYPE": "Chassis Type",
+        "PAINT_TYPE": "Paint Type",
+        "POWER_SUPPLY": "Power Supply",
+        "TRAILER_TYPE": "Trailer Type",
         "LENGTH": "Length",
         "WIDTH": "Width",
         "HEIGHT": "Height",
@@ -544,6 +593,11 @@
         "SINGLE_PHASE": "Single Phase",
         "THREE_PHASE": "Three Phase"
       },
+      "CARD": {
+        "POWER": "Power",
+        "TYPE": "Type",
+        "COMPATIBILITY": "Compatibility"
+      },
       "NO_RESULTS": {
         "TITLE": "No engines found",
         "DESCRIPTION": "No engines are available with the selected filters",
@@ -551,6 +605,8 @@
       }
     },
     "ENGINE_DIALOG": {
+      "SPECS_TITLE": "Engine Specifications",
+      "ADDITIONAL_FEATURES": "Additional Features",
       "MAX_POWER": "Maximum Power",
       "MAX_TORQUE": "Maximum Torque",
       "ENGINE_DIMENSIONS": "Engine Dimensions",
@@ -579,6 +635,10 @@
       "ENGLISH": "English",
       "SPANISH": "Spanish",
       "CANCEL": "Cancel"
+    },
+    "FINAL_CTA": {
+      "TITLE": "Ready to Power Your Next Project?",
+      "DESCRIPTION": "Talk to our team about which mixer fits your worksite. We'll help you spec the right configuration and ship it where you need it."
     }
   },
   "PRODUCTS_PAGE.MT-370.SERIES_TITLE": "MT-370 Series",

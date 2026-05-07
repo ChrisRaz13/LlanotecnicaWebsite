@@ -1,46 +1,34 @@
-import { provideZoneChangeDetection } from "@angular/core";
-import { renderApplication } from '@angular/platform-server';
+import { mergeApplicationConfig } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
-import { INITIAL_LANGUAGE } from './app/core/i18n/injection-tokens';
-import { appConfig } from './app/app.config';
-import { AppComponent } from './app/app.component';
 import { bootstrapApplication, BootstrapContext } from '@angular/platform-browser';
 
+import { config as serverAppConfig } from './app/app.config.server';
+import { AppComponent } from './app/app.component';
+import { INITIAL_LANGUAGE } from './app/core/i18n/injection-tokens';
+
 const detectLanguageFromUrl = (url: string): string => {
-  if (url.startsWith('/es/') || url === '/es') {
-    return 'es';
-  }
+  if (url.startsWith('/es/') || url === '/es') return 'es';
   const spanishPaths = ['/sobre-nosotros', '/productos', '/contacto'];
-  if (spanishPaths.some(path => url === path || url.startsWith(path))) {
-    return 'es';
-  }
+  if (spanishPaths.some((p) => url === p || url.startsWith(p))) return 'es';
   return 'en';
 };
 
-export default async function bootstrap({
-  // Fallback document now includes <app-root>
-  document = '<!DOCTYPE html><html lang="en"><head></head><body><app-root></app-root></body></html>',
-  url = '/',
-  providers = [],
-} = {}): Promise<string> {
+const bootstrap = (context: BootstrapContext) => {
+  // The SSR harness exposes the request URL on the context so we can pre-pick
+  // the correct locale before bootstrap.
+  const url = (context as { url?: string })?.url ?? '/';
   const lang = detectLanguageFromUrl(url);
-  const documentWithLang = document.replace(
-    /<html lang=".*?">/,
-    `<html lang="${lang}">`
-  );
 
-  return renderApplication((context: BootstrapContext) =>
-    bootstrapApplication(AppComponent, {
-      ...appConfig,
+  return bootstrapApplication(
+    AppComponent,
+    mergeApplicationConfig(serverAppConfig, {
       providers: [
-        provideZoneChangeDetection(),{ provide: APP_BASE_HREF, useValue: '/' },
+        { provide: APP_BASE_HREF, useValue: '/' },
         { provide: INITIAL_LANGUAGE, useValue: lang },
-        ...providers,
       ],
-    }, context),
-    {
-      document: documentWithLang,
-      url,
-    }
+    }),
+    context,
   );
-}
+};
+
+export default bootstrap;

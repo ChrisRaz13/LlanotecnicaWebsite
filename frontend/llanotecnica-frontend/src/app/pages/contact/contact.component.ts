@@ -12,6 +12,7 @@ declare global {
 }
 
 import {
+  AfterViewInit,
   Component,
   OnInit,
   OnDestroy,
@@ -32,6 +33,8 @@ import { environment } from '../../../environments/environment';
 import { debounceTime, distinctUntilChanged, map, takeUntil, timeout, catchError } from 'rxjs/operators';
 import { Subject, of } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 // Import TranslateModule to make the translation pipe available in your template
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -40,6 +43,7 @@ import { SeoService } from '../../services/seo.service';
 // Import our custom directive and fallback data
 import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
 import { Country, FALLBACK_COUNTRIES } from '../../shared/data/countries.data';
+import { LtButtonComponent } from '../../ui/button/lt-button.component';
 
 interface ContactForm {
   name: string;
@@ -62,8 +66,8 @@ interface SubmitResponse {
     selector: 'app-contact',
     templateUrl: './contact.component.html',
     styleUrls: ['./contact.component.css'],
-    // Added TranslateModule and ClickOutsideDirective to the imports array
-    imports: [ReactiveFormsModule, TranslateModule, ClickOutsideDirective],
+    // Added TranslateModule, ClickOutsideDirective and LtButtonComponent to the imports array
+    imports: [ReactiveFormsModule, TranslateModule, ClickOutsideDirective, LtButtonComponent],
     animations: [
         trigger('fadeSlideInOut', [
             transition(':enter', [
@@ -76,8 +80,23 @@ interface SubmitResponse {
         ])
     ]
 })
-export class ContactComponent implements OnInit, OnDestroy {
+export class ContactComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('countryInput') countryInput!: ElementRef;
+  @ViewChild('contactHeroSection') contactHeroSection?: ElementRef<HTMLElement>;
+  @ViewChild('contactHeroEyebrow') contactHeroEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('contactHeroTitle') contactHeroTitle?: ElementRef<HTMLElement>;
+  @ViewChild('contactHeroDescription') contactHeroDescription?: ElementRef<HTMLElement>;
+  @ViewChild('contactHeroLinks') contactHeroLinks?: ElementRef<HTMLElement>;
+
+  @ViewChild('contactFormSection') contactFormSection?: ElementRef<HTMLElement>;
+  @ViewChild('contactFormEyebrow') contactFormEyebrow?: ElementRef<HTMLElement>;
+  @ViewChild('contactFormTitle') contactFormTitle?: ElementRef<HTMLElement>;
+  @ViewChild('contactFormSubtitle') contactFormSubtitle?: ElementRef<HTMLElement>;
+  @ViewChild('contactFormCard') contactFormCard?: ElementRef<HTMLElement>;
+  @ViewChild('contactInfoCard') contactInfoCard?: ElementRef<HTMLElement>;
+
+  private heroEntryTimeline: gsap.core.Timeline | null = null;
+  private contactScrollTriggers: ScrollTrigger[] = [];
 
   contactForm!: FormGroup;
   countries: Country[] = [];
@@ -140,11 +159,11 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.setupSEO();
+    // SEO setup must run on the server too so prerendered HTML has correct
+    // canonical/hreflang tags.
+    this.setupSEO();
 
-      // We'll keep the loadRecaptcha call for backward compatibility
-      // but the service will handle the actual loading
+    if (isPlatformBrowser(this.platformId)) {
       this.loadCountries().then(() => {
         this.setupCountrySearch();
       });
@@ -194,12 +213,100 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    gsap.registerPlugin(ScrollTrigger);
+    this.buildContactHeroEntry();
+    requestAnimationFrame(() => this.setupContactSectionReveals());
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.heroEntryTimeline?.kill();
+    this.contactScrollTriggers.forEach((t) => t.kill());
     if (isPlatformBrowser(this.platformId) && this.recaptchaScript) {
       this.recaptchaScript.remove();
     }
+  }
+
+  /** Hero entry — eyebrow bar draws, then title + description + quick-links cascade. */
+  private buildContactHeroEntry(): void {
+    const eyebrow = this.contactHeroEyebrow?.nativeElement;
+    const title = this.contactHeroTitle?.nativeElement;
+    const desc = this.contactHeroDescription?.nativeElement;
+    const links = this.contactHeroLinks?.nativeElement;
+    if (!eyebrow || !title || !desc || !links) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      gsap.set([eyebrow, title, desc, links], { opacity: 1, y: 0 });
+      return;
+    }
+
+    const eyebrowBar = eyebrow.querySelector('.lt-contact-hero__eyebrow-bar');
+    const eyebrowText = eyebrow.querySelector('.lt-contact-hero__eyebrow-text');
+    const linkPills = links.querySelectorAll('.lt-contact-quick');
+
+    gsap.set(eyebrow, { opacity: 1 });
+    gsap.set(eyebrowBar, { width: 0 });
+    gsap.set(eyebrowText, { opacity: 0, x: -6 });
+    gsap.set([title, desc, links], { opacity: 0, y: 20 });
+    gsap.set(linkPills, { opacity: 0, y: 12 });
+
+    this.heroEntryTimeline = gsap
+      .timeline({ defaults: { ease: 'power3.out' } })
+      .to(eyebrowBar, { width: 32, duration: 0.4 })
+      .to(eyebrowText, { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' }, '-=0.15')
+      .to(title, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out' }, '-=0.1')
+      .to(desc, { opacity: 1, y: 0, duration: 0.55 }, '-=0.4')
+      .to(links, { opacity: 1, y: 0, duration: 0.4 }, '-=0.3')
+      .to(linkPills, { opacity: 1, y: 0, duration: 0.4, stagger: 0.08, ease: 'power2.out' }, '-=0.2');
+  }
+
+  /** Scroll-triggered reveal for the form/info cards. */
+  private setupContactSectionReveals(): void {
+    const section = this.contactFormSection?.nativeElement;
+    if (!section) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const heads = [
+      this.contactFormEyebrow?.nativeElement,
+      this.contactFormTitle?.nativeElement,
+      this.contactFormSubtitle?.nativeElement,
+    ].filter(Boolean) as HTMLElement[];
+    const cards = [
+      this.contactFormCard?.nativeElement,
+      this.contactInfoCard?.nativeElement,
+    ].filter(Boolean) as HTMLElement[];
+
+    if (reduced) {
+      gsap.set([...heads, ...cards], { opacity: 1, y: 0, scale: 1 });
+      return;
+    }
+
+    gsap.set(heads, { opacity: 0, y: 24 });
+    gsap.set(cards, { opacity: 0, y: 28, scale: 0.97 });
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'power3.out' },
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 78%',
+        toggleActions: 'play none none none',
+      },
+    });
+    heads.forEach((el, i) => {
+      tl.to(el, { opacity: 1, y: 0, duration: 0.5 }, i === 0 ? 0 : '-=0.3');
+    });
+    if (cards.length) {
+      tl.to(
+        cards,
+        { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.12, ease: 'power4.out' },
+        '-=0.25',
+      );
+    }
+    if (tl.scrollTrigger) this.contactScrollTriggers.push(tl.scrollTrigger);
   }
 
   private initializeForm() {

@@ -1,9 +1,9 @@
 // Service Worker for Llanotecnica - Advanced Caching Strategy
-// Version 2.4 - Font Optimization Cache Refresh
+// Version 2.5 - Skip non-http schemes + 206 partials in cache writes
 
-const CACHE_NAME = 'llanotecnica-v2.4';
-const STATIC_CACHE = 'llanotecnica-static-v2.4';
-const DYNAMIC_CACHE = 'llanotecnica-dynamic-v2.4';
+const CACHE_NAME = 'llanotecnica-v2.5';
+const STATIC_CACHE = 'llanotecnica-static-v2.5';
+const DYNAMIC_CACHE = 'llanotecnica-dynamic-v2.5';
 
 // Assets to cache immediately
 const STATIC_ASSETS = [
@@ -79,6 +79,27 @@ self.addEventListener('activate', event => {
   );
 });
 
+// Cache API only accepts http/https; chrome-extension://, data:, blob:, etc.
+// throw "scheme is unsupported" when passed to cache.put.
+function isCacheableRequest(request) {
+  return request.url.startsWith('http:') || request.url.startsWith('https:');
+}
+
+// Cache API rejects partial (206), opaque, and error responses. Skip them.
+function isCacheableResponse(response) {
+  return response && response.ok && response.status === 200 && response.type !== 'opaqueredirect';
+}
+
+async function safePut(cacheName, request, response) {
+  if (!isCacheableRequest(request) || !isCacheableResponse(response)) return;
+  try {
+    const cache = await caches.open(cacheName);
+    await cache.put(request, response);
+  } catch (e) {
+    // Swallow — caching is best-effort, never block the user-facing response.
+  }
+}
+
 // Fetch event - implement caching strategies
 self.addEventListener('fetch', event => {
   const { request } = event;
@@ -86,6 +107,11 @@ self.addEventListener('fetch', event => {
 
   // Skip non-GET requests
   if (request.method !== 'GET') {
+    return;
+  }
+
+  // Skip non-http(s) schemes entirely (chrome-extension, data:, blob:, etc.)
+  if (!isCacheableRequest(request)) {
     return;
   }
 
@@ -156,12 +182,7 @@ async function cacheFirst(request) {
   if (cachedResponse) {
     // Update cache in background
     fetch(request)
-      .then(response => {
-        if (response.ok) {
-          const cache = caches.open(DYNAMIC_CACHE);
-          cache.then(c => c.put(request, response));
-        }
-      })
+      .then(response => safePut(DYNAMIC_CACHE, request, response.clone()))
       .catch(() => {}); // Ignore background update errors
 
     return cachedResponse;
@@ -169,12 +190,7 @@ async function cacheFirst(request) {
 
   try {
     const networkResponse = await fetch(request);
-
-    if (networkResponse.ok) {
-      const cache = await caches.open(DYNAMIC_CACHE);
-      cache.put(request, networkResponse.clone());
-    }
-
+    safePut(DYNAMIC_CACHE, request, networkResponse.clone());
     return networkResponse;
   } catch (error) {
     console.error('❌ Failed to fetch:', request.url);
@@ -188,10 +204,7 @@ async function staleWhileRevalidate(request) {
 
   const fetchPromise = fetch(request)
     .then(response => {
-      if (response.ok) {
-        const cache = caches.open(DYNAMIC_CACHE);
-        cache.then(c => c.put(request, response.clone()));
-      }
+      safePut(DYNAMIC_CACHE, request, response.clone());
       return response;
     })
     .catch(() => cachedResponse); // Fallback to cache on network error

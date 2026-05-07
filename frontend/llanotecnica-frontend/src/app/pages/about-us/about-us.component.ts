@@ -165,8 +165,11 @@ export class AboutUsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // SEO setup must run on the server too so prerendered HTML has correct
+    // canonical/hreflang tags.
+    this.setupSEO();
+
     if (isPlatformBrowser(this.platformId)) {
-      this.setupSEO();
       this.loadRecaptcha();
       this.loadCountries().then(() => {
         this.setupCountrySearch();

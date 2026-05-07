@@ -103,15 +103,12 @@ export class SeoService {
   }
 
   updateCanonicalUrl(url: string): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    // Remove existing canonical link
+    // Runs in SSR + browser: server-side DOCUMENT is provided by @angular/ssr.
     const existingCanonical = this.document.querySelector('link[rel="canonical"]');
     if (existingCanonical) {
       existingCanonical.remove();
     }
 
-    // Add new canonical link
     const link: HTMLLinkElement = this.document.createElement('link');
     link.setAttribute('rel', 'canonical');
     link.setAttribute('href', url);
@@ -119,13 +116,9 @@ export class SeoService {
   }
 
   addHreflangTags(languages: { lang: string; url: string }[]): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    // Remove existing hreflang links
     const existingHreflangs = this.document.querySelectorAll('link[rel="alternate"]');
     existingHreflangs.forEach(link => link.remove());
 
-    // Add new hreflang links
     languages.forEach(({ lang, url }) => {
       const link: HTMLLinkElement = this.document.createElement('link');
       link.setAttribute('rel', 'alternate');
@@ -136,9 +129,6 @@ export class SeoService {
   }
 
   addStructuredData(data: any): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    // Remove existing structured data with same @type to avoid duplicates
     const existingScripts = this.document.querySelectorAll('script[type="application/ld+json"]');
     existingScripts.forEach(script => {
       try {
@@ -147,12 +137,10 @@ export class SeoService {
           script.remove();
         }
       } catch (e) {
-        // Invalid JSON, remove it
         script.remove();
       }
     });
 
-    // Add new structured data
     const script = this.document.createElement('script');
     script.type = 'application/ld+json';
     script.text = JSON.stringify(data);
@@ -160,8 +148,6 @@ export class SeoService {
   }
 
   removeStructuredData(type: string): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-
     const scripts = this.document.querySelectorAll('script[type="application/ld+json"]');
     scripts.forEach(script => {
       try {
