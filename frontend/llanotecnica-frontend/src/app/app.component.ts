@@ -22,8 +22,25 @@ import { RecaptchaService } from './services/language-selector/recaptcha.service
     template: `
     <app-navbar></app-navbar>
     <router-outlet></router-outlet>
-    <app-footer></app-footer>
-    <app-whatsapp-widget></app-whatsapp-widget>
+
+    <!-- Footer and WhatsApp widget render below the fold on every page.
+         With incremental hydration enabled in app.config, the prerendered
+         HTML for these stays visible immediately, but their JS hydrates
+         only when scrolled into view (footer) or when the page settles
+         (widget). Cuts initial-load main-thread work site-wide.
+         The @placeholder reserves layout space for client-side
+         navigations where the prerendered HTML isn't available. -->
+    @defer (hydrate on viewport) {
+      <app-footer></app-footer>
+    } @placeholder {
+      <div aria-hidden="true" style="min-height: 480px;"></div>
+    }
+
+    @defer (hydrate on idle) {
+      <app-whatsapp-widget></app-whatsapp-widget>
+    } @placeholder {
+      <span aria-hidden="true"></span>
+    }
   `
 })
 export class AppComponent implements OnInit {
