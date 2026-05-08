@@ -1,4 +1,15 @@
+# Default-block all .mp4 (lots of raw multi-GB source videos sit alongside the
+# 7 we actually ship). Below: explicit allowlist for the production-shipped
+# videos referenced by home.component.ts. If you add a new shipped video,
+# add another `!` line here AND `git add -f` it.
 *.mp4
+!frontend/llanotecnica-frontend/src/assets/compressedvideos/hero-desktop.av1.mp4
+!frontend/llanotecnica-frontend/src/assets/compressedvideos/hero-desktop.h264.mp4
+!frontend/llanotecnica-frontend/src/assets/compressedvideos/hero-mobile.av1.mp4
+!frontend/llanotecnica-frontend/src/assets/compressedvideos/hero-mobile.h264.mp4
+!frontend/llanotecnica-frontend/src/assets/compressedvideos/IntroductionEnglish.mp4
+!frontend/llanotecnica-frontend/src/assets/compressedvideos/IntroductionSpanish.mp4
+!frontend/llanotecnica-frontend/src/assets/compressedvideos/instruction.mp4
 .DS_Store
 
 # Archived assets (kept on disk, never shipped or committed)
