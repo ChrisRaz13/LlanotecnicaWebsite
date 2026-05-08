@@ -41,5 +41,8 @@ testem.log
 .DS_Store
 Thumbs.db
 src/environments/environment.ts
+src/environments/environment.dev.ts
 src/environments/environment.prod.ts
+# environment.prod.template.ts IS tracked — CI substitutes GitHub Secrets
+# into __PLACEHOLDER__ tokens to generate the real environment.prod.ts.
 src/assets/videos/HomePageSpanish.mov

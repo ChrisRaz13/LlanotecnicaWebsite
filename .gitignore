@@ -13,12 +13,17 @@ default
 .gradle
 *.war
 *.bak
-src/environments/environment.ts
-src/environments/environment.prod.ts
-src/environments/environment.ts
-src/environments/environment.prod.ts
-src/environments/environment.dev.ts
-src/environmentssrc/environments/
-src/environments/
-src/environments/
-frontend/llanotecnica-frontend/src/environments/
+
+# ----------------------------------------------------------------------------
+# Environment files: real values stay local / in CI secrets, NEVER in git.
+# Templates with `__PLACEHOLDER__` tokens DO get committed so CI knows the
+# expected file shape. The substitution happens in
+# .github/workflows/firebase-hosting-merge.yml from GitHub Actions Secrets.
+# ----------------------------------------------------------------------------
+frontend/llanotecnica-frontend/src/environments/environment.ts
+frontend/llanotecnica-frontend/src/environments/environment.dev.ts
+frontend/llanotecnica-frontend/src/environments/environment.prod.ts
+frontend/llanotecnica-frontend/src/environments/environment.js
+frontend/llanotecnica-frontend/src/environments/environment.js.map
+frontend/llanotecnica-frontend/src/environments/environment.prod.js
+frontend/llanotecnica-frontend/src/environments/environment.prod.js.map

@@ -17,6 +17,20 @@ jobs:
           node-version: '22'
           cache: 'npm'
           cache-dependency-path: frontend/llanotecnica-frontend/package-lock.json
+      - name: Generate environment.prod.ts from template + secrets
+        working-directory: frontend/llanotecnica-frontend
+        # See merge workflow for rationale.
+        env:
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          GMAPS_API_KEY: ${{ secrets.GMAPS_API_KEY }}
+          RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
+        run: |
+          sed \
+            -e "s|__FIREBASE_API_KEY__|${FIREBASE_API_KEY}|g" \
+            -e "s|__GMAPS_API_KEY__|${GMAPS_API_KEY}|g" \
+            -e "s|__RECAPTCHA_SITE_KEY__|${RECAPTCHA_SITE_KEY}|g" \
+            src/environments/environment.prod.template.ts \
+            > src/environments/environment.prod.ts
       - name: Install + build (Angular SSG, postbuild lang patch)
         working-directory: frontend/llanotecnica-frontend
         run: npm ci && npm run build
