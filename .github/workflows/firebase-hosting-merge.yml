@@ -17,6 +17,28 @@ jobs:
           node-version: '22'
           cache: 'npm'
           cache-dependency-path: frontend/llanotecnica-frontend/package-lock.json
+      - name: Verify required secrets are set (refuse to deploy with empty keys)
+        env:
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          GMAPS_API_KEY: ${{ secrets.GMAPS_API_KEY }}
+          RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
+        # Fail-fast guard: better to break CI than to deploy a build with
+        # empty API keys (would silently break Maps, reCAPTCHA, contact form
+        # on production). Add the secrets at:
+        # https://github.com/ChrisRaz13/LlanotecnicaWebsite/settings/secrets/actions
+        run: |
+          missing=()
+          [ -z "$FIREBASE_API_KEY" ] && missing+=(FIREBASE_API_KEY)
+          [ -z "$GMAPS_API_KEY" ] && missing+=(GMAPS_API_KEY)
+          [ -z "$RECAPTCHA_SITE_KEY" ] && missing+=(RECAPTCHA_SITE_KEY)
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "::error::Missing required GitHub Secrets: ${missing[*]}"
+            echo "::error::Add them at https://github.com/ChrisRaz13/LlanotecnicaWebsite/settings/secrets/actions"
+            echo "::error::Refusing to deploy a build with empty API keys."
+            exit 1
+          fi
+          echo "All required secrets present."
+
       - name: Generate environment files from template + secrets
         working-directory: frontend/llanotecnica-frontend
         # The real environment.{ts,prod.ts} files are gitignored. Substitute
