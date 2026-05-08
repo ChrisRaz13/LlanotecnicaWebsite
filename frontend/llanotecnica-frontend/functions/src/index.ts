@@ -12,7 +12,32 @@ if (!admin.apps.length) {
   admin.initializeApp();
 }
 
-const corsHandler = promisify(corsLib({origin: true}));
+// Tightened CORS — only accept browser POSTs from llanotecnica.com (and
+// localhost for dev). reCAPTCHA Enterprise verification is the primary
+// abuse defense, but an origin allowlist blocks most cross-site abuse
+// before we spend a function invocation. Add new domains here if the
+// site is ever served from elsewhere.
+const ALLOWED_ORIGINS: readonly string[] = [
+  "https://llanotecnica.com",
+  "https://www.llanotecnica.com",
+  "https://llanotecnica-59a31.web.app",
+  "https://llanotecnica-59a31.firebaseapp.com",
+  "http://localhost:4200",
+  "http://localhost:4000",
+];
+const corsHandler = promisify(
+  corsLib({
+    origin: (origin, callback) => {
+      // Allow no-origin requests (server-to-server, curl, GBP sitemap crawls)
+      // OR origins on the allowlist. Reject everything else.
+      if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error(`Origin not allowed: ${origin}`), false);
+    },
+  })
+);
 
 // Initialize Gmail transporter for sending emails
 let emailTransporter: nodemailer.Transporter | null = null;
