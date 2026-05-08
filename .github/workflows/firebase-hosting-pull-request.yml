@@ -17,7 +17,7 @@ jobs:
           node-version: '22'
           cache: 'npm'
           cache-dependency-path: frontend/llanotecnica-frontend/package-lock.json
-      - name: Generate environment.prod.ts from template + secrets
+      - name: Generate environment files from template + secrets
         working-directory: frontend/llanotecnica-frontend
         # See merge workflow for rationale.
         env:
@@ -31,6 +31,8 @@ jobs:
             -e "s|__RECAPTCHA_SITE_KEY__|${RECAPTCHA_SITE_KEY}|g" \
             src/environments/environment.prod.template.ts \
             > src/environments/environment.prod.ts
+          cp src/environments/environment.prod.ts src/environments/environment.ts
+          cp src/environments/environment.prod.ts src/environments/environment.dev.ts
       - name: Install + build (Angular SSG, postbuild lang patch)
         working-directory: frontend/llanotecnica-frontend
         run: npm ci && npm run build
