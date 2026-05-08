@@ -10,6 +10,12 @@
 !frontend/llanotecnica-frontend/src/assets/compressedvideos/IntroductionEnglish.mp4
 !frontend/llanotecnica-frontend/src/assets/compressedvideos/IntroductionSpanish.mp4
 !frontend/llanotecnica-frontend/src/assets/compressedvideos/instruction.mp4
+# Demo-section portrait variants (the <video #mainVideo> element on the home
+# page builds these URLs at runtime via `intro-${lang}-portrait.${codec}.mp4`).
+!frontend/llanotecnica-frontend/src/assets/compressedvideos/intro-english-portrait.av1.mp4
+!frontend/llanotecnica-frontend/src/assets/compressedvideos/intro-english-portrait.h264.mp4
+!frontend/llanotecnica-frontend/src/assets/compressedvideos/intro-spanish-portrait.av1.mp4
+!frontend/llanotecnica-frontend/src/assets/compressedvideos/intro-spanish-portrait.h264.mp4
 .DS_Store
 
 # Archived assets (kept on disk, never shipped or committed)
