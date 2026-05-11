@@ -44,7 +44,7 @@
         {{ 'PANAMA_PAGE.HERO.CTA_PRIMARY' | translate }}
         <i class="fas fa-arrow-right" aria-hidden="true"></i>
       </a>
-      <a lt-button variant="ghost" size="lg" data-on-dark="true"
+      <a lt-button variant="primary" size="lg"
          [routerLink]="productsRoute"
          [attr.aria-label]="'PANAMA_PAGE.HERO.CTA_SECONDARY' | translate">
         {{ 'PANAMA_PAGE.HERO.CTA_SECONDARY' | translate }}
@@ -267,33 +267,64 @@
   </div>
 </section>
 
-<!-- /07 — FINAL CTA (safety yellow) -->
+<!-- /07 — FINAL CTA (safety yellow with caution-stripe top + contour bg) -->
 <section class="lt-pa-cta" aria-labelledby="lt-pa-cta-title">
+  <!-- Caution-tape top border (diagonal black/yellow stripes — same pattern as
+       about-us final CTA so visual rhythm reads consistently across pages) -->
+  <div class="lt-pa-cta__caution" aria-hidden="true"></div>
+
+  <!-- Subtle contour SVG behind content (echoes about-us aesthetic) -->
+  <div class="lt-pa-cta__bg" aria-hidden="true">
+    <svg class="lt-pa-cta__contour" viewBox="0 0 1600 600" preserveAspectRatio="none">
+      <path d="M0,400 C 240,360 380,460 600,420 S 980,360 1200,420 S 1500,520 1600,460"
+            fill="none"
+            stroke="rgba(0, 27, 17, 0.1)"
+            stroke-width="1.5" />
+      <path d="M0,520 C 280,490 420,560 640,530 S 1020,470 1240,520 S 1520,600 1600,560"
+            fill="none"
+            stroke="rgba(0, 27, 17, 0.06)"
+            stroke-width="1.5" />
+    </svg>
+  </div>
+
   <div class="lt-pa-cta__inner">
-    <p class="lt-pa-cta__eyebrow">
-      <span class="lt-pa-cta__eyebrow-num">/07</span>
-      <span class="lt-pa-cta__eyebrow-divider" aria-hidden="true"></span>
-      <span class="lt-pa-cta__eyebrow-text">{{ 'PANAMA_PAGE.EYEBROWS.CTA' | translate }}</span>
-    </p>
-    <h2 id="lt-pa-cta-title" class="lt-pa-cta__title">
-      {{ 'PANAMA_PAGE.CTA.TITLE' | translate }}
-    </h2>
-    <p class="lt-pa-cta__description">{{ 'PANAMA_PAGE.CTA.DESCRIPTION' | translate }}</p>
-    <div class="lt-pa-cta__buttons">
-      <a lt-button variant="primary" size="lg"
-         [routerLink]="contactRoute"
-         [attr.aria-label]="'PANAMA_PAGE.CTA.PRIMARY' | translate">
-        {{ 'PANAMA_PAGE.CTA.PRIMARY' | translate }}
-        <i class="fas fa-arrow-right" aria-hidden="true"></i>
-      </a>
-      <a lt-button variant="secondary" size="lg"
-         href="https://wa.me/50765664942"
-         target="_blank"
-         rel="noopener"
-         [attr.aria-label]="'PANAMA_PAGE.CTA.WHATSAPP' | translate">
-        <i class="fab fa-whatsapp" aria-hidden="true"></i>
-        {{ 'PANAMA_PAGE.CTA.WHATSAPP' | translate }}
-      </a>
+    <div class="lt-pa-cta__content">
+      <p class="lt-pa-cta__eyebrow">
+        <span class="lt-pa-cta__eyebrow-bar" aria-hidden="true"></span>
+        <span class="lt-pa-cta__eyebrow-num">/07</span>
+        <span class="lt-pa-cta__eyebrow-text">{{ 'PANAMA_PAGE.EYEBROWS.CTA' | translate }}</span>
+      </p>
+      <h2 id="lt-pa-cta-title" class="lt-pa-cta__title">
+        {{ 'PANAMA_PAGE.CTA.TITLE' | translate }}
+      </h2>
+      <p class="lt-pa-cta__description">{{ 'PANAMA_PAGE.CTA.DESCRIPTION' | translate }}</p>
+      <div class="lt-pa-cta__actions">
+        <a lt-button variant="primary" size="lg"
+           [routerLink]="contactRoute"
+           [attr.aria-label]="'PANAMA_PAGE.CTA.PRIMARY' | translate">
+          {{ 'PANAMA_PAGE.CTA.PRIMARY' | translate }}
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
+        <a lt-button variant="primary" size="lg"
+           href="https://wa.me/50765664942"
+           target="_blank"
+           rel="noopener"
+           class="lt-pa-cta__whatsapp"
+           [attr.aria-label]="'PANAMA_PAGE.CTA.WHATSAPP' | translate">
+          <i class="fab fa-whatsapp" aria-hidden="true"></i>
+          {{ 'PANAMA_PAGE.CTA.WHATSAPP' | translate }}
+        </a>
+      </div>
+    </div>
+
+    <div class="lt-pa-cta__image-wrap">
+      <img src="assets/photos/MT-480-optimized.webp"
+        [alt]="'PANAMA_PAGE.CTA.IMAGE_ALT' | translate"
+        width="500"
+        height="400"
+        loading="lazy"
+        decoding="async"
+        class="lt-pa-cta__image" />
     </div>
   </div>
 </section>

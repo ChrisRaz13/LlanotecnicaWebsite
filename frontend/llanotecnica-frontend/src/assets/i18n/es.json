@@ -834,7 +834,8 @@
       "TITLE": "¿Listo para cotizar su mezcladora?",
       "DESCRIPTION": "Conteste tres datos y le enviamos cotización con disponibilidad, condiciones de entrega y opciones de pago en menos de 24 horas hábiles.",
       "PRIMARY": "Solicitar cotización",
-      "WHATSAPP": "WhatsApp directo"
+      "WHATSAPP": "WhatsApp directo",
+      "IMAGE_ALT": "Mezcladora MT-480 fabricada en Panamá por Llanotecnica"
     }
   }
 }

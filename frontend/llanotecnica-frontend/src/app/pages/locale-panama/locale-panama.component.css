@@ -720,54 +720,163 @@
 }
 
 /* ============================================================================
-   /07 — FINAL CTA (safety yellow)
+   /07 — FINAL CTA (safety yellow, caution-tape top, contour bg)
+   Mirrors the about-us final CTA pattern so the visual rhythm reads
+   consistently across pages.
    ============================================================================ */
 .lt-pa-cta {
+  position: relative;
   background-color: var(--lt-color-safety-yellow);
   color: var(--lt-color-steel-900);
-  padding: clamp(3.5rem, 8vw, 5.5rem) 0;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Diagonal caution-tape top border (same visual as about-us) */
+.lt-pa-cta__caution {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--lt-color-steel-900) 0 18px,
+    var(--lt-color-safety-yellow) 18px 36px
+  );
+  z-index: 3;
+}
+
+/* Override the shared section-top stripe — caution tape replaces it here */
+.lt-pa-cta [class*='__stripe'],
+.lt-pa-cta::before { display: none; }
+
+.lt-pa-cta__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.lt-pa-cta__contour {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .lt-pa-cta__inner {
-  max-width: 900px;
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 clamp(1.25rem, 4vw, 2.5rem);
-  text-align: center;
+  padding: clamp(3.5rem, 8vw, 5.5rem) clamp(1.25rem, 4vw, 2.5rem);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .lt-pa-cta__inner {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+  }
+}
+
+.lt-pa-cta__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
 
 .lt-pa-cta__eyebrow {
-  justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  font-family: var(--lt-font-mono, 'Roboto Mono', monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--lt-color-steel-900);
 }
 
+.lt-pa-cta__eyebrow-bar {
+  display: inline-block;
+  width: 32px;
+  height: 2px;
+  background-color: var(--lt-color-steel-900);
+}
+
 .lt-pa-cta__eyebrow-num {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
   background-color: var(--lt-color-steel-900);
   color: var(--lt-color-safety-yellow);
+  border-radius: 2px;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
 }
 
 .lt-pa-cta__title {
   font-family: var(--lt-font-heading, 'Anton', sans-serif);
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
   line-height: 1.05;
-  margin: 0 auto 1rem;
+  letter-spacing: -0.005em;
+  margin: 0 0 1rem;
   max-width: 22ch;
   text-wrap: balance;
   color: var(--lt-color-steel-900);
+  text-transform: uppercase;
 }
 
 .lt-pa-cta__description {
   font-size: clamp(1rem, 1.5vw, 1.15rem);
-  line-height: 1.55;
-  margin: 0 auto 2rem;
-  max-width: 58ch;
-  color: rgba(13, 13, 16, 0.8);
+  line-height: 1.6;
+  margin: 0 0 1.75rem;
+  max-width: 56ch;
+  color: rgba(13, 13, 16, 0.82);
 }
 
-.lt-pa-cta__buttons {
+.lt-pa-cta__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1rem;
+}
+
+/* Brand-green primary button reads great on yellow (matches about-us pattern) */
+.lt-pa-cta__actions .lt-btn[data-variant='primary'] {
+  background-color: var(--lt-color-brand-700) !important;
+  border-color: var(--lt-color-brand-900) !important;
+  color: #ffffff !important;
+}
+.lt-pa-cta__actions .lt-btn[data-variant='primary']:hover {
+  background-color: var(--lt-color-brand-800) !important;
+  border-color: var(--lt-color-brand-950) !important;
+}
+
+/* WhatsApp variant: same shape as primary but visually distinct via the icon */
+.lt-pa-cta__whatsapp .fa-whatsapp {
+  font-size: 1.15em;
+  margin-right: 0.1em;
+}
+
+.lt-pa-cta__image-wrap {
+  display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.lt-pa-cta__image {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.22));
 }
 
 /* Reduce motion preferences honored */

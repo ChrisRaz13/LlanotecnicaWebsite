@@ -772,7 +772,8 @@
       "TITLE": "Ready to quote your mixer?",
       "DESCRIPTION": "Answer three details and we'll send you a quote with availability, delivery terms and payment options in less than 24 business hours.",
       "PRIMARY": "Request a quote",
-      "WHATSAPP": "Direct WhatsApp"
+      "WHATSAPP": "Direct WhatsApp",
+      "IMAGE_ALT": "MT-480 mixer manufactured in Panama by Llanotecnica"
     }
   }
 }
