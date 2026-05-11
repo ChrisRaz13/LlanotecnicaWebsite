@@ -38,24 +38,57 @@
     },
     "QUICK_LINKS_TITLE": "Enlaces Rápidos",
     "QUICK_LINKS": [
-      { "TEXT": "Sobre Nosotros", "ROUTE": "/about" },
-      { "TEXT": "Productos", "ROUTE": "/products" },
-      { "TEXT": "Servicios", "ROUTE": "/services" },
-      { "TEXT": "Contacto", "ROUTE": "/contact" }
+      {
+        "TEXT": "Sobre Nosotros",
+        "ROUTE": "/about"
+      },
+      {
+        "TEXT": "Productos",
+        "ROUTE": "/products"
+      },
+      {
+        "TEXT": "Servicios",
+        "ROUTE": "/services"
+      },
+      {
+        "TEXT": "Contacto",
+        "ROUTE": "/contact"
+      }
     ],
     "PRODUCTS_TITLE": "Productos",
     "PRODUCTS": [
-      { "TEXT": "Mezcladora MT-370", "ROUTE": "/products/mt-370" },
-      { "TEXT": "Mezcladora MT-480", "ROUTE": "/products/mt-480" },
-      { "TEXT": "Motores", "ROUTE": "/products/accessories" }
+      {
+        "TEXT": "Mezcladora MT-370",
+        "ROUTE": "/products/mt-370"
+      },
+      {
+        "TEXT": "Mezcladora MT-480",
+        "ROUTE": "/products/mt-480"
+      },
+      {
+        "TEXT": "Motores",
+        "ROUTE": "/products/accessories"
+      }
     ],
     "FOLLOW_US_TITLE": "Síguenos",
     "SUPPORT_TITLE": "Soporte",
     "SUPPORT": [
-      { "TEXT": "Soporte Técnico", "ROUTE": "/support" },
-      { "TEXT": "Guía de Mantenimiento", "ROUTE": "/maintenance" },
-      { "TEXT": "Preguntas Frecuentes", "ROUTE": "/faq" },
-      { "TEXT": "Descargar Catálogo", "ROUTE": "/catalog" }
+      {
+        "TEXT": "Soporte Técnico",
+        "ROUTE": "/support"
+      },
+      {
+        "TEXT": "Guía de Mantenimiento",
+        "ROUTE": "/maintenance"
+      },
+      {
+        "TEXT": "Preguntas Frecuentes",
+        "ROUTE": "/faq"
+      },
+      {
+        "TEXT": "Descargar Catálogo",
+        "ROUTE": "/catalog"
+      }
     ],
     "COPYRIGHT": "© {{currentYear}} Llanotecnica",
     "ALL_RIGHTS_RESERVED": "Todos los derechos reservados",
@@ -714,5 +747,94 @@
   "Transistorized coil": "Bobina transistorizada",
   "Direct Injection": "Inyección directa",
   "Non-contact transistorized ignition (TCI)": "Encendido transistorizado sin contacto (TCI)",
-  "Electric motor": "Motor eléctrico"
+  "Electric motor": "Motor eléctrico",
+  "PANAMA_PAGE": {
+    "EYEBROWS": {
+      "LOCAL": "FABRICACIÓN NACIONAL · PANAMÁ",
+      "MADE_IN_PANAMA": "HECHO EN PANAMÁ",
+      "WHY_LOCAL": "POR QUÉ COMPRAR LOCAL",
+      "PRODUCTS": "MODELOS DISPONIBLES",
+      "COVERAGE": "COBERTURA NACIONAL",
+      "FAQ": "PREGUNTAS FRECUENTES",
+      "CTA": "SOLICITE SU COTIZACIÓN"
+    },
+    "HERO": {
+      "TAGLINE": "Llanotecnica · Pacora, Ciudad de Panamá",
+      "TITLE": "Mezcladoras de concreto fabricadas en Panamá desde 2002",
+      "DESCRIPTION": "Las mezcladoras MT-370 y MT-480 son diseñadas, ensambladas y soportadas en Panamá. Sin importación, sin aranceles, sin meses de espera: stock disponible, soporte técnico local y entrega a todo el país.",
+      "CTA_PRIMARY": "Solicitar cotización",
+      "CTA_SECONDARY": "Ver modelos"
+    },
+    "MFG": {
+      "TITLE": "Una empresa panameña al servicio de la construcción nacional",
+      "LEAD": "Llanotecnica fabrica equipo industrial en Panamá desde 2002 — más de dos décadas atendiendo a contratistas, constructoras y empresas de obras públicas en todo el país.",
+      "P1": "Nuestras instalaciones en Pacora producen, ensamblan y prueban cada mezcladora antes de su entrega. Cada unidad sale con el control de calidad de un equipo panameño que entiende las exigencias del mercado local: humedad, climas extremos, jornadas largas y obras intensivas.",
+      "P2": "Como fabricante nacional, no dependemos de cadenas de importación ni de inventarios al otro lado del mundo. Cuando un cliente necesita una unidad, un repuesto o soporte técnico, respondemos desde aquí.",
+      "BULLET1_TITLE": "Más de 22 años fabricando en Panamá",
+      "BULLET1_DESC": "Operación continua desde 2002, con mezcladoras desplegadas en proyectos a lo largo del istmo.",
+      "BULLET2_TITLE": "Diseñado para condiciones tropicales",
+      "BULLET2_DESC": "Componentes y acabados seleccionados para resistir humedad, polvo, sal costera y uso intensivo.",
+      "BULLET3_TITLE": "Soporte técnico desde Pacora",
+      "BULLET3_DESC": "Ingeniería local, repuestos en inventario y atención directa — sin intermediarios ni tiempos de respuesta internacionales.",
+      "IMAGE_ALT": "Equipo de Llanotecnica en sus instalaciones de fabricación en Pacora, Panamá"
+    },
+    "WHY": {
+      "TITLE": "Las ventajas de comprarle a un fabricante panameño",
+      "SUBTITLE": "Comprar nacional no es solo apoyar la industria local — son ventajas operativas y económicas concretas frente a equipo importado.",
+      "CARD1_TITLE": "Cero aranceles de importación",
+      "CARD1_DESC": "Al comprar a un fabricante panameño, evita aranceles, ITBMS sobre flete internacional y costos de nacionalización aduanera.",
+      "CARD2_TITLE": "Disponibilidad inmediata",
+      "CARD2_DESC": "Mezcladoras en stock listas para entrega. Sin esperas de 60-90 días por contenedores marítimos ni demoras en aduanas.",
+      "CARD3_TITLE": "Soporte técnico en español, en tiempo real",
+      "CARD3_DESC": "Hablamos directo, en horario panameño, sin call centers ni tickets en idiomas extranjeros. Diagnóstico rápido por WhatsApp o visita en sitio.",
+      "CARD4_TITLE": "Repuestos siempre disponibles",
+      "CARD4_DESC": "Inventario completo de repuestos en Pacora. Su mezcladora no queda fuera de servicio esperando piezas que nunca llegan."
+    },
+    "PRODUCTS": {
+      "TITLE": "Dos modelos diseñados para la realidad de la construcción panameña",
+      "SUBTITLE": "Desde proyectos residenciales y remodelaciones hasta obras comerciales de gran escala. Elija el modelo según el volumen y la exigencia del trabajo.",
+      "MT370_TITLE": "MT-370 — Trabajo Medio",
+      "MT370_DESC": "Ideal para proyectos residenciales, remodelaciones y obras comerciales pequeñas. Equilibrio entre capacidad, transporte y consumo.",
+      "MT370_LINK": "Ver especificaciones de la MT-370",
+      "MT480_TITLE": "MT-480 — Trabajo Pesado",
+      "MT480_DESC": "Diseñada para obras comerciales mayores, infraestructura pública y contratistas con alta carga diaria de mezclado.",
+      "MT480_LINK": "Ver especificaciones de la MT-480"
+    },
+    "COVERAGE": {
+      "TITLE": "Entrega y soporte en las 10 provincias",
+      "SUBTITLE": "Servimos a contratistas y constructoras en todo el país. Coordinamos entrega directa o retiro en planta según su ubicación y preferencia.",
+      "PROVINCES": {
+        "PANAMA": "Panamá",
+        "PANAMA_OESTE": "Panamá Oeste",
+        "COLON": "Colón",
+        "COCLE": "Coclé",
+        "HERRERA": "Herrera",
+        "LOS_SANTOS": "Los Santos",
+        "VERAGUAS": "Veraguas",
+        "CHIRIQUI": "Chiriquí",
+        "BOCAS": "Bocas del Toro",
+        "DARIEN": "Darién"
+      },
+      "NOTE": "También atendemos a clientes en las comarcas y zonas remotas — coordinamos transporte según su ubicación."
+    },
+    "FAQ": {
+      "TITLE": "Preguntas frecuentes de clientes en Panamá",
+      "Q1": "¿Tienen mezcladoras disponibles en stock?",
+      "A1": "Sí, mantenemos inventario activo de los modelos MT-370 y MT-480 en nuestras instalaciones de Pacora. La disponibilidad puede variar según la demanda — confirme la disponibilidad actual al solicitar su cotización.",
+      "Q2": "¿Hacen entrega o tengo que retirar en planta?",
+      "A2": "Ambas opciones están disponibles. Coordinamos entrega directa a su obra en cualquier provincia, o puede retirar en nuestra planta de Pacora. El costo de transporte se calcula según la distancia.",
+      "Q3": "¿Cómo es el proceso de garantía y soporte técnico?",
+      "A3": "Cada mezcladora incluye garantía de 6 meses contra defectos de fabricación. Para soporte técnico contacte a nuestro equipo en Pacora — atendemos por WhatsApp, llamada o visita en sitio según el caso.",
+      "Q4": "¿Tienen repuestos para mezcladoras compradas hace años?",
+      "A4": "Sí. Mantenemos inventario de repuestos para todos los modelos MT-370 y MT-480, incluyendo unidades vendidas hace varios años. Los componentes principales (motor, transmisión, tambor) están siempre disponibles.",
+      "Q5": "¿Aceptan pagos por transferencia bancaria local?",
+      "A5": "Sí. Aceptamos transferencia bancaria a cuentas panameñas (sin costo de transferencia internacional), efectivo y otras modalidades coordinables. Emitimos factura fiscal con desglose de ITBMS."
+    },
+    "CTA": {
+      "TITLE": "¿Listo para cotizar su mezcladora?",
+      "DESCRIPTION": "Conteste tres datos y le enviamos cotización con disponibilidad, condiciones de entrega y opciones de pago en menos de 24 horas hábiles.",
+      "PRIMARY": "Solicitar cotización",
+      "WHATSAPP": "WhatsApp directo"
+    }
+  }
 }

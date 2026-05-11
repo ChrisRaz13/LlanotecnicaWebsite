@@ -7,3 +7,4 @@
 /es/sobre-nosotros
 /es/productos
 /es/contacto
+/es/mezcladoras-panama

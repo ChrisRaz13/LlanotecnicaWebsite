@@ -142,6 +142,15 @@ export const routes: Routes = [
     data: { language: 'es' }
   },
 
+  // Country-specific Spanish landing page (SEO target: "mezcladora de
+  // concreto Panamá" / "fabricante de mezcladoras Panamá"). Spanish-only
+  // by design — Panama buyers are Spanish speakers.
+  {
+    path: 'es/mezcladoras-panama',
+    loadChildren: () => import('./pages/locale-panama/locale-panama.module').then(m => m.LocalePanamaModule),
+    data: { language: 'es' }
+  },
+
   // 301 Redirects for removed language-agnostic routes
   // These ensure clean SEO signals and preserve any existing external links
   {

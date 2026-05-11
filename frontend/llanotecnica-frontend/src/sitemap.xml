@@ -72,6 +72,14 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.llanotecnica.com/es/contacto" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.llanotecnica.com/en/contact" />
   </url>
+  <!-- Country-specific landing pages (Spanish-only, target LatAm SEO).
+       No hreflang block: these are deliberately single-language, locale-targeted. -->
+  <url>
+    <loc>https://www.llanotecnica.com/es/mezcladoras-panama</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
   <!-- Brochure PDFs (linked from header/footer; Google indexes PDFs). -->
   <url>
     <loc>https://www.llanotecnica.com/assets/photos/Catalog-Eng.pdf</loc>

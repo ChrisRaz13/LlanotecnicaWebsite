@@ -1,0 +1,299 @@
+<!-- ============================================================
+     MEZCLADORAS EN PANAMÁ — Spanish-only landing page targeting
+     "mezcladora de concreto Panamá" / "fabricante de mezcladoras
+     Panamá" search intent. Visual rhythm matches about-us:
+       /01 hero (dark)
+       /02 manufacturing story (light, two-column)
+       /03 why buy local (dark, 4-up grid)
+       /04 product cards (light)
+       /05 service coverage (dark, region grid)
+       /06 Panama-specific FAQ (light, accordion)
+       /07 final CTA (safety-yellow)
+     ============================================================ -->
+
+<!-- /01 — HERO -->
+<section class="lt-pa-hero" aria-labelledby="lt-pa-hero-title">
+  <div class="lt-pa-hero__bg" aria-hidden="true">
+    <img src="assets/photos/aboutus-herosection.jpg"
+      alt=""
+      class="lt-pa-hero__image"
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync" />
+  </div>
+  <div class="lt-pa-hero__vignette" aria-hidden="true"></div>
+  <div class="lt-pa-hero__bottom-gradient" aria-hidden="true"></div>
+
+  <div class="lt-pa-hero__content">
+    <p class="lt-pa-hero__eyebrow">
+      <span class="lt-pa-hero__eyebrow-bar" aria-hidden="true"></span>
+      <span class="lt-pa-hero__eyebrow-num">/01</span>
+      <span class="lt-pa-hero__eyebrow-text">{{ 'PANAMA_PAGE.EYEBROWS.LOCAL' | translate }}</span>
+    </p>
+    <p class="lt-pa-hero__tagline">{{ 'PANAMA_PAGE.HERO.TAGLINE' | translate }}</p>
+    <h1 id="lt-pa-hero-title" class="lt-pa-hero__title">
+      {{ 'PANAMA_PAGE.HERO.TITLE' | translate }}
+    </h1>
+    <p class="lt-pa-hero__description">
+      {{ 'PANAMA_PAGE.HERO.DESCRIPTION' | translate }}
+    </p>
+    <div class="lt-pa-hero__cta">
+      <a lt-button variant="accent" size="lg"
+         [routerLink]="contactRoute"
+         [attr.aria-label]="'PANAMA_PAGE.HERO.CTA_PRIMARY' | translate">
+        {{ 'PANAMA_PAGE.HERO.CTA_PRIMARY' | translate }}
+        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+      </a>
+      <a lt-button variant="ghost" size="lg" data-on-dark="true"
+         [routerLink]="productsRoute"
+         [attr.aria-label]="'PANAMA_PAGE.HERO.CTA_SECONDARY' | translate">
+        {{ 'PANAMA_PAGE.HERO.CTA_SECONDARY' | translate }}
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- /02 — MANUFACTURING STORY (light) -->
+<section class="lt-pa-mfg" aria-labelledby="lt-pa-mfg-title">
+  <div class="lt-pa-mfg__stripe" aria-hidden="true"></div>
+  <div class="lt-pa-mfg__inner">
+    <header class="lt-pa-mfg__header">
+      <p class="lt-pa-mfg__eyebrow">
+        <span class="lt-pa-mfg__eyebrow-num">/02</span>
+        <span class="lt-pa-mfg__eyebrow-divider" aria-hidden="true"></span>
+        <span class="lt-pa-mfg__eyebrow-text">{{ 'PANAMA_PAGE.EYEBROWS.MADE_IN_PANAMA' | translate }}</span>
+      </p>
+      <h2 id="lt-pa-mfg-title" class="lt-pa-mfg__title">
+        {{ 'PANAMA_PAGE.MFG.TITLE' | translate }}
+      </h2>
+    </header>
+
+    <div class="lt-pa-mfg__grid">
+      <div class="lt-pa-mfg__text">
+        <p class="lt-pa-mfg__lead">{{ 'PANAMA_PAGE.MFG.LEAD' | translate }}</p>
+        <p class="lt-pa-mfg__paragraph">{{ 'PANAMA_PAGE.MFG.P1' | translate }}</p>
+        <p class="lt-pa-mfg__paragraph">{{ 'PANAMA_PAGE.MFG.P2' | translate }}</p>
+        <ul class="lt-pa-mfg__bullets">
+          <li><strong>{{ 'PANAMA_PAGE.MFG.BULLET1_TITLE' | translate }}</strong> — {{ 'PANAMA_PAGE.MFG.BULLET1_DESC' | translate }}</li>
+          <li><strong>{{ 'PANAMA_PAGE.MFG.BULLET2_TITLE' | translate }}</strong> — {{ 'PANAMA_PAGE.MFG.BULLET2_DESC' | translate }}</li>
+          <li><strong>{{ 'PANAMA_PAGE.MFG.BULLET3_TITLE' | translate }}</strong> — {{ 'PANAMA_PAGE.MFG.BULLET3_DESC' | translate }}</li>
+        </ul>
+      </div>
+
+      <div class="lt-pa-mfg__image-wrap">
+        <div class="lt-pa-mfg__image-frame">
+          <img src="assets/photos/teamphoto.jpg"
+            [alt]="'PANAMA_PAGE.MFG.IMAGE_ALT' | translate"
+            width="600" height="400"
+            loading="lazy" decoding="async"
+            class="lt-pa-mfg__image" />
+          <span class="lt-pa-mfg__corner lt-pa-mfg__corner--tl" aria-hidden="true"></span>
+          <span class="lt-pa-mfg__corner lt-pa-mfg__corner--tr" aria-hidden="true"></span>
+          <span class="lt-pa-mfg__corner lt-pa-mfg__corner--bl" aria-hidden="true"></span>
+          <span class="lt-pa-mfg__corner lt-pa-mfg__corner--br" aria-hidden="true"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- /03 — WHY BUY LOCAL (dark, 4-up advantages grid) -->
+<section class="lt-pa-why" aria-labelledby="lt-pa-why-title">
+  <div class="lt-pa-why__stripe" aria-hidden="true"></div>
+  <div class="lt-pa-why__inner">
+    <header class="lt-pa-why__header">
+      <p class="lt-pa-why__eyebrow">
+        <span class="lt-pa-why__eyebrow-num">/03</span>
+        <span class="lt-pa-why__eyebrow-divider" aria-hidden="true"></span>
+        <span class="lt-pa-why__eyebrow-text">{{ 'PANAMA_PAGE.EYEBROWS.WHY_LOCAL' | translate }}</span>
+      </p>
+      <h2 id="lt-pa-why-title" class="lt-pa-why__title">
+        {{ 'PANAMA_PAGE.WHY.TITLE' | translate }}
+      </h2>
+      <p class="lt-pa-why__subtitle">{{ 'PANAMA_PAGE.WHY.SUBTITLE' | translate }}</p>
+    </header>
+
+    <div class="lt-pa-why__grid">
+      <article class="lt-pa-why__card">
+        <div class="lt-pa-why__card-num">01</div>
+        <h3 class="lt-pa-why__card-title">{{ 'PANAMA_PAGE.WHY.CARD1_TITLE' | translate }}</h3>
+        <p class="lt-pa-why__card-text">{{ 'PANAMA_PAGE.WHY.CARD1_DESC' | translate }}</p>
+      </article>
+      <article class="lt-pa-why__card">
+        <div class="lt-pa-why__card-num">02</div>
+        <h3 class="lt-pa-why__card-title">{{ 'PANAMA_PAGE.WHY.CARD2_TITLE' | translate }}</h3>
+        <p class="lt-pa-why__card-text">{{ 'PANAMA_PAGE.WHY.CARD2_DESC' | translate }}</p>
+      </article>
+      <article class="lt-pa-why__card">
+        <div class="lt-pa-why__card-num">03</div>
+        <h3 class="lt-pa-why__card-title">{{ 'PANAMA_PAGE.WHY.CARD3_TITLE' | translate }}</h3>
+        <p class="lt-pa-why__card-text">{{ 'PANAMA_PAGE.WHY.CARD3_DESC' | translate }}</p>
+      </article>
+      <article class="lt-pa-why__card">
+        <div class="lt-pa-why__card-num">04</div>
+        <h3 class="lt-pa-why__card-title">{{ 'PANAMA_PAGE.WHY.CARD4_TITLE' | translate }}</h3>
+        <p class="lt-pa-why__card-text">{{ 'PANAMA_PAGE.WHY.CARD4_DESC' | translate }}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- /04 — PRODUCT CARDS (light) -->
+<section class="lt-pa-products" aria-labelledby="lt-pa-products-title">
+  <div class="lt-pa-products__stripe" aria-hidden="true"></div>
+  <div class="lt-pa-products__inner">
+    <header class="lt-pa-products__header">
+      <p class="lt-pa-products__eyebrow">
+        <span class="lt-pa-products__eyebrow-num">/04</span>
+        <span class="lt-pa-products__eyebrow-divider" aria-hidden="true"></span>
+        <span class="lt-pa-products__eyebrow-text">{{ 'PANAMA_PAGE.EYEBROWS.PRODUCTS' | translate }}</span>
+      </p>
+      <h2 id="lt-pa-products-title" class="lt-pa-products__title">
+        {{ 'PANAMA_PAGE.PRODUCTS.TITLE' | translate }}
+      </h2>
+      <p class="lt-pa-products__subtitle">{{ 'PANAMA_PAGE.PRODUCTS.SUBTITLE' | translate }}</p>
+    </header>
+
+    <div class="lt-pa-products__grid">
+      <article class="lt-pa-product-card">
+        <div class="lt-pa-product-card__media">
+          <img src="assets/photos/MT-370-optimized.webp"
+            alt="MT-370"
+            width="600" height="450"
+            loading="lazy" decoding="async" />
+        </div>
+        <div class="lt-pa-product-card__body">
+          <p class="lt-pa-product-card__model">MT-370</p>
+          <h3 class="lt-pa-product-card__title">{{ 'PANAMA_PAGE.PRODUCTS.MT370_TITLE' | translate }}</h3>
+          <p class="lt-pa-product-card__desc">{{ 'PANAMA_PAGE.PRODUCTS.MT370_DESC' | translate }}</p>
+          <a class="lt-pa-product-card__link" [routerLink]="productsRoute" fragment="mt-370">
+            {{ 'PANAMA_PAGE.PRODUCTS.MT370_LINK' | translate }}
+            <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </article>
+
+      <article class="lt-pa-product-card">
+        <div class="lt-pa-product-card__media">
+          <img src="assets/photos/MT-480-optimized.webp"
+            alt="MT-480"
+            width="600" height="450"
+            loading="lazy" decoding="async" />
+        </div>
+        <div class="lt-pa-product-card__body">
+          <p class="lt-pa-product-card__model">MT-480</p>
+          <h3 class="lt-pa-product-card__title">{{ 'PANAMA_PAGE.PRODUCTS.MT480_TITLE' | translate }}</h3>
+          <p class="lt-pa-product-card__desc">{{ 'PANAMA_PAGE.PRODUCTS.MT480_DESC' | translate }}</p>
+          <a class="lt-pa-product-card__link" [routerLink]="productsRoute" fragment="mt-480">
+            {{ 'PANAMA_PAGE.PRODUCTS.MT480_LINK' | translate }}
+            <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- /05 — SERVICE COVERAGE (dark, region grid) -->
+<section class="lt-pa-coverage" aria-labelledby="lt-pa-coverage-title">
+  <div class="lt-pa-coverage__stripe" aria-hidden="true"></div>
+  <div class="lt-pa-coverage__inner">
+    <header class="lt-pa-coverage__header">
+      <p class="lt-pa-coverage__eyebrow">
+        <span class="lt-pa-coverage__eyebrow-num">/05</span>
+        <span class="lt-pa-coverage__eyebrow-divider" aria-hidden="true"></span>
+        <span class="lt-pa-coverage__eyebrow-text">{{ 'PANAMA_PAGE.EYEBROWS.COVERAGE' | translate }}</span>
+      </p>
+      <h2 id="lt-pa-coverage-title" class="lt-pa-coverage__title">
+        {{ 'PANAMA_PAGE.COVERAGE.TITLE' | translate }}
+      </h2>
+      <p class="lt-pa-coverage__subtitle">{{ 'PANAMA_PAGE.COVERAGE.SUBTITLE' | translate }}</p>
+    </header>
+
+    <ul class="lt-pa-coverage__grid">
+      <li class="lt-pa-coverage__chip">{{ 'PANAMA_PAGE.COVERAGE.PROVINCES.PANAMA' | translate }}</li>
+      <li class="lt-pa-coverage__chip">{{ 'PANAMA_PAGE.COVERAGE.PROVINCES.PANAMA_OESTE' | translate }}</li>
+      <li class="lt-pa-coverage__chip">{{ 'PANAMA_PAGE.COVERAGE.PROVINCES.COLON' | translate }}</li>
+      <li class="lt-pa-coverage__chip">{{ 'PANAMA_PAGE.COVERAGE.PROVINCES.COCLE' | translate }}</li>
+      <li class="lt-pa-coverage__chip">{{ 'PANAMA_PAGE.COVERAGE.PROVINCES.HERRERA' | translate }}</li>
+      <li class="lt-pa-coverage__chip">{{ 'PANAMA_PAGE.COVERAGE.PROVINCES.LOS_SANTOS' | translate }}</li>
+      <li class="lt-pa-coverage__chip">{{ 'PANAMA_PAGE.COVERAGE.PROVINCES.VERAGUAS' | translate }}</li>
+      <li class="lt-pa-coverage__chip">{{ 'PANAMA_PAGE.COVERAGE.PROVINCES.CHIRIQUI' | translate }}</li>
+      <li class="lt-pa-coverage__chip">{{ 'PANAMA_PAGE.COVERAGE.PROVINCES.BOCAS' | translate }}</li>
+      <li class="lt-pa-coverage__chip">{{ 'PANAMA_PAGE.COVERAGE.PROVINCES.DARIEN' | translate }}</li>
+    </ul>
+
+    <p class="lt-pa-coverage__note">{{ 'PANAMA_PAGE.COVERAGE.NOTE' | translate }}</p>
+  </div>
+</section>
+
+<!-- /06 — PANAMA-SPECIFIC FAQ (light) -->
+<section class="lt-pa-faq" aria-labelledby="lt-pa-faq-title">
+  <div class="lt-pa-faq__stripe" aria-hidden="true"></div>
+  <div class="lt-pa-faq__inner">
+    <header class="lt-pa-faq__header">
+      <p class="lt-pa-faq__eyebrow">
+        <span class="lt-pa-faq__eyebrow-num">/06</span>
+        <span class="lt-pa-faq__eyebrow-divider" aria-hidden="true"></span>
+        <span class="lt-pa-faq__eyebrow-text">{{ 'PANAMA_PAGE.EYEBROWS.FAQ' | translate }}</span>
+      </p>
+      <h2 id="lt-pa-faq-title" class="lt-pa-faq__title">
+        {{ 'PANAMA_PAGE.FAQ.TITLE' | translate }}
+      </h2>
+    </header>
+
+    <div class="lt-pa-faq__list">
+      <details class="lt-pa-faq__item">
+        <summary class="lt-pa-faq__q">{{ 'PANAMA_PAGE.FAQ.Q1' | translate }}</summary>
+        <div class="lt-pa-faq__a">{{ 'PANAMA_PAGE.FAQ.A1' | translate }}</div>
+      </details>
+      <details class="lt-pa-faq__item">
+        <summary class="lt-pa-faq__q">{{ 'PANAMA_PAGE.FAQ.Q2' | translate }}</summary>
+        <div class="lt-pa-faq__a">{{ 'PANAMA_PAGE.FAQ.A2' | translate }}</div>
+      </details>
+      <details class="lt-pa-faq__item">
+        <summary class="lt-pa-faq__q">{{ 'PANAMA_PAGE.FAQ.Q3' | translate }}</summary>
+        <div class="lt-pa-faq__a">{{ 'PANAMA_PAGE.FAQ.A3' | translate }}</div>
+      </details>
+      <details class="lt-pa-faq__item">
+        <summary class="lt-pa-faq__q">{{ 'PANAMA_PAGE.FAQ.Q4' | translate }}</summary>
+        <div class="lt-pa-faq__a">{{ 'PANAMA_PAGE.FAQ.A4' | translate }}</div>
+      </details>
+      <details class="lt-pa-faq__item">
+        <summary class="lt-pa-faq__q">{{ 'PANAMA_PAGE.FAQ.Q5' | translate }}</summary>
+        <div class="lt-pa-faq__a">{{ 'PANAMA_PAGE.FAQ.A5' | translate }}</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- /07 — FINAL CTA (safety yellow) -->
+<section class="lt-pa-cta" aria-labelledby="lt-pa-cta-title">
+  <div class="lt-pa-cta__inner">
+    <p class="lt-pa-cta__eyebrow">
+      <span class="lt-pa-cta__eyebrow-num">/07</span>
+      <span class="lt-pa-cta__eyebrow-divider" aria-hidden="true"></span>
+      <span class="lt-pa-cta__eyebrow-text">{{ 'PANAMA_PAGE.EYEBROWS.CTA' | translate }}</span>
+    </p>
+    <h2 id="lt-pa-cta-title" class="lt-pa-cta__title">
+      {{ 'PANAMA_PAGE.CTA.TITLE' | translate }}
+    </h2>
+    <p class="lt-pa-cta__description">{{ 'PANAMA_PAGE.CTA.DESCRIPTION' | translate }}</p>
+    <div class="lt-pa-cta__buttons">
+      <a lt-button variant="primary" size="lg"
+         [routerLink]="contactRoute"
+         [attr.aria-label]="'PANAMA_PAGE.CTA.PRIMARY' | translate">
+        {{ 'PANAMA_PAGE.CTA.PRIMARY' | translate }}
+        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+      </a>
+      <a lt-button variant="secondary" size="lg"
+         href="https://wa.me/50765664942"
+         target="_blank"
+         rel="noopener"
+         [attr.aria-label]="'PANAMA_PAGE.CTA.WHATSAPP' | translate">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+        {{ 'PANAMA_PAGE.CTA.WHATSAPP' | translate }}
+      </a>
+    </div>
+  </div>
+</section>

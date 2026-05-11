@@ -38,24 +38,57 @@
     },
     "QUICK_LINKS_TITLE": "Quick Links",
     "QUICK_LINKS": [
-      { "TEXT": "About Us", "ROUTE": "/about" },
-      { "TEXT": "Products", "ROUTE": "/products" },
-      { "TEXT": "Services", "ROUTE": "/services" },
-      { "TEXT": "Contact", "ROUTE": "/contact" }
+      {
+        "TEXT": "About Us",
+        "ROUTE": "/about"
+      },
+      {
+        "TEXT": "Products",
+        "ROUTE": "/products"
+      },
+      {
+        "TEXT": "Services",
+        "ROUTE": "/services"
+      },
+      {
+        "TEXT": "Contact",
+        "ROUTE": "/contact"
+      }
     ],
     "PRODUCTS_TITLE": "Products",
     "PRODUCTS": [
-      { "TEXT": "MT-370 Mixer", "ROUTE": "/products/mt-370" },
-      { "TEXT": "MT-480 Mixer", "ROUTE": "/products/mt-480" },
-      { "TEXT": "Engines", "ROUTE": "/products/accessories" }
+      {
+        "TEXT": "MT-370 Mixer",
+        "ROUTE": "/products/mt-370"
+      },
+      {
+        "TEXT": "MT-480 Mixer",
+        "ROUTE": "/products/mt-480"
+      },
+      {
+        "TEXT": "Engines",
+        "ROUTE": "/products/accessories"
+      }
     ],
     "FOLLOW_US_TITLE": "Follow Us",
     "SUPPORT_TITLE": "Support",
     "SUPPORT": [
-      { "TEXT": "Technical Support", "ROUTE": "/support" },
-      { "TEXT": "Maintenance Guide", "ROUTE": "/maintenance" },
-      { "TEXT": "FAQ", "ROUTE": "/faq" },
-      { "TEXT": "Download Catalog", "ROUTE": "/catalog" }
+      {
+        "TEXT": "Technical Support",
+        "ROUTE": "/support"
+      },
+      {
+        "TEXT": "Maintenance Guide",
+        "ROUTE": "/maintenance"
+      },
+      {
+        "TEXT": "FAQ",
+        "ROUTE": "/faq"
+      },
+      {
+        "TEXT": "Download Catalog",
+        "ROUTE": "/catalog"
+      }
     ],
     "COPYRIGHT": "© {{currentYear}} Llanotecnica",
     "ALL_RIGHTS_RESERVED": "All rights reserved",
@@ -652,5 +685,94 @@
   "PRODUCTS_PAGE.MT-480.DETAILED_DESCRIPTION": "Built for large-scale construction needs, this mixer features a 420L drum with 360° rotation for enhanced loading and multiple discharge positions. Its tubular T-reinforced chassis and optimized blade vanes provide reliable, high-volume performance. A V-belt transmission reduces vibrations for smoother operation, while pedal-controlled positioning and cast iron-toothed parts enable single-operator handling. The MT-480 thrives under continuous mixing in demanding jobsites.",
   "WHATSAPP": {
     "MESSAGE": "Hello! I'm interested in learning more about your concrete mixers. Could you please provide me with information about pricing, availability, and technical specifications? Thank you!"
+  },
+  "PANAMA_PAGE": {
+    "EYEBROWS": {
+      "LOCAL": "MADE IN PANAMA",
+      "MADE_IN_PANAMA": "MADE IN PANAMA",
+      "WHY_LOCAL": "WHY BUY LOCAL",
+      "PRODUCTS": "AVAILABLE MODELS",
+      "COVERAGE": "NATIONWIDE COVERAGE",
+      "FAQ": "FREQUENTLY ASKED QUESTIONS",
+      "CTA": "REQUEST YOUR QUOTE"
+    },
+    "HERO": {
+      "TAGLINE": "Llanotecnica · Pacora, Panama City",
+      "TITLE": "Concrete mixers manufactured in Panama since 2002",
+      "DESCRIPTION": "MT-370 and MT-480 mixers are designed, assembled and supported in Panama. No imports, no duties, no months of waiting — stock on hand, local technical support, nationwide delivery.",
+      "CTA_PRIMARY": "Request a quote",
+      "CTA_SECONDARY": "View models"
+    },
+    "MFG": {
+      "TITLE": "A Panamanian company serving the national construction industry",
+      "LEAD": "Llanotecnica has manufactured industrial equipment in Panama since 2002 — over two decades serving contractors, construction firms and public works companies across the country.",
+      "P1": "Our facilities in Pacora produce, assemble and test every mixer before delivery. Every unit ships with quality control by a Panamanian team that understands local market demands: humidity, extreme climates, long shifts, intensive jobs.",
+      "P2": "As a national manufacturer, we don't depend on import chains or inventories on the other side of the world. When a customer needs a unit, a part or technical support, we respond from here.",
+      "BULLET1_TITLE": "Over 22 years manufacturing in Panama",
+      "BULLET1_DESC": "Continuous operation since 2002, with mixers deployed on projects throughout the isthmus.",
+      "BULLET2_TITLE": "Designed for tropical conditions",
+      "BULLET2_DESC": "Components and finishes selected to withstand humidity, dust, coastal salt and intensive use.",
+      "BULLET3_TITLE": "Technical support from Pacora",
+      "BULLET3_DESC": "Local engineering, parts in inventory and direct attention — no middlemen, no international response times.",
+      "IMAGE_ALT": "Llanotecnica team at its manufacturing facility in Pacora, Panama"
+    },
+    "WHY": {
+      "TITLE": "The advantages of buying from a Panamanian manufacturer",
+      "SUBTITLE": "Buying local is not just about supporting national industry — it's concrete operational and economic advantages over imported equipment.",
+      "CARD1_TITLE": "Zero import duties",
+      "CARD1_DESC": "Buying from a Panamanian manufacturer means no duties, no ITBMS on international freight, no customs nationalization costs.",
+      "CARD2_TITLE": "Immediate availability",
+      "CARD2_DESC": "Mixers in stock ready to deliver. No 60-90 day waits for shipping containers or customs delays.",
+      "CARD3_TITLE": "Technical support in Spanish, in real time",
+      "CARD3_DESC": "We talk directly, on Panama time, no call centers or foreign-language tickets. Quick diagnosis via WhatsApp or on-site visit.",
+      "CARD4_TITLE": "Parts always available",
+      "CARD4_DESC": "Complete parts inventory in Pacora. Your mixer doesn't go out of service waiting for parts that never arrive."
+    },
+    "PRODUCTS": {
+      "TITLE": "Two models designed for Panama's construction reality",
+      "SUBTITLE": "From residential projects and remodels to large-scale commercial works. Pick the model based on volume and demand of the work.",
+      "MT370_TITLE": "MT-370 — Medium Duty",
+      "MT370_DESC": "Ideal for residential projects, remodels and small commercial works. Balance between capacity, transport and consumption.",
+      "MT370_LINK": "View MT-370 specifications",
+      "MT480_TITLE": "MT-480 — Heavy Duty",
+      "MT480_DESC": "Designed for major commercial works, public infrastructure and contractors with high daily mixing load.",
+      "MT480_LINK": "View MT-480 specifications"
+    },
+    "COVERAGE": {
+      "TITLE": "Delivery and support across all 10 provinces",
+      "SUBTITLE": "We serve contractors and construction firms throughout the country. We coordinate direct delivery or factory pickup based on your location and preference.",
+      "PROVINCES": {
+        "PANAMA": "Panama",
+        "PANAMA_OESTE": "Panama Oeste",
+        "COLON": "Colon",
+        "COCLE": "Cocle",
+        "HERRERA": "Herrera",
+        "LOS_SANTOS": "Los Santos",
+        "VERAGUAS": "Veraguas",
+        "CHIRIQUI": "Chiriqui",
+        "BOCAS": "Bocas del Toro",
+        "DARIEN": "Darien"
+      },
+      "NOTE": "We also serve customers in the comarcas and remote areas — we coordinate transport based on your location."
+    },
+    "FAQ": {
+      "TITLE": "Frequently asked questions from Panama customers",
+      "Q1": "Do you have mixers available in stock?",
+      "A1": "Yes, we maintain active inventory of MT-370 and MT-480 models at our Pacora facilities. Availability may vary by demand — confirm current availability when requesting your quote.",
+      "Q2": "Do you deliver or do I have to pick up at the factory?",
+      "A2": "Both options are available. We coordinate direct delivery to your jobsite in any province, or you can pick up at our Pacora plant. Transport cost is calculated by distance.",
+      "Q3": "How does the warranty and technical support process work?",
+      "A3": "Every mixer includes a 6-month warranty against manufacturing defects. For technical support contact our team in Pacora — we respond via WhatsApp, call, or on-site visit depending on the case.",
+      "Q4": "Do you have parts for mixers bought years ago?",
+      "A4": "Yes. We maintain parts inventory for all MT-370 and MT-480 models, including units sold years ago. Main components (engine, transmission, drum) are always available.",
+      "Q5": "Do you accept local bank transfer payments?",
+      "A5": "Yes. We accept transfers to Panamanian bank accounts (no international transfer cost), cash, and other arrangeable methods. We issue tax invoices with ITBMS breakdown."
+    },
+    "CTA": {
+      "TITLE": "Ready to quote your mixer?",
+      "DESCRIPTION": "Answer three details and we'll send you a quote with availability, delivery terms and payment options in less than 24 business hours.",
+      "PRIMARY": "Request a quote",
+      "WHATSAPP": "Direct WhatsApp"
+    }
   }
 }
