@@ -1713,6 +1713,7 @@ private ensureImageDimensions(): void {
       // body content; we just don't claim a rich-result type we can't honestly
       // satisfy.
       this.addHowToSchema(currentLang);
+      this.addFAQSchema(currentLang);
     });
   }
 
@@ -1933,6 +1934,83 @@ private ensureImageDimensions(): void {
       }
     };
     this.seoService.addStructuredData(howToData);
+  }
+
+  // FAQ schema mirrors the 5 questions in the home-page accordion
+  // (HOME_PAGE.FAQ.QUESTIONS in en.json/es.json). Eligible for the
+  // expandable FAQ Rich Result in Google search — answers render
+  // inline below the page title, lifting CTR significantly. Keep in
+  // sync with the i18n strings; the OPERATION step-list is flattened
+  // into one summary sentence here since FAQPage answers must be plain text.
+  private addFAQSchema(lang: string): void {
+    const isEs = lang === 'es';
+    const faqData = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': isEs
+            ? '¿Cómo opero las mezcladoras MT-370 y MT-480?'
+            : 'How do I operate the MT-370 and MT-480 mixers?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': isEs
+              ? 'Para operar de forma segura: (1) Inspeccione todos los componentes antes de iniciar, (2) Encienda el motor siguiendo los procedimientos correctos, (3) Coloque el tambor en posición de mezclado con el pedal de control, (4) Cargue cemento, agregado y agua según las proporciones requeridas. Vea el video de demostración en nuestra sección de FAQ para una guía visual completa.'
+              : 'To operate safely: (1) Inspect all components before starting, (2) Start the engine following proper startup procedures, (3) Set the drum to mixing position using the foot pedal control, (4) Load cement, aggregate, and water according to required proportions. Watch the demonstration video in our FAQ section for a complete visual guide.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': isEs
+            ? '¿Qué mantenimiento se requiere?'
+            : 'What maintenance is required?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': isEs
+              ? 'El mantenimiento regular incluye limpieza diaria, revisión semanal de lubricación e inspecciones mecánicas mensuales.'
+              : 'Regular maintenance includes daily cleaning, weekly lubrication checks, and monthly mechanical inspections.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': isEs
+            ? '¿Cuál mezcladora es adecuada para mi proyecto?'
+            : 'Which mixer is right for my project?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': isEs
+              ? 'La MT-370 es ideal para proyectos residenciales y comerciales pequeños, mientras que la MT-480 está diseñada para aplicaciones comerciales más grandes.'
+              : 'The MT-370 is ideal for residential and small commercial projects, while the MT-480 is designed for larger commercial applications.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': isEs
+            ? '¿Qué garantía ofrecen?'
+            : 'What warranty do you offer?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': isEs
+              ? 'Nuestras mezcladoras de concreto están cubiertas por una garantía de 6 meses contra cualquier defecto de fabricación. Para más información, contacte a soporte técnico.'
+              : 'Our concrete mixers are covered by a 6-month warranty against any manufacturing defects. For more information, please contact technical support.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': isEs
+            ? '¿Hay repuestos disponibles?'
+            : 'Are spare parts readily available?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': isEs
+              ? 'Sí, mantenemos un inventario completo de repuestos con entrega bajo solicitud.'
+              : 'Yes, we maintain a complete inventory of spare parts with delivery on request.'
+          }
+        }
+      ]
+    };
+    this.seoService.addStructuredData(faqData);
   }
 
   private setupScrollIndicator(): void {
