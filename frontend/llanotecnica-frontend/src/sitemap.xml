@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.llanotecnica.com/en</loc>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.llanotecnica.com/en" />
@@ -10,6 +11,7 @@
   </url>
   <url>
     <loc>https://www.llanotecnica.com/es</loc>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.llanotecnica.com/en" />
@@ -18,6 +20,7 @@
   </url>
   <url>
     <loc>https://www.llanotecnica.com/en/products</loc>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.llanotecnica.com/en/products" />
@@ -26,6 +29,7 @@
   </url>
   <url>
     <loc>https://www.llanotecnica.com/es/productos</loc>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.llanotecnica.com/en/products" />
@@ -34,6 +38,7 @@
   </url>
   <url>
     <loc>https://www.llanotecnica.com/en/about-us</loc>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.llanotecnica.com/en/about-us" />
@@ -42,6 +47,7 @@
   </url>
   <url>
     <loc>https://www.llanotecnica.com/es/sobre-nosotros</loc>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.llanotecnica.com/en/about-us" />
@@ -50,6 +56,7 @@
   </url>
   <url>
     <loc>https://www.llanotecnica.com/en/contact</loc>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.llanotecnica.com/en/contact" />
@@ -58,10 +65,24 @@
   </url>
   <url>
     <loc>https://www.llanotecnica.com/es/contacto</loc>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.llanotecnica.com/en/contact" />
     <xhtml:link rel="alternate" hreflang="es" href="https://www.llanotecnica.com/es/contacto" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.llanotecnica.com/en/contact" />
+  </url>
+  <!-- Product catalog PDFs (linked from header/footer; Google indexes PDFs). -->
+  <url>
+    <loc>https://www.llanotecnica.com/assets/photos/Catalog-Eng.pdf</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.llanotecnica.com/assets/photos/Catalog-Esp.pdf</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>
